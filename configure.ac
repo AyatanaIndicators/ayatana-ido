@@ -1,0 +1,128 @@
+#
+# shamelessly stolen from clutter-gtk
+#
+m4_define([ido_major_version], [0])
+m4_define([ido_minor_version], [1])
+m4_define([ido_micro_version], [0])
+
+m4_define([ido_api_version],
+          [ido_major_version.ido_minor_version])
+m4_define([ido_version],
+          [ido_major_version.ido_minor_version.ido_micro_version])
+
+m4_define([ido_interface_age], [0])
+m4_define([ido_binary_age],
+          [m4_eval(100 * ido_minor_version + ido_micro_version)])
+
+AC_PREREQ(2.59)
+
+AC_INIT([ido],
+        [ido_version],
+        [https://bugs.launchpad.net/avani])
+AC_CONFIG_SRCDIR([src/ido.h])
+AC_CONFIG_MACRO_DIR([build/autotools])
+
+AM_CONFIG_HEADER([config.h])
+
+AM_INIT_AUTOMAKE([1.9])
+
+IDO_MAJOR_VERSION=ido_major_version
+IDO_MINOR_VERSION=ido_minor_version
+IDO_MICRO_VERSION=ido_micro_version
+IDO_VERSION=ido_version
+AC_SUBST(IDO_MAJOR_VERSION)
+AC_SUBST(IDO_MINOR_VERSION)
+AC_SUBST(IDO_MICRO_VERSION)
+AC_SUBST(IDO_VERSION)
+
+m4_define([lt_current],
+          [m4_eval(100 * ido_minor_version + ido_micro_version - ido_interface_age)])
+m4_define([lt_revision], [ido_interface_age])
+m4_define([lt_age], [m4_eval(ido_binary_age - ido_interface_age)])
+IDO_LT_CURRENT=lt_current
+IDO_LT_REV=lt_revision
+IDO_LT_AGE=lt_age
+IDO_LT_VERSION="$IDO_LT_CURRENT:$IDO_LT_REV:$IDO_LT_AGE"
+IDO_LT_LDFLAGS="-version-info $IDO_LT_VERSION"
+
+AC_SUBST(IDO_LT_VERSION)
+AC_SUBST(IDO_LT_LDFLAGS)
+
+dnl ===========================================================================
+
+# Checks for programs
+AC_PROG_CC
+AC_DISABLE_STATIC
+AC_PROG_LIBTOOL
+AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+
+# Checks for header files
+AC_HEADER_STDC
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h])
+
+# Checks for typedefs, structures and compiler charecteristics
+AC_C_CONST
+
+# Checks for library functions
+AC_FUNC_MALLOC
+AC_FUNC_MMAP
+AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
+
+PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.14)
+AC_SUBST(GTK_CFLAGS)
+AC_SUBST(GTK_LIBS)
+
+dnl ===========================================================================
+
+if test "x$GCC" = "xyes"; then
+  GCC_FLAGS="-g -Wall"
+fi
+AC_SUBST(GCC_FLAGS)
+
+# use strict compiler flags only on development releases
+m4_define([maintainer_flags_default], [m4_if(m4_eval(ido_minor_version % 2), [1], [yes], [no])])
+AC_ARG_ENABLE([maintainer-flags],
+              [AC_HELP_STRING([--enable-maintainer-flags=@<:@no/yes@:>@],
+                              [Use strict compiler flags @<:@default=no@:>@])],
+              [],
+              [enable_maintainer_flags=maintainer_flags_default])
+
+MAINTAINER_CFLAGS=""
+AS_IF([test "x$enable_maintainer_flags" = "xyes" && test "x$GCC" = "xyes"],
+      [
+        MAINTAINER_CFLAGS="-Werror -Wall -Wshadow -Wcast-align -Wno-uninitialized -Wempty-body -Wformat-security -Winit-self"
+      ]
+)
+
+AC_SUBST(MAINTAINER_CFLAGS)
+
+
+dnl = GTK Doc Check ===========================================================
+
+GTK_DOC_CHECK([1.8])
+
+dnl ===========================================================================
+
+SHAVE_INIT([build/autotools], [enable])
+
+AC_CONFIG_FILES([
+  Makefile
+  build/Makefile
+  build/autotools/Makefile
+  build/autotools/shave-libtool
+  build/autotools/shave
+  src/Makefile
+  example/Makefile
+  libido.pc
+])
+
+AC_OUTPUT
+
+echo ""
+echo " ido $VERSION"
+echo " ==============================="
+echo ""
+echo " Prefix       : ${prefix}"
+echo ""
+echo " Documentation: ${enable_gtk_doc}"
+echo ""
