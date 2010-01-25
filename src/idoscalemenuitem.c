@@ -446,4 +446,16 @@ ido_scale_menu_item_new_with_range (const gchar *label,
 		       NULL);
 }
 
+GtkWidget*
+ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
+
+  priv = GET_PRIVATE (menuitem);
+
+  return priv->scale;
+}
+
 #define __IDO_SCALE_MENU_ITEM_C__
