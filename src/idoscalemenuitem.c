@@ -194,6 +194,8 @@ ido_scale_menu_item_expose (GtkWidget      *widget,
                        gdk_pixbuf_get_height (pixbuf),
                        GDK_RGB_DITHER_NORMAL,
                        0, 0);
+
+      g_object_unref (pixbuf);
     }
 
   return TRUE;
