@@ -1,4 +1,5 @@
 sources_h =				\
+	idoentrymenuitem.h		\
 	idoscalemenuitem.h
 
 INCLUDES =				\
@@ -20,6 +21,7 @@ AM_CPPFLAGS =				\
 lib_LTLIBRARIES = libido-0.1.la
 
 libido_0_1_la_SOURCES =			\
+	idoentrymenuitem.c		\
 	idoscalemenuitem.c
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
