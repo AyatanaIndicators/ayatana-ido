@@ -28,7 +28,7 @@ libidoincludedir=$(includedir)/libido-0.1/libido
 
 libidoinclude_HEADERS =			\
 	idoentrymenuitem.h		\
-	idoscalemenuitem.c
+	idoscalemenuitem.h
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
 libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)
