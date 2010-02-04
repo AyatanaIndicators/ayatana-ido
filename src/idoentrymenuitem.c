@@ -41,6 +41,7 @@ static void     entry_move_focus_cb                   (GtkWidget        *widget,
 
 struct _IdoEntryMenuItemPrivate
 {
+  GtkWidget       *box;
   GtkWidget       *entry;
   gboolean         selected;
 };
@@ -77,10 +78,19 @@ static void
 ido_entry_menu_item_init (IdoEntryMenuItem *item)
 {
   IdoEntryMenuItemPrivate *priv;
+  GtkBorder border;
+
+  border.left = 4;
+  border.right = 4;
+  border.top = 2;
+  border.bottom = 2;
 
   priv = item->priv = IDO_ENTRY_MENU_ITEM_GET_PRIVATE (item);
 
-  priv->entry = gtk_entry_new ();
+  priv->entry = g_object_new (gtk_entry_get_type (),
+                              "inner-border", &border,
+                              NULL);
+
   g_signal_connect (priv->entry,
                     "realize",
                     G_CALLBACK (entry_realized_cb),
@@ -90,11 +100,12 @@ ido_entry_menu_item_init (IdoEntryMenuItem *item)
                     G_CALLBACK (entry_move_focus_cb),
                     item);
 
-  gtk_widget_set_size_request (priv->entry, 100, -1);
+  priv->box = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->entry, FALSE, FALSE, 0);
 
-  gtk_container_add (GTK_CONTAINER (item), priv->entry);
+  gtk_container_add (GTK_CONTAINER (item), priv->box);
 
-  gtk_widget_show (priv->entry);
+  gtk_widget_show_all (priv->box);
 }
 
 static gboolean
