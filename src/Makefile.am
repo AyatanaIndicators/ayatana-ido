@@ -1,6 +1,7 @@
 sources_h =				\
 	idoentrymenuitem.h		\
-	idoscalemenuitem.h
+	idoscalemenuitem.h		\
+	libido.h
 
 INCLUDES =				\
 	-I$(srcdir)			\
@@ -28,7 +29,8 @@ libidoincludedir=$(includedir)/libido-0.1/libido
 
 libidoinclude_HEADERS =			\
 	idoentrymenuitem.h		\
-	idoscalemenuitem.h
+	idoscalemenuitem.h		\
+	libido.h
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
 libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)

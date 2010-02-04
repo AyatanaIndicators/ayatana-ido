@@ -19,7 +19,7 @@ AC_PREREQ(2.59)
 AC_INIT([ido],
         [ido_version],
         [https://bugs.launchpad.net/avani])
-AC_CONFIG_SRCDIR([src/ido.h])
+AC_CONFIG_SRCDIR([src/libido.h])
 AC_CONFIG_MACRO_DIR([build/autotools])
 
 AM_CONFIG_HEADER([config.h])
