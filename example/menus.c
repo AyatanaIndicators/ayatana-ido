@@ -38,8 +38,8 @@ main (int argc, char *argv[])
   menuitem = gtk_menu_item_new_with_label ("Open");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-  //menuitem = ido_scale_menu_item_new_with_range ("Volume", 0, 100, 1);
-  //gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  menuitem = ido_scale_menu_item_new_with_range ("Volume", 0, 100, 1);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   menuitem = ido_entry_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
