@@ -128,7 +128,7 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
   if (menuitem->priv->selected)
     {
       gtk_widget_event (menuitem->priv->entry,
-                        (GdkEvent *)event);
+                        ((GdkEvent *)(void*)(event)));
     }
 
   return FALSE;

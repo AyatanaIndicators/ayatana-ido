@@ -79,7 +79,8 @@ ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
 {
   GtkWidget *scale = GET_PRIVATE (IDO_SCALE_MENU_ITEM (menuitem))->scale;
 
-  gtk_widget_event (scale, (GdkEvent *) event);
+  gtk_widget_event (scale,
+                    ((GdkEvent *)(void*)(event)));
 
   return TRUE;
 }
@@ -296,7 +297,8 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   event->x -= priv->child_allocation.x;
   event->x_root -= priv->child_allocation.x;
 
-  gtk_widget_event (scale, (GdkEvent *)event);
+  gtk_widget_event (scale,
+                    ((GdkEvent *)(void*)(event)));
 
   return TRUE;
 }
@@ -313,7 +315,8 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   event->x -= priv->child_allocation.x;
   event->x_root -= priv->child_allocation.x;
 
-  gtk_widget_event (scale, (GdkEvent *) event);
+  gtk_widget_event (scale,
+                    ((GdkEvent *)(void*)(event)));
 
   event->window = tmp;
 
@@ -330,7 +333,8 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
   event->x -= priv->child_allocation.x;
   event->x_root -= priv->child_allocation.x;
 
-  gtk_widget_event (scale, (GdkEvent *) event);
+  gtk_widget_event (scale,
+                    ((GdkEvent *)(void*)(event)));
 
   return TRUE;
 }
