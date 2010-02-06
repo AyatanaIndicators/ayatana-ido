@@ -26,35 +26,46 @@
 #include <gtk/gtk.h>
 #include "idoscalemenuitem.h"
 
-static GObject* ido_scale_menu_item_constructor          (GType                  type,
-                                                          guint                  n_construct_properties,
-                                                          GObjectConstructParam *construct_params);
-static void     ido_scale_menu_item_set_property         (GObject               *object,
-                                                          guint                  prop_id,
-                                                          const GValue          *value,
-                                                          GParamSpec            *pspec);
-static void     ido_scale_menu_item_get_property         (GObject               *object,
-                                                          guint                  prop_id,
-                                                          GValue                *value,
-                                                          GParamSpec            *pspec);
-static void     ido_scale_menu_item_forall               (GtkContainer          *container,
-                                                          gboolean               include_internals,
-                                                          GtkCallback            callback,
-                                                          gpointer               data);
-static gboolean ido_scale_menu_item_button_press_event   (GtkWidget             *menuitem,
-                                                          GdkEventButton        *event);
-static gboolean ido_scale_menu_item_button_release_event (GtkWidget             *menuitem,
-                                                          GdkEventButton        *event);
-static gboolean ido_scale_menu_item_motion_notify_event  (GtkWidget             *menuitem,
-                                                          GdkEventMotion        *event);
-static gboolean ido_scale_menu_item_expose               (GtkWidget             *widget,
-                                                          GdkEventExpose        *event);
+static GObject* ido_scale_menu_item_constructor            (GType                  type,
+                                                            guint                  n_construct_properties,
+                                                            GObjectConstructParam *construct_params);
+static void     ido_scale_menu_item_set_property           (GObject               *object,
+                                                            guint                  prop_id,
+                                                            const GValue          *value,
+                                                            GParamSpec            *pspec);
+static void     ido_scale_menu_item_get_property           (GObject               *object,
+                                                            guint                  prop_id,
+                                                            GValue                *value,
+                                                            GParamSpec            *pspec);
+static void     ido_scale_menu_item_forall                 (GtkContainer          *container,
+                                                            gboolean               include_internals,
+                                                            GtkCallback            callback,
+                                                            gpointer               data);
+static gboolean ido_scale_menu_item_button_press_event     (GtkWidget             *menuitem,
+                                                            GdkEventButton        *event);
+static gboolean ido_scale_menu_item_button_release_event   (GtkWidget             *menuitem,
+                                                            GdkEventButton        *event);
+static gboolean ido_scale_menu_item_motion_notify_event    (GtkWidget             *menuitem,
+                                                            GdkEventMotion        *event);
+static gboolean ido_scale_menu_item_expose                 (GtkWidget             *widget,
+                                                            GdkEventExpose        *event);
+static void     ido_scale_menu_item_primary_image_notify   (GtkImage              *image,
+                                                            GParamSpec            *pspec,
+                                                            IdoScaleMenuItem      *item);
+static void     ido_scale_menu_item_secondary_image_notify (GtkImage              *image,
+                                                            GParamSpec            *pspec,
+                                                            IdoScaleMenuItem      *item);
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget     *scale;
   GtkAdjustment *adjustment;
   GtkWidget     *offscreen;
+  GtkWidget     *primary_image;
+  GtkWidget     *secondary_image;
+  GtkWidget     *hbox;
   GtkAllocation  child_allocation;
+  gdouble        left_padding;
+  gdouble        right_padding;
 };
 
 enum {
@@ -89,25 +100,44 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (widget);
-  GtkRequisition child_requisition;
+  GtkRequisition primary_image_req;
+  GtkRequisition secondary_image_req;
   gint horizontal_padding;
+  gint primary_padding, secondary_padding;
 
   GTK_WIDGET_CLASS (ido_scale_menu_item_parent_class)->size_allocate (widget, allocation);
 
-  gtk_widget_get_child_requisition (priv->scale, &child_requisition);
+  gtk_widget_get_child_requisition (priv->primary_image, &primary_image_req);
+  gtk_widget_get_child_requisition (priv->secondary_image, &secondary_image_req);
 
   gtk_widget_style_get (widget,
                         "horizontal-padding", &horizontal_padding,
                         NULL);
 
+  primary_padding = GTK_WIDGET_VISIBLE (priv->primary_image) ? primary_image_req.width : 0;
+  secondary_padding += GTK_WIDGET_VISIBLE (priv->secondary_image) ? secondary_image_req.width : 0;
+
+  priv->left_padding = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ? primary_padding : secondary_padding;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+    {
+      priv->left_padding = primary_padding;
+      priv->right_padding = secondary_padding;
+    }
+  else
+    {
+      priv->left_padding = secondary_padding;
+      priv->right_padding = primary_padding;
+    }
+
   priv->child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
   priv->child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
 
   priv->child_allocation.x += horizontal_padding;
-
   priv->child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;
 
   priv->child_allocation.width = MAX (1, (gint)allocation->width - priv->child_allocation.x * 2);
+  priv->child_allocation.width -= (primary_padding + secondary_padding);
   priv->child_allocation.height = MAX (1, (gint)allocation->height - priv->child_allocation.y * 2);
 
   gtk_widget_set_size_request (priv->scale, priv->child_allocation.width, -1);
@@ -242,6 +272,7 @@ ido_scale_menu_item_constructor (GType                  type,
                                  GObjectConstructParam *construct_params)
 {
   GObject *object;
+  GtkWidget *hbox;
   IdoScaleMenuItemPrivate *priv;
 
   object = G_OBJECT_CLASS (ido_scale_menu_item_parent_class)->constructor (type,
@@ -254,9 +285,29 @@ ido_scale_menu_item_constructor (GType                  type,
 
   priv->scale = gtk_hscale_new_with_range (0.0, 100.0, 1.0);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
-  gtk_container_add (GTK_CONTAINER (priv->offscreen), priv->scale);
   gtk_widget_show (priv->scale);
   gtk_widget_show (priv->offscreen);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (priv->offscreen), hbox);
+
+  priv->primary_image = gtk_image_new ();
+  g_signal_connect (priv->primary_image, "notify",
+                    G_CALLBACK (ido_scale_menu_item_primary_image_notify),
+                    object);
+
+  priv->secondary_image = gtk_image_new ();
+  g_signal_connect (priv->secondary_image, "notify",
+                    G_CALLBACK (ido_scale_menu_item_secondary_image_notify),
+                    object);
+
+  gtk_box_pack_start (GTK_BOX (hbox), priv->primary_image, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), priv->scale, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), priv->secondary_image, FALSE, FALSE, 0);
+
+  priv->hbox = hbox;
+
+  gtk_widget_show (priv->hbox);
 
   gtk_widget_queue_draw (priv->offscreen);
 
@@ -286,15 +337,29 @@ ido_scale_menu_item_forall (GtkContainer *container,
     (* callback) (priv->scale, data);
 }
 
+static void
+translate_event_coordinates (GtkWidget *widget,
+                             gdouble    in_x,
+                             gdouble   *out_x)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (widget);
+
+  *out_x = in_x - priv->child_allocation.x - priv->left_padding;
+}
+
 static gboolean
 ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
+  gdouble x;
 
-  event->x -= priv->child_allocation.x;
-  event->x_root -= priv->child_allocation.x;
+  translate_event_coordinates (menuitem, event->x, &x);
+  event->x = x;
+
+  translate_event_coordinates (menuitem, event->x_root, &x);
+  event->x_root = x;
 
   gtk_widget_event (scale, (GdkEvent *)event);
 
@@ -308,10 +373,51 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
   GdkWindow *tmp = event->window;
+  gdouble x;
+
+  if (event->x > priv->child_allocation.x &&
+      event->x < priv->child_allocation.x + priv->left_padding)
+    {
+      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+      gdouble value = gtk_adjustment_get_value (adj);
+
+      if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
+        {
+          gtk_adjustment_set_value (adj, value - gtk_adjustment_get_step_increment (adj));
+        }
+      else
+        {
+          gtk_adjustment_set_value (adj, value + gtk_adjustment_get_step_increment (adj));
+        }
+
+      return TRUE;
+    }
+
+  if (event->x < priv->child_allocation.x + priv->child_allocation.width + priv->right_padding + priv->left_padding &&
+      event->x > priv->child_allocation.x + priv->child_allocation.width + priv->left_padding)
+    {
+      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+      gdouble value = gtk_adjustment_get_value (adj);
+
+      if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
+        {
+          gtk_adjustment_set_value (adj, value + gtk_adjustment_get_step_increment (adj));
+        }
+      else
+        {
+          gtk_adjustment_set_value (adj, value - gtk_adjustment_get_step_increment (adj));
+        }
+
+      return TRUE;
+    }
 
   event->window = GTK_RANGE (scale)->event_window;
-  event->x -= priv->child_allocation.x;
-  event->x_root -= priv->child_allocation.x;
+
+  translate_event_coordinates (menuitem, event->x, &x);
+  event->x = x;
+
+  translate_event_coordinates (menuitem, event->x_root, &x);
+  event->x_root= x;
 
   gtk_widget_event (scale, (GdkEvent *) event);
 
@@ -326,15 +432,70 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
+  gdouble x;
 
-  event->x -= priv->child_allocation.x;
-  event->x_root -= priv->child_allocation.x;
+  translate_event_coordinates (menuitem, event->x, &x);
+  event->x = x;
+
+  translate_event_coordinates (menuitem, event->x_root, &x);
+  event->x_root= x;
 
   gtk_widget_event (scale, (GdkEvent *) event);
 
   return TRUE;
 }
 
+static void
+ido_scale_menu_item_primary_image_notify (GtkImage         *image,
+                                          GParamSpec       *pspec,
+                                          IdoScaleMenuItem *item)
+{
+  if (gtk_image_get_storage_type (image) == GTK_IMAGE_EMPTY)
+    gtk_widget_hide (GTK_WIDGET (image));
+  else
+    gtk_widget_show (GTK_WIDGET (image));
+}
+
+static void
+ido_scale_menu_item_secondary_image_notify (GtkImage         *image,
+                                            GParamSpec       *pspec,
+                                            IdoScaleMenuItem *item)
+{
+  if (gtk_image_get_storage_type (image) == GTK_IMAGE_EMPTY)
+    gtk_widget_hide (GTK_WIDGET (image));
+  else
+    gtk_widget_show (GTK_WIDGET (image));
+}
+
+#if 0
+static void
+ido_scale_menu_item_primary_button_press (GtkWidget        *image,
+                                          GdkEventButton   *event,
+                                          IdoScaleMenuItem *item)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+  GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+  gdouble value = gtk_adjustment_get_value (adj);
+
+  g_print ("button primary\n");
+
+  gtk_adjustment_set_value (adj, value - gtk_adjustment_get_step_increment (adj));
+}
+
+static void
+ido_scale_menu_item_secondary_button_press (GtkWidget        *image,
+                                            GdkEventButton   *event,
+                                            IdoScaleMenuItem *item)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+  GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+  gdouble value = gtk_adjustment_get_value (adj);
+
+  g_print ("button secondary\n");
+
+  gtk_adjustment_set_value (adj, value + gtk_adjustment_get_step_increment (adj));
+}
+#endif
 
 /**
  * ido_scale_menu_item_new:
@@ -388,5 +549,30 @@ ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
 
   return priv->scale;
 }
+
+GtkWidget *
+ido_scale_menu_item_get_primary_image (IdoScaleMenuItem *menuitem)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
+
+  priv = GET_PRIVATE (menuitem);
+
+  return priv->primary_image;
+}
+
+GtkWidget *
+ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
+
+  priv = GET_PRIVATE (menuitem);
+
+  return priv->secondary_image;
+}
+
 
 #define __IDO_SCALE_MENU_ITEM_C__

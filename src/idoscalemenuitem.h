@@ -55,14 +55,16 @@ struct _IdoScaleMenuItemClass
 };
 
 
-GType	   ido_scale_menu_item_get_type          (void) G_GNUC_CONST;
-GtkWidget *ido_scale_menu_item_new               (const gchar      *label,
-                                                  GtkAdjustment    *adjustment);
-GtkWidget *ido_scale_menu_item_new_with_range    (const gchar      *label,
-                                                  gdouble           min,
-                                                  gdouble           max,
-                                                  gdouble           step);
-GtkWidget *ido_scale_menu_item_get_scale         (IdoScaleMenuItem *menuitem);
+GType	   ido_scale_menu_item_get_type            (void) G_GNUC_CONST;
+GtkWidget *ido_scale_menu_item_new                 (const gchar      *label,
+                                                    GtkAdjustment    *adjustment);
+GtkWidget *ido_scale_menu_item_new_with_range      (const gchar      *label,
+                                                    gdouble           min,
+                                                    gdouble           max,
+                                                    gdouble           step);
+GtkWidget *ido_scale_menu_item_get_scale           (IdoScaleMenuItem *menuitem);
+GtkWidget *ido_scale_menu_item_get_primary_image   (IdoScaleMenuItem *menuitem);
+GtkWidget *ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem);
 
 G_END_DECLS
 
