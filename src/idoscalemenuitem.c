@@ -379,15 +379,14 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
       event->x < priv->child_allocation.x + priv->left_padding)
     {
       GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
-      gdouble value = gtk_adjustment_get_value (adj);
 
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
-          gtk_adjustment_set_value (adj, value - gtk_adjustment_get_step_increment (adj));
+          gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
         }
       else
         {
-          gtk_adjustment_set_value (adj, value + gtk_adjustment_get_step_increment (adj));
+          gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
         }
 
       return TRUE;
@@ -397,15 +396,14 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
       event->x > priv->child_allocation.x + priv->child_allocation.width + priv->left_padding)
     {
       GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
-      gdouble value = gtk_adjustment_get_value (adj);
 
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
-          gtk_adjustment_set_value (adj, value + gtk_adjustment_get_step_increment (adj));
+          gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
         }
       else
         {
-          gtk_adjustment_set_value (adj, value - gtk_adjustment_get_step_increment (adj));
+          gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
         }
 
       return TRUE;
@@ -466,36 +464,6 @@ ido_scale_menu_item_secondary_image_notify (GtkImage         *image,
   else
     gtk_widget_show (GTK_WIDGET (image));
 }
-
-#if 0
-static void
-ido_scale_menu_item_primary_button_press (GtkWidget        *image,
-                                          GdkEventButton   *event,
-                                          IdoScaleMenuItem *item)
-{
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
-  GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
-  gdouble value = gtk_adjustment_get_value (adj);
-
-  g_print ("button primary\n");
-
-  gtk_adjustment_set_value (adj, value - gtk_adjustment_get_step_increment (adj));
-}
-
-static void
-ido_scale_menu_item_secondary_button_press (GtkWidget        *image,
-                                            GdkEventButton   *event,
-                                            IdoScaleMenuItem *item)
-{
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
-  GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
-  gdouble value = gtk_adjustment_get_value (adj);
-
-  g_print ("button secondary\n");
-
-  gtk_adjustment_set_value (adj, value + gtk_adjustment_get_step_increment (adj));
-}
-#endif
 
 /**
  * ido_scale_menu_item_new:
