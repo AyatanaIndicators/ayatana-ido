@@ -39,7 +39,7 @@ main (int argc, char *argv[])
   menuitem = gtk_menu_item_new_with_label ("Open");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-  menuitem = ido_scale_menu_item_new_with_range ("Volume", 0, 100, 1);
+  menuitem = ido_scale_menu_item_new_with_range ("Volume", 65, 0, 100, 1);
   image = ido_scale_menu_item_get_primary_image (IDO_SCALE_MENU_ITEM (menuitem));
   gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_NEW, GTK_ICON_SIZE_MENU);
   image = ido_scale_menu_item_get_secondary_image (IDO_SCALE_MENU_ITEM (menuitem));

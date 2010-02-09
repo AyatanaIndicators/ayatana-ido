@@ -59,6 +59,7 @@ GType	   ido_scale_menu_item_get_type            (void) G_GNUC_CONST;
 GtkWidget *ido_scale_menu_item_new                 (const gchar      *label,
                                                     GtkAdjustment    *adjustment);
 GtkWidget *ido_scale_menu_item_new_with_range      (const gchar      *label,
+                                                    gdouble           value,
                                                     gdouble           min,
                                                     gdouble           max,
                                                     gdouble           step);
