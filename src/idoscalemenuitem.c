@@ -369,11 +369,12 @@ ido_scale_menu_item_new (const gchar   *label,
  **/
 GtkWidget*
 ido_scale_menu_item_new_with_range (const gchar *label,
+                                    gdouble      value,
                                     gdouble      min,
                                     gdouble      max,
                                     gdouble      step)
 {
-  GtkObject *adjustment = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
+  GtkObject *adjustment = gtk_adjustment_new (value, min, max, step, 10 * step, 0);
 
   return g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
                        "label", label,
