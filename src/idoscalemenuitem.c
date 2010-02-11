@@ -116,7 +116,7 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
                         NULL);
 
   primary_padding = GTK_WIDGET_VISIBLE (priv->primary_image) ? primary_image_req.width : 0;
-  secondary_padding += GTK_WIDGET_VISIBLE (priv->secondary_image) ? secondary_image_req.width : 0;
+  secondary_padding = GTK_WIDGET_VISIBLE (priv->secondary_image) ? secondary_image_req.width : 0;
 
   priv->left_padding = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ? primary_padding : secondary_padding;
 
