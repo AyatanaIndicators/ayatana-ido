@@ -66,11 +66,13 @@ struct _IdoScaleMenuItemPrivate {
   GtkAllocation  child_allocation;
   gdouble        left_padding;
   gdouble        right_padding;
+  gboolean       reverse_scroll;
 };
 
 enum {
   PROP_0,
-  PROP_ADJUSTMENT
+  PROP_ADJUSTMENT,
+  PROP_REVERSE_SCROLL_EVENTS
 };
 
 G_DEFINE_TYPE (IdoScaleMenuItem, ido_scale_menu_item, GTK_TYPE_MENU_ITEM)
@@ -88,7 +90,13 @@ static gboolean
 ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
                                   GdkEventScroll *event)
 {
-  GtkWidget *scale = GET_PRIVATE (IDO_SCALE_MENU_ITEM (menuitem))->scale;
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  GtkWidget *scale = priv->scale;
+
+  if (priv->reverse_scroll)
+    {
+      event->direction = !event->direction;
+    }
 
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
@@ -174,6 +182,14 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_REVERSE_SCROLL_EVENTS,
+                                   g_param_spec_boolean ("reverse-scroll-events",
+                                                         "Reverse scroll events",
+                                                         "Reverses how scroll events are interpreted",
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, sizeof (IdoScaleMenuItemPrivate));
 }
 
@@ -199,7 +215,10 @@ ido_scale_menu_item_set_property (GObject         *object,
     {
     case PROP_ADJUSTMENT:
       gtk_range_set_adjustment (GTK_RANGE (priv->scale), g_value_get_object (value));
+      break;
 
+    case PROP_REVERSE_SCROLL_EVENTS:
+      priv->reverse_scroll = g_value_get_boolean (value);
       break;
 
     default:
@@ -222,6 +241,10 @@ ido_scale_menu_item_get_property (GObject         *object,
     {
     case PROP_ADJUSTMENT:
       g_value_set_object (value, adjustment);
+      break;
+
+    case PROP_REVERSE_SCROLL_EVENTS:
+      g_value_set_boolean (value, priv->reverse_scroll);
       break;
 
     default:
