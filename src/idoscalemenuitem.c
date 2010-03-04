@@ -308,6 +308,7 @@ ido_scale_menu_item_constructor (GType                  type,
   priv->offscreen = gtk_offscreen_window_new ();
 
   priv->scale = gtk_hscale_new_with_range (0.0, 100.0, 1.0);
+  gtk_widget_set_name (priv->scale, "ido-offscreen-scale");
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
   gtk_widget_show (priv->scale);
   gtk_widget_show (priv->offscreen);
