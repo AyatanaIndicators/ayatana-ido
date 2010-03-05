@@ -3,6 +3,18 @@
 #include "idoscalemenuitem.h"
 #include "idoentrymenuitem.h"
 
+static void
+slider_grabbed (GtkWidget *widget, gpointer user_data)
+{
+  g_print ("grabbed\n");
+}
+
+static void
+slider_released (GtkWidget *widget, gpointer user_data)
+{
+  g_print ("released\n");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -45,6 +57,9 @@ main (int argc, char *argv[])
   image = ido_scale_menu_item_get_secondary_image (IDO_SCALE_MENU_ITEM (menuitem));
   gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  g_signal_connect (menuitem, "slider-grabbed", G_CALLBACK (slider_grabbed), NULL);
+  g_signal_connect (menuitem, "slider-released", G_CALLBACK (slider_released), NULL);
 
   menuitem = ido_entry_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);

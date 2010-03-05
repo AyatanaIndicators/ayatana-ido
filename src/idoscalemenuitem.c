@@ -70,10 +70,18 @@ struct _IdoScaleMenuItemPrivate {
 };
 
 enum {
+  SLIDER_GRABBED,
+  SLIDER_RELEASED,
+  LAST_SIGNAL
+};
+
+enum {
   PROP_0,
   PROP_ADJUSTMENT,
   PROP_REVERSE_SCROLL_EVENTS
 };
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (IdoScaleMenuItem, ido_scale_menu_item, GTK_TYPE_MENU_ITEM)
 
@@ -189,6 +197,22 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                                          "Reverses how scroll events are interpreted",
                                                          FALSE,
                                                          G_PARAM_READWRITE));
+
+  signals[SLIDER_GRABBED] = g_signal_new ("slider-grabbed",
+                                          G_OBJECT_CLASS_TYPE (gobject_class),
+                                          G_SIGNAL_RUN_FIRST,
+                                          0,
+                                          NULL, NULL,
+                                          g_cclosure_marshal_VOID__VOID,
+                                          G_TYPE_NONE, 0);
+
+  signals[SLIDER_RELEASED] = g_signal_new ("slider-released",
+                                           G_OBJECT_CLASS_TYPE (gobject_class),
+                                           G_SIGNAL_RUN_FIRST,
+                                           0,
+                                           NULL, NULL,
+                                           g_cclosure_marshal_VOID__VOID,
+                                           G_TYPE_NONE, 0);
 
   g_type_class_add_private (object_class, sizeof (IdoScaleMenuItemPrivate));
 }
@@ -389,6 +413,8 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
 
+  g_signal_emit (menuitem, signals[SLIDER_GRABBED], 0);
+
   return TRUE;
 }
 
@@ -415,6 +441,8 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
           gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
         }
 
+      g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+
       return TRUE;
     }
 
@@ -432,6 +460,8 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
           gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
         }
 
+      g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+
       return TRUE;
     }
 
@@ -447,6 +477,8 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
                     ((GdkEvent *)(void*)(event)));
 
   event->window = tmp;
+
+  g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
 
   return TRUE;
 }
