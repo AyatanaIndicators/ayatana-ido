@@ -55,6 +55,9 @@ static void     ido_scale_menu_item_primary_image_notify   (GtkImage            
 static void     ido_scale_menu_item_secondary_image_notify (GtkImage              *image,
                                                             GParamSpec            *pspec,
                                                             IdoScaleMenuItem      *item);
+static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem      *item,
+                                                            GParamSpec            *pspec,
+                                                            gpointer               user_data);
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget     *scale;
@@ -67,6 +70,7 @@ struct _IdoScaleMenuItemPrivate {
   gdouble        left_padding;
   gdouble        right_padding;
   gboolean       reverse_scroll;
+  gboolean       grabbed;
 };
 
 enum {
@@ -329,6 +333,10 @@ ido_scale_menu_item_constructor (GType                  type,
 
   priv = GET_PRIVATE (object);
 
+  g_signal_connect (object, "notify",
+                    G_CALLBACK (ido_scale_menu_item_notify),
+                    NULL);
+
   priv->offscreen = gtk_offscreen_window_new ();
   gtk_widget_set_name (priv->offscreen, "ido-offscreen-scale");
 
@@ -413,7 +421,11 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
 
-  g_signal_emit (menuitem, signals[SLIDER_GRABBED], 0);
+  if (!priv->grabbed)
+    {
+      priv->grabbed = TRUE;
+      g_signal_emit (menuitem, signals[SLIDER_GRABBED], 0);
+    }
 
   return TRUE;
 }
@@ -441,7 +453,11 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
           gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
         }
 
-      g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+      if (priv->grabbed)
+        {
+          priv->grabbed = FALSE;
+          g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+        }
 
       return TRUE;
     }
@@ -460,7 +476,11 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
           gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
         }
 
-      g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+      if (priv->grabbed)
+        {
+          priv->grabbed = FALSE;
+          g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+        }
 
       return TRUE;
     }
@@ -478,7 +498,11 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
 
   event->window = tmp;
 
-  g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+  if (priv->grabbed)
+    {
+      priv->grabbed = FALSE;
+      g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
+    }
 
   return TRUE;
 }
@@ -501,6 +525,36 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
                     ((GdkEvent *)(void*)(event)));
 
   return TRUE;
+}
+
+static void
+menu_hidden (GtkWidget *menu,
+             IdoScaleMenuItem *scale)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (scale);
+
+  if (priv->grabbed)
+    {
+      priv->grabbed = FALSE;
+      g_signal_emit (scale, signals[SLIDER_RELEASED], 0);
+    }
+}
+
+static void
+ido_scale_menu_item_notify (IdoScaleMenuItem *item,
+                            GParamSpec       *pspec,
+                            gpointer          user_data)
+{
+  if (g_strcmp0 (pspec->name, "parent"))
+    {
+      GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (item));
+      if (parent)
+        {
+          g_signal_connect (parent, "hide",
+                            G_CALLBACK (menu_hidden),
+                            item);
+        }
+    }
 }
 
 static void
