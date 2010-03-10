@@ -23,6 +23,7 @@
  *    Cody Russell <crussell@canonical.com>
  */
 
+#include <gdk/gdkkeysyms.h>
 #include "idoentrymenuitem.h"
 
 static void     ido_entry_menu_item_select            (GtkItem        *item);
@@ -125,7 +126,8 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
 {
   IdoEntryMenuItem *menuitem = (IdoEntryMenuItem *)data;
 
-  if (menuitem->priv->selected)
+  if (menuitem->priv->selected &&
+      event->keyval != GDK_Escape)
     {
       gtk_widget_event (menuitem->priv->entry,
                         ((GdkEvent *)(void*)(event)));
