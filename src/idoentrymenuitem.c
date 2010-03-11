@@ -171,18 +171,23 @@ static gboolean
 ido_entry_menu_item_button_press (GtkWidget      *widget,
                                   GdkEventButton *event)
 {
-  GtkWidget *entry;
-
-  entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
-
-  if (entry->window != NULL)
+  if (event->button == GDK_BUTTON_PRESS)
     {
-      gdk_window_raise (entry->window);
-    }
+      GtkWidget *entry;
 
-  if (!GTK_WIDGET_HAS_FOCUS (entry))
-    {
-      gtk_widget_grab_focus (entry);
+      entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
+
+      if (entry->window != NULL)
+        {
+          gdk_window_raise (entry->window);
+        }
+
+      if (!GTK_WIDGET_HAS_FOCUS (entry))
+        {
+          gtk_widget_grab_focus (entry);
+        }
+
+      return TRUE;
     }
 
   return FALSE;
