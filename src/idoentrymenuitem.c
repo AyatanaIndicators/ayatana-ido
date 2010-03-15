@@ -120,6 +120,24 @@ ido_entry_menu_item_button_release (GtkWidget      *widget,
 }
 
 static gboolean
+is_key_press_valid (IdoEntryMenuItem *item,
+                    gint              key)
+{
+  switch (key)
+    {
+    case GDK_Escape:
+    case GDK_Up:
+    case GDK_Down:
+    case GDK_KP_Up:
+    case GDK_KP_Down:
+      return FALSE;
+
+    default:
+      return TRUE;
+    }
+}
+
+static gboolean
 ido_entry_menu_item_key_press (GtkWidget     *widget,
                                GdkEventKey   *event,
                                gpointer       data)
@@ -127,7 +145,7 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
   IdoEntryMenuItem *menuitem = (IdoEntryMenuItem *)data;
 
   if (menuitem->priv->selected &&
-      event->keyval != GDK_Escape)
+      is_key_press_valid (menuitem, event->keyval))
     {
       gtk_widget_event (menuitem->priv->entry,
                         ((GdkEvent *)(void*)(event)));
@@ -140,7 +158,7 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
 
 static void
 ido_entry_menu_item_send_focus_change (GtkWidget *widget,
-                   gboolean   in)
+                                       gboolean   in)
 {
   GdkEvent *event = gdk_event_new (GDK_FOCUS_CHANGE);
 
@@ -182,7 +200,7 @@ ido_entry_menu_item_button_press (GtkWidget      *widget,
           gdk_window_raise (entry->window);
         }
 
-      if (!GTK_WIDGET_HAS_FOCUS (entry))
+      if (!gtk_widget_has_focus (entry))
         {
           gtk_widget_grab_focus (entry);
         }
