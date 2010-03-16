@@ -135,8 +135,8 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
                         "horizontal-padding", &horizontal_padding,
                         NULL);
 
-  primary_padding = GTK_WIDGET_VISIBLE (priv->primary_image) ? primary_image_req.width : 0;
-  secondary_padding = GTK_WIDGET_VISIBLE (priv->secondary_image) ? secondary_image_req.width : 0;
+  primary_padding = gtk_widget_get_visible (priv->primary_image) ? primary_image_req.width : 0;
+  secondary_padding = gtk_widget_get_visible (priv->secondary_image) ? secondary_image_req.width : 0;
 
   priv->left_padding = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ? primary_padding : secondary_padding;
 
@@ -297,7 +297,7 @@ ido_scale_menu_item_expose (GtkWidget      *widget,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (widget);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GdkPixbuf *pixbuf = gtk_offscreen_window_get_pixbuf (GTK_OFFSCREEN_WINDOW (priv->offscreen));
 
