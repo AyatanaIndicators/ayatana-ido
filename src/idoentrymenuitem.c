@@ -73,7 +73,7 @@ ido_entry_menu_item_class_init (IdoEntryMenuItemClass *klass)
   item_class->select = ido_entry_menu_item_select;
   item_class->deselect = ido_entry_menu_item_deselect;
 
-  menu_item_class->hide_on_activate = FALSE;
+  menu_item_class->hide_on_activate = TRUE;
 
   g_type_class_add_private (gobject_class, sizeof (IdoEntryMenuItemPrivate));
 }
@@ -150,7 +150,11 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
       gtk_widget_event (menuitem->priv->entry,
                         ((GdkEvent *)(void*)(event)));
 
-      return TRUE;
+      /* We've handled the event, but if the key was GDK_Return
+       * we still want to forward the event up to the menu shell
+       * to ensure that the menuitem receives the activate signal.
+       */
+      return event->keyval != GDK_Return;
     }
 
   return FALSE;
