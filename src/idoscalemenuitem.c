@@ -107,7 +107,19 @@ ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
 
   if (priv->reverse_scroll)
     {
-      event->direction = !event->direction;
+      switch (event->direction)
+        {
+        case GDK_SCROLL_UP:
+          event->direction = GDK_SCROLL_DOWN;
+          break;
+
+        case GDK_SCROLL_DOWN:
+          event->direction = GDK_SCROLL_UP;
+          break;
+
+        default:
+          break;
+        }
     }
 
   gtk_widget_event (scale,
@@ -198,7 +210,7 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                    PROP_REVERSE_SCROLL_EVENTS,
                                    g_param_spec_boolean ("reverse-scroll-events",
                                                          "Reverse scroll events",
-                                                         "Reverses how scroll events are interpreted",
+                                                         "Reverses how up/down scroll events are interpreted",
                                                          FALSE,
                                                          G_PARAM_READWRITE));
 
