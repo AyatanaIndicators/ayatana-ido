@@ -335,8 +335,12 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   translate_event_coordinates (menuitem, event->x_root, &x);
   event->x_root = x;
 
+  GTK_OBJECT_FLAGS (scale) |= GTK_HAS_GRAB;
+
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
+
+  GTK_OBJECT_FLAGS (scale) &= ~(GTK_HAS_GRAB);
 
   if (!priv->grabbed)
     {
