@@ -1,7 +1,32 @@
+ido_built_public_sources =		\
+	idotypebuiltins.h
+
+stamp_files =				\
+	idotypebuiltins.h		\
+	idotypebuiltins.c
+
 sources_h =				\
 	idoentrymenuitem.h		\
+	idomessagedialog.h		\
 	idoscalemenuitem.h		\
+	idotimeline.h			\
 	libido.h
+
+EXTRA_DIST =				\
+	ido.list
+
+idotypebuiltins.h: stamp-idotypebuiltins.h
+
+stamp-idotypebuiltins.h: $(sources_h)
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template idotypebuiltins.h.template \
+		$(sources_h) ) >> xgen-gtbh \
+	&& (cmp -s xgen-gtbh idotypebuiltins.h || cp xgen-gtbh idotypebuiltins.h ) \
+	&& rm -f xgen-gtbh && echo timestamp > $(@F)
+
+idotypebuiltins.c: stamp-idotypebuiltins.h
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template idotypebuiltins.c.template \
+		$(sources_h) ) > xgen-gtbc \
+	&& cp xgen-gtbc idotypebuiltins.c && rm -f xgen-gtbc
 
 INCLUDES =				\
 	-I$(srcdir)			\
@@ -22,8 +47,11 @@ AM_CPPFLAGS =				\
 lib_LTLIBRARIES = libido-0.1.la
 
 libido_0_1_la_SOURCES =			\
+	idotypebuiltins.c		\
 	idoentrymenuitem.c		\
-	idoscalemenuitem.c
+	idomessagedialog.c		\
+	idoscalemenuitem.c		\
+	idotimeline.c
 
 libidoincludedir=$(includedir)/libido-0.1/libido
 
