@@ -13,7 +13,9 @@ sources_h =				\
 	libido.h
 
 EXTRA_DIST =				\
-	ido.list
+	ido.list			\
+	idotypebuiltins.h.template	\
+	idotypebuiltins.c.template
 
 idotypebuiltins.h: stamp-idotypebuiltins.h
 
@@ -57,10 +59,18 @@ libidoincludedir=$(includedir)/libido-0.1/libido
 
 libidoinclude_HEADERS =			\
 	idoentrymenuitem.h		\
+	idomessagedialog.h		\
 	idoscalemenuitem.h		\
+	idotimeline.h			\
 	libido.h
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
 libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)
 
 idoheadersdir = $(includedir)/ido-0.1/ido
+
+DISTCLEANFILES =			\
+	stamp-idotypebuiltins.h		\
+	idotypebuiltins.h		\
+	idotypebuiltins.c
+

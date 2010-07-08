@@ -28,5 +28,6 @@
 
 #include <libido/idoscalemenuitem.h>
 #include <libido/idoentrymenuitem.h>
+#include <libido/idomessagedialog.h>
 
 #endif /* __IDO__ */
