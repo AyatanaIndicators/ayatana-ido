@@ -358,6 +358,8 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
   GList *list;
   gchar *text;
   gchar *secondary_text;
+  GtkWidget *content;
+  GList *children;
 
   g_object_get (G_OBJECT (dialog),
                 "text", &text,
@@ -366,34 +368,38 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
 
   g_return_val_if_fail (IDO_IS_MESSAGE_DIALOG (dialog), NULL);
 
-  for (list = GTK_BOX (GTK_DIALOG (dialog)->vbox)->children; list != NULL; list = list->next)
+  content = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  children = gtk_container_get_children (GTK_CONTAINER (content));
+
+  for (list = children; list != NULL; list = list->next)
     {
-      GtkBoxChild *child = (GtkBoxChild *)list->data;
-
-      if (G_TYPE_FROM_INSTANCE (child->widget) == GTK_TYPE_HBOX)
+      if (G_TYPE_FROM_INSTANCE (list->data) == GTK_TYPE_HBOX)
         {
+	  GList *hchildren;
           GList *hlist;
-          GtkWidget *hbox = child->widget;
+          GtkWidget *hbox = GTK_WIDGET (list->data);
 
-          for (hlist = GTK_BOX (hbox)->children; hlist != NULL; hlist = hlist->next)
+	  hchildren = gtk_container_get_children (GTK_CONTAINER (hbox));
+
+          for (hlist = hchildren; hlist != NULL; hlist = hlist->next)
             {
-              GtkBoxChild *hchild = (GtkBoxChild *)hlist->data;
-
-              if (G_TYPE_FROM_INSTANCE (hchild->widget) == GTK_TYPE_VBOX)
+              if (G_TYPE_FROM_INSTANCE (hlist->data) == GTK_TYPE_VBOX)
                 {
                   GList *vlist;
-                  GtkWidget *vbox = hchild->widget;
+                  GtkWidget *vbox = GTK_WIDGET (hlist->data);
+		  GList *vchildren;
 
-                  for (vlist = GTK_BOX (vbox)->children; vlist != NULL; vlist = vlist->next)
+		  vchildren = gtk_container_get_children (GTK_CONTAINER (vbox));
+
+                  for (vlist = vchildren; vlist != NULL; vlist = vlist->next)
                     {
-                      GtkBoxChild *vchild = (GtkBoxChild *)vlist->data;
                       GtkLabel *label;
 
-                      label = GTK_LABEL (vchild->widget);
+                      label = GTK_LABEL (vlist->data);
 
                       if (strcmp ((primary ? text : secondary_text), label->label) == 0)
                         {
-                          return vchild->widget;
+                          return GTK_WIDGET (label);
                         }
                     }
                 }
