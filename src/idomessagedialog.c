@@ -150,11 +150,10 @@ timeline_finished_cb (IdoTimeline *timeline,
 }
 
 static gboolean
-button_pressed (GtkWidget      *event_box,
-                GdkEventButton *event,
-                gpointer        user_data)
+ido_message_dialog_focus_in_event (GtkWidget     *widget,
+                                   GdkEventFocus *event)
 {
-  IdoMessageDialog *dialog = (IdoMessageDialog *) user_data;
+  IdoMessageDialog *dialog = IDO_MESSAGE_DIALOG (widget);
   IdoMessageDialogPrivate *priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 
   if (!priv->expanded)
@@ -206,10 +205,6 @@ ido_message_dialog_constructed (GObject *object)
 
   event_box = gtk_event_box_new ();
   gtk_widget_show (event_box);
-  g_signal_connect (event_box,
-                    "button-press-event",
-                    G_CALLBACK (button_pressed),
-                    object);
 
   vbox = GTK_DIALOG (object)->vbox;
   priv->action_area = gtk_dialog_get_action_area (GTK_DIALOG (object));
@@ -228,9 +223,10 @@ ido_message_dialog_class_init (IdoMessageDialogClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  object_class->constructed = ido_message_dialog_constructed;
+  object_class->constructed    = ido_message_dialog_constructed;
 
-  widget_class->map         = ido_message_dialog_map;
+  widget_class->map            = ido_message_dialog_map;
+  widget_class->focus_in_event = ido_message_dialog_focus_in_event;
 
   g_type_class_add_private (object_class, sizeof (IdoMessageDialogPrivate));
 }
