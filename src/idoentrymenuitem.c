@@ -35,8 +35,8 @@ static gboolean ido_entry_menu_item_key_press         (GtkWidget      *widget,
                                                        gpointer        data);
 static gboolean ido_entry_menu_item_button_press      (GtkWidget      *widget,
                                                        GdkEventButton *event);
-static void     ido_entry_menu_item_send_focus_change (GtkWidget *widget,
-                                                       gboolean   in);
+static void     ido_entry_menu_item_send_focus_change (GtkWidget      *widget,
+                                                       gboolean        in);
 static void     entry_realized_cb                     (GtkWidget        *widget,
                                                        IdoEntryMenuItem *item);
 static void     entry_move_focus_cb                   (GtkWidget        *widget,
@@ -113,13 +113,6 @@ ido_entry_menu_item_init (IdoEntryMenuItem *item)
 }
 
 static gboolean
-ido_entry_menu_item_button_release (GtkWidget      *widget,
-                                    GdkEventButton *event)
-{
-  return TRUE;
-}
-
-static gboolean
 is_key_press_valid (IdoEntryMenuItem *item,
                     gint              key)
 {
@@ -147,8 +140,20 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
   if (menuitem->priv->selected &&
       is_key_press_valid (menuitem, event->keyval))
     {
-      gtk_widget_event (menuitem->priv->entry,
+      GtkWidget *entry = menuitem->priv->entry;
+
+      gtk_widget_event (entry,
                         ((GdkEvent *)(void*)(event)));
+
+      if (entry->window != NULL)
+        {
+          gdk_window_raise (entry->window);
+        }
+
+      if (!gtk_widget_has_focus (entry))
+        {
+          gtk_widget_grab_focus (entry);
+        }
 
       /* We've handled the event, but if the key was GDK_Return
        * we still want to forward the event up to the menu shell
@@ -193,12 +198,10 @@ static gboolean
 ido_entry_menu_item_button_press (GtkWidget      *widget,
                                   GdkEventButton *event)
 {
-  if (event->button == GDK_BUTTON_PRESS)
+  GtkWidget *entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
+
+  if (event->button == 1)
     {
-      GtkWidget *entry;
-
-      entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
-
       if (entry->window != NULL)
         {
           gdk_window_raise (entry->window);
@@ -209,10 +212,25 @@ ido_entry_menu_item_button_press (GtkWidget      *widget,
           gtk_widget_grab_focus (entry);
         }
 
+      gtk_widget_event (entry,
+                        ((GdkEvent *)(void*)(event)));
+
       return TRUE;
     }
 
   return FALSE;
+}
+
+static gboolean
+ido_entry_menu_item_button_release (GtkWidget      *widget,
+                                    GdkEventButton *event)
+{
+  GtkWidget *entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
+
+  gtk_widget_event (entry,
+                    ((GdkEvent *)(void*)(event)));
+
+  return TRUE;
 }
 
 static void
