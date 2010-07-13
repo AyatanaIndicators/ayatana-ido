@@ -24,7 +24,9 @@
  */
 
 #include <gtk/gtk.h>
+#include "idorange.h"
 #include "idoscalemenuitem.h"
+#include "idotypebuiltins.h"
 
 static void     ido_scale_menu_item_set_property           (GObject               *object,
                                                             guint                  prop_id,
@@ -51,16 +53,19 @@ static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem    
                                                             gpointer               user_data);
 
 struct _IdoScaleMenuItemPrivate {
-  GtkWidget     *scale;
-  GtkAdjustment *adjustment;
-  GtkWidget     *primary_image;
-  GtkWidget     *secondary_image;
-  GtkWidget     *hbox;
-  GtkAllocation  child_allocation;
-  gdouble        left_padding;
-  gdouble        right_padding;
-  gboolean       reverse_scroll;
-  gboolean       grabbed;
+  GtkWidget            *scale;
+  GtkAdjustment        *adjustment;
+  GtkWidget            *primary_image;
+  GtkWidget            *secondary_image;
+  GtkWidget            *primary_label;
+  GtkWidget            *secondary_label;
+  GtkWidget            *hbox;
+  GtkAllocation         child_allocation;
+  gdouble               left_padding;
+  gdouble               right_padding;
+  gboolean              reverse_scroll;
+  gboolean              grabbed;
+  IdoScaleMenuItemStyle style;
 };
 
 enum {
@@ -72,7 +77,8 @@ enum {
 enum {
   PROP_0,
   PROP_ADJUSTMENT,
-  PROP_REVERSE_SCROLL_EVENTS
+  PROP_REVERSE_SCROLL_EVENTS,
+  PROP_STYLE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -123,22 +129,42 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (widget);
-  GtkRequisition primary_image_req;
-  GtkRequisition secondary_image_req;
+  GtkRequisition primary_req;
+  GtkRequisition secondary_req;
   gint horizontal_padding;
   gint primary_padding, secondary_padding;
 
   GTK_WIDGET_CLASS (ido_scale_menu_item_parent_class)->size_allocate (widget, allocation);
 
-  gtk_widget_get_child_requisition (priv->primary_image, &primary_image_req);
-  gtk_widget_get_child_requisition (priv->secondary_image, &secondary_image_req);
+  switch (priv->style)
+    {
+    case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
+      gtk_widget_get_child_requisition (priv->primary_image, &primary_req);
+      gtk_widget_get_child_requisition (priv->secondary_image, &secondary_req);
+
+      primary_padding = gtk_widget_get_visible (priv->primary_image) ? primary_req.width : 0;
+      secondary_padding = gtk_widget_get_visible (priv->secondary_image) ? secondary_req.width : 0;
+      break;
+
+    case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
+      gtk_widget_get_child_requisition (priv->primary_label, &primary_req);
+      gtk_widget_get_child_requisition (priv->secondary_label, &secondary_req);
+
+      primary_padding = gtk_widget_get_visible (priv->primary_label) ? primary_req.width : 0;
+      secondary_padding = gtk_widget_get_visible (priv->secondary_label) ? secondary_req.width : 0;
+      break;
+
+    default:
+      primary_req.width = primary_req.height = 0;
+      secondary_req.width = secondary_req.height = 0;
+      primary_padding = 0;
+      secondary_padding = 0;
+      break;
+    }
 
   gtk_widget_style_get (widget,
                         "horizontal-padding", &horizontal_padding,
                         NULL);
-
-  primary_padding = gtk_widget_get_visible (priv->primary_image) ? primary_image_req.width : 0;
-  secondary_padding = gtk_widget_get_visible (priv->secondary_image) ? secondary_image_req.width : 0;
 
   priv->left_padding = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ? primary_padding : secondary_padding;
 
@@ -184,6 +210,15 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
   gobject_class->get_property = ido_scale_menu_item_get_property;
 
   g_object_class_install_property (gobject_class,
+                                   PROP_STYLE,
+                                   g_param_spec_enum ("range-style",
+                                                      "Range style",
+                                                      "The style of the range",
+                                                      IDO_TYPE_SCALE_MENU_ITEM_STYLE,
+                                                      IDO_SCALE_MENU_ITEM_STYLE_NONE,
+                                                      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
                                    g_param_spec_object ("adjustment",
                                                         "Adjustment",
@@ -219,14 +254,79 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 }
 
 static void
+update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMenuItemStyle old_style)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  GtkContainer *container = GTK_CONTAINER (priv->hbox);
+
+  g_print ("%s %s %s\n",
+           G_OBJECT_TYPE_NAME (priv->primary_image),
+           G_OBJECT_TYPE_NAME (priv->scale),
+           G_OBJECT_TYPE_NAME (priv->secondary_image));
+
+  if (style != old_style)
+    {
+      switch (old_style)
+        {
+        case IDO_SCALE_MENU_ITEM_STYLE_NONE:
+          gtk_container_remove (container, priv->scale);
+          break;
+
+        case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
+          gtk_container_remove (container, priv->primary_image);
+          gtk_container_remove (container, priv->secondary_image);
+          gtk_container_remove (container, priv->scale);
+          break;
+
+        case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
+          gtk_container_remove (container, priv->primary_label);
+          gtk_container_remove (container, priv->secondary_label);
+          gtk_container_remove (container, priv->scale);
+          break;
+
+        default:
+          gtk_container_remove (container, priv->scale);
+          break;
+        }
+    }
+
+  switch (style)
+    {
+    case IDO_SCALE_MENU_ITEM_STYLE_NONE:
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      break;
+
+    case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_image, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_image, FALSE, FALSE, 0);
+      break;
+
+    case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_label, FALSE, FALSE, 0);
+      break;
+
+    default:
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      break;
+    }
+
+  gtk_widget_show_all (priv->hbox);
+}
+
+static void
 ido_scale_menu_item_init (IdoScaleMenuItem *self)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
   GtkWidget *hbox;
+  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0));
 
   priv->adjustment = NULL;
 
-  priv->scale = gtk_hscale_new_with_range (0.0, 100.0, 1.0);
+  priv->scale = ido_range_new (adj, IDO_RANGE_STYLE_SMALL);
+  g_object_ref (priv->scale);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
 
   hbox = gtk_hbox_new (FALSE, 0);
@@ -241,13 +341,12 @@ ido_scale_menu_item_init (IdoScaleMenuItem *self)
                     G_CALLBACK (ido_scale_menu_item_secondary_image_notify),
                     self);
 
-  gtk_box_pack_start (GTK_BOX (hbox), priv->primary_image, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->scale, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->secondary_image, FALSE, FALSE, 0);
+  priv->primary_label = gtk_label_new ("");
+  priv->secondary_label = gtk_label_new ("");
 
   priv->hbox = hbox;
 
-  gtk_widget_show_all (priv->hbox);
+  update_packing (self, priv->style, priv->style);
 
   g_signal_connect (self, "notify",
                     G_CALLBACK (ido_scale_menu_item_notify),
@@ -273,6 +372,10 @@ ido_scale_menu_item_set_property (GObject         *object,
 
     case PROP_REVERSE_SCROLL_EVENTS:
       priv->reverse_scroll = g_value_get_boolean (value);
+      break;
+
+    case PROP_STYLE:
+      ido_scale_menu_item_set_style (menu_item, g_value_get_enum (value));
       break;
 
     default:
@@ -543,6 +646,13 @@ ido_scale_menu_item_new_with_range (const gchar *label,
 		       NULL);
 }
 
+/**
+ * ido_scale_menu_item_get_scale:
+ * @menuitem: The #IdoScaleMenuItem
+ * @returns: A pointer to the scale widget.
+ *
+ * Retrieves the scale widget.
+ **/
 GtkWidget*
 ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
 {
@@ -555,6 +665,52 @@ ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
   return priv->scale;
 }
 
+/**
+ * ido_scale_menu_item_get_style:
+ * @menuitem: The #IdoScaleMenuItem
+ * @returns: A #IdoScaleMenuItemStyle enum describing the style.
+ *
+ * Retrieves the type of widgets being used for the primary and
+ * secondary widget slots.  This could be images, labels, or nothing.
+ **/
+IdoScaleMenuItemStyle
+ido_scale_menu_item_get_style (IdoScaleMenuItem *menuitem)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), IDO_SCALE_MENU_ITEM_STYLE_NONE);
+
+  priv = GET_PRIVATE (menuitem);
+
+  return priv->style;
+}
+
+void
+ido_scale_menu_item_set_style (IdoScaleMenuItem      *menuitem,
+                               IdoScaleMenuItemStyle  style)
+{
+  IdoScaleMenuItemPrivate *priv;
+  IdoScaleMenuItemStyle    old_style;
+
+  g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
+
+  priv = GET_PRIVATE (menuitem);
+
+  old_style = priv->style;
+  priv->style = style;
+
+  update_packing (menuitem, style, old_style);
+}
+
+/**
+ * ido_scale_menu_item_get_primary_image:
+ * @menuitem: The #IdoScaleMenuItem
+ * @returns: A #GtkWidget pointer for the primary image.
+ *
+ * Retrieves a pointer to the image widget used in the primary slot.
+ * Whether this is visible depends upon the return value from
+ * ido_scale_menu_item_get_style().
+ **/
 GtkWidget *
 ido_scale_menu_item_get_primary_image (IdoScaleMenuItem *menuitem)
 {
@@ -567,6 +723,15 @@ ido_scale_menu_item_get_primary_image (IdoScaleMenuItem *menuitem)
   return priv->primary_image;
 }
 
+/**
+ * ido_scale_menu_item_get_secondary_image:
+ * @menuitem: The #IdoScaleMenuItem
+ * @returns: A #GtkWidget pointer for the secondary image.
+ *
+ * Retrieves a pointer to the image widget used in the secondary slot.
+ * Whether this is visible depends upon the return value from
+ * ido_scale_menu_item_get_style().
+ **/
 GtkWidget *
 ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
 {
@@ -577,6 +742,98 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
   priv = GET_PRIVATE (menuitem);
 
   return priv->secondary_image;
+}
+
+/**
+ * ido_scale_menu_item_get_primary_label:
+ * @menuitem: The #IdoScaleMenuItem
+ * @returns: A const gchar* string of the label text.
+ *
+ * Retrieves a string of the text for the primary label widget.
+ * Whether this is visible depends upon the return value from
+ * ido_scale_menu_item_get_style().
+ **/
+G_CONST_RETURN gchar*
+ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
+
+  priv = GET_PRIVATE (menuitem);
+
+  return gtk_label_get_text (GTK_LABEL (priv->primary_label));
+}
+
+/**
+ * ido_scale_menu_item_get_primary_label:
+ * @menuitem: The #IdoScaleMenuItem
+ * @returns: A const gchar* string of the label text.
+ *
+ * Retrieves a string of the text for the primary label widget.
+ * Whether this is visible depends upon the return value from
+ * ido_scale_menu_item_get_style().
+ **/
+G_CONST_RETURN gchar*
+ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem *menuitem)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
+
+  priv = GET_PRIVATE (menuitem);
+
+  return gtk_label_get_text (GTK_LABEL (priv->secondary_label));
+}
+
+/**
+ * ido_scale_menu_item_set_primary_label:
+ * @menuitem: The #IdoScaleMenuItem
+ * @label: A string containing the label text
+ *
+ * Sets the text for the label widget in the primary slot.  This
+ * widget will only be visibile if the return value of
+ * ido_scale_menu_item_get_style() is set to %IDO_SCALE_MENU_ITEM_STYLE_LABEL.
+ **/
+void
+ido_scale_menu_item_set_primary_label (IdoScaleMenuItem *menuitem,
+                                       const gchar      *label)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
+
+  priv = GET_PRIVATE (menuitem);
+
+  if (priv->primary_label)
+    {
+      gtk_label_set_text (GTK_LABEL (priv->primary_label), label);
+    }
+}
+
+/**
+ * ido_scale_menu_item_set_primary_label:
+ * @menuitem: The #IdoScaleMenuItem
+ * @label: A string containing the label text
+ *
+ * Sets the text for the label widget in the primary slot.  This
+ * widget will only be visibile if the return value of
+ * ido_scale_menu_item_get_style() is set to %IDO_SCALE_MENU_ITEM_STYLE_LABEL.
+ **/
+void
+ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem *menuitem,
+                                         const gchar      *label)
+{
+  IdoScaleMenuItemPrivate *priv;
+
+  g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
+
+  priv = GET_PRIVATE (menuitem);
+
+  if (priv->secondary_label)
+    {
+      gtk_label_set_text (GTK_LABEL (priv->secondary_label), label);
+    }
 }
 
 
