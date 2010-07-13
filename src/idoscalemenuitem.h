@@ -37,6 +37,12 @@ G_BEGIN_DECLS
 #define IDO_IS_SCALE_MENU_ITEM_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), IDO_TYPE_SCALE_MENU_ITEM))
 #define IDO_SCALE_MENU_ITEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), IDO_TYPE_SCALE_MENU_ITEM, IdoScaleMenuItemClass))
 
+typedef enum
+{
+  IDO_SCALE_MENU_ITEM_STYLE_NONE,
+  IDO_SCALE_MENU_ITEM_STYLE_IMAGE,
+  IDO_SCALE_MENU_ITEM_STYLE_LABEL
+} IdoScaleMenuItemStyle;
 
 typedef struct _IdoScaleMenuItem        IdoScaleMenuItem;
 typedef struct _IdoScaleMenuItemClass   IdoScaleMenuItemClass;
@@ -64,8 +70,18 @@ GtkWidget *ido_scale_menu_item_new_with_range      (const gchar      *label,
                                                     gdouble           max,
                                                     gdouble           step);
 GtkWidget *ido_scale_menu_item_get_scale           (IdoScaleMenuItem *menuitem);
-GtkWidget *ido_scale_menu_item_get_primary_image   (IdoScaleMenuItem *menuitem);
-GtkWidget *ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem);
+
+IdoScaleMenuItemStyle  ido_scale_menu_item_get_style           (IdoScaleMenuItem      *menuitem);
+void                   ido_scale_menu_item_set_style           (IdoScaleMenuItem      *menuitem,
+                                                                IdoScaleMenuItemStyle  style);
+GtkWidget             *ido_scale_menu_item_get_primary_image   (IdoScaleMenuItem      *menuitem);
+GtkWidget             *ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem      *menuitem);
+G_CONST_RETURN gchar  *ido_scale_menu_item_get_primary_label   (IdoScaleMenuItem      *menuitem);
+G_CONST_RETURN gchar  *ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem      *menuitem);
+void                   ido_scale_menu_item_set_primary_label   (IdoScaleMenuItem      *menuitem,
+                                                                const gchar           *label);
+void                   ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem      *menuitem,
+                                                                const gchar           *label);
 
 G_END_DECLS
 

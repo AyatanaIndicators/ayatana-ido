@@ -8,6 +8,7 @@ stamp_files =				\
 sources_h =				\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
+	idorange.h			\
 	idoscalemenuitem.h		\
 	idotimeline.h			\
 	libido.h
@@ -52,6 +53,7 @@ libido_0_1_la_SOURCES =			\
 	idotypebuiltins.c		\
 	idoentrymenuitem.c		\
 	idomessagedialog.c		\
+	idorange.c			\
 	idoscalemenuitem.c		\
 	idotimeline.c
 
