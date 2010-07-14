@@ -215,7 +215,7 @@ ido_timeline_set_property (GObject      *object,
       break;
     case PROP_SCREEN:
       ido_timeline_set_screen (timeline,
-                               GDK_SCREEN (g_value_get_object (value)));
+                               (GdkScreen*)g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
