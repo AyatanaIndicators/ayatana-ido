@@ -51,6 +51,9 @@ static void     ido_scale_menu_item_secondary_image_notify (GtkImage            
 static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem      *item,
                                                             GParamSpec            *pspec,
                                                             gpointer               user_data);
+static void     update_packing                             (IdoScaleMenuItem      *self,
+                                                            IdoScaleMenuItemStyle  style,
+                                                            IdoScaleMenuItemStyle  old_style);
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget            *scale;
@@ -66,6 +69,7 @@ struct _IdoScaleMenuItemPrivate {
   gboolean              reverse_scroll;
   gboolean              grabbed;
   IdoScaleMenuItemStyle style;
+  IdoRangeStyle         range_style;
 };
 
 enum {
@@ -78,7 +82,8 @@ enum {
   PROP_0,
   PROP_ADJUSTMENT,
   PROP_REVERSE_SCROLL_EVENTS,
-  PROP_STYLE
+  PROP_STYLE,
+  PROP_RANGE_STYLE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -193,30 +198,85 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
 }
 
 static void
+ido_scale_menu_item_constructed (GObject *object)
+{
+  IdoScaleMenuItem *self = IDO_SCALE_MENU_ITEM (object);
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0));
+  IdoRangeStyle range_style;
+  GtkWidget *hbox;
+
+  priv->adjustment  = NULL;
+
+  g_object_get (self,
+                "range-style", &range_style,
+                NULL);
+
+  priv->scale = ido_range_new (adj, range_style);
+  g_object_ref (priv->scale);
+  gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+
+  priv->primary_image = gtk_image_new ();
+  g_signal_connect (priv->primary_image, "notify",
+                    G_CALLBACK (ido_scale_menu_item_primary_image_notify),
+                    self);
+
+  priv->secondary_image = gtk_image_new ();
+  g_signal_connect (priv->secondary_image, "notify",
+                    G_CALLBACK (ido_scale_menu_item_secondary_image_notify),
+                    self);
+
+  priv->primary_label = gtk_label_new ("");
+  priv->secondary_label = gtk_label_new ("");
+
+  priv->hbox = hbox;
+
+  update_packing (self, priv->style, priv->style);
+
+  g_signal_connect (self, "notify",
+                    G_CALLBACK (ido_scale_menu_item_notify),
+                    NULL);
+
+  gtk_container_add (GTK_CONTAINER (self), hbox);
+}
+
+static void
 ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 {
   GObjectClass      *gobject_class = G_OBJECT_CLASS (item_class);
   GtkObjectClass    *object_class = GTK_OBJECT_CLASS (item_class);
   GtkWidgetClass    *widget_class = GTK_WIDGET_CLASS (item_class);
 
-  widget_class->button_press_event = ido_scale_menu_item_button_press_event;
+  widget_class->button_press_event   = ido_scale_menu_item_button_press_event;
   widget_class->button_release_event = ido_scale_menu_item_button_release_event;
-  widget_class->motion_notify_event = ido_scale_menu_item_motion_notify_event;
-  widget_class->scroll_event = ido_scale_menu_item_scroll_event;
-  widget_class->state_changed = ido_scale_menu_item_state_changed;
-  widget_class->size_allocate = ido_scale_menu_item_size_allocate;
+  widget_class->motion_notify_event  = ido_scale_menu_item_motion_notify_event;
+  widget_class->scroll_event         = ido_scale_menu_item_scroll_event;
+  widget_class->state_changed        = ido_scale_menu_item_state_changed;
+  widget_class->size_allocate        = ido_scale_menu_item_size_allocate;
 
+  gobject_class->constructed  = ido_scale_menu_item_constructed;
   gobject_class->set_property = ido_scale_menu_item_set_property;
   gobject_class->get_property = ido_scale_menu_item_get_property;
 
   g_object_class_install_property (gobject_class,
                                    PROP_STYLE,
-                                   g_param_spec_enum ("range-style",
-                                                      "Range style",
-                                                      "The style of the range",
+                                   g_param_spec_enum ("accessory-style",
+                                                      "Style of primary/secondary widgets",
+                                                      "The style of the primary/secondary widgets",
                                                       IDO_TYPE_SCALE_MENU_ITEM_STYLE,
                                                       IDO_SCALE_MENU_ITEM_STYLE_NONE,
                                                       G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_RANGE_STYLE,
+                                   g_param_spec_enum ("range-style",
+                                                      "Range style",
+                                                      "Style of the range",
+                                                      IDO_TYPE_RANGE_STYLE,
+                                                      IDO_RANGE_STYLE_DEFAULT,
+                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -258,11 +318,6 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMen
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
   GtkContainer *container = GTK_CONTAINER (priv->hbox);
-
-  g_print ("%s %s %s\n",
-           G_OBJECT_TYPE_NAME (priv->primary_image),
-           G_OBJECT_TYPE_NAME (priv->scale),
-           G_OBJECT_TYPE_NAME (priv->secondary_image));
 
   if (style != old_style)
     {
@@ -319,40 +374,6 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMen
 static void
 ido_scale_menu_item_init (IdoScaleMenuItem *self)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
-  GtkWidget *hbox;
-  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0));
-
-  priv->adjustment = NULL;
-
-  priv->scale = ido_range_new (adj, IDO_RANGE_STYLE_SMALL);
-  g_object_ref (priv->scale);
-  gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
-
-  hbox = gtk_hbox_new (FALSE, 0);
-
-  priv->primary_image = gtk_image_new ();
-  g_signal_connect (priv->primary_image, "notify",
-                    G_CALLBACK (ido_scale_menu_item_primary_image_notify),
-                    self);
-
-  priv->secondary_image = gtk_image_new ();
-  g_signal_connect (priv->secondary_image, "notify",
-                    G_CALLBACK (ido_scale_menu_item_secondary_image_notify),
-                    self);
-
-  priv->primary_label = gtk_label_new ("");
-  priv->secondary_label = gtk_label_new ("");
-
-  priv->hbox = hbox;
-
-  update_packing (self, priv->style, priv->style);
-
-  g_signal_connect (self, "notify",
-                    G_CALLBACK (ido_scale_menu_item_notify),
-                    NULL);
-
-  gtk_container_add (GTK_CONTAINER (self), hbox);
 }
 
 static void
@@ -378,6 +399,10 @@ ido_scale_menu_item_set_property (GObject         *object,
       ido_scale_menu_item_set_style (menu_item, g_value_get_enum (value));
       break;
 
+    case PROP_RANGE_STYLE:
+      priv->range_style = g_value_get_enum (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -392,16 +417,21 @@ ido_scale_menu_item_get_property (GObject         *object,
 {
   IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (object);
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menu_item);
-  GtkAdjustment *adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+  GtkAdjustment *adjustment;
 
   switch (prop_id)
     {
     case PROP_ADJUSTMENT:
+      adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
       g_value_set_object (value, adjustment);
       break;
 
     case PROP_REVERSE_SCROLL_EVENTS:
       g_value_set_boolean (value, priv->reverse_scroll);
+      break;
+
+    case PROP_RANGE_STYLE:
+      g_value_set_enum (value, priv->range_style);
       break;
 
     default:
@@ -607,6 +637,7 @@ ido_scale_menu_item_secondary_image_notify (GtkImage         *image,
 /**
  * ido_scale_menu_item_new:
  * @label: the text of the new menu item.
+ * @size: The size style of the range.
  * @adjustment: A #GtkAdjustment describing the slider value.
  * @returns: a new #IdoScaleMenuItem.
  *
@@ -614,16 +645,19 @@ ido_scale_menu_item_secondary_image_notify (GtkImage         *image,
  **/
 GtkWidget*
 ido_scale_menu_item_new (const gchar   *label,
+                         IdoRangeStyle  range_style,
                          GtkAdjustment *adjustment)
 {
   return g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
-                       "adjustment", adjustment,
+                       "adjustment",  adjustment,
+                       "range-style", range_style,
                        NULL);
 }
 
 /**
  * ido_scale_menu_item_new_with_label:
  * @label: the text of the menu item.
+ * @size: The size style of the range.
  * @min: The minimum value of the slider.
  * @max: The maximum value of the slider.
  * @step: The step increment of the slider.
@@ -632,17 +666,19 @@ ido_scale_menu_item_new (const gchar   *label,
  * Creates a new #IdoScaleMenuItem containing a label.
  **/
 GtkWidget*
-ido_scale_menu_item_new_with_range (const gchar *label,
-                                    gdouble      value,
-                                    gdouble      min,
-                                    gdouble      max,
-                                    gdouble      step)
+ido_scale_menu_item_new_with_range (const gchar  *label,
+                                    IdoRangeStyle range_style,
+                                    gdouble       value,
+                                    gdouble       min,
+                                    gdouble       max,
+                                    gdouble       step)
 {
   GtkObject *adjustment = gtk_adjustment_new (value, min, max, step, 10 * step, 0);
 
   return g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
-                       "label", label,
-                       "adjustment", adjustment,
+                       "label",       label,
+                       "range-style", range_style,
+                       "adjustment",  adjustment,
 		       NULL);
 }
 
