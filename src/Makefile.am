@@ -62,6 +62,7 @@ libidoincludedir=$(includedir)/libido-0.1/libido
 libidoinclude_HEADERS =			\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
+	idorange.h			\
 	idoscalemenuitem.h		\
 	idotimeline.h			\
 	libido.h
