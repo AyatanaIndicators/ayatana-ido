@@ -27,6 +27,7 @@
 #define __IDO_SCALE_MENU_ITEM_H__
 
 #include <gtk/gtkmenuitem.h>
+#include "idorange.h"
 
 G_BEGIN_DECLS
 
@@ -63,8 +64,10 @@ struct _IdoScaleMenuItemClass
 
 GType	   ido_scale_menu_item_get_type            (void) G_GNUC_CONST;
 GtkWidget *ido_scale_menu_item_new                 (const gchar      *label,
+                                                    IdoRangeStyle     size,
                                                     GtkAdjustment    *adjustment);
 GtkWidget *ido_scale_menu_item_new_with_range      (const gchar      *label,
+                                                    IdoRangeStyle     size,
                                                     gdouble           value,
                                                     gdouble           min,
                                                     gdouble           max,
