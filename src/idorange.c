@@ -141,6 +141,9 @@ ido_range_constructed (GObject *object)
                 "range-style", &style,
                 NULL);
 
+  g_snprintf (buf, sizeof (buf), "idorange-%p", range);
+  gtk_widget_set_name (GTK_WIDGET (range), buf);
+
   if (style == IDO_RANGE_STYLE_SMALL)
     {
       gint width, height;
@@ -154,8 +157,8 @@ ido_range_constructed (GObject *object)
                   "style \"ido-range\" {\n"
                   "  GtkRange::slider-width = %d\n"
                   "  GtkScale::slider-length = %d\n"
-                  "} class \"IdoRange\" style \"ido-range\"\n",
-                  width, height);
+                  "} widget \"*.idorange-%p\" style \"ido-range\"\n",
+                  width, height, range);
       gtk_rc_parse_string (buf);
     }
 
