@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include "idoscalemenuitem.h"
+#include "idocalendarmenuitem.h"
 #include "idoentrymenuitem.h"
 
 static void
@@ -65,6 +66,9 @@ main (int argc, char *argv[])
   g_signal_connect (menuitem, "slider-released", G_CALLBACK (slider_released), NULL);
 
   menuitem = ido_entry_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = ido_calendar_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   menuitem = ido_scale_menu_item_new_with_range ("Volume",

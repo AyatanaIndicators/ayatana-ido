@@ -6,6 +6,7 @@ stamp_files =				\
 	idotypebuiltins.c
 
 sources_h =				\
+	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
 	idorange.h			\
@@ -51,6 +52,7 @@ lib_LTLIBRARIES = libido-0.1.la
 
 libido_0_1_la_SOURCES =			\
 	idotypebuiltins.c		\
+	idocalendarmenuitem.c		\
 	idoentrymenuitem.c		\
 	idomessagedialog.c		\
 	idorange.c			\
@@ -60,6 +62,7 @@ libido_0_1_la_SOURCES =			\
 libidoincludedir=$(includedir)/libido-0.1/libido
 
 libidoinclude_HEADERS =			\
+	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
 	idorange.h			\
