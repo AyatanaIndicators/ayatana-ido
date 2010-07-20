@@ -64,6 +64,8 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
   item_class = GTK_ITEM_CLASS (klass);
 
+  gobject_class->dispose = ido_calendar_menu_item_dispose;
+
   widget_class->button_release_event = ido_calendar_menu_item_button_release;
   widget_class->button_press_event = ido_calendar_menu_item_button_press;
 
@@ -88,6 +90,7 @@ ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
 
   priv = item->priv = IDO_CALENDAR_MENU_ITEM_GET_PRIVATE (item);
 
+  /* Will be disposed automatically */
   priv->calendar = g_object_new (gtk_calendar_get_type (),
                                  NULL);
 
@@ -110,7 +113,7 @@ ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
 
 static void
 ido_calendar_menu_item_send_focus_change (GtkWidget *widget,
-                                       gboolean   in)
+                                          gboolean   in)
 {
   GdkEvent *event = gdk_event_new (GDK_FOCUS_CHANGE);
 
@@ -166,7 +169,7 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 
 static gboolean
 ido_calendar_menu_item_button_release (GtkWidget      *widget,
-                                    GdkEventButton *event)
+                                       GdkEventButton *event)
 {
   GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
 
@@ -195,7 +198,7 @@ ido_calendar_menu_item_deselect (GtkItem *item)
 
 static void
 calendar_realized_cb (GtkWidget        *widget,
-                   IdoCalendarMenuItem *item)
+                      IdoCalendarMenuItem *item)
 {
   if (widget->window != NULL)
     {
@@ -207,8 +210,8 @@ calendar_realized_cb (GtkWidget        *widget,
 
 static void
 calendar_move_focus_cb (GtkWidget        *widget,
-                     GtkDirectionType  direction,
-                     IdoCalendarMenuItem *item)
+                        GtkDirectionType  direction,
+                        IdoCalendarMenuItem *item)
 {
   ido_calendar_menu_item_send_focus_change (GTK_WIDGET (IDO_CALENDAR_MENU_ITEM (item)->priv->calendar), FALSE);
 
