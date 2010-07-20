@@ -32,6 +32,9 @@ static gboolean ido_calendar_menu_item_button_release    (GtkWidget      *widget
                                                           GdkEventButton *event);
 static gboolean ido_calendar_menu_item_button_press      (GtkWidget      *widget,
                                                           GdkEventButton *event);
+static gboolean ido_calendar_menu_item_key_press         (GtkWidget      *widget,
+                                                          GdkEventKey    *event,
+                                                          gpointer        data);
 static void     ido_calendar_menu_item_send_focus_change (GtkWidget      *widget,
                                                           gboolean        in);
 static void     calendar_realized_cb                     (GtkWidget        *widget,
@@ -139,6 +142,36 @@ ido_calendar_menu_item_send_focus_change (GtkWidget *widget,
 }
 
 static gboolean
+ido_calendar_menu_item_key_press (GtkWidget   *widget,
+                                  GdkEventKey *event,
+                                  gpointer     data)
+{
+  IdoCalendarMenuItem *menuitem = (IdoCalendarMenuItem *)data;
+
+  if (menuitem->priv->selected)
+    {
+      GtkWidget *calendar = menuitem->priv->calendar;
+
+      gtk_widget_event (calendar,
+                        ((GdkEvent *)(void*)(event)));
+
+      if (calendar->window != NULL)
+        {
+          gdk_window_raise (calendar->window);
+        }
+
+      if (!gtk_widget_has_focus (calendar))
+        {
+          gtk_widget_grab_focus (calendar);
+        }
+
+      return event->keyval != GDK_Return;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 ido_calendar_menu_item_button_press (GtkWidget      *widget,
                                      GdkEventButton *event)
 {
@@ -202,6 +235,11 @@ calendar_realized_cb (GtkWidget        *widget,
     {
       gdk_window_raise (widget->window);
     }
+
+  g_signal_connect (GTK_WIDGET (item)->parent,
+                    "key-press-event",
+                    G_CALLBACK (ido_calendar_menu_item_key_press),
+                    item);
 
   ido_calendar_menu_item_send_focus_change (widget, TRUE);
 }
