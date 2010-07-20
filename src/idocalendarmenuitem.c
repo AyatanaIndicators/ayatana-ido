@@ -64,8 +64,6 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
   item_class = GTK_ITEM_CLASS (klass);
 
-  gobject_class->dispose = ido_calendar_menu_item_dispose;
-
   widget_class->button_release_event = ido_calendar_menu_item_button_release;
   widget_class->button_press_event = ido_calendar_menu_item_button_press;
 
