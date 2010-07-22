@@ -104,6 +104,8 @@ void                  ido_timeline_set_direction       (IdoTimeline             
                                                         IdoTimelineDirection      direction);
 
 gdouble               ido_timeline_get_progress        (IdoTimeline              *timeline);
+void                  ido_timeline_set_progress        (IdoTimeline              *timeline,
+                                                        gdouble                   progress);
 
 gdouble               ido_timeline_calculate_progress  (gdouble                   linear_progress,
                                                         IdoTimelineProgressType   progress_type);

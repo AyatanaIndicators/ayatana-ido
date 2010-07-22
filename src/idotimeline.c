@@ -688,6 +688,27 @@ ido_timeline_get_progress (IdoTimeline *timeline)
   return priv->progress;
 }
 
+void
+ido_timeline_set_progress (IdoTimeline *timeline, gdouble progress)
+{
+  IdoTimelinePriv *priv;
+
+  g_return_if_fail (IDO_IS_TIMELINE (timeline));
+
+  priv = IDO_TIMELINE_GET_PRIV (timeline);
+
+  if (priv->source_id)
+    {
+      g_timer_stop (priv->timer);
+      g_source_remove (priv->source_id);
+      priv->source_id = 0;
+    }
+
+  priv->progress = progress;
+
+  ido_timeline_start (timeline);
+}
+
 gdouble
 ido_timeline_calculate_progress (gdouble                 linear_progress,
                                  IdoTimelineProgressType progress_type)
