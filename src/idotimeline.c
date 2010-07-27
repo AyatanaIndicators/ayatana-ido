@@ -704,7 +704,7 @@ ido_timeline_set_progress (IdoTimeline *timeline, gdouble progress)
       priv->source_id = 0;
     }
 
-  priv->progress = progress;
+  priv->progress = priv->last_progress = progress;
 
   ido_timeline_start (timeline);
 }
