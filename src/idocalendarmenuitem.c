@@ -121,13 +121,7 @@ ido_calendar_menu_item_send_focus_change (GtkWidget *widget,
   g_object_ref (widget);
 
   if (in)
-    {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-    }
-  else
-    {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-    }
+    gtk_widget_grab_focus (widget);
 
   event->focus_change.type = GDK_FOCUS_CHANGE;
   event->focus_change.window = g_object_ref (widget->window);
