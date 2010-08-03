@@ -179,7 +179,7 @@ ido_range_init (IdoRange *range)
  * Creates a new #IdoRange widget.
  **/
 GtkWidget *
-ido_range_new (GtkAdjustment *adj,
+ido_range_new (GtkObject     *adj,
                IdoRangeStyle  style)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adj), NULL);
