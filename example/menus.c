@@ -27,6 +27,8 @@ main (int argc, char *argv[])
   GtkWidget *menubar;
   GtkWidget *image;
 
+  g_unsetenv ("UBUNTU_MENUPROXY");
+
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
