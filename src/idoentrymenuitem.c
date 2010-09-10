@@ -145,16 +145,6 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
       gtk_widget_event (entry,
                         ((GdkEvent *)(void*)(event)));
 
-      if (entry->window != NULL)
-        {
-          gdk_window_raise (entry->window);
-        }
-
-      if (!gtk_widget_has_focus (entry))
-        {
-          gtk_widget_grab_focus (entry);
-        }
-
       /* We've handled the event, but if the key was GDK_Return
        * we still want to forward the event up to the menu shell
        * to ensure that the menuitem receives the activate signal.
@@ -172,9 +162,6 @@ ido_entry_menu_item_send_focus_change (GtkWidget *widget,
   GdkEvent *event = gdk_event_new (GDK_FOCUS_CHANGE);
 
   g_object_ref (widget);
-
-  if (in)
-    gtk_widget_grab_focus (widget);
 
   event->focus_change.type = GDK_FOCUS_CHANGE;
   event->focus_change.window = g_object_ref (widget->window);
