@@ -97,8 +97,6 @@ pinch_update (GtkWindow       *window,
 
   scale += e->radius_delta / 100;
 
-  g_print ("radius_delta == %f, scale is now %f\n", e->radius_delta, scale);
-
   gtk_widget_queue_draw (GTK_WIDGET (window));
 }
 

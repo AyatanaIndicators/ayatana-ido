@@ -183,38 +183,37 @@ pinch_gesture_handle_properties (IdoEventGesturePinch *event,
 
   for (i = 0; i < attr_count; ++i)
     {
-      //g_print ("attr == %s\n", attrs[i].name);
-      if (g_strcmp0 (attrs[i].name, "fingers") == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FINGERS) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           touches = attrs[i].integer_val;
         }
-      if (g_strcmp0 (attrs[i].name, "timestamp") == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_TIMESTAMP) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           event->timestamp = attrs[i].integer_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "focus X") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FOCUS_X) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->focus_x = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "focus Y") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FOCUS_Y) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->focus_y = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "radius delta") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_RADIUS_DELTA) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->radius_delta = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "radial velocity") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_RADIAL_VELOCITY) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->radial_velocity = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "radius") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_RADIUS) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->radius = attrs[i].float_val;
@@ -234,52 +233,52 @@ drag_gesture_handle_properties (IdoEventGestureDrag *event,
 
   for (i = 0; i < attr_count; ++i)
     {
-      if (g_strcmp0 (attrs[i].name, "fingers") == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FINGERS) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           touches = attrs[i].integer_val;
         }
-      if (g_strcmp0 (attrs[i].name, "timestamp") == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_TIMESTAMP) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           event->timestamp = attrs[i].integer_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "focus X") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FOCUS_X) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->focus_x = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "focus Y") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FOCUS_Y) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->focus_y = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "delta X") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_DELTA_X) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->delta_x = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "delta Y") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_DELTA_Y) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->delta_y = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "velocity X") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_VELOCITY_X) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->velocity_x = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "velocity Y") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_VELOCITY_Y) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->velocity_y = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "position X") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_POSITION_X) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->position_x = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "position Y") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_POSITION_Y) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->position_y = attrs[i].float_val;
@@ -299,37 +298,37 @@ rotate_gesture_handle_properties (IdoEventGestureRotate *event,
 
   for (i = 0; i < attr_count; ++i)
     {
-      if (g_strcmp0 (attrs[i].name, "fingers") == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FINGERS) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           touches = attrs[i].integer_val;
         }
-      if (g_strcmp0 (attrs[i].name, "timestamp") == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_TIMESTAMP) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           event->timestamp = attrs[i].integer_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "focus X") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FOCUS_X) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->focus_x = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "focus Y") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FOCUS_Y) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->focus_y = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "angle delta") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_ANGLE_DELTA) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->angle_delta = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "angular velocity") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_ANGULAR_VELOCITY) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->angular_velocity = attrs[i].float_val;
         }
-      else if (g_strcmp0 (attrs[i].name, "angle") == 0 &&
+      else if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_ANGLE) == 0 &&
                attrs[i].type == GEIS_ATTR_TYPE_FLOAT)
         {
           event->angle = attrs[i].float_val;
@@ -368,13 +367,9 @@ gesture_start (void              *cookie,
   IdoGestureRegistration *reg = (IdoGestureRegistration *)cookie;
   GList *l = NULL;
 
-  //g_print ("start, type == %d\n", type);
-
   for (l = reg->bindings; l != NULL; l = l->next)
     {
       IdoGestureBinding *binding = (IdoGestureBinding *)l->data;
-
-      //g_print ("   binding->type == %d, touches == %d\n", binding->type, binding->touches);
 
       if (binding->type == type)
         {
@@ -387,8 +382,6 @@ gesture_start (void              *cookie,
               drag.fingers = drag_gesture_handle_properties (&drag,
                                                              attr_count,
                                                              attrs);
-
-              g_print ("drag.fingers == %d\n", drag.fingers);
 
               if (drag.fingers == binding->touches)
                 {
@@ -406,8 +399,6 @@ gesture_start (void              *cookie,
                                                                attr_count,
                                                                attrs);
 
-              g_print ("pinch.fingers == %d\n", pinch.fingers);
-
               if (pinch.fingers == binding->touches)
                 {
                   binding->start (reg->window,
@@ -423,8 +414,6 @@ gesture_start (void              *cookie,
               rotate.fingers = rotate_gesture_handle_properties (&rotate,
                                                                  attr_count,
                                                                  attrs);
-
-              g_print ("rotate.fingers == %d\n", rotate.fingers);
 
               if (rotate.fingers == binding->touches)
                 {
@@ -447,8 +436,6 @@ gesture_update (void              *cookie,
 {
   IdoGestureRegistration *reg = (IdoGestureRegistration *)cookie;
   GList *l = NULL;
-
-  //g_print ("update %d\n", type);
 
   for (l = reg->bindings; l != NULL; l = l->next)
     {
@@ -517,8 +504,6 @@ gesture_finish (void              *cookie,
 {
   IdoGestureRegistration *reg = (IdoGestureRegistration *)cookie;
   GList *l = NULL;
-
-  //g_print ("finish\n");
 
   for (l = reg->bindings; l != NULL; l = l->next)
     {
@@ -696,8 +681,6 @@ ido_gesture_manager_register_window (IdoGestureManager *manager,
 
   /* XXX - check for duplicates in reg->bindings first */
   binding = g_new0 (IdoGestureBinding, 1);
-
-  g_print (" *** Adding binding type %d\n", (gint)gesture_type);
 
   binding->type    = gesture_type;
   binding->touches = touch_points;
