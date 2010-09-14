@@ -47,31 +47,9 @@ typedef struct _IdoEventGesturePinch  IdoEventGesturePinch;
 typedef struct _IdoEventGestureRotate IdoEventGestureRotate;
 
 typedef enum {
-  IDO_GESTURE_DRAG1,
-  IDO_GESTURE_PINCH1,
-  IDO_GESTURE_ROTATE1,
-
-  IDO_GESTURE_DRAG2,
-  IDO_GESTURE_PINCH2,
-  IDO_GESTURE_ROTATE2,
-
-  IDO_GESTURE_DRAG3,
-  IDO_GESTURE_PINCH3,
-  IDO_GESTURE_ROTATE3,
-
-  IDO_GESTURE_DRAG4,
-  IDO_GESTURE_PINCH4,
-  IDO_GESTURE_ROTATE4,
-
-  IDO_GESTURE_DRAG5,
-  IDO_GESTURE_PINCH5,
-  IDO_GESTURE_ROTATE5,
-
-  IDO_GESTURE_TAP1,
-  IDO_GESTURE_TAP2,
-  IDO_GESTURE_TAP3,
-  IDO_GESTURE_TAP4,
-  IDO_GESTURE_TAP5
+  IDO_GESTURE_DRAG,
+  IDO_GESTURE_PINCH,
+  IDO_GESTURE_ROTATE
 } IdoGestureType;
 
 struct _IdoEventGestureDrag
@@ -153,6 +131,7 @@ IdoGestureManager *ido_gesture_manager_get             (void);
 void               ido_gesture_manager_register_window (IdoGestureManager *manager,
 							GtkWindow         *window,
 							IdoGestureType     gesture_type,
+                                                        gint               touch_points,
                                                         IdoGestureCallback start,
                                                         IdoGestureCallback update,
                                                         IdoGestureCallback end);

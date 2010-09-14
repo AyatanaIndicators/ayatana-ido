@@ -97,6 +97,8 @@ pinch_update (GtkWindow       *window,
 
   scale += e->radius_delta / 100;
 
+  g_print ("radius_delta == %f, scale is now %f\n", e->radius_delta, scale);
+
   gtk_widget_queue_draw (GTK_WIDGET (window));
 }
 
@@ -120,21 +122,24 @@ window_mapped (GtkWidget *widget)
 
   ido_gesture_manager_register_window (manager,
                                        window,
-                                       IDO_GESTURE_PINCH2,
+                                       IDO_GESTURE_PINCH,
+                                       2,
                                        gesture_start,
                                        pinch_update,
                                        gesture_end);
 
   ido_gesture_manager_register_window (manager,
                                        window,
-                                       IDO_GESTURE_ROTATE2,
+                                       IDO_GESTURE_ROTATE,
+                                       2,
                                        gesture_start,
                                        rotate_update,
                                        gesture_end);
 
   ido_gesture_manager_register_window (manager,
                                        window,
-                                       IDO_GESTURE_DRAG2,
+                                       IDO_GESTURE_DRAG,
+                                       2,
                                        gesture_start,
                                        drag_update,
                                        gesture_end);

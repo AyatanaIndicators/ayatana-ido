@@ -39,6 +39,7 @@ struct _IdoGestureManagerPrivate
 struct _IdoGestureBinding
 {
   IdoGestureType     type;
+  gint               touches;
   IdoGestureCallback start;
   IdoGestureCallback update;
   IdoGestureCallback end;
@@ -172,15 +173,22 @@ print_attr (GeisGestureAttr *attr)
 }
 */
 
-static void
+static gint
 pinch_gesture_handle_properties (IdoEventGesturePinch *event,
                                  GeisSize              attr_count,
                                  GeisGestureAttr      *attrs)
 {
   gint i = 0;
+  gint touches = 0;
 
   for (i = 0; i < attr_count; ++i)
     {
+      //g_print ("attr == %s\n", attrs[i].name);
+      if (g_strcmp0 (attrs[i].name, "fingers") == 0 &&
+          attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
+        {
+          touches = attrs[i].integer_val;
+        }
       if (g_strcmp0 (attrs[i].name, "timestamp") == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
@@ -212,17 +220,25 @@ pinch_gesture_handle_properties (IdoEventGesturePinch *event,
           event->radius = attrs[i].float_val;
         }
     }
+
+  return touches;
 }
 
-static void
+static gint
 drag_gesture_handle_properties (IdoEventGestureDrag *event,
                                 GeisSize             attr_count,
                                 GeisGestureAttr     *attrs)
 {
   gint i;
+  gint touches = 0;
 
   for (i = 0; i < attr_count; ++i)
     {
+      if (g_strcmp0 (attrs[i].name, "fingers") == 0 &&
+          attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
+        {
+          touches = attrs[i].integer_val;
+        }
       if (g_strcmp0 (attrs[i].name, "timestamp") == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
@@ -269,17 +285,25 @@ drag_gesture_handle_properties (IdoEventGestureDrag *event,
           event->position_y = attrs[i].float_val;
         }
     }
+
+  return touches;
 }
 
-static void
+static gint
 rotate_gesture_handle_properties (IdoEventGestureRotate *event,
                                   GeisSize               attr_count,
                                   GeisGestureAttr       *attrs)
 {
   gint i;
+  gint touches = 0;
 
   for (i = 0; i < attr_count; ++i)
     {
+      if (g_strcmp0 (attrs[i].name, "fingers") == 0 &&
+          attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
+        {
+          touches = attrs[i].integer_val;
+        }
       if (g_strcmp0 (attrs[i].name, "timestamp") == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
@@ -311,6 +335,8 @@ rotate_gesture_handle_properties (IdoEventGestureRotate *event,
           event->angle = attrs[i].float_val;
         }
     }
+
+  return touches;
 }
 
 
@@ -342,65 +368,69 @@ gesture_start (void              *cookie,
   IdoGestureRegistration *reg = (IdoGestureRegistration *)cookie;
   GList *l = NULL;
 
+  //g_print ("start, type == %d\n", type);
+
   for (l = reg->bindings; l != NULL; l = l->next)
     {
       IdoGestureBinding *binding = (IdoGestureBinding *)l->data;
 
+      //g_print ("   binding->type == %d, touches == %d\n", binding->type, binding->touches);
+
       if (binding->type == type)
         {
-          if (type == IDO_GESTURE_DRAG1 ||
-              type == IDO_GESTURE_DRAG2 ||
-              type == IDO_GESTURE_DRAG3 ||
-              type == IDO_GESTURE_DRAG4 ||
-              type == IDO_GESTURE_DRAG5)
+          if (type == IDO_GESTURE_DRAG)
             {
               IdoEventGestureDrag drag;
 
-              drag.type = type;
-              drag.id   = id;
+              drag.type    = type;
+              drag.id      = id;
+              drag.fingers = drag_gesture_handle_properties (&drag,
+                                                             attr_count,
+                                                             attrs);
 
-              drag_gesture_handle_properties (&drag,
-                                              attr_count,
-                                              attrs);
+              g_print ("drag.fingers == %d\n", drag.fingers);
 
-              binding->start (reg->window,
-                              ((IdoGestureEvent*)&drag));
+              if (drag.fingers == binding->touches)
+                {
+                  binding->start (reg->window,
+                                  ((IdoGestureEvent*)&drag));
+                }
             }
-          else if (type == IDO_GESTURE_PINCH1 ||
-                   type == IDO_GESTURE_PINCH2 ||
-                   type == IDO_GESTURE_PINCH3 ||
-                   type == IDO_GESTURE_PINCH4 ||
-                   type == IDO_GESTURE_PINCH5)
+          else if (type == IDO_GESTURE_PINCH)
             {
               IdoEventGesturePinch pinch;
 
-              pinch.type = type;
-              pinch.id   = id;
+              pinch.type    = type;
+              pinch.id      = id;
+              pinch.fingers = pinch_gesture_handle_properties (&pinch,
+                                                               attr_count,
+                                                               attrs);
 
-              pinch_gesture_handle_properties (&pinch,
-                                               attr_count,
-                                               attrs);
+              g_print ("pinch.fingers == %d\n", pinch.fingers);
 
-              binding->start (reg->window,
-                              ((IdoGestureEvent*)&pinch));
+              if (pinch.fingers == binding->touches)
+                {
+                  binding->start (reg->window,
+                                  ((IdoGestureEvent*)&pinch));
+                }
             }
-          else if (type == IDO_GESTURE_ROTATE1 ||
-                   type == IDO_GESTURE_ROTATE2 ||
-                   type == IDO_GESTURE_ROTATE3 ||
-                   type == IDO_GESTURE_ROTATE4 ||
-                   type == IDO_GESTURE_ROTATE5)
+          else if (type == IDO_GESTURE_ROTATE)
             {
               IdoEventGestureRotate rotate;
 
-              rotate.type = type;
-              rotate.id   = id;
+              rotate.type    = type;
+              rotate.id      = id;
+              rotate.fingers = rotate_gesture_handle_properties (&rotate,
+                                                                 attr_count,
+                                                                 attrs);
 
-              rotate_gesture_handle_properties (&rotate,
-                                                attr_count,
-                                                attrs);
+              g_print ("rotate.fingers == %d\n", rotate.fingers);
 
-              binding->start (reg->window,
-                              ((IdoGestureEvent*)&rotate));
+              if (rotate.fingers == binding->touches)
+                {
+                  binding->start (reg->window,
+                                  ((IdoGestureEvent*)&rotate));
+                }
             }
 
           return;
@@ -418,65 +448,61 @@ gesture_update (void              *cookie,
   IdoGestureRegistration *reg = (IdoGestureRegistration *)cookie;
   GList *l = NULL;
 
+  //g_print ("update %d\n", type);
+
   for (l = reg->bindings; l != NULL; l = l->next)
     {
       IdoGestureBinding *binding = (IdoGestureBinding *)l->data;
 
       if (binding->type == type)
         {
-          if (type == IDO_GESTURE_DRAG1 ||
-              type == IDO_GESTURE_DRAG2 ||
-              type == IDO_GESTURE_DRAG3 ||
-              type == IDO_GESTURE_DRAG4 ||
-              type == IDO_GESTURE_DRAG5)
+          if (type == IDO_GESTURE_DRAG)
             {
               IdoEventGestureDrag drag;
 
-              drag.type = type;
-              drag.id   = id;
+              drag.type    = type;
+              drag.id      = id;
+              drag.fingers = drag_gesture_handle_properties (&drag,
+                                                             attr_count,
+                                                             attrs);
 
-              drag_gesture_handle_properties (&drag,
-                                              attr_count,
-                                              attrs);
-
-              binding->update (reg->window,
-                               ((IdoGestureEvent*)&drag));
+              if (drag.fingers == binding->touches)
+                {
+                  binding->update (reg->window,
+                                   ((IdoGestureEvent*)&drag));
+                }
             }
-          else if (type == IDO_GESTURE_PINCH1 ||
-                   type == IDO_GESTURE_PINCH2 ||
-                   type == IDO_GESTURE_PINCH3 ||
-                   type == IDO_GESTURE_PINCH4 ||
-                   type == IDO_GESTURE_PINCH5)
+          else if (type == IDO_GESTURE_PINCH)
             {
               IdoEventGesturePinch pinch;
 
-              pinch.type = type;
-              pinch.id   = id;
+              pinch.type    = type;
+              pinch.id      = id;
+              pinch.fingers = pinch_gesture_handle_properties (&pinch,
+                                                               attr_count,
+                                                               attrs);
 
-              pinch_gesture_handle_properties (&pinch,
-                                               attr_count,
-                                               attrs);
-
-              binding->update (reg->window,
-                               ((IdoGestureEvent*)&pinch));
+              if (pinch.fingers == binding->touches)
+                {
+                  binding->update (reg->window,
+                                   ((IdoGestureEvent*)&pinch));
+                }
             }
-          else if (type == IDO_GESTURE_ROTATE1 ||
-                   type == IDO_GESTURE_ROTATE2 ||
-                   type == IDO_GESTURE_ROTATE3 ||
-                   type == IDO_GESTURE_ROTATE4 ||
-                   type == IDO_GESTURE_ROTATE5)
+          else if (type == IDO_GESTURE_ROTATE)
             {
               IdoEventGestureRotate rotate;
 
-              rotate.type = type;
-              rotate.id   = id;
+              rotate.type    = type;
+              rotate.id      = id;
+              rotate.fingers = rotate_gesture_handle_properties (&rotate,
+                                                                 attr_count,
+                                                                 attrs);
 
-              rotate_gesture_handle_properties (&rotate,
-                                                attr_count,
-                                                attrs);
-
-              binding->update (reg->window,
-                               ((IdoGestureEvent*)&rotate));
+              if (rotate.fingers == binding->touches)
+                {
+                  binding->update (reg->window,
+                                   ((IdoGestureEvent*)&rotate));
+                }
             }
         }
     }
@@ -492,65 +518,61 @@ gesture_finish (void              *cookie,
   IdoGestureRegistration *reg = (IdoGestureRegistration *)cookie;
   GList *l = NULL;
 
+  //g_print ("finish\n");
+
   for (l = reg->bindings; l != NULL; l = l->next)
     {
       IdoGestureBinding *binding = (IdoGestureBinding *)l->data;
 
       if (binding->type == type)
         {
-          if (type == IDO_GESTURE_DRAG1 ||
-              type == IDO_GESTURE_DRAG2 ||
-              type == IDO_GESTURE_DRAG3 ||
-              type == IDO_GESTURE_DRAG4 ||
-              type == IDO_GESTURE_DRAG5)
+          if (type == IDO_GESTURE_DRAG)
             {
               IdoEventGestureDrag drag;
 
-              drag.type = type;
-              drag.id   = id;
+              drag.type    = type;
+              drag.id      = id;
+              drag.fingers = drag_gesture_handle_properties (&drag,
+                                                             attr_count,
+                                                             attrs);
 
-              drag_gesture_handle_properties (&drag,
-                                              attr_count,
-                                              attrs);
-
-              binding->end (reg->window,
-                            ((IdoGestureEvent*)&drag));
+              if (drag.fingers == binding->touches)
+                {
+                  binding->end (reg->window,
+                                ((IdoGestureEvent*)&drag));
+                }
             }
-          else if (type == IDO_GESTURE_PINCH1 ||
-                   type == IDO_GESTURE_PINCH2 ||
-                   type == IDO_GESTURE_PINCH3 ||
-                   type == IDO_GESTURE_PINCH4 ||
-                   type == IDO_GESTURE_PINCH5)
+          else if (type == IDO_GESTURE_PINCH)
             {
               IdoEventGesturePinch pinch;
 
-              pinch.type = type;
-              pinch.id   = id;
+              pinch.type    = type;
+              pinch.id      = id;
+              pinch.fingers = pinch_gesture_handle_properties (&pinch,
+                                                               attr_count,
+                                                               attrs);
 
-              pinch_gesture_handle_properties (&pinch,
-                                               attr_count,
-                                               attrs);
-
-              binding->end (reg->window,
-                            ((IdoGestureEvent*)&pinch));
+              if (pinch.fingers == binding->touches)
+                {
+                  binding->end (reg->window,
+                                ((IdoGestureEvent*)&pinch));
+                }
             }
-          else if (type == IDO_GESTURE_ROTATE1 ||
-                   type == IDO_GESTURE_ROTATE2 ||
-                   type == IDO_GESTURE_ROTATE3 ||
-                   type == IDO_GESTURE_ROTATE4 ||
-                   type == IDO_GESTURE_ROTATE5)
+          else if (type == IDO_GESTURE_ROTATE)
             {
               IdoEventGestureRotate rotate;
 
-              rotate.type = type;
-              rotate.id   = id;
+              rotate.type    = type;
+              rotate.id      = id;
+              rotate.fingers = rotate_gesture_handle_properties (&rotate,
+                                                                 attr_count,
+                                                                 attrs);
 
-              rotate_gesture_handle_properties (&rotate,
-                                                attr_count,
-                                                attrs);
-
-              binding->end (reg->window,
-                            ((IdoGestureEvent*)&rotate));
+              if (rotate.fingers == binding->touches)
+                {
+                  binding->end (reg->window,
+                                ((IdoGestureEvent*)&rotate));
+                }
             }
         }
     }
@@ -589,6 +611,7 @@ ido_gesture_manager_get (void)
  * ido_gesture_manager_register_window:
  * @window: A #GtkWindow to register the gesture event for.
  * @gesture_type: The type of gesture event to register.
+ * @touch_points: Number of touch points for this gesture.
  * @start: Called when a user initiates a gesture.
  * @update: Called each time the user updates the gesture.
  * @end: Called when the user ends the gesture.
@@ -602,6 +625,7 @@ void
 ido_gesture_manager_register_window (IdoGestureManager *manager,
                                      GtkWindow         *window,
                                      IdoGestureType     gesture_type,
+                                     gint               touch_points,
                                      IdoGestureCallback start,
                                      IdoGestureCallback update,
                                      IdoGestureCallback end)
@@ -675,10 +699,11 @@ ido_gesture_manager_register_window (IdoGestureManager *manager,
 
   g_print (" *** Adding binding type %d\n", (gint)gesture_type);
 
-  binding->type   = gesture_type;
-  binding->start  = start;
-  binding->update = update;
-  binding->end    = end;
+  binding->type    = gesture_type;
+  binding->touches = touch_points;
+  binding->start   = start;
+  binding->update  = update;
+  binding->end     = end;
 
   reg->bindings = g_list_append (reg->bindings, binding);
 
