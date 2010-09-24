@@ -50,6 +50,7 @@ struct _IdoGestureRegistration
   GtkWindow         *window;
   GList             *bindings;
   GeisInstance       instance;
+  GIOChannel        *iochannel;
 };
 
 static void gesture_added (void              *cookie,
@@ -103,7 +104,13 @@ ido_gesture_manager_dispose (GObject *object)
   if (priv->hash != NULL)
     {
       g_hash_table_unref (priv->hash);
+      priv->hash = NULL;
     }
+}
+
+static void
+ido_gesture_manager_finalize (GObject *object)
+{
 }
 
 static GObject *
@@ -143,6 +150,7 @@ ido_gesture_manager_class_init (IdoGestureManagerClass *class)
 
   gobject_class->constructor = ido_gesture_manager_constructor;
   gobject_class->dispose     = ido_gesture_manager_dispose;
+  gobject_class->finalize    = ido_gesture_manager_finalize;
 }
 
 /*
@@ -183,7 +191,7 @@ pinch_gesture_handle_properties (IdoEventGesturePinch *event,
 
   for (i = 0; i < attr_count; ++i)
     {
-      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FINGERS) == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_TOUCHES) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           touches = attrs[i].integer_val;
@@ -233,7 +241,7 @@ drag_gesture_handle_properties (IdoEventGestureDrag *event,
 
   for (i = 0; i < attr_count; ++i)
     {
-      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FINGERS) == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_TOUCHES) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           touches = attrs[i].integer_val;
@@ -298,7 +306,7 @@ rotate_gesture_handle_properties (IdoEventGestureRotate *event,
 
   for (i = 0; i < attr_count; ++i)
     {
-      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_FINGERS) == 0 &&
+      if (g_strcmp0 (attrs[i].name, GEIS_GESTURE_ATTRIBUTE_TOUCHES) == 0 &&
           attrs[i].type == GEIS_ATTR_TYPE_INTEGER)
         {
           touches = attrs[i].integer_val;
@@ -585,6 +593,33 @@ io_callback (GIOChannel *source,
   return TRUE;
 }
 
+static void
+window_destroyed_cb (GtkObject *object,
+                     gpointer   user_data)
+{
+  IdoGestureManager *manager = (IdoGestureManager *)user_data;
+  IdoGestureManagerPrivate *priv = manager->priv;
+  IdoGestureRegistration *reg = g_hash_table_lookup (priv->hash, object);
+  GList *list;
+
+  for (list = reg->bindings; list != NULL; list = list->next)
+    {
+      IdoGestureBinding *binding = (IdoGestureBinding *)list->data;
+
+      g_free (binding);
+    }
+
+  g_list_free (reg->bindings);
+
+  g_io_channel_shutdown (reg->iochannel, TRUE, NULL);
+
+  geis_finish (reg->instance);
+
+  g_hash_table_remove (priv->hash, object);
+  g_free (reg);
+}
+
+
 /* Public API */
 IdoGestureManager *
 ido_gesture_manager_get (void)
@@ -666,6 +701,11 @@ ido_gesture_manager_register_window (IdoGestureManager *manager,
       reg->window   = window;
       reg->instance = instance;
 
+      g_signal_connect (window,
+                        "destroy",
+                        G_CALLBACK (window_destroyed_cb),
+                        manager);
+
       geis_subscribe (reg->instance,
                       GEIS_ALL_INPUT_DEVICES,
                       GEIS_ALL_GESTURES,
@@ -677,6 +717,8 @@ ido_gesture_manager_register_window (IdoGestureManager *manager,
                       G_IO_IN,
                       io_callback,
                       reg);
+
+      reg->iochannel = iochannel;
     }
 
   /* XXX - check for duplicates in reg->bindings first */
