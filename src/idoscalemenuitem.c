@@ -70,6 +70,7 @@ struct _IdoScaleMenuItemPrivate {
   gboolean              grabbed;
   IdoScaleMenuItemStyle style;
   IdoRangeStyle         range_style;
+  gint                  toggle_size;
 };
 
 enum {
@@ -188,13 +189,23 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
   priv->child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
 
   priv->child_allocation.x += horizontal_padding;
-  priv->child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;
+  priv->child_allocation.x += priv->toggle_size;
 
   priv->child_allocation.width = MAX (1, (gint)allocation->width - priv->child_allocation.x * 2);
   priv->child_allocation.width -= (primary_padding + secondary_padding);
   priv->child_allocation.height = MAX (1, (gint)allocation->height - priv->child_allocation.y * 2);
 
   gtk_widget_set_size_request (priv->scale, priv->child_allocation.width, -1);
+}
+
+static void
+ido_scale_menu_item_toggle_size_allocate (IdoScaleMenuItem *item,
+                                          gint              toggle_size,
+                                          gpointer          user_data)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+
+  priv->toggle_size = toggle_size;
 }
 
 static void
@@ -234,6 +245,10 @@ ido_scale_menu_item_constructed (GObject *object)
   priv->hbox = hbox;
 
   update_packing (self, priv->style, priv->style);
+
+  g_signal_connect (self, "toggle-size-allocate",
+                    G_CALLBACK (ido_scale_menu_item_toggle_size_allocate),
+                    NULL);
 
   g_signal_connect (self, "notify",
                     G_CALLBACK (ido_scale_menu_item_notify),
