@@ -8,7 +8,6 @@ stamp_files =				\
 sources_h =				\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
-	idogesturemanager.h		\
 	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
@@ -47,7 +46,6 @@ INCLUDES =				\
 AM_CPPFLAGS =				\
 	$(GCC_FLAGS)			\
 	$(GTK_CFLAGS)			\
-	$(GEIS_CFLAGS)			\
 	$(MAINTAINER_CFLAGS)
 
 lib_LTLIBRARIES = libido-0.1.la
@@ -56,7 +54,6 @@ libido_0_1_la_SOURCES =			\
 	idotypebuiltins.c		\
 	idocalendarmenuitem.c		\
 	idoentrymenuitem.c		\
-	idogesturemanager.c		\
 	idomessagedialog.c		\
 	idorange.c			\
 	idoscalemenuitem.c		\
@@ -67,14 +64,13 @@ libidoincludedir=$(includedir)/libido-0.1/libido
 libidoinclude_HEADERS =			\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
-	idogesturemanager.h		\
 	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idotimeline.h			\
 	libido.h
 
-libido_0_1_la_LIBADD = $(GTK_LIBS) $(GEIS_LIBS)
+libido_0_1_la_LIBADD = $(GTK_LIBS)
 libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)
 
 idoheadersdir = $(includedir)/ido-0.1/ido

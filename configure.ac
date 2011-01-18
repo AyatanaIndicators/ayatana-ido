@@ -72,10 +72,6 @@ PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
-PKG_CHECK_MODULES(GEIS, libutouch-geis >= 0.3)
-AC_SUBST(GEIS_CFLAGS)
-AC_SUBST(GEIS_LIBS)
-
 dnl ===========================================================================
 
 if test "x$GCC" = "xyes"; then
