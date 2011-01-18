@@ -36,8 +36,8 @@ menus_CPPFLAGS =                \
         $(GTK_CFLAGS)           \
         $(MAINTAINER_CFLAGS)
 
-gesture_LDADD = $(top_builddir)/src/libido-0.1.la
+gesture_LDADD = $(top_builddir)/src/libido-0.1.la $(GTK_LIBS)
 
-messagedialog_LDADD = $(top_builddir)/src/libido-0.1.la
+messagedialog_LDADD = $(top_builddir)/src/libido-0.1.la $(GTK_LIBS)
 
-menus_LDADD = $(top_builddir)/src/libido-0.1.la
+menus_LDADD = $(top_builddir)/src/libido-0.1.la $(GTK_LIBS)
