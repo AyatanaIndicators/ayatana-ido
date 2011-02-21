@@ -264,3 +264,27 @@ ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *item)
 
   return item->priv->calendar;
 }
+
+gboolean
+ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
+{
+	return gtk_calendar_mark_day(menuitem->priv->calendar, day);
+}
+
+gboolean
+ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
+{
+	return gtk_calendar_unmark_day(menuitem->priv->calendar, day);
+}
+
+void
+ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
+{
+	gtk_calendar_clear_marks(menuitem->priv->calendar);
+}
+
+void
+ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags)
+{
+	gtk_calendar_set_display_options (menuitem->priv->calendar, flags);
+}
