@@ -300,3 +300,12 @@ ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCa
 {
   gtk_calendar_set_display_options (GTK_CALENDAR (menuitem->priv->calendar), flags);
 }
+
+void 
+ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
+                                 guint *year,
+                                 guint *month,
+                                 guint *day) {
+
+	gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), year, month, day);
+}
