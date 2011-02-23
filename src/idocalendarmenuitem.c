@@ -24,6 +24,7 @@
  */
 
 #include <gdk/gdkkeysyms.h>
+#include <gtk/gtkmarshal.h>
 #include "idocalendarmenuitem.h"
 
 static void     ido_calendar_menu_item_select            (GtkItem        *item);
@@ -42,6 +43,8 @@ static void     calendar_realized_cb                     (GtkWidget        *widg
 static void     calendar_move_focus_cb                   (GtkWidget        *widget,
                                                           GtkDirectionType  direction,
                                                           IdoCalendarMenuItem *item);
+static void     calendar_month_changed_cb                (GtkWidget *widget, 
+                                                          gpointer user_data);                             
 
 struct _IdoCalendarMenuItemPrivate
 {
@@ -79,7 +82,7 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   
   g_signal_new("month-changed", G_TYPE_FROM_CLASS(klass),
                                 G_SIGNAL_RUN_LAST, 0, NULL, NULL,
-                                gtk_marshal_VOID__VOID,
+                                g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 }
 
@@ -240,7 +243,7 @@ calendar_realized_cb (GtkWidget        *widget,
                     G_CALLBACK (ido_calendar_menu_item_key_press),
                     item);
   
-  g_signal_connect (priv->calendar,
+  g_signal_connect (item->priv->calendar,
                     "month-changed",
                     G_CALLBACK (calendar_month_changed_cb),
                     item);
@@ -264,6 +267,7 @@ static void
 calendar_month_changed_cb (GtkWidget        *widget, 
                            gpointer          user_data)
 {
+  IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
   g_signal_emit_by_name (item, "month-changed", NULL);
 }
 
@@ -277,23 +281,23 @@ ido_calendar_menu_item_new (void)
 gboolean
 ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
-  return gtk_calendar_mark_day(menuitem->priv->calendar, day);
+  return gtk_calendar_mark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
 }
 
 gboolean
 ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
 {
-  return gtk_calendar_unmark_day(menuitem->priv->calendar, day);
+  return gtk_calendar_unmark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
 }
 
 void
 ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
 {
-  gtk_calendar_clear_marks(menuitem->priv->calendar);
+  gtk_calendar_clear_marks(GTK_CALENDAR (menuitem->priv->calendar));
 }
 
 void
 ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags)
 {
-  gtk_calendar_set_display_options (menuitem->priv->calendar, flags);
+  gtk_calendar_set_display_options (GTK_CALENDAR (menuitem->priv->calendar), flags);
 }
