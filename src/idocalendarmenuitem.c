@@ -24,7 +24,6 @@
  */
 
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtkmarshal.h>
 #include "idocalendarmenuitem.h"
 
 static void     ido_calendar_menu_item_select            (GtkItem        *item);
