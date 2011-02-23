@@ -42,6 +42,8 @@ static void     calendar_realized_cb                     (GtkWidget        *widg
 static void     calendar_move_focus_cb                   (GtkWidget        *widget,
                                                           GtkDirectionType  direction,
                                                           IdoCalendarMenuItem *item);
+static void     calendar_month_changed_cb                (GtkWidget *widget, 
+                                                          gpointer user_data);                             
 
 struct _IdoCalendarMenuItemPrivate
 {
@@ -76,6 +78,11 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   menu_item_class->hide_on_activate = TRUE;
 
   g_type_class_add_private (gobject_class, sizeof (IdoCalendarMenuItemPrivate));
+  
+  g_signal_new("month-changed", G_TYPE_FROM_CLASS(klass),
+                                G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
 }
 
 static void
@@ -234,6 +241,11 @@ calendar_realized_cb (GtkWidget        *widget,
                     "key-press-event",
                     G_CALLBACK (ido_calendar_menu_item_key_press),
                     item);
+  
+  g_signal_connect (item->priv->calendar,
+                    "month-changed",
+                    G_CALLBACK (calendar_month_changed_cb),
+                    item);
 
   ido_calendar_menu_item_send_focus_change (widget, TRUE);
 }
@@ -250,6 +262,14 @@ calendar_move_focus_cb (GtkWidget        *widget,
                          GTK_DIR_TAB_FORWARD);
 }
 
+static void
+calendar_month_changed_cb (GtkWidget        *widget, 
+                           gpointer          user_data)
+{
+  IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
+  g_signal_emit_by_name (item, "month-changed", NULL);
+}
+
 /* Public API */
 GtkWidget *
 ido_calendar_menu_item_new (void)
@@ -257,10 +277,35 @@ ido_calendar_menu_item_new (void)
   return g_object_new (IDO_TYPE_CALENDAR_MENU_ITEM, NULL);
 }
 
-GtkWidget *
-ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *item)
+gboolean
+ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
-  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM (item), NULL);
+  return gtk_calendar_mark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
+}
 
-  return item->priv->calendar;
+gboolean
+ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
+{
+  return gtk_calendar_unmark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
+}
+
+void
+ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
+{
+  gtk_calendar_clear_marks(GTK_CALENDAR (menuitem->priv->calendar));
+}
+
+void
+ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags)
+{
+  gtk_calendar_set_display_options (GTK_CALENDAR (menuitem->priv->calendar), flags);
+}
+
+void 
+ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
+                                 guint *year,
+                                 guint *month,
+                                 guint *day) {
+
+	gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), year, month, day);
 }

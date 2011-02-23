@@ -53,11 +53,17 @@ struct _IdoCalendarMenuItemClass
   GtkMenuItemClass parent_class;
 };
 
-GType      ido_calendar_menu_item_get_type      (void) G_GNUC_CONST;
+GType      ido_calendar_menu_item_get_type            (void) G_GNUC_CONST;
 
-GtkWidget *ido_calendar_menu_item_new           (void);
-GtkWidget *ido_calendar_menu_item_get_calendar  (IdoCalendarMenuItem *menuitem);
-
+GtkWidget *ido_calendar_menu_item_new                 (void);
+gboolean   ido_calendar_menu_item_mark_day	          (IdoCalendarMenuItem *menuitem, guint day);
+gboolean   ido_calendar_menu_item_unmark_day          (IdoCalendarMenuItem *menuitem, guint day);
+void       ido_calendar_menu_item_clear_marks         (IdoCalendarMenuItem *menuitem);
+void       ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags);
+void       ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
+                                            guint *year,
+                                            guint *month,
+                                            guint *day)
 G_END_DECLS
 
 #endif /* __IDO_CALENDAR_MENU_ITEM_H__ */
