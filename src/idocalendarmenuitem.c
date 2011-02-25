@@ -312,8 +312,7 @@ ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCa
 GtkCalendarDisplayOptions
 ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem)
 {
-  
-  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), NULL);
+  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), 0);
   
   return gtk_calendar_get_display_options (GTK_CALENDAR (menuitem->priv->calendar));
 }

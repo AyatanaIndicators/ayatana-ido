@@ -26,6 +26,7 @@
 #ifndef __IDO__
 #define __IDO__
 
+#include <libido/idocalendarmenuitem.h>
 #include <libido/idoscalemenuitem.h>
 #include <libido/idoentrymenuitem.h>
 #include <libido/idomessagedialog.h>
