@@ -60,6 +60,7 @@ gboolean   ido_calendar_menu_item_mark_day            (IdoCalendarMenuItem *menu
 gboolean   ido_calendar_menu_item_unmark_day          (IdoCalendarMenuItem *menuitem, guint day);
 void       ido_calendar_menu_item_clear_marks         (IdoCalendarMenuItem *menuitem);
 void       ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags);
+GtkCalendarDisplayOptions ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem);
 void       ido_calendar_menu_item_get_date            (IdoCalendarMenuItem *menuitem,
                                                        guint               *year,
                                                        guint               *month,

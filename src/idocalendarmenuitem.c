@@ -280,25 +280,41 @@ ido_calendar_menu_item_new (void)
 gboolean
 ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
+  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
+  
   return gtk_calendar_mark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
 }
 
 gboolean
 ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
 {
+  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
+  
   return gtk_calendar_unmark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
 }
 
 void
 ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
 {
+  g_return_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem));
+  
   gtk_calendar_clear_marks(GTK_CALENDAR (menuitem->priv->calendar));
 }
 
 void
 ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags)
 {
+  g_return_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem));
+  
   gtk_calendar_set_display_options (GTK_CALENDAR (menuitem->priv->calendar), flags);
+}
+
+GtkCalendarDisplayOptions
+ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem)
+{
+  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), 0);
+  
+  return gtk_calendar_get_display_options (GTK_CALENDAR (menuitem->priv->calendar));
 }
 
 void 
@@ -306,6 +322,7 @@ ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
                                  guint *year,
                                  guint *month,
                                  guint *day) {
-
-	gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), year, month, day);
+	
+  g_return_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem));
+  gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), year, month, day);
 }
