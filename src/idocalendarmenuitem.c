@@ -277,6 +277,14 @@ ido_calendar_menu_item_new (void)
   return g_object_new (IDO_TYPE_CALENDAR_MENU_ITEM, NULL);
 }
 
+GtkWidget *
+ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *item)
+{
+  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM (item), NULL);
+
+  return item->priv->calendar;
+}
+
 gboolean
 ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
