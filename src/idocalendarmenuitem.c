@@ -314,6 +314,14 @@ ido_calendar_menu_item_new (void)
   return g_object_new (IDO_TYPE_CALENDAR_MENU_ITEM, NULL);
 }
 
+GtkWidget *
+ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *item)
+{
+  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM (item), NULL);
+
+  return item->priv->calendar;
+}
+
 gboolean
 ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
@@ -349,8 +357,7 @@ ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCa
 GtkCalendarDisplayOptions
 ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem)
 {
-  
-  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), NULL);
+  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), 0);
   
   return gtk_calendar_get_display_options (GTK_CALENDAR (menuitem->priv->calendar));
 }
