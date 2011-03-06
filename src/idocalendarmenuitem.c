@@ -44,7 +44,10 @@ static void     calendar_move_focus_cb                   (GtkWidget        *widg
                                                           IdoCalendarMenuItem *item);
 static void     calendar_month_changed_cb                (GtkWidget *widget, 
                                                           gpointer user_data);                             
-
+static void     calendar_day_selected_double_click_cb    (GtkWidget        *widget, 
+                                                          gpointer          user_data);
+static void     calendar_day_selected_cb                 (GtkWidget        *widget, 
+                                                          gpointer          user_data);                               
 struct _IdoCalendarMenuItemPrivate
 {
   GtkWidget       *box;
@@ -293,17 +296,17 @@ calendar_day_selected_cb (GtkWidget        *widget,
 {
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
   guint day, month, year;
-  gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), &year, &month, &day);
+  gtk_calendar_get_date (GTK_CALENDAR (widget), &year, &month, &day);
   g_signal_emit_by_name (item, "day-selected", day, NULL);
 }
 
 static void
 calendar_day_selected_double_click_cb (GtkWidget        *widget, 
-                          gpointer          user_data)
+                                       gpointer          user_data)
 {
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
   guint day, month, year;
-  gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), &year, &month, &day);
+  gtk_calendar_get_date (GTK_CALENDAR (widget), &year, &month, &day);
   g_signal_emit_by_name (item, "day-selected-double-click", day, NULL);
 }
 
@@ -378,7 +381,7 @@ ido_calendar_menu_item_set_date (IdoCalendarMenuItem *menuitem,
                                  guint month,
                                  guint day)
 {
-  g_return_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem));
+  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
   gtk_calendar_select_month (GTK_CALENDAR (menuitem->priv->calendar), month, year);
   gtk_calendar_select_day (GTK_CALENDAR (menuitem->priv->calendar), day);
   return TRUE;
