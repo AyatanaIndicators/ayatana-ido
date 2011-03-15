@@ -66,6 +66,10 @@ void       ido_calendar_menu_item_get_date            (IdoCalendarMenuItem *menu
                                                        guint               *year,
                                                        guint               *month,
                                                        guint               *day);
+gboolean   ido_calendar_menu_item_set_date            (IdoCalendarMenuItem *menuitem,
+                                                       guint year,
+                                                       guint month,
+                                                       guint day);                                                
 G_END_DECLS
 
 #endif /* __IDO_CALENDAR_MENU_ITEM_H__ */
