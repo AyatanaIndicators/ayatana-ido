@@ -90,11 +90,11 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   g_signal_new("day-selected",  G_TYPE_FROM_CLASS(klass),
                                 G_SIGNAL_RUN_LAST, 0, NULL, NULL,
                                 g_cclosure_marshal_VOID__VOID,
-                                G_TYPE_NONE, 1, G_TYPE_UINT);
+                                G_TYPE_NONE, 0);
   g_signal_new("day-selected-double-click",  G_TYPE_FROM_CLASS(klass),
                                 G_SIGNAL_RUN_LAST, 0, NULL, NULL,
                                 g_cclosure_marshal_VOID__VOID,
-                                G_TYPE_NONE, 1, G_TYPE_UINT);
+                                G_TYPE_NONE, 0);
 }
 
 static void
@@ -295,9 +295,7 @@ calendar_day_selected_cb (GtkWidget        *widget,
                           gpointer          user_data)
 {
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
-  guint day, month, year;
-  gtk_calendar_get_date (GTK_CALENDAR (widget), &year, &month, &day);
-  g_signal_emit_by_name (item, "day-selected", day, NULL);
+  g_signal_emit_by_name (item, "day-selected", NULL);
 }
 
 static void
@@ -307,7 +305,7 @@ calendar_day_selected_double_click_cb (GtkWidget        *widget,
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
   guint day, month, year;
   gtk_calendar_get_date (GTK_CALENDAR (widget), &year, &month, &day);
-  g_signal_emit_by_name (item, "day-selected-double-click", day, NULL);
+  g_signal_emit_by_name (item, "day-selected-double-click", NULL);
 }
 
 /* Public API */
