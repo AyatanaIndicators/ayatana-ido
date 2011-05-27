@@ -26,8 +26,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "idocalendarmenuitem.h"
 
-static void     ido_calendar_menu_item_select            (GtkItem        *item);
-static void     ido_calendar_menu_item_deselect          (GtkItem        *item);
+static void     ido_calendar_menu_item_select            (GtkMenuItem        *item);
+static void     ido_calendar_menu_item_deselect          (GtkMenuItem        *item);
 static gboolean ido_calendar_menu_item_button_release    (GtkWidget      *widget,
                                                           GdkEventButton *event);
 static gboolean ido_calendar_menu_item_button_press      (GtkWidget      *widget,
@@ -65,18 +65,17 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   GObjectClass     *gobject_class;
   GtkWidgetClass   *widget_class;
   GtkMenuItemClass *menu_item_class;
-  GtkItemClass     *item_class;
+  GtkMenuItemClass     *item_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
-  item_class = GTK_ITEM_CLASS (klass);
 
   widget_class->button_release_event = ido_calendar_menu_item_button_release;
   widget_class->button_press_event = ido_calendar_menu_item_button_press;
 
-  item_class->select = ido_calendar_menu_item_select;
-  item_class->deselect = ido_calendar_menu_item_deselect;
+  menu_item_class->select = ido_calendar_menu_item_select;
+  menu_item_class->deselect = ido_calendar_menu_item_deselect;
 
   menu_item_class->hide_on_activate = TRUE;
 
@@ -143,7 +142,7 @@ ido_calendar_menu_item_send_focus_change (GtkWidget *widget,
     gtk_widget_grab_focus (widget);
 
   event->focus_change.type = GDK_FOCUS_CHANGE;
-  event->focus_change.window = g_object_ref (widget->window);
+  event->focus_change.window = g_object_ref (gtk_widget_get_window (widget));
   event->focus_change.in = in;
 
   gtk_widget_event (widget, event);
@@ -168,9 +167,9 @@ ido_calendar_menu_item_key_press (GtkWidget   *widget,
       gtk_widget_event (calendar,
                         ((GdkEvent *)(void*)(event)));
 
-      if (calendar->window != NULL)
+      if (gtk_widget_get_window (calendar) != NULL)
         {
-          gdk_window_raise (calendar->window);
+          gdk_window_raise (gtk_widget_get_window (calendar));
         }
 
       if (!gtk_widget_has_focus (calendar))
@@ -178,7 +177,7 @@ ido_calendar_menu_item_key_press (GtkWidget   *widget,
           gtk_widget_grab_focus (calendar);
         }
 
-      return event->keyval != GDK_Return;
+      return event->keyval != GDK_KEY_Return;
     }
 
   return FALSE;
@@ -192,9 +191,9 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 
   if (event->button == 1)
     {
-      if (calendar->window != NULL)
+      if (gtk_widget_get_window (calendar) != NULL)
         {
-          gdk_window_raise (calendar->window);
+          gdk_window_raise (gtk_widget_get_window (calendar));
         }
 
       if (!gtk_widget_has_focus (calendar))
@@ -224,7 +223,7 @@ ido_calendar_menu_item_button_release (GtkWidget      *widget,
 }
 
 static void
-ido_calendar_menu_item_select (GtkItem *item)
+ido_calendar_menu_item_select (GtkMenuItem *item)
 {
   IDO_CALENDAR_MENU_ITEM (item)->priv->selected = TRUE;
 
@@ -232,7 +231,7 @@ ido_calendar_menu_item_select (GtkItem *item)
 }
 
 static void
-ido_calendar_menu_item_deselect (GtkItem *item)
+ido_calendar_menu_item_deselect (GtkMenuItem *item)
 {
   IDO_CALENDAR_MENU_ITEM (item)->priv->selected = FALSE;
 
@@ -244,12 +243,12 @@ static void
 calendar_realized_cb (GtkWidget        *widget,
                       IdoCalendarMenuItem *item)
 {
-  if (widget->window != NULL)
+  if (gtk_widget_get_window (widget) != NULL)
     {
-      gdk_window_raise (widget->window);
+      gdk_window_raise (gtk_widget_get_window (widget));
     }
 
-  g_signal_connect (GTK_WIDGET (item)->parent,
+  g_signal_connect (gtk_widget_get_parent (GTK_WIDGET (item)),
                     "key-press-event",
                     G_CALLBACK (ido_calendar_menu_item_key_press),
                     item);
@@ -328,7 +327,9 @@ ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
   g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
   
-  return gtk_calendar_mark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
+  gtk_calendar_mark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
+  return gtk_calendar_get_day_is_marked (GTK_CALENDAR (menuitem->priv->calendar), day);
+
 }
 
 gboolean
@@ -336,7 +337,8 @@ ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
 {
   g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
   
-  return gtk_calendar_unmark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
+  gtk_calendar_unmark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
+  return !gtk_calendar_get_day_is_marked (GTK_CALENDAR (menuitem->priv->calendar), day);
 }
 
 void

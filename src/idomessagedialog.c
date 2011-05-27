@@ -82,7 +82,7 @@ ido_message_dialog_map (GtkWidget *widget)
    *
    * See: https://bugs.launchpad.net/ubuntu/+source/compiz/+bug/240794
    */
-  gdk_window_set_functions (widget->window,
+  gdk_window_set_functions (gtk_widget_get_window (widget),
                             GDK_FUNC_RESIZE | GDK_FUNC_MOVE);
 
   ido_message_dialog_get_secondary_label (IDO_MESSAGE_DIALOG (widget));
@@ -166,14 +166,14 @@ ido_message_dialog_focus_in_event (GtkWidget     *widget,
       IdoTimeline *timeline;
       IdoMessageDialogMorphContext *context;
 
-      start = GTK_WIDGET (dialog)->requisition;
+      gtk_widget_get_requisition (GTK_WIDGET (dialog), &start);
 
       priv->expanded = TRUE;
 
       gtk_widget_show (priv->action_area);
       gtk_widget_show (priv->secondary_label);
 
-      gtk_widget_size_request (GTK_WIDGET (dialog), &end);
+      gtk_widget_get_requisition (GTK_WIDGET (dialog), &end);
 
       gtk_widget_hide (priv->action_area);
       gtk_widget_hide (priv->secondary_label);
@@ -209,7 +209,7 @@ ido_message_dialog_constructed (GObject *object)
   event_box = gtk_event_box_new ();
   gtk_widget_show (event_box);
 
-  vbox = GTK_DIALOG (object)->vbox;
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (object));
   priv->action_area = gtk_dialog_get_action_area (GTK_DIALOG (object));
 
   g_object_ref (G_OBJECT (vbox));

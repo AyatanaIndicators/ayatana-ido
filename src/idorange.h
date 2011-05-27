@@ -64,7 +64,7 @@ struct _IdoRangeClass
 
 GType      ido_range_get_type (void) G_GNUC_CONST;
 
-GtkWidget* ido_range_new       (GtkObject     *adj,
+GtkWidget* ido_range_new       (GtkWidget     *adj,
                                 IdoRangeStyle  style);
 
 G_END_DECLS

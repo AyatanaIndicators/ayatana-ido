@@ -29,7 +29,7 @@
 #ifndef __IDO_MESSAGE_DIALOG_H__
 #define __IDO_MESSAGE_DIALOG_H__
 
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtk.h>
 
 #define IDO_TYPE_MESSAGE_DIALOG         (ido_message_dialog_get_type ())
 #define IDO_MESSAGE_DIALOG(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IDO_TYPE_MESSAGE_DIALOG, IdoMessageDialog))

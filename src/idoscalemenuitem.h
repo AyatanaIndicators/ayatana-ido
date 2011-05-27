@@ -26,7 +26,7 @@
 #ifndef __IDO_SCALE_MENU_ITEM_H__
 #define __IDO_SCALE_MENU_ITEM_H__
 
-#include <gtk/gtkmenuitem.h>
+#include <gtk/gtk.h>
 #include "idorange.h"
 
 G_BEGIN_DECLS

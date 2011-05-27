@@ -21,7 +21,7 @@
 #define __IDO_TIMELINE_H__
 
 #include <glib-object.h>
-#include <gtk/gtkenums.h>
+#include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS

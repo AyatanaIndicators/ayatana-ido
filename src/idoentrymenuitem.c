@@ -26,8 +26,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "idoentrymenuitem.h"
 
-static void     ido_entry_menu_item_select            (GtkItem        *item);
-static void     ido_entry_menu_item_deselect          (GtkItem        *item);
+static void     ido_entry_menu_item_select            (GtkMenuItem        *item);
+static void     ido_entry_menu_item_deselect          (GtkMenuItem        *item);
 static gboolean ido_entry_menu_item_button_release    (GtkWidget      *widget,
                                                        GdkEventButton *event);
 static gboolean ido_entry_menu_item_key_press         (GtkWidget      *widget,
@@ -60,18 +60,16 @@ ido_entry_menu_item_class_init (IdoEntryMenuItemClass *klass)
   GObjectClass     *gobject_class;
   GtkWidgetClass   *widget_class;
   GtkMenuItemClass *menu_item_class;
-  GtkItemClass     *item_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
-  item_class = GTK_ITEM_CLASS (klass);
 
   widget_class->button_release_event = ido_entry_menu_item_button_release;
   widget_class->button_press_event = ido_entry_menu_item_button_press;
 
-  item_class->select = ido_entry_menu_item_select;
-  item_class->deselect = ido_entry_menu_item_deselect;
+  menu_item_class->select = ido_entry_menu_item_select;
+  menu_item_class->deselect = ido_entry_menu_item_deselect;
 
   menu_item_class->hide_on_activate = TRUE;
 
@@ -118,11 +116,11 @@ is_key_press_valid (IdoEntryMenuItem *item,
 {
   switch (key)
     {
-    case GDK_Escape:
-    case GDK_Up:
-    case GDK_Down:
-    case GDK_KP_Up:
-    case GDK_KP_Down:
+    case GDK_KEY_Escape:
+    case GDK_KEY_Up:
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Up:
+    case GDK_KEY_KP_Down:
       return FALSE;
 
     default:
@@ -145,11 +143,11 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
       gtk_widget_event (entry,
                         ((GdkEvent *)(void*)(event)));
 
-      /* We've handled the event, but if the key was GDK_Return
+      /* We've handled the event, but if the key was GDK_KEY_Return
        * we still want to forward the event up to the menu shell
        * to ensure that the menuitem receives the activate signal.
        */
-      return event->keyval != GDK_Return;
+      return event->keyval != GDK_KEY_Return;
     }
 
   return FALSE;
@@ -164,7 +162,7 @@ ido_entry_menu_item_send_focus_change (GtkWidget *widget,
   g_object_ref (widget);
 
   event->focus_change.type = GDK_FOCUS_CHANGE;
-  event->focus_change.window = g_object_ref (widget->window);
+  event->focus_change.window = g_object_ref (gtk_widget_get_window (widget));
   event->focus_change.in = in;
 
   gtk_widget_event (widget, event);
@@ -183,9 +181,9 @@ ido_entry_menu_item_button_press (GtkWidget      *widget,
 
   if (event->button == 1)
     {
-      if (entry->window != NULL)
+      if (gtk_widget_get_window (entry) != NULL)
         {
-          gdk_window_raise (entry->window);
+          gdk_window_raise (gtk_widget_get_window (entry));
         }
 
       if (!gtk_widget_has_focus (entry))
@@ -215,7 +213,7 @@ ido_entry_menu_item_button_release (GtkWidget      *widget,
 }
 
 static void
-ido_entry_menu_item_select (GtkItem *item)
+ido_entry_menu_item_select (GtkMenuItem *item)
 {
   IDO_ENTRY_MENU_ITEM (item)->priv->selected = TRUE;
 
@@ -223,7 +221,7 @@ ido_entry_menu_item_select (GtkItem *item)
 }
 
 static void
-ido_entry_menu_item_deselect (GtkItem *item)
+ido_entry_menu_item_deselect (GtkMenuItem *item)
 {
   IDO_ENTRY_MENU_ITEM (item)->priv->selected = FALSE;
 
@@ -235,12 +233,12 @@ static void
 entry_realized_cb (GtkWidget        *widget,
                    IdoEntryMenuItem *item)
 {
-  if (widget->window != NULL)
+  if (gtk_widget_get_window (widget) != NULL)
     {
-      gdk_window_raise (widget->window);
+      gdk_window_raise (gtk_widget_get_window (widget));
     }
 
-  g_signal_connect (GTK_WIDGET (item)->parent,
+  g_signal_connect (gtk_widget_get_parent (GTK_WIDGET (item)),
                     "key-press-event",
                     G_CALLBACK (ido_entry_menu_item_key_press),
                     item);
