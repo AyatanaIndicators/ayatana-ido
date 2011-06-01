@@ -502,7 +502,6 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
-  GdkWindow *tmp = event->window;
   gdouble x;
 
   if (event->x > priv->child_allocation.x &&
@@ -551,8 +550,6 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
       return TRUE;
     }
 
-  event->window = GTK_RANGE (scale)->event_window;
-
   translate_event_coordinates (menuitem, event->x, &x);
   event->x = x;
 
@@ -561,8 +558,6 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
 
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
-
-  event->window = tmp;
 
   if (priv->grabbed)
     {
