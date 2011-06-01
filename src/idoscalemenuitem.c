@@ -213,7 +213,7 @@ ido_scale_menu_item_constructed (GObject *object)
 {
   IdoScaleMenuItem *self = IDO_SCALE_MENU_ITEM (object);
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
-  GtkWidget *adj = gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0);
+  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0));
   IdoRangeStyle range_style;
   GtkWidget *hbox;
 
@@ -685,7 +685,7 @@ ido_scale_menu_item_new_with_range (const gchar  *label,
                                     gdouble       max,
                                     gdouble       step)
 {
-  GtkWidget *adjustment = gtk_adjustment_new (value, min, max, step, 10 * step, 0);
+  GtkAdjustment *adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (value, min, max, step, 10 * step, 0));
 
   return GTK_WIDGET (g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
                                   "label",       label,
