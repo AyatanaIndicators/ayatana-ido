@@ -26,8 +26,13 @@
 #include <gdk/gdkkeysyms.h>
 #include "idoentrymenuitem.h"
 
+#if GTK_CHECK_VERSION (3, 0, 0)
 static void     ido_entry_menu_item_select            (GtkMenuItem        *item);
 static void     ido_entry_menu_item_deselect          (GtkMenuItem        *item);
+#else
+static void     ido_entry_menu_item_select            (GtkItem        *item);
+static void     ido_entry_menu_item_deselect          (GtkItem        *item);
+#endif
 static gboolean ido_entry_menu_item_button_release    (GtkWidget      *widget,
                                                        GdkEventButton *event);
 static gboolean ido_entry_menu_item_key_press         (GtkWidget      *widget,
@@ -60,16 +65,27 @@ ido_entry_menu_item_class_init (IdoEntryMenuItemClass *klass)
   GObjectClass     *gobject_class;
   GtkWidgetClass   *widget_class;
   GtkMenuItemClass *menu_item_class;
+#if ! GTK_CHECK_VERSION (3, 0, 0)
+  GtkItemClass     *item_class;
+#endif
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
+#if ! GTK_CHECK_VERSION (3, 0, 0)
+  item_class = GTK_ITEM_CLASS (klass);
+#endif
 
   widget_class->button_release_event = ido_entry_menu_item_button_release;
   widget_class->button_press_event = ido_entry_menu_item_button_press;
 
+#if GTK_CHECK_VERSION (3, 0, 0)
   menu_item_class->select = ido_entry_menu_item_select;
   menu_item_class->deselect = ido_entry_menu_item_deselect;
+#else
+  item_class->select = ido_entry_menu_item_select;
+  item_class->deselect = ido_entry_menu_item_deselect;
+#endif
 
   menu_item_class->hide_on_activate = TRUE;
 
@@ -213,7 +229,11 @@ ido_entry_menu_item_button_release (GtkWidget      *widget,
 }
 
 static void
+#if GTK_CHECK_VERSION (3, 0, 0)
 ido_entry_menu_item_select (GtkMenuItem *item)
+#else
+ido_entry_menu_item_select (GtkItem *item)
+#endif
 {
   IDO_ENTRY_MENU_ITEM (item)->priv->selected = TRUE;
 
@@ -221,7 +241,11 @@ ido_entry_menu_item_select (GtkMenuItem *item)
 }
 
 static void
+#if GTK_CHECK_VERSION (3, 0, 0)
 ido_entry_menu_item_deselect (GtkMenuItem *item)
+#else
+ido_entry_menu_item_deselect (GtkItem *item)
+#endif
 {
   IDO_ENTRY_MENU_ITEM (item)->priv->selected = FALSE;
 

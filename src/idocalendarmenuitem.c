@@ -26,8 +26,13 @@
 #include <gdk/gdkkeysyms.h>
 #include "idocalendarmenuitem.h"
 
+#if GTK_CHECK_VERSION (3, 0, 0)
 static void     ido_calendar_menu_item_select            (GtkMenuItem        *item);
 static void     ido_calendar_menu_item_deselect          (GtkMenuItem        *item);
+#else
+static void     ido_calendar_menu_item_select            (GtkItem        *item);
+static void     ido_calendar_menu_item_deselect          (GtkItem        *item);
+#endif
 static gboolean ido_calendar_menu_item_button_release    (GtkWidget      *widget,
                                                           GdkEventButton *event);
 static gboolean ido_calendar_menu_item_button_press      (GtkWidget      *widget,
@@ -65,16 +70,27 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   GObjectClass     *gobject_class;
   GtkWidgetClass   *widget_class;
   GtkMenuItemClass *menu_item_class;
+#if ! GTK_CHECK_VERSION (3, 0, 0)
+  GtkItemClass     *item_class;
+#endif
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
+#if ! GTK_CHECK_VERSION (3, 0, 0)
+  item_class = GTK_ITEM_CLASS (klass);
+#endif
 
   widget_class->button_release_event = ido_calendar_menu_item_button_release;
   widget_class->button_press_event = ido_calendar_menu_item_button_press;
 
+#if GTK_CHECK_VERSION (3, 0, 0)
   menu_item_class->select = ido_calendar_menu_item_select;
   menu_item_class->deselect = ido_calendar_menu_item_deselect;
+#else
+  item_class->select = ido_calendar_menu_item_select;
+  item_class->deselect = ido_calendar_menu_item_deselect;
+#endif
 
   menu_item_class->hide_on_activate = TRUE;
 
@@ -216,7 +232,11 @@ ido_calendar_menu_item_button_release (GtkWidget      *widget,
 }
 
 static void
+#if GTK_CHECK_VERSION (3, 0, 0)
 ido_calendar_menu_item_select (GtkMenuItem *item)
+#else
+ido_calendar_menu_item_select (GtkItem *item)
+#endif
 {
   IDO_CALENDAR_MENU_ITEM (item)->priv->selected = TRUE;
 
@@ -224,7 +244,11 @@ ido_calendar_menu_item_select (GtkMenuItem *item)
 }
 
 static void
+#if GTK_CHECK_VERSION (3, 0, 0)
 ido_calendar_menu_item_deselect (GtkMenuItem *item)
+#else
+ido_calendar_menu_item_deselect (GtkItem *item)
+#endif
 {
   IDO_CALENDAR_MENU_ITEM (item)->priv->selected = FALSE;
 
@@ -321,8 +345,7 @@ ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
   g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
   
   gtk_calendar_mark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
-  return gtk_calendar_get_day_is_marked (GTK_CALENDAR (menuitem->priv->calendar), day);
-
+  return TRUE;
 }
 
 gboolean
@@ -331,7 +354,7 @@ ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
   g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
   
   gtk_calendar_unmark_day(GTK_CALENDAR (menuitem->priv->calendar), day);
-  return !gtk_calendar_get_day_is_marked (GTK_CALENDAR (menuitem->priv->calendar), day);
+  return TRUE;
 }
 
 void
