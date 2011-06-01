@@ -22,7 +22,7 @@
 #include "idotimeline.h"
 #include "idotypebuiltins.h"
 
-#include <gtk/gtksettings.h>
+#include <gtk/gtk.h>
 #include <math.h>
 
 #define IDO_TIMELINE_GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IDO_TYPE_TIMELINE, IdoTimelinePriv))

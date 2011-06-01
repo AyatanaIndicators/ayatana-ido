@@ -24,7 +24,7 @@ AC_CONFIG_MACRO_DIR([build/autotools])
 
 AM_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE([1.9])
+AM_INIT_AUTOMAKE([1.9 foreign])
 
 IDO_MAJOR_VERSION=ido_major_version
 IDO_MINOR_VERSION=ido_minor_version
@@ -52,9 +52,11 @@ dnl ===========================================================================
 
 # Checks for programs
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+PKG_PROG_PKG_CONFIG
 
 # Checks for header files
 AC_HEADER_STDC
@@ -67,8 +69,6 @@ AC_C_CONST
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
-
-PKG_PROG_PKG_CONFIG
 
 AC_ARG_WITH([gtk],
   [AS_HELP_STRING([--with-gtk],
