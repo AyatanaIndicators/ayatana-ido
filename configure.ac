@@ -68,7 +68,20 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
 
-PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.19.7)
+PKG_PROG_PKG_CONFIG
+
+AC_ARG_WITH([gtk],
+  [AS_HELP_STRING([--with-gtk],
+    [Which version of gtk to use @<:@default=3@:>@])],
+  [],
+  [with_gtk=3])
+AM_CONDITIONAL(USE_GTK3, [test "x$with_gtk" = x3])
+
+if test "x$with_gtk" = "x2"; then
+  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
+else
+  PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
+fi
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
@@ -114,6 +127,7 @@ AC_CONFIG_FILES([
   src/Makefile
   example/Makefile
   libido.pc
+  libido3.pc
 ])
 
 AC_OUTPUT

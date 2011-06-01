@@ -284,11 +284,13 @@ ido_message_dialog_new (GtkWindow      *parent,
                          NULL);
   dialog = GTK_DIALOG (widget);
 
+#if ! GTK_CHECK_VERSION(3, 0, 0)
   if (flags & GTK_DIALOG_NO_SEPARATOR)
     {
       g_warning ("The GTK_DIALOG_NO_SEPARATOR flag cannot be used for IdoMessageDialog");
       flags &= ~GTK_DIALOG_NO_SEPARATOR;
     }
+#endif
 
   if (message_format)
     {
@@ -296,8 +298,7 @@ ido_message_dialog_new (GtkWindow      *parent,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->label),
-                          msg);
+      g_object_set (G_OBJECT (widget), "text", msg, NULL);
 
       g_free (msg);
     }
@@ -397,7 +398,8 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
 
                       label = GTK_LABEL (vlist->data);
 
-                      if (strcmp ((primary ? text : secondary_text), label->label) == 0)
+                      if (strcmp ((primary ? text : secondary_text),
+                                  gtk_label_get_label (label)) == 0)
                         {
                           return GTK_WIDGET (label);
                         }

@@ -185,8 +185,8 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
       priv->right_padding = primary_padding;
     }
 
-  priv->child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-  priv->child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+  priv->child_allocation.x = gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->xthickness;
+  priv->child_allocation.y = gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->ythickness;
 
   priv->child_allocation.x += horizontal_padding;
   priv->child_allocation.x += priv->toggle_size;
@@ -261,7 +261,6 @@ static void
 ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 {
   GObjectClass      *gobject_class = G_OBJECT_CLASS (item_class);
-  GtkWidgetClass    *object_class = GTK_OBJECT_CLASS (item_class);
   GtkWidgetClass    *widget_class = GTK_WIDGET_CLASS (item_class);
 
   widget_class->button_press_event   = ido_scale_menu_item_button_press_event;
@@ -325,7 +324,7 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                            g_cclosure_marshal_VOID__VOID,
                                            G_TYPE_NONE, 0);
 
-  g_type_class_add_private (object_class, sizeof (IdoScaleMenuItemPrivate));
+  g_type_class_add_private (item_class, sizeof (IdoScaleMenuItemPrivate));
 }
 
 static void
