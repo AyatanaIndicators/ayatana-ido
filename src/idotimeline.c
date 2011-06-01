@@ -194,10 +194,8 @@ ido_timeline_set_property (GObject      *object,
                            GParamSpec   *pspec)
 {
   IdoTimeline *timeline;
-  IdoTimelinePriv *priv;
 
   timeline = IDO_TIMELINE (object);
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
 
   switch (prop_id)
     {

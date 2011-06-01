@@ -470,11 +470,9 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
-  GtkWidget *parent;
   gdouble x;
 
   // can we block emissions of "grab-notify" on parent??
-  parent = gtk_widget_get_parent (GTK_WIDGET (menuitem));
 
   translate_event_coordinates (menuitem, event->x, &x);
   event->x = x;
@@ -689,11 +687,11 @@ ido_scale_menu_item_new_with_range (const gchar  *label,
 {
   GtkWidget *adjustment = gtk_adjustment_new (value, min, max, step, 10 * step, 0);
 
-  return g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
-                       "label",       label,
-                       "range-style", range_style,
-                       "adjustment",  adjustment,
-		       NULL);
+  return GTK_WIDGET (g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
+                                  "label",       label,
+                                  "range-style", range_style,
+                                  "adjustment",  adjustment,
+                     NULL));
 }
 
 /**

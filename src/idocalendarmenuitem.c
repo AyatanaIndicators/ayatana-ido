@@ -65,7 +65,6 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   GObjectClass     *gobject_class;
   GtkWidgetClass   *widget_class;
   GtkMenuItemClass *menu_item_class;
-  GtkMenuItemClass     *item_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
@@ -100,12 +99,6 @@ static void
 ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
 {
   IdoCalendarMenuItemPrivate *priv;
-  GtkBorder border;
-
-  border.left = 4;
-  border.right = 4;
-  border.top = 2;
-  border.bottom = 2;
 
   priv = item->priv = IDO_CALENDAR_MENU_ITEM_GET_PRIVATE (item);
 

@@ -237,11 +237,7 @@ ido_message_dialog_class_init (IdoMessageDialogClass *class)
 static void
 ido_message_dialog_init (IdoMessageDialog *dialog)
 {
-  IdoMessageDialogPrivate *priv;
-
   gtk_window_set_focus_on_map (GTK_WINDOW (dialog), FALSE);
-
-  priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 }
 
 /**
