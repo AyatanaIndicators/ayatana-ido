@@ -796,7 +796,7 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
  **/
-G_CONST_RETURN gchar*
+const gchar*
 ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
 {
   IdoScaleMenuItemPrivate *priv;
@@ -817,7 +817,7 @@ ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
  **/
-G_CONST_RETURN gchar*
+const gchar*
 ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem *menuitem)
 {
   IdoScaleMenuItemPrivate *priv;
