@@ -185,8 +185,8 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
       priv->right_padding = primary_padding;
     }
 
-  priv->child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-  priv->child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+  priv->child_allocation.x = gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->xthickness;
+  priv->child_allocation.y = gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->ythickness;
 
   priv->child_allocation.x += horizontal_padding;
   priv->child_allocation.x += priv->toggle_size;
@@ -213,7 +213,7 @@ ido_scale_menu_item_constructed (GObject *object)
 {
   IdoScaleMenuItem *self = IDO_SCALE_MENU_ITEM (object);
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
-  GtkObject *adj = gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0);
+  GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0));
   IdoRangeStyle range_style;
   GtkWidget *hbox;
 
@@ -261,7 +261,6 @@ static void
 ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 {
   GObjectClass      *gobject_class = G_OBJECT_CLASS (item_class);
-  GtkObjectClass    *object_class = GTK_OBJECT_CLASS (item_class);
   GtkWidgetClass    *widget_class = GTK_WIDGET_CLASS (item_class);
 
   widget_class->button_press_event   = ido_scale_menu_item_button_press_event;
@@ -325,7 +324,7 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                            g_cclosure_marshal_VOID__VOID,
                                            G_TYPE_NONE, 0);
 
-  g_type_class_add_private (object_class, sizeof (IdoScaleMenuItemPrivate));
+  g_type_class_add_private (item_class, sizeof (IdoScaleMenuItemPrivate));
 }
 
 static void
@@ -471,11 +470,9 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
-  GtkWidget *parent;
   gdouble x;
 
   // can we block emissions of "grab-notify" on parent??
-  parent = gtk_widget_get_parent (GTK_WIDGET (menuitem));
 
   translate_event_coordinates (menuitem, event->x, &x);
   event->x = x;
@@ -505,7 +502,6 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
-  GdkWindow *tmp = event->window;
   gdouble x;
 
   if (event->x > priv->child_allocation.x &&
@@ -554,8 +550,6 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
       return TRUE;
     }
 
-  event->window = GTK_RANGE (scale)->event_window;
-
   translate_event_coordinates (menuitem, event->x, &x);
   event->x = x;
 
@@ -564,8 +558,6 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
 
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
-
-  event->window = tmp;
 
   if (priv->grabbed)
     {
@@ -688,13 +680,13 @@ ido_scale_menu_item_new_with_range (const gchar  *label,
                                     gdouble       max,
                                     gdouble       step)
 {
-  GtkObject *adjustment = gtk_adjustment_new (value, min, max, step, 10 * step, 0);
+  GtkAdjustment *adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (value, min, max, step, 10 * step, 0));
 
-  return g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
-                       "label",       label,
-                       "range-style", range_style,
-                       "adjustment",  adjustment,
-		       NULL);
+  return GTK_WIDGET (g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
+                                  "label",       label,
+                                  "range-style", range_style,
+                                  "adjustment",  adjustment,
+                     NULL));
 }
 
 /**
@@ -804,7 +796,7 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
  **/
-G_CONST_RETURN gchar*
+const gchar*
 ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
 {
   IdoScaleMenuItemPrivate *priv;
@@ -825,7 +817,7 @@ ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
  **/
-G_CONST_RETURN gchar*
+const gchar*
 ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem *menuitem)
 {
   IdoScaleMenuItemPrivate *priv;

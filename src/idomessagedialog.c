@@ -82,7 +82,7 @@ ido_message_dialog_map (GtkWidget *widget)
    *
    * See: https://bugs.launchpad.net/ubuntu/+source/compiz/+bug/240794
    */
-  gdk_window_set_functions (widget->window,
+  gdk_window_set_functions (gtk_widget_get_window (widget),
                             GDK_FUNC_RESIZE | GDK_FUNC_MOVE);
 
   ido_message_dialog_get_secondary_label (IDO_MESSAGE_DIALOG (widget));
@@ -166,14 +166,14 @@ ido_message_dialog_focus_in_event (GtkWidget     *widget,
       IdoTimeline *timeline;
       IdoMessageDialogMorphContext *context;
 
-      start = GTK_WIDGET (dialog)->requisition;
+      gtk_widget_get_requisition (GTK_WIDGET (dialog), &start);
 
       priv->expanded = TRUE;
 
       gtk_widget_show (priv->action_area);
       gtk_widget_show (priv->secondary_label);
 
-      gtk_widget_size_request (GTK_WIDGET (dialog), &end);
+      gtk_widget_get_requisition (GTK_WIDGET (dialog), &end);
 
       gtk_widget_hide (priv->action_area);
       gtk_widget_hide (priv->secondary_label);
@@ -209,7 +209,7 @@ ido_message_dialog_constructed (GObject *object)
   event_box = gtk_event_box_new ();
   gtk_widget_show (event_box);
 
-  vbox = GTK_DIALOG (object)->vbox;
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (object));
   priv->action_area = gtk_dialog_get_action_area (GTK_DIALOG (object));
 
   g_object_ref (G_OBJECT (vbox));
@@ -237,11 +237,7 @@ ido_message_dialog_class_init (IdoMessageDialogClass *class)
 static void
 ido_message_dialog_init (IdoMessageDialog *dialog)
 {
-  IdoMessageDialogPrivate *priv;
-
   gtk_window_set_focus_on_map (GTK_WINDOW (dialog), FALSE);
-
-  priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 }
 
 /**
@@ -284,11 +280,13 @@ ido_message_dialog_new (GtkWindow      *parent,
                          NULL);
   dialog = GTK_DIALOG (widget);
 
+#if ! GTK_CHECK_VERSION(3, 0, 0)
   if (flags & GTK_DIALOG_NO_SEPARATOR)
     {
       g_warning ("The GTK_DIALOG_NO_SEPARATOR flag cannot be used for IdoMessageDialog");
       flags &= ~GTK_DIALOG_NO_SEPARATOR;
     }
+#endif
 
   if (message_format)
     {
@@ -296,8 +294,7 @@ ido_message_dialog_new (GtkWindow      *parent,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->label),
-                          msg);
+      g_object_set (G_OBJECT (widget), "text", msg, NULL);
 
       g_free (msg);
     }
@@ -397,7 +394,8 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
 
                       label = GTK_LABEL (vlist->data);
 
-                      if (strcmp ((primary ? text : secondary_text), label->label) == 0)
+                      if (strcmp ((primary ? text : secondary_text),
+                                  gtk_label_get_label (label)) == 0)
                         {
                           return GTK_WIDGET (label);
                         }

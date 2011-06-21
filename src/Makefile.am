@@ -1,3 +1,11 @@
+if USE_GTK3
+VER=3
+lib_LTLIBRARIES = libido3-0.1.la
+else
+VER=
+lib_LTLIBRARIES = libido-0.1.la
+endif
+
 ido_built_public_sources =		\
 	idotypebuiltins.h
 
@@ -40,15 +48,12 @@ INCLUDES =				\
 	-DLIBDIR=\"$(libdir)"\"		\
 	-DG_DISABLE_DEPRECATED		\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED
+	-DGDK_DISABLE_DEPRECATED
 
 AM_CPPFLAGS =				\
 	$(GCC_FLAGS)			\
 	$(GTK_CFLAGS)			\
 	$(MAINTAINER_CFLAGS)
-
-lib_LTLIBRARIES = libido-0.1.la
 
 libido_0_1_la_SOURCES =			\
 	idotypebuiltins.c		\
@@ -58,8 +63,9 @@ libido_0_1_la_SOURCES =			\
 	idorange.c			\
 	idoscalemenuitem.c		\
 	idotimeline.c
+libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
 
-libidoincludedir=$(includedir)/libido-0.1/libido
+libidoincludedir=$(includedir)/libido$(VER)-0.1/libido
 
 libidoinclude_HEADERS =			\
 	idocalendarmenuitem.h		\
@@ -72,8 +78,8 @@ libidoinclude_HEADERS =			\
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
 libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)
-
-idoheadersdir = $(includedir)/ido-0.1/ido
+libido3_0_1_la_LIBADD = $(libido_0_1_la_LIBADD)
+libido3_0_1_la_LDFLAGS = $(libido_0_1_la_LDFLAGS)
 
 DISTCLEANFILES =			\
 	stamp-idotypebuiltins.h		\

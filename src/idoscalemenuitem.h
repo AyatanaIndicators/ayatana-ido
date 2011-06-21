@@ -26,7 +26,7 @@
 #ifndef __IDO_SCALE_MENU_ITEM_H__
 #define __IDO_SCALE_MENU_ITEM_H__
 
-#include <gtk/gtkmenuitem.h>
+#include <gtk/gtk.h>
 #include "idorange.h"
 
 G_BEGIN_DECLS
@@ -79,8 +79,8 @@ void                   ido_scale_menu_item_set_style           (IdoScaleMenuItem
                                                                 IdoScaleMenuItemStyle  style);
 GtkWidget             *ido_scale_menu_item_get_primary_image   (IdoScaleMenuItem      *menuitem);
 GtkWidget             *ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem      *menuitem);
-G_CONST_RETURN gchar  *ido_scale_menu_item_get_primary_label   (IdoScaleMenuItem      *menuitem);
-G_CONST_RETURN gchar  *ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem      *menuitem);
+const gchar  *ido_scale_menu_item_get_primary_label   (IdoScaleMenuItem      *menuitem);
+const gchar  *ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem      *menuitem);
 void                   ido_scale_menu_item_set_primary_label   (IdoScaleMenuItem      *menuitem,
                                                                 const gchar           *label);
 void                   ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem      *menuitem,

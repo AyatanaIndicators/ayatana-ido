@@ -24,7 +24,7 @@ AC_CONFIG_MACRO_DIR([build/autotools])
 
 AM_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE([1.9])
+AM_INIT_AUTOMAKE([1.9 foreign])
 
 IDO_MAJOR_VERSION=ido_major_version
 IDO_MINOR_VERSION=ido_minor_version
@@ -52,9 +52,11 @@ dnl ===========================================================================
 
 # Checks for programs
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+PKG_PROG_PKG_CONFIG
 
 # Checks for header files
 AC_HEADER_STDC
@@ -68,7 +70,18 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
 
-PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
+AC_ARG_WITH([gtk],
+  [AS_HELP_STRING([--with-gtk],
+    [Which version of gtk to use @<:@default=3@:>@])],
+  [],
+  [with_gtk=3])
+AM_CONDITIONAL(USE_GTK3, [test "x$with_gtk" = x3])
+
+if test "x$with_gtk" = "x2"; then
+  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
+else
+  PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
+fi
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
@@ -114,6 +127,7 @@ AC_CONFIG_FILES([
   src/Makefile
   example/Makefile
   libido.pc
+  libido3.pc
 ])
 
 AC_OUTPUT

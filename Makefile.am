@@ -1,3 +1,9 @@
+if USE_GTK3
+VER=3
+else
+VER=
+endif
+
 ACLOCAL_AMFLAGS = -I build/autotools
 
 V         = @
@@ -6,14 +12,14 @@ QUIET_GEN = $(Q:@=@echo '  GEN   '$@;)
 
 SUBDIRS = build src example
 
-libido-0.1.pc: libido.pc
-	$(QUIET_GEN) cp -f libido.pc libido-0.1.pc
+%-0.1.pc: %.pc
+	$(QUIET_GEN) cp -f $< $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libido-0.1.pc
+pkgconfig_DATA = libido$(VER)-0.1.pc
 
-CLEANFILES = libido-0.1.pc
-DISTCLEANFILES = libido.pc
-EXTRA_DIST = libido.pc.in
+CLEANFILES = libido-0.1.pc libido3-0.1.pc
+DISTCLEANFILES = libido.pc libido3.pc
+EXTRA_DIST = libido.pc.in libido3.pc.in
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-gtk-doc

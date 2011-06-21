@@ -1,3 +1,9 @@
+if USE_GTK3
+VER=3
+else
+VER=
+endif
+
 noinst_PROGRAMS =               \
 	messagedialog		\
         menus
@@ -24,6 +30,6 @@ menus_CPPFLAGS =                \
         $(GTK_CFLAGS)           \
         $(MAINTAINER_CFLAGS)
 
-messagedialog_LDADD = $(top_builddir)/src/libido-0.1.la $(GTK_LIBS)
+messagedialog_LDADD = $(top_builddir)/src/libido$(VER)-0.1.la $(GTK_LIBS)
 
-menus_LDADD = $(top_builddir)/src/libido-0.1.la $(GTK_LIBS)
+menus_LDADD = $(top_builddir)/src/libido$(VER)-0.1.la $(GTK_LIBS)
