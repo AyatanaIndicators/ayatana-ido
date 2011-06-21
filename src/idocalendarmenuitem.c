@@ -220,7 +220,7 @@ static gboolean
 ido_calendar_menu_item_button_release (GtkWidget      *widget,
                                        GdkEventButton *event)
 {
-  GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
+  // GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
 
   return TRUE;
 }
