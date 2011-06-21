@@ -210,9 +210,6 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
           gtk_widget_grab_focus (calendar);
         }
 
-      gtk_widget_event (calendar,
-                        ((GdkEvent *)(void*)(event)));
-
       return TRUE;
     }
 
@@ -224,9 +221,6 @@ ido_calendar_menu_item_button_release (GtkWidget      *widget,
                                        GdkEventButton *event)
 {
   GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
-
-  gtk_widget_event (calendar,
-                    ((GdkEvent *)(void*)(event)));
 
   return TRUE;
 }
