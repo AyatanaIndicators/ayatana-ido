@@ -20,11 +20,13 @@ AC_INIT([ido],
         [ido_version],
         [https://bugs.launchpad.net/avani])
 AC_CONFIG_SRCDIR([src/libido.h])
-AC_CONFIG_MACRO_DIR([build/autotools])
+AC_CONFIG_MACRO_DIR([m4])
 
 AM_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE([1.9 foreign])
+AM_INIT_AUTOMAKE([1.11 foreign])
+
+AM_SILENT_RULES([yes])
 
 IDO_MAJOR_VERSION=ido_major_version
 IDO_MINOR_VERSION=ido_minor_version
@@ -116,14 +118,8 @@ GTK_DOC_CHECK([1.8])
 
 dnl ===========================================================================
 
-SHAVE_INIT([build/autotools], [enable])
-
 AC_CONFIG_FILES([
   Makefile
-  build/Makefile
-  build/autotools/Makefile
-  build/autotools/shave-libtool
-  build/autotools/shave
   src/Makefile
   example/Makefile
   libido.pc
