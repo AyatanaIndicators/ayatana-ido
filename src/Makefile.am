@@ -18,9 +18,10 @@ sources_h =				\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
 	idorange.h			\
+	idooffscreenproxy.h             \
 	idoscalemenuitem.h		\
 	idotimeline.h			\
-	libido.h
+	libido.h 
 
 EXTRA_DIST =				\
 	ido.list			\
@@ -62,7 +63,8 @@ libido_0_1_la_SOURCES =			\
 	idomessagedialog.c		\
 	idorange.c			\
 	idoscalemenuitem.c		\
-	idotimeline.c
+	idotimeline.c                   \
+	idooffscreenproxy.c
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
 
 libidoincludedir=$(includedir)/libido$(VER)-0.1/libido
@@ -74,6 +76,7 @@ libidoinclude_HEADERS =			\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idotimeline.h			\
+	idooffscreenproxy.h              \
 	libido.h
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
