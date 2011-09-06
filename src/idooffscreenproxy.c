@@ -243,6 +243,7 @@ ido_offscreen_proxy_realize (GtkWidget *widget)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUITEM);
   gtk_style_context_set_background (context, window);
   gtk_style_context_set_background (context, proxy->priv->offscreen_window);
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT);
 
   gdk_window_show (proxy->priv->offscreen_window);
 }
@@ -450,16 +451,19 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
 {
   IdoOffscreenProxy *proxy = IDO_OFFSCREEN_PROXY (widget);
   GdkWindow *window;
-  GtkStyleContext *sc;
+  GtkStyleContext *sc, *wsc;
+  GtkBorder border;
   
   window = gtk_widget_get_window (widget);
   
   sc = get_menu_style_context();
+  wsc = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_border (wsc, gtk_widget_get_state (widget), &border);
 
   gtk_render_background (sc, cr,
-			 -1, -1,
-			 gdk_window_get_width (window)+2,
-			 gdk_window_get_height (window)+2);
+			 -border.left,-border.top,
+			 gdk_window_get_width (window) + border.right*2,
+			 gdk_window_get_height (window) + border.bottom*2);
 
 
   
