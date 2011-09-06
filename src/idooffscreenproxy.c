@@ -169,6 +169,19 @@ ido_offscreen_proxy_create_alpha_image_surface (GdkWindow *offscreen, gint width
 }
 
 static void
+proxy_add_css (GtkStyleContext *sc)
+{
+  GtkCssProvider *provider = gtk_css_provider_new();
+  const gchar *proxy_css = ".menu.ido-offscreen { \nborder-width: 0;\nborder-radius:0; \n}\n";
+  
+  gtk_css_provider_load_from_data (provider, proxy_css, -1, NULL);
+  
+  gtk_style_context_add_provider (sc, GTK_STYLE_PROVIDER (provider), 
+				  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    
+}
+
+static void
 ido_offscreen_proxy_realize (GtkWidget *widget)
 {
   IdoOffscreenProxy *proxy = IDO_OFFSCREEN_PROXY (widget);
@@ -244,7 +257,10 @@ ido_offscreen_proxy_realize (GtkWidget *widget)
   gtk_style_context_set_background (context, window);
   gtk_style_context_set_background (context, proxy->priv->offscreen_window);
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT);
-
+  
+  gtk_widget_set_name (widget, "IdoOffscreenProxy");
+  gtk_widget_path_iter_set_name (gtk_widget_get_path (widget), -1, "IdoOffscreenProxy");
+  
   gdk_window_show (proxy->priv->offscreen_window);
 }
 
@@ -436,9 +452,14 @@ get_menu_style_context ()
   gtk_widget_path_append_type (path, GTK_TYPE_MENU);
   
   sc = gtk_style_context_new();
+
+  proxy_add_css (sc);
   
   gtk_style_context_set_path (sc, path);
   gtk_style_context_add_class (sc, GTK_STYLE_CLASS_MENU);
+  gtk_style_context_add_class (sc, "ido-offscreen");
+  
+
   
   gtk_widget_path_free (path);
 
@@ -451,19 +472,16 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
 {
   IdoOffscreenProxy *proxy = IDO_OFFSCREEN_PROXY (widget);
   GdkWindow *window;
-  GtkStyleContext *sc, *wsc;
-  GtkBorder border;
+  GtkStyleContext *sc;
   
   window = gtk_widget_get_window (widget);
   
   sc = get_menu_style_context();
-  wsc = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_border (wsc, gtk_widget_get_state (widget), &border);
 
   gtk_render_background (sc, cr,
-			 -border.left,-border.top,
-			 gdk_window_get_width (window) + border.right*2,
-			 gdk_window_get_height (window) + border.bottom*2);
+			 0, 0,
+			 gdk_window_get_width (window),
+			 gdk_window_get_height (window));
   
   g_object_unref (sc);
 
