@@ -477,7 +477,6 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  GtkWidget *scale = priv->scale;
   gdouble x;
 
   // can we block emissions of "grab-notify" on parent??

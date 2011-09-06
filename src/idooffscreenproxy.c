@@ -108,6 +108,8 @@ ido_offscreen_proxy_init (IdoOffscreenProxy *proxy)
     | GDK_SCROLL_MASK
     | GDK_ENTER_NOTIFY_MASK
 			 | GDK_LEAVE_NOTIFY_MASK);
+  
+  gtk_container_set_border_width (GTK_CONTAINER (proxy), 0);
 }
 
 GtkWidget *
@@ -130,7 +132,6 @@ pick_offscreen_child (GdkWindow *offscreen_window,
       // if (widget_x >= 0 && widget_x < child_area.width &&
       //  widget_y >= 0 && widget_y < child_area.height)
       //return proxy->priv->offscreen_window;
-      exit(0);
       return proxy->priv->offscreen_window;
     }
   
@@ -424,8 +425,8 @@ ido_offscreen_proxy_damage (GtkWidget *widget,
   return TRUE;
 }
 
-static void
-get_background_color (GdkRGBA *color)
+static GtkStyleContext *
+get_menu_style_context ()
 {
   GtkStyleContext *sc;
   GtkWidgetPath *path;
@@ -436,12 +437,11 @@ get_background_color (GdkRGBA *color)
   sc = gtk_style_context_new();
   
   gtk_style_context_set_path (sc, path);
-  gtk_style_context_add_class (sc, "menu");
-  gtk_style_context_get_background_color (sc, GTK_STATE_FLAG_ACTIVE, color);
+  gtk_style_context_add_class (sc, GTK_STYLE_CLASS_MENU);
   
-
   gtk_widget_path_free (path);
-  g_object_unref (sc);
+
+  return sc;
 }
 
 static gboolean
@@ -450,11 +450,18 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
 {
   IdoOffscreenProxy *proxy = IDO_OFFSCREEN_PROXY (widget);
   GdkWindow *window;
-  GdkRGBA bg_color;
+  GtkStyleContext *sc;
   
   window = gtk_widget_get_window (widget);
   
-  get_background_color (&bg_color);
+  sc = get_menu_style_context();
+
+  gtk_render_background (sc, cr,
+			 -1, -1,
+			 gdk_window_get_width (window)+2,
+			 gdk_window_get_height (window)+2);
+
+
   
   if (gtk_cairo_should_draw_window (cr, window))
     {
@@ -464,28 +471,12 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
 	{
 	  surface = gdk_offscreen_window_get_surface (proxy->priv->offscreen_window);
 
-	  cairo_set_source_rgba(cr, bg_color.red, bg_color.green,
-	  			bg_color.blue, 1);
-	  cairo_paint(cr);
-
 	  cairo_set_source_surface (cr, surface, 0, 0);
 	  cairo_paint (cr);
 	}
     }
     else if (gtk_cairo_should_draw_window (cr, proxy->priv->offscreen_window))
     {
-            cairo_save (cr);
-            cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
-            cairo_paint(cr);
-            cairo_restore (cr);
-
-	    //      gtk_render_background (gtk_widget_get_style_context (widget), cr,
-	    //               0, 0,
-	    //               gdk_window_get_width (proxy->priv->offscreen_window),
-	    //               gdk_window_get_height (proxy->priv->offscreen_window));
-
-
-
 
       if (proxy->priv->child)
 	gtk_container_propagate_draw (GTK_CONTAINER (widget),
