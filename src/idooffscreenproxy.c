@@ -464,6 +464,8 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
 			 -border.left,-border.top,
 			 gdk_window_get_width (window) + border.right*2,
 			 gdk_window_get_height (window) + border.bottom*2);
+  
+  g_object_unref (sc);
 
 
   
