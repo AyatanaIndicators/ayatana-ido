@@ -3,7 +3,7 @@
 #
 m4_define([ido_major_version], [0])
 m4_define([ido_minor_version], [2])
-m4_define([ido_micro_version], [90])
+m4_define([ido_micro_version], [91])
 
 m4_define([ido_api_version],
           [ido_major_version.ido_minor_version])
