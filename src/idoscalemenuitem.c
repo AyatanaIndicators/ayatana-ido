@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include "idorange.h"
 #include "idoscalemenuitem.h"
+#include "idooffscreenproxy.h"
 #include "idotypebuiltins.h"
 
 static void     ido_scale_menu_item_set_property           (GObject               *object,
@@ -57,6 +58,7 @@ static void     update_packing                             (IdoScaleMenuItem    
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget            *scale;
+  GtkWidget            *proxy;
   GtkAdjustment        *adjustment;
   GtkWidget            *primary_image;
   GtkWidget            *secondary_image;
@@ -226,6 +228,12 @@ ido_scale_menu_item_constructed (GObject *object)
   priv->scale = ido_range_new (adj, range_style);
   g_object_ref (priv->scale);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
+  
+  gtk_widget_set_can_focus (priv->scale, FALSE);
+  
+  priv->proxy = ido_offscreen_proxy_new ();
+  g_object_ref (priv->proxy);
+  gtk_container_add (GTK_CONTAINER (priv->proxy), priv->scale);
 
   hbox = gtk_hbox_new (FALSE, 0);
 
@@ -338,23 +346,23 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMen
       switch (old_style)
         {
         case IDO_SCALE_MENU_ITEM_STYLE_NONE:
-          gtk_container_remove (container, priv->scale);
+          gtk_container_remove (container, priv->proxy);
           break;
 
         case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
           gtk_container_remove (container, priv->primary_image);
           gtk_container_remove (container, priv->secondary_image);
-          gtk_container_remove (container, priv->scale);
+          gtk_container_remove (container, priv->proxy);
           break;
 
         case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
           gtk_container_remove (container, priv->primary_label);
           gtk_container_remove (container, priv->secondary_label);
-          gtk_container_remove (container, priv->scale);
+          gtk_container_remove (container, priv->proxy);
           break;
 
         default:
-          gtk_container_remove (container, priv->scale);
+          gtk_container_remove (container, priv->proxy);
           break;
         }
     }
@@ -362,23 +370,23 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMen
   switch (style)
     {
     case IDO_SCALE_MENU_ITEM_STYLE_NONE:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
       gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_image, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_image, FALSE, FALSE, 0);
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
       gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_label, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_label, FALSE, FALSE, 0);
       break;
 
     default:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
       break;
     }
 
@@ -469,7 +477,6 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  GtkWidget *scale = priv->scale;
   gdouble x;
 
   // can we block emissions of "grab-notify" on parent??
@@ -480,12 +487,12 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   translate_event_coordinates (menuitem, event->x_root, &x);
   event->x_root = x;
 
-  ubuntu_gtk_widget_set_has_grab (scale, TRUE);
+  //  ubuntu_gtk_widget_set_has_grab (scale, TRUE);
 
-  gtk_widget_event (scale,
+  gtk_widget_event (priv->scale,
                     ((GdkEvent *)(void*)(event)));
 
-  ubuntu_gtk_widget_set_has_grab (scale, FALSE);
+  //  ubuntu_gtk_widget_set_has_grab (scale, FALSE);
 
   if (!priv->grabbed)
     {
@@ -493,7 +500,7 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
       g_signal_emit (menuitem, signals[SLIDER_GRABBED], 0);
     }
 
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
