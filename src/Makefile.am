@@ -22,14 +22,18 @@ sources_h =				\
 	idotimeline.h			\
 	libido.h 
 
-if USE_GTK3
-sources_h += idooffscreenproxy.h
-endif
-
 EXTRA_DIST =				\
 	ido.list			\
 	idotypebuiltins.h.template	\
 	idotypebuiltins.c.template
+
+
+if USE_GTK3
+sources_h += idooffscreenproxy.h
+else
+EXTRA_DIST += idooffscreenproxy.h \
+              idooffscreenproxy.c
+endif
 
 idotypebuiltins.h: stamp-idotypebuiltins.h
 
