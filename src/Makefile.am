@@ -54,7 +54,8 @@ INCLUDES =				\
 AM_CPPFLAGS =				\
 	$(GCC_FLAGS)			\
 	$(GTK_CFLAGS)			\
-	$(MAINTAINER_CFLAGS)
+	$(MAINTAINER_CFLAGS)    \
+	-Wall -Werror -Wextra -Wno-unused-parameter
 
 libido_0_1_la_SOURCES =			\
 	idotypebuiltins.c		\
