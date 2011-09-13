@@ -81,6 +81,7 @@ if test "x$with_gtk" = "x2"; then
   PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
 else
   PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
+  AC_DEFINE_UNQUOTED(USE_GTK3, , [Use GTK3])
 fi
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
