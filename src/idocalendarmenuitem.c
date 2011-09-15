@@ -196,62 +196,60 @@ static gboolean
 ido_calendar_menu_item_button_press (GtkWidget      *widget,
                                      GdkEventButton *event)
 {
-  GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
-  g_debug("Button Press");
+	GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
+	g_debug("Button Press");
 
-  if (event->button == 1)
-    {
-      if (gtk_widget_get_window (calendar) != NULL)
-        {
-          gdk_window_raise (gtk_widget_get_window (calendar));
-		  g_debug("Raise window");
-        }
+	if (event->button == 1) {
+		if (gtk_widget_get_window (calendar) != NULL) {
+			gdk_window_raise (gtk_widget_get_window (calendar));
+			g_debug("Raise window");
+		}
 
-      if (!gtk_widget_has_focus (calendar))
-        {
-          gtk_widget_grab_focus (calendar);
-		  g_debug("Grab focus: %d", gtk_widget_has_focus(calendar));
-        }
-GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
-GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
-GList * child;
-gint root_x, root_y;
+		if (!gtk_widget_has_focus (calendar)) {
+			gtk_widget_grab_focus (calendar);
+			g_debug("Grab focus: %d", gtk_widget_has_focus(calendar));
+		}
 
-gdk_window_get_position(gtk_widget_get_window(widget), &root_x, &root_y);
-root_x += event->x;
-root_y += event->y;
-g_debug("Root X: %d Y: %d", root_x, root_y);
+		GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
+		GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
+		GList * child;
+		gint root_x, root_y;
 
-for (child = children; child != NULL; child = g_list_next(child)) {
-gint newx, newy;
-gint winx, winy;
-GdkWindow * newwindow = (GdkWindow*)child->data;
+		gdk_window_get_position(gtk_widget_get_window(widget), &root_x, &root_y);
+		root_x += event->x;
+		root_y += event->y;
+		g_debug("Root X: %d Y: %d", root_x, root_y);
 
-((GdkEventButton *)newevent)->window = newwindow;
+		for (child = children; child != NULL; child = g_list_next(child)) {
+			gint newx, newy;
+			gint winx, winy;
+			GdkWindow * newwindow = (GdkWindow*)child->data;
 
-//gdk_window_get_position((GdkWindow*)child->data, &winx, &winy);
-gdk_window_get_position(newwindow, &winx, &winy);
-newx = root_x - winx;
-newy = root_y - winy;
+			((GdkEventButton *)newevent)->window = newwindow;
+
+			//gdk_window_get_position((GdkWindow*)child->data, &winx, &winy);
+			gdk_window_get_position(newwindow, &winx, &winy);
+			newx = root_x - winx;
+			newy = root_y - winy;
 
 
-if (newx >= 0 && newy >= 0) {
-//if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
-gboolean returned = FALSE;
-g_debug("Simulating event at: %dx%d", newx, newy);
-((GdkEventButton *)newevent)->x = newx;
-((GdkEventButton *)newevent)->y = newy;
+			if (newx >= 0 && newy >= 0) {
+				//if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
+				gboolean returned = FALSE;
+				g_debug("Simulating event at: %dx%d", newx, newy);
+				((GdkEventButton *)newevent)->x = newx;
+				((GdkEventButton *)newevent)->y = newy;
 
-      returned = GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
-	  if (returned) {
-	  	g_debug("\tHandled");
+				returned = GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
+				if (returned) {
+					g_debug("\tHandled");
+				}
+			}
+		}
+		return TRUE;
 	}
-	  }
-	 }
-      return TRUE;
-    }
 
-  return FALSE;
+	return FALSE;
 }
 
 static gboolean
