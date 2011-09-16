@@ -213,11 +213,10 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 		GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
 		GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
 		GList * child;
-		gint root_x, root_y;
 
-		gdk_window_get_position(gtk_widget_get_window(widget), &root_x, &root_y);
-		root_x += event->x;
-		root_y += event->y;
+		gint root_x = event->x_root;
+		gint root_y = event->y_root;
+
 		g_debug("Root X: %d Y: %d", root_x, root_y);
 
 		for (child = children; child != NULL; child = g_list_next(child)) {
