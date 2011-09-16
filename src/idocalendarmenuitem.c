@@ -207,6 +207,7 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 			gtk_widget_grab_focus (calendar);
 		}
 
+#if GTK_CHECK_VERSION (3, 0, 0)
 		GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
 		GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
 		GList * child;
@@ -232,6 +233,8 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 				GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
 			}
 		}
+#endif
+
 		return TRUE;
 	}
 
@@ -242,8 +245,10 @@ static gboolean
 ido_calendar_menu_item_button_release (GtkWidget      *widget,
                                        GdkEventButton *event)
 {
+#if GTK_CHECK_VERSION (3, 0, 0)
   GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
   GTK_WIDGET_GET_CLASS(calendar)->button_release_event(GTK_WIDGET(calendar), event);
+#endif
 
   return TRUE;
 }
