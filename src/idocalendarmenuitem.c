@@ -233,6 +233,9 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 				GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
 			}
 		}
+
+		((GdkEventButton *)newevent)->window = event->window;
+		gdk_event_free(newevent);
 #endif
 
 		return TRUE;
