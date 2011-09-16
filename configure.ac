@@ -14,17 +14,21 @@ m4_define([ido_interface_age], [0])
 m4_define([ido_binary_age],
           [m4_eval(100 * ido_minor_version + ido_micro_version)])
 
-AC_PREREQ(2.59)
+AC_PREREQ([2.64])
 
 AC_INIT([ido],
         [ido_version],
-        [https://bugs.launchpad.net/avani])
+        [http://bugs.launchpad.net/ido],
+        [ido],
+        [http://launchpad.net/ido])
+
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/libido.h])
-AC_CONFIG_MACRO_DIR([build/autotools])
+AC_CONFIG_MACRO_DIR([m4])
 
-AM_CONFIG_HEADER([config.h])
+AM_INIT_AUTOMAKE([1.11 foreign])
 
-AM_INIT_AUTOMAKE([1.9 foreign])
+AM_SILENT_RULES([yes])
 
 IDO_MAJOR_VERSION=ido_major_version
 IDO_MINOR_VERSION=ido_minor_version
@@ -53,8 +57,11 @@ dnl ===========================================================================
 # Checks for programs
 AC_PROG_CC
 AM_PROG_CC_C_O
-AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
+
+# Initialize libtool
+LT_PREREQ([2.2])
+LT_INIT([disable-static])
+
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 PKG_PROG_PKG_CONFIG
 
@@ -96,7 +103,7 @@ AC_SUBST(GCC_FLAGS)
 # use strict compiler flags only on development releases
 m4_define([maintainer_flags_default], [m4_if(m4_eval(ido_minor_version % 2), [1], [yes], [no])])
 AC_ARG_ENABLE([maintainer-flags],
-              [AC_HELP_STRING([--enable-maintainer-flags=@<:@no/yes@:>@],
+              [AS_HELP_STRING([--enable-maintainer-flags=@<:@no/yes@:>@],
                               [Use strict compiler flags @<:@default=no@:>@])],
               [],
               [enable_maintainer_flags=maintainer_flags_default])
@@ -117,14 +124,8 @@ GTK_DOC_CHECK([1.8])
 
 dnl ===========================================================================
 
-SHAVE_INIT([build/autotools], [enable])
-
 AC_CONFIG_FILES([
   Makefile
-  build/Makefile
-  build/autotools/Makefile
-  build/autotools/shave-libtool
-  build/autotools/shave
   src/Makefile
   example/Makefile
   libido.pc
