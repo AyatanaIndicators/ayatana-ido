@@ -226,18 +226,16 @@ ido_calendar_menu_item_button_press (GtkWidget      *widget,
 
 			((GdkEventButton *)newevent)->window = newwindow;
 
-			gdk_window_get_position(newwindow, &winx, &winy);
+			gdk_window_get_origin(newwindow, &winx, &winy);
 			g_debug("Window position: %dx%d", winx, winy);
 			newx = root_x - winx;
 			newy = root_y - winy;
 
-
-			if (newx >= 0 && newy >= 0) {
-				//if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
+			if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
 				gboolean returned = FALSE;
 				g_debug("Simulating event at: %dx%d", newx, newy);
-				//((GdkEventButton *)newevent)->x = newx;
-				//((GdkEventButton *)newevent)->y = newy;
+				((GdkEventButton *)newevent)->x = newx;
+				((GdkEventButton *)newevent)->y = newy;
 
 				returned = GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
 				if (returned) {
