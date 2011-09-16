@@ -196,31 +196,62 @@ static gboolean
 ido_calendar_menu_item_button_press (GtkWidget      *widget,
                                      GdkEventButton *event)
 {
-  GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
+	GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
 
-  if (event->button == 1)
-    {
-      if (gtk_widget_get_window (calendar) != NULL)
-        {
-          gdk_window_raise (gtk_widget_get_window (calendar));
-        }
+	if (event->button == 1) {
+		if (gtk_widget_get_window (calendar) != NULL) {
+			gdk_window_raise (gtk_widget_get_window (calendar));
+		}
 
-      if (!gtk_widget_has_focus (calendar))
-        {
-          gtk_widget_grab_focus (calendar);
-        }
+		if (!gtk_widget_has_focus (calendar)) {
+			gtk_widget_grab_focus (calendar);
+		}
 
-      return TRUE;
-    }
+#if GTK_CHECK_VERSION (3, 0, 0)
+		GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
+		GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
+		GList * child;
 
-  return FALSE;
+		gint root_x = event->x_root;
+		gint root_y = event->y_root;
+
+		for (child = children; child != NULL; child = g_list_next(child)) {
+			gint newx, newy;
+			gint winx, winy;
+			GdkWindow * newwindow = (GdkWindow*)child->data;
+
+			((GdkEventButton *)newevent)->window = newwindow;
+
+			gdk_window_get_origin(newwindow, &winx, &winy);
+			newx = root_x - winx;
+			newy = root_y - winy;
+
+			if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
+				((GdkEventButton *)newevent)->x = newx;
+				((GdkEventButton *)newevent)->y = newy;
+
+				GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
+			}
+		}
+
+		((GdkEventButton *)newevent)->window = event->window;
+		gdk_event_free(newevent);
+#endif
+
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 static gboolean
 ido_calendar_menu_item_button_release (GtkWidget      *widget,
                                        GdkEventButton *event)
 {
-  // GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
+#if GTK_CHECK_VERSION (3, 0, 0)
+  GtkWidget *calendar = IDO_CALENDAR_MENU_ITEM (widget)->priv->calendar;
+  GTK_WIDGET_GET_CLASS(calendar)->button_release_event(GTK_WIDGET(calendar), event);
+#endif
 
   return TRUE;
 }
