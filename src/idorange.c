@@ -40,8 +40,10 @@ static void ido_range_get_property   (GObject          *object,
                                       guint             prop_id,
                                       GValue           *value,
                                       GParamSpec       *pspec);
+#ifdef USE_GTK3
 static void ido_range_grab_notify    (GtkWidget        *widget,
                                       gboolean          was_grabbed);
+#endif
 
 #define IDO_RANGE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_RANGE, IdoRangePrivate))
 
@@ -62,7 +64,9 @@ ido_range_class_init (IdoRangeClass *class)
   gobject_class->set_property = ido_range_set_property;
   gobject_class->get_property = ido_range_get_property;
 
+#ifdef USE_GTK3
   widget_class->grab_notify = ido_range_grab_notify;
+#endif
 
   g_object_class_install_property (gobject_class,
                                    PROP_STYLE,
@@ -134,11 +138,21 @@ ido_range_set_property (GObject      *object,
     }
 }
 
+#ifdef USE_GTK3
 static void
 ido_range_grab_notify (GtkWidget *widget, gboolean was_grabbed)
 {
+  /*
+   * FIXME: workaround for lp bug #865122.
+   * Without this handler, GtkRange will call remove_grab which results
+   * in an infinite loop of grab_notifies.
+   *
+   * The widget will still work properly, because grab-broken-event will get
+   * properly fired and internal state of GtkRange will be properly updated.
+   */
   g_return_if_fail (IDO_IS_RANGE (widget));
 }
+#endif
 
 static void
 ido_range_constructed (GObject *object)
