@@ -151,7 +151,6 @@ ido_range_grab_notify (GtkWidget *widget, gboolean was_grabbed)
    * The widget will still work properly, because grab-broken-event will get
    * properly fired and internal state of GtkRange will be properly updated.
    */
-  g_return_if_fail (IDO_IS_RANGE (widget));
 }
 #endif
 
