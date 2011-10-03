@@ -40,6 +40,8 @@ static void ido_range_get_property   (GObject          *object,
                                       guint             prop_id,
                                       GValue           *value,
                                       GParamSpec       *pspec);
+static void ido_range_grab_notify    (GtkWidget        *widget,
+                                      gboolean          was_grabbed);
 
 #define IDO_RANGE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_RANGE, IdoRangePrivate))
 
@@ -59,6 +61,8 @@ ido_range_class_init (IdoRangeClass *class)
   gobject_class->constructed  = ido_range_constructed;
   gobject_class->set_property = ido_range_set_property;
   gobject_class->get_property = ido_range_get_property;
+
+  widget_class->grab_notify = ido_range_grab_notify;
 
   g_object_class_install_property (gobject_class,
                                    PROP_STYLE,
@@ -128,6 +132,12 @@ ido_range_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+ido_range_grab_notify (GtkWidget *widget, gboolean was_grabbed)
+{
+  g_return_if_fail (IDO_IS_RANGE (widget));
 }
 
 static void
