@@ -25,6 +25,7 @@
 
 #include "idorange.h"
 #include "idotypebuiltins.h"
+#include "config.h"
 
 struct _IdoRangePrivate
 {
