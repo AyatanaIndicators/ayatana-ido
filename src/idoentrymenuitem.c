@@ -25,6 +25,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include "idoentrymenuitem.h"
+#include "config.h"
 
 #if GTK_CHECK_VERSION (3, 0, 0)
 static void     ido_entry_menu_item_select            (GtkMenuItem        *item);
@@ -118,7 +119,12 @@ ido_entry_menu_item_init (IdoEntryMenuItem *item)
                     G_CALLBACK (entry_move_focus_cb),
                     item);
 
+#ifdef USE_GTK3
+  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#else
   priv->box = gtk_hbox_new (FALSE, 0);
+#endif
+
   gtk_box_pack_start (GTK_BOX (priv->box), priv->entry, FALSE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (item), priv->box);

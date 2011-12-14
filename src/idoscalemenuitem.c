@@ -157,16 +157,26 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
   switch (priv->style)
     {
     case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
+#ifdef USE_GTK3
+      gtk_widget_get_preferred_size (priv->primary_image, &primary_req, NULL);
+      gtk_widget_get_preferred_size (priv->secondary_image, &secondary_req, NULL);
+#else
       gtk_widget_get_child_requisition (priv->primary_image, &primary_req);
       gtk_widget_get_child_requisition (priv->secondary_image, &secondary_req);
+#endif
 
       primary_padding = gtk_widget_get_visible (priv->primary_image) ? primary_req.width : 0;
       secondary_padding = gtk_widget_get_visible (priv->secondary_image) ? secondary_req.width : 0;
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
+#ifdef USE_GTK3
+      gtk_widget_get_preferred_size (priv->primary_label, &primary_req, NULL);
+      gtk_widget_get_preferred_size (priv->secondary_label, &secondary_req, NULL);
+#else
       gtk_widget_get_child_requisition (priv->primary_label, &primary_req);
       gtk_widget_get_child_requisition (priv->secondary_label, &secondary_req);
+#endif
 
       primary_padding = gtk_widget_get_visible (priv->primary_label) ? primary_req.width : 0;
       secondary_padding = gtk_widget_get_visible (priv->secondary_label) ? secondary_req.width : 0;
@@ -247,7 +257,11 @@ ido_scale_menu_item_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (priv->proxy), priv->scale);
 #endif
 
+#ifdef USE_GTK3
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#else
   hbox = gtk_hbox_new (FALSE, 0);
+#endif
 
   priv->primary_image = gtk_image_new ();
   g_signal_connect (priv->primary_image, "notify",
