@@ -32,6 +32,7 @@
 
 #include "idomessagedialog.h"
 #include "idotimeline.h"
+#include "config.h"
 
 #define IDO_MESSAGE_DIALOG_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_MESSAGE_DIALOG, IdoMessageDialogPrivate))
 
@@ -166,14 +167,22 @@ ido_message_dialog_focus_in_event (GtkWidget     *widget,
       IdoTimeline *timeline;
       IdoMessageDialogMorphContext *context;
 
+#ifdef USE_GTK3
+      gtk_widget_get_preferred_size (GTK_WIDGET (dialog), NULL, &start);
+#else
       gtk_widget_get_requisition (GTK_WIDGET (dialog), &start);
+#endif
 
       priv->expanded = TRUE;
 
       gtk_widget_show (priv->action_area);
       gtk_widget_show (priv->secondary_label);
 
+#ifdef USE_GTK3
+      gtk_widget_get_preferred_size (GTK_WIDGET (dialog), NULL, &end);
+#else
       gtk_widget_get_requisition (GTK_WIDGET (dialog), &end);
+#endif
 
       gtk_widget_hide (priv->action_area);
       gtk_widget_hide (priv->secondary_label);
@@ -370,7 +379,11 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
 
   for (list = children; list != NULL; list = list->next)
     {
+#ifdef USE_GTK3
+      if (G_TYPE_FROM_INSTANCE (list->data) == GTK_TYPE_BOX && gtk_orientable_get_orientation (list->data) == GTK_ORIENTATION_HORIZONTAL)
+#else
       if (G_TYPE_FROM_INSTANCE (list->data) == GTK_TYPE_HBOX)
+#endif
         {
 	  GList *hchildren;
           GList *hlist;
@@ -380,7 +393,11 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
 
           for (hlist = hchildren; hlist != NULL; hlist = hlist->next)
             {
+#ifdef USE_GTK3
+              if (G_TYPE_FROM_INSTANCE (hlist->data) == GTK_TYPE_BOX && gtk_orientable_get_orientation (hlist->data) == GTK_ORIENTATION_VERTICAL)
+#else
               if (G_TYPE_FROM_INSTANCE (hlist->data) == GTK_TYPE_VBOX)
+#endif
                 {
                   GList *vlist;
                   GtkWidget *vbox = GTK_WIDGET (hlist->data);
