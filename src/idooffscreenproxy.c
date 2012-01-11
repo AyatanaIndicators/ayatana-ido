@@ -211,6 +211,10 @@ ido_offscreen_proxy_realize (GtkWidget *widget)
     | GDK_ENTER_NOTIFY_MASK
     | GDK_LEAVE_NOTIFY_MASK;
   attributes.visual = gdk_screen_get_rgba_visual (gdk_screen_get_default ());//gtk_widget_get_visual (widget);
+  if (!attributes.visual)
+    {
+      attributes.visual = gdk_screen_get_system_visual (gdk_screen_get_default ());
+    }
   attributes.wclass = GDK_INPUT_OUTPUT;
   
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
