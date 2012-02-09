@@ -482,6 +482,8 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
   
   sc = get_menu_style_context();
 
+  gtk_style_context_add_class (sc, "menubar");
+
   gtk_render_background (sc, cr,
 			 0, 0,
 			 gdk_window_get_width (window),
@@ -489,8 +491,6 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
   
   g_object_unref (sc);
 
-
-  
   if (gtk_cairo_should_draw_window (cr, window))
     {
       cairo_surface_t *surface;
@@ -505,12 +505,11 @@ ido_offscreen_proxy_draw (GtkWidget *widget,
     }
     else if (gtk_cairo_should_draw_window (cr, proxy->priv->offscreen_window))
     {
-
       if (proxy->priv->child)
 	gtk_container_propagate_draw (GTK_CONTAINER (widget),
 				      proxy->priv->child,
 				      cr);
-				      }
+    }
   
   return TRUE;
 }
