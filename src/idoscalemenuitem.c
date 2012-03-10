@@ -56,6 +56,8 @@ static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem    
                                                             gpointer               user_data);
 static void     update_packing                             (IdoScaleMenuItem      *self,
                                                             IdoScaleMenuItemStyle  style);
+static void     default_primary_clicked_handler            (IdoScaleMenuItem      *self);
+static void     default_secondary_clicked_handler          (IdoScaleMenuItem      *self);
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget            *scale;
@@ -78,6 +80,8 @@ struct _IdoScaleMenuItemPrivate {
 enum {
   SLIDER_GRABBED,
   SLIDER_RELEASED,
+  PRIMARY_CLICKED,
+  SECONDARY_CLICKED,
   LAST_SIGNAL
 };
 
@@ -272,6 +276,9 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
   GObjectClass      *gobject_class = G_OBJECT_CLASS (item_class);
   GtkWidgetClass    *widget_class = GTK_WIDGET_CLASS (item_class);
 
+  item_class->primary_clicked        = default_primary_clicked_handler;
+  item_class->secondary_clicked      = default_secondary_clicked_handler;
+
   widget_class->button_press_event   = ido_scale_menu_item_button_press_event;
   widget_class->button_release_event = ido_scale_menu_item_button_release_event;
   widget_class->motion_notify_event  = ido_scale_menu_item_motion_notify_event;
@@ -331,6 +338,24 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                            NULL, NULL,
                                            g_cclosure_marshal_VOID__VOID,
                                            G_TYPE_NONE, 0);
+
+  signals[PRIMARY_CLICKED] = g_signal_new ("primary-clicked",
+                                           G_TYPE_FROM_CLASS (item_class),
+                                           G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                                           G_STRUCT_OFFSET (IdoScaleMenuItemClass, primary_clicked),
+                                           NULL, NULL,
+                                           g_cclosure_marshal_VOID__VOID,
+                                           G_TYPE_NONE, /* return type */
+                                           0 /* n_params */);
+
+  signals[SECONDARY_CLICKED] = g_signal_new ("secondary-clicked",
+                                             G_TYPE_FROM_CLASS (item_class),
+                                             G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                                             G_STRUCT_OFFSET (IdoScaleMenuItemClass, secondary_clicked),
+                                             NULL, NULL,
+                                             g_cclosure_marshal_VOID__VOID,
+                                             G_TYPE_NONE, /* return type */
+                                             0 /* n_params */);
 
   g_type_class_add_private (item_class, sizeof (IdoScaleMenuItemPrivate));
 }
@@ -498,64 +523,50 @@ static gboolean
 ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
                                           GdkEventButton *event)
 {
+  IdoScaleMenuItem *item = IDO_SCALE_MENU_ITEM (menuitem);
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
   gdouble x;
 
+  /* if user clicked to the left of the scale... */
   if (event->x > priv->child_allocation.x &&
       event->x < priv->child_allocation.x + priv->left_padding)
     {
-      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
-
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
-          gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
+          ido_scale_menu_item_primary_clicked (item);
         }
       else
         {
-          gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
+          ido_scale_menu_item_secondary_clicked (item);
         }
-
-      if (priv->grabbed)
-        {
-          priv->grabbed = FALSE;
-          g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
-        }
-
-      return TRUE;
     }
 
-  if (event->x < priv->child_allocation.x + priv->child_allocation.width + priv->right_padding + priv->left_padding &&
+  /* if user clicked to the right of the scale... */
+  else if (event->x < priv->child_allocation.x + priv->child_allocation.width + priv->right_padding + priv->left_padding &&
       event->x > priv->child_allocation.x + priv->child_allocation.width + priv->left_padding)
     {
-      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
-
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
-          gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
+          ido_scale_menu_item_secondary_clicked (item);
         }
       else
         {
-          gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
+          ido_scale_menu_item_primary_clicked (item);
         }
-
-      if (priv->grabbed)
-        {
-          priv->grabbed = FALSE;
-          g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
-        }
-
-      return TRUE;
     }
 
-  translate_event_coordinates (menuitem, event->x, &x);
-  event->x = x;
+  /* user clicked on the scale... */
+  else
+    {
+      translate_event_coordinates (menuitem, event->x, &x);
+      event->x = x;
 
-  translate_event_coordinates (menuitem, event->x_root, &x);
-  event->x_root= x;
+      translate_event_coordinates (menuitem, event->x_root, &x);
+      event->x_root= x;
 
-  gtk_widget_event (scale,
-                    ((GdkEvent *)(void*)(event)));
+      gtk_widget_event (scale, (GdkEvent*)event);
+    }
 
   if (priv->grabbed)
     {
@@ -875,5 +886,50 @@ ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem *menuitem,
     }
 }
 
+/**
+ * ido_scale_menu_item_primary_clicked:
+ * @menuitem: the #IdoScaleMenuItem
+ * 
+ * Emits the "primary-clicked" signal.
+ *
+ * The default handler for this signal lowers the scale's
+ * adjustment to its lower bound.
+ */
+void
+ido_scale_menu_item_primary_clicked (IdoScaleMenuItem * item)
+{
+  g_signal_emit (item, signals[PRIMARY_CLICKED], 0);
+}
+static void
+default_primary_clicked_handler (IdoScaleMenuItem * item)
+{
+  g_debug ("%s: setting scale to lower bound", G_STRFUNC);
+  IdoScaleMenuItemPrivate * priv = GET_PRIVATE (item);
+  GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+  gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
+}
+
+/**
+ * ido_scale_menu_item_primary_clicked:
+ * @menuitem: the #IdoScaleMenuItem
+ * 
+ * Emits the "primary-clicked" signal.
+ *
+ * The default handler for this signal raises the scale's
+ * adjustment to its upper bound.
+ */
+void
+ido_scale_menu_item_secondary_clicked (IdoScaleMenuItem * item)
+{
+  g_signal_emit (item, signals[SECONDARY_CLICKED], 0);
+}
+static void
+default_secondary_clicked_handler (IdoScaleMenuItem * item)
+{
+  g_debug ("%s: setting scale to upper bound", G_STRFUNC);
+  IdoScaleMenuItemPrivate * priv = GET_PRIVATE (item);
+  GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
+  gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
+}
 
 #define __IDO_SCALE_MENU_ITEM_C__
