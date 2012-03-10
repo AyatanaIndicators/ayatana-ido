@@ -28,13 +28,6 @@ EXTRA_DIST =				\
 	idotypebuiltins.c.template
 
 
-if USE_GTK3
-sources_h += idooffscreenproxy.h
-else
-EXTRA_DIST += idooffscreenproxy.h \
-              idooffscreenproxy.c
-endif
-
 idotypebuiltins.h: stamp-idotypebuiltins.h
 
 stamp-idotypebuiltins.h: $(sources_h)
@@ -73,10 +66,6 @@ libido_0_1_la_SOURCES =			\
 	idoscalemenuitem.c		\
 	idotimeline.c                   
 
-if USE_GTK3
-libido_0_1_la_SOURCES += idooffscreenproxy.c
-endif
-
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
 
 libidoincludedir=$(includedir)/libido$(VER)-0.1/libido
@@ -89,10 +78,6 @@ libidoinclude_HEADERS =			\
 	idoscalemenuitem.h		\
 	idotimeline.h			\
 	libido.h
-
-if USE_GTK3
-libidoinclude_HEADERS += idooffscreenproxy.h
-endif
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
 libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)
