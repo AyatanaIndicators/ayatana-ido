@@ -55,8 +55,7 @@ static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem    
                                                             GParamSpec            *pspec,
                                                             gpointer               user_data);
 static void     update_packing                             (IdoScaleMenuItem      *self,
-                                                            IdoScaleMenuItemStyle  style,
-                                                            IdoScaleMenuItemStyle  old_style);
+                                                            IdoScaleMenuItemStyle  style);
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget            *scale;
@@ -254,7 +253,7 @@ ido_scale_menu_item_constructed (GObject *object)
 
   priv->hbox = hbox;
 
-  update_packing (self, priv->style, priv->style);
+  update_packing (self, priv->style);
 
   g_signal_connect (self, "toggle-size-allocate",
                     G_CALLBACK (ido_scale_menu_item_toggle_size_allocate),
@@ -337,57 +336,36 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 }
 
 static void
-update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMenuItemStyle old_style)
+update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  GtkBox * box = GTK_BOX (priv->hbox);
   GtkContainer *container = GTK_CONTAINER (priv->hbox);
 
-  if (style != old_style)
-    {
-      switch (old_style)
-        {
-        case IDO_SCALE_MENU_ITEM_STYLE_NONE:
-	  gtk_container_remove (container, priv->scale);
-          break;
+  /* remove the old layout */
+  GList * children = gtk_container_get_children (container);
+  GList * l;
+  for (l=children; l!=NULL; l=l->next)
+    gtk_container_remove (container, l->data);
+  g_list_free (children);
 
-        case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
-          gtk_container_remove (container, priv->primary_image);
-          gtk_container_remove (container, priv->secondary_image);
-	  gtk_container_remove (container, priv->scale);
-          break;
-
-        case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
-          gtk_container_remove (container, priv->primary_label);
-          gtk_container_remove (container, priv->secondary_label);
-	  gtk_container_remove (container, priv->scale);
-          break;
-
-        default:
-	  gtk_container_remove (container, priv->scale);
-          break;
-        }
-    }
-
+  /* add the new layout */
   switch (style)
     {
-    case IDO_SCALE_MENU_ITEM_STYLE_NONE:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-      break;
-
     case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_image, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_image, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->primary_image, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->secondary_image, FALSE, FALSE, 0);
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_label, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->primary_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->secondary_label, FALSE, FALSE, 0);
       break;
 
     default:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
       break;
     }
 
@@ -753,16 +731,14 @@ ido_scale_menu_item_set_style (IdoScaleMenuItem      *menuitem,
                                IdoScaleMenuItemStyle  style)
 {
   IdoScaleMenuItemPrivate *priv;
-  IdoScaleMenuItemStyle    old_style;
 
   g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
 
   priv = GET_PRIVATE (menuitem);
 
-  old_style = priv->style;
   priv->style = style;
 
-  update_packing (menuitem, style, old_style);
+  update_packing (menuitem, style);
 }
 
 /**
