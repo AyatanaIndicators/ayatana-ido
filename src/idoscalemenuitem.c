@@ -105,13 +105,6 @@ G_DEFINE_TYPE (IdoScaleMenuItem, ido_scale_menu_item, GTK_TYPE_MENU_ITEM)
 
 #define GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_SCALE_MENU_ITEM, IdoScaleMenuItemPrivate))
 
-static void
-ido_scale_menu_item_state_changed (GtkWidget *widget,
-                                   GtkStateType previous_state)
-{
-  gtk_widget_set_state (widget, GTK_STATE_NORMAL);
-}
-
 static gboolean
 ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
                                   GdkEventScroll *event)
@@ -301,7 +294,6 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
   widget_class->button_release_event = ido_scale_menu_item_button_release_event;
   widget_class->motion_notify_event  = ido_scale_menu_item_motion_notify_event;
   widget_class->scroll_event         = ido_scale_menu_item_scroll_event;
-  widget_class->state_changed        = ido_scale_menu_item_state_changed;
   widget_class->size_allocate        = ido_scale_menu_item_size_allocate;
 
   gobject_class->constructed  = ido_scale_menu_item_constructed;
