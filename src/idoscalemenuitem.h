@@ -59,6 +59,10 @@ struct _IdoScaleMenuItem
 struct _IdoScaleMenuItemClass
 {
   GtkMenuItemClass parent_class;
+
+  /* signal default handlers */
+  void (*primary_clicked)(IdoScaleMenuItem * self);
+  void (*secondary_clicked)(IdoScaleMenuItem * self);
 };
 
 
@@ -79,12 +83,14 @@ void                   ido_scale_menu_item_set_style           (IdoScaleMenuItem
                                                                 IdoScaleMenuItemStyle  style);
 GtkWidget             *ido_scale_menu_item_get_primary_image   (IdoScaleMenuItem      *menuitem);
 GtkWidget             *ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem      *menuitem);
-const gchar  *ido_scale_menu_item_get_primary_label   (IdoScaleMenuItem      *menuitem);
-const gchar  *ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem      *menuitem);
+const gchar           *ido_scale_menu_item_get_primary_label   (IdoScaleMenuItem      *menuitem);
 void                   ido_scale_menu_item_set_primary_label   (IdoScaleMenuItem      *menuitem,
                                                                 const gchar           *label);
+const gchar           *ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem      *menuitem);
 void                   ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem      *menuitem,
                                                                 const gchar           *label);
+void                   ido_scale_menu_item_primary_clicked     (IdoScaleMenuItem      *menuitem);
+void                   ido_scale_menu_item_secondary_clicked   (IdoScaleMenuItem      *menuitem);
 
 G_END_DECLS
 
