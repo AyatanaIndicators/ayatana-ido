@@ -31,10 +31,6 @@
 #include "idoscalemenuitem.h"
 #include "idotypebuiltins.h"
 
-#ifdef USE_GTK3
-#include "idooffscreenproxy.h"
-#endif
-
 static void     ido_scale_menu_item_set_property           (GObject               *object,
                                                             guint                  prop_id,
                                                             const GValue          *value,
@@ -59,16 +55,10 @@ static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem    
                                                             GParamSpec            *pspec,
                                                             gpointer               user_data);
 static void     update_packing                             (IdoScaleMenuItem      *self,
-                                                            IdoScaleMenuItemStyle  style,
-                                                            IdoScaleMenuItemStyle  old_style);
+                                                            IdoScaleMenuItemStyle  style);
 
 struct _IdoScaleMenuItemPrivate {
   GtkWidget            *scale;
-  
-#ifdef USE_GTK3
-  GtkWidget            *proxy;
-#endif
-
   GtkAdjustment        *adjustment;
   GtkWidget            *primary_image;
   GtkWidget            *secondary_image;
@@ -104,13 +94,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE (IdoScaleMenuItem, ido_scale_menu_item, GTK_TYPE_MENU_ITEM)
 
 #define GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_SCALE_MENU_ITEM, IdoScaleMenuItemPrivate))
-
-static void
-ido_scale_menu_item_state_changed (GtkWidget *widget,
-                                   GtkStateType previous_state)
-{
-  gtk_widget_set_state (widget, GTK_STATE_NORMAL);
-}
 
 static gboolean
 ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
@@ -250,14 +233,6 @@ ido_scale_menu_item_constructed (GObject *object)
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
   
 #ifdef USE_GTK3
-  gtk_widget_set_can_focus (priv->scale, FALSE);
-  
-  priv->proxy = ido_offscreen_proxy_new ();
-  g_object_ref (priv->proxy);
-  gtk_container_add (GTK_CONTAINER (priv->proxy), priv->scale);
-#endif
-
-#ifdef USE_GTK3
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 #else
   hbox = gtk_hbox_new (FALSE, 0);
@@ -278,7 +253,7 @@ ido_scale_menu_item_constructed (GObject *object)
 
   priv->hbox = hbox;
 
-  update_packing (self, priv->style, priv->style);
+  update_packing (self, priv->style);
 
   g_signal_connect (self, "toggle-size-allocate",
                     G_CALLBACK (ido_scale_menu_item_toggle_size_allocate),
@@ -301,7 +276,6 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
   widget_class->button_release_event = ido_scale_menu_item_button_release_event;
   widget_class->motion_notify_event  = ido_scale_menu_item_motion_notify_event;
   widget_class->scroll_event         = ido_scale_menu_item_scroll_event;
-  widget_class->state_changed        = ido_scale_menu_item_state_changed;
   widget_class->size_allocate        = ido_scale_menu_item_size_allocate;
 
   gobject_class->constructed  = ido_scale_menu_item_constructed;
@@ -362,91 +336,36 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 }
 
 static void
-update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style, IdoScaleMenuItemStyle old_style)
+update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  GtkBox * box = GTK_BOX (priv->hbox);
   GtkContainer *container = GTK_CONTAINER (priv->hbox);
 
-  if (style != old_style)
-    {
-      switch (old_style)
-        {
-        case IDO_SCALE_MENU_ITEM_STYLE_NONE:
-#ifdef USE_GTK3
-          gtk_container_remove (container, priv->proxy);
-#else 
-	  gtk_container_remove (container, priv->scale);
-#endif
-          break;
+  /* remove the old layout */
+  GList * children = gtk_container_get_children (container);
+  GList * l;
+  for (l=children; l!=NULL; l=l->next)
+    gtk_container_remove (container, l->data);
+  g_list_free (children);
 
-        case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
-          gtk_container_remove (container, priv->primary_image);
-          gtk_container_remove (container, priv->secondary_image);
-#ifdef USE_GTK3
-          gtk_container_remove (container, priv->proxy);
-#else
-	  gtk_container_remove (container, priv->scale);
-#endif
-          break;
-
-        case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
-          gtk_container_remove (container, priv->primary_label);
-          gtk_container_remove (container, priv->secondary_label);
-#ifdef USE_GTK3
-          gtk_container_remove (container, priv->proxy);
-#else
-	  gtk_container_remove (container, priv->scale);
-#endif
-          break;
-
-        default:
-#ifdef USE_GTK3
-          gtk_container_remove (container, priv->proxy);
-#else
-	  gtk_container_remove (container, priv->scale);
-#endif
-          break;
-        }
-    }
-
+  /* add the new layout */
   switch (style)
     {
-    case IDO_SCALE_MENU_ITEM_STYLE_NONE:
-#ifdef USE_GTK3
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
-#else
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-#endif
-      break;
-
     case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_image, FALSE, FALSE, 0);
-
-#ifdef USE_GTK3
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
-#else
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-#endif
-
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_image, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->primary_image, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->secondary_image, FALSE, FALSE, 0);
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->primary_label, FALSE, FALSE, 0);
-#ifdef USE_GTK3
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
-#else
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-#endif
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->secondary_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->primary_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->secondary_label, FALSE, FALSE, 0);
       break;
 
     default:
-#ifdef USE_GTK3
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->proxy, FALSE, FALSE, 0);
-#else
-      gtk_box_pack_start (GTK_BOX (priv->hbox), priv->scale, FALSE, FALSE, 0);
-#endif
+      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
       break;
     }
 
@@ -812,16 +731,14 @@ ido_scale_menu_item_set_style (IdoScaleMenuItem      *menuitem,
                                IdoScaleMenuItemStyle  style)
 {
   IdoScaleMenuItemPrivate *priv;
-  IdoScaleMenuItemStyle    old_style;
 
   g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
 
   priv = GET_PRIVATE (menuitem);
 
-  old_style = priv->style;
   priv->style = style;
 
-  update_packing (menuitem, style, old_style);
+  update_packing (menuitem, style);
 }
 
 /**
