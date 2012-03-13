@@ -217,6 +217,21 @@ ido_scale_menu_item_toggle_size_allocate (IdoScaleMenuItem *item,
   priv->toggle_size = toggle_size;
 }
 
+static gboolean
+on_scale_button_press_or_release_event (GtkWidget      * widget G_GNUC_UNUSED, 
+                                        GdkEventButton * event,
+                                        gpointer         unused G_GNUC_UNUSED)
+{
+  /* HACK: we want the behaviour you get with the middle button, so we
+   * mangle the event. clicking with other buttons moves the slider in
+   * step increments, clicking with the middle button moves the slider to
+   * the location of the click. */
+  if (event->button == 1)
+    event->button = 2;
+
+  return FALSE;
+}
+
 static void
 ido_scale_menu_item_constructed (GObject *object)
 {
@@ -235,6 +250,11 @@ ido_scale_menu_item_constructed (GObject *object)
   priv->scale = ido_range_new (adj, range_style);
   g_object_ref (priv->scale);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
+  g_signal_connect (G_OBJECT (priv->scale), "button-press-event",
+                    G_CALLBACK (on_scale_button_press_or_release_event), NULL);
+  g_signal_connect (G_OBJECT (priv->scale), "button-release-event",
+                    G_CALLBACK (on_scale_button_press_or_release_event), NULL);
+
   
 #ifdef USE_GTK3
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
