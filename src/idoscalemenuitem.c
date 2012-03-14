@@ -288,6 +288,8 @@ ido_scale_menu_item_constructed (GObject *object)
                     NULL);
 
   gtk_container_add (GTK_CONTAINER (self), hbox);
+
+  gtk_widget_add_events (GTK_WIDGET(self), GDK_SCROLL_MASK);
 }
 
 static void
