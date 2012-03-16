@@ -189,6 +189,8 @@ ido_range_constructed (GObject *object)
     }
 
   gtk_range_set_slider_size_fixed (GTK_RANGE (range), TRUE);
+
+  G_OBJECT_CLASS (ido_range_parent_class)->constructed (object);
 }
 
 static void
