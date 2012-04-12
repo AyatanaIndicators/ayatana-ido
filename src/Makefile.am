@@ -57,6 +57,9 @@ AM_CPPFLAGS =				\
 	$(MAINTAINER_CFLAGS)    \
 	-Wall -Werror -Wextra -Wno-unused-parameter
 
+AM_CFLAGS =                             \
+	$(COVERAGE_CFLAGS)
+
 libido_0_1_la_SOURCES =			\
 	idotypebuiltins.c		\
 	idocalendarmenuitem.c		\
@@ -80,9 +83,13 @@ libidoinclude_HEADERS =			\
 	libido.h
 
 libido_0_1_la_LIBADD = $(GTK_LIBS)
-libido_0_1_la_LDFLAGS = $(GTK_LT_LDFLAGS)
+libido_0_1_la_LDFLAGS =                 \
+	$(GTK_LT_LDFLAGS)               \
+	$(COVERAGE_LDFLAGS)
 libido3_0_1_la_LIBADD = $(libido_0_1_la_LIBADD)
-libido3_0_1_la_LDFLAGS = $(libido_0_1_la_LDFLAGS)
+libido3_0_1_la_LDFLAGS =                \
+	$(libido_0_1_la_LDFLAGS)        \
+	$(COVERAGE_LDFLAGS)
 
 DISTCLEANFILES =			\
 	stamp-idotypebuiltins.h		\

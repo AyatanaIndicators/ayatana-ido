@@ -23,3 +23,5 @@ DISTCLEANFILES = libido.pc libido3.pc
 EXTRA_DIST = libido.pc.in libido3.pc.in
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-gtk-doc
+
+include $(top_srcdir)/Makefile.am.coverage
