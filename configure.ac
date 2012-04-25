@@ -57,6 +57,7 @@ dnl ===========================================================================
 # Checks for programs
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_CXX
 
 # Initialize libtool
 LT_PREREQ([2.2])
@@ -127,6 +128,11 @@ AM_CONDITIONAL([HAVE_GCOVR], [test "x$ac_cv_check_gcovr" = xyes])
 AC_SUBST(COVERAGE_CFLAGS)
 AC_SUBST(COVERAGE_CXXFLAGS)
 AC_SUBST(COVERAGE_LDFLAGS)
+
+dnl = Google Test Framework ===================================================
+
+m4_include([m4/gtest.m4])
+CHECK_GTEST
 
 dnl = GTK Doc Check ===========================================================
 
