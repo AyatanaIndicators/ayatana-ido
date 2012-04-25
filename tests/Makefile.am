@@ -1,3 +1,10 @@
+if USE_GTK3
+VER=3
+IDOLIB = $(top_builddir)/src/libido3-0.1.la
+else
+VER=
+IDOLIB = $(top_builddir)/src/libido-0.1.la
+endif
 
 check_LIBRARIES = libgtest.a
 check_PROGRAMS = 
@@ -39,5 +46,6 @@ gtest_menuitems_LDFLAGS = \
 	-pthread
 gtest_menuitems_LDADD = \
 	$(GTK_LIBS) \
+	$(IDOLIB) \
 	libgtest.a
 
