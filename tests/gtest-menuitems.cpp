@@ -2,6 +2,8 @@
 #include <gtk/gtk.h>
 #include <gtest/gtest.h>
 #include "idocalendarmenuitem.h"
+#include "idoentrymenuitem.h"
+#include "idoscalemenuitem.h"
 
 class TestMenuitems : public ::testing::Test
 {
@@ -31,7 +33,29 @@ TEST_F(TestMenuitems, BuildCalendar) {
 
 	EXPECT_TRUE(gtk_widget_get_realized(cal));
 
-	g_object_ref_sink(cal);
-	g_object_unref(cal);
+	g_object_ref_sink(menu);
+	g_object_unref(menu);
 	return;
 }
+
+TEST_F(TestMenuitems, BuildEntry) {
+	GtkWidget * entry = ido_entry_menu_item_new();
+
+	EXPECT_TRUE(entry != NULL);
+	EXPECT_TRUE(IDO_IS_ENTRY_MENU_ITEM(entry));
+	EXPECT_TRUE(GTK_IS_MENU_ITEM(entry));
+
+	GtkWidget * menu = gtk_menu_new();
+	gtk_widget_show(menu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), entry);
+
+	gtk_widget_show(entry);
+	gtk_widget_realize(entry);
+
+	EXPECT_TRUE(gtk_widget_get_realized(entry));
+
+	g_object_ref_sink(menu);
+	g_object_unref(menu);
+	return;
+}
+
