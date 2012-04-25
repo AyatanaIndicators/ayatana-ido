@@ -19,14 +19,15 @@ AM_CPPFLAGS = \
 #############################
 
 nodist_libgtest_a_SOURCES = \
+	$(XORG_GTEST_SOURCE)/src/xorg-gtest-all.cpp \
 	$(GTEST_SOURCE)/src/gtest-all.cc \
-	$(GTEST_SOURCE)/src/gtest_main.cc
+	$(XORG_GTEST_SOURCE)/src/xorg-gtest_main.cpp
 libgtest_a_CPPFLAGS = \
+	$(XORG_GTEST_CPPFLAGS) \
+	$(AM_CPPFLAGS) \
 	$(GTEST_CPPFLAGS) -w
 libgtest_a_CXXFLAGS = \
 	$(AM_CXXFLAGS)
-libgtest_a_CPPFLAGS = \
-	$(AM_CPPFLAGS)
 
 #############################
 # Menuitem tests

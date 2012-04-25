@@ -133,6 +133,7 @@ dnl = Google Test Framework ===================================================
 
 m4_include([m4/gtest.m4])
 CHECK_GTEST
+CHECK_XORG_GTEST
 
 dnl = GTK Doc Check ===========================================================
 
