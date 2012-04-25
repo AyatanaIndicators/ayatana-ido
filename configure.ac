@@ -144,6 +144,7 @@ AC_CONFIG_FILES([
   Makefile
   src/Makefile
   example/Makefile
+  tests/Makefile
   libido.pc
   libido3.pc
 ])
