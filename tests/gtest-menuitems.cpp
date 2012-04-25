@@ -59,3 +59,44 @@ TEST_F(TestMenuitems, BuildEntry) {
 	return;
 }
 
+TEST_F(TestMenuitems, BuildScaleDefault) {
+	GtkWidget * scale = ido_scale_menu_item_new("Label", IDO_RANGE_STYLE_DEFAULT, gtk_adjustment_new(0.5, 0.0, 1.0, 0.01, 0.1, 0.1));
+
+	EXPECT_TRUE(scale != NULL);
+	EXPECT_TRUE(IDO_IS_SCALE_MENU_ITEM(scale));
+	EXPECT_TRUE(GTK_IS_MENU_ITEM(scale));
+
+	GtkWidget * menu = gtk_menu_new();
+	gtk_widget_show(menu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), scale);
+
+	gtk_widget_show(scale);
+	gtk_widget_realize(scale);
+
+	EXPECT_TRUE(gtk_widget_get_realized(scale));
+
+	g_object_ref_sink(menu);
+	g_object_unref(menu);
+	return;
+}
+
+TEST_F(TestMenuitems, BuildScaleSmall) {
+	GtkWidget * scale = ido_scale_menu_item_new("Label", IDO_RANGE_STYLE_SMALL, gtk_adjustment_new(0.5, 0.0, 1.0, 0.01, 0.1, 0.1));
+
+	EXPECT_TRUE(scale != NULL);
+	EXPECT_TRUE(IDO_IS_SCALE_MENU_ITEM(scale));
+	EXPECT_TRUE(GTK_IS_MENU_ITEM(scale));
+
+	GtkWidget * menu = gtk_menu_new();
+	gtk_widget_show(menu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), scale);
+
+	gtk_widget_show(scale);
+	gtk_widget_realize(scale);
+
+	EXPECT_TRUE(gtk_widget_get_realized(scale));
+
+	g_object_ref_sink(menu);
+	g_object_unref(menu);
+	return;
+}
