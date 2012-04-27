@@ -28,6 +28,8 @@
 
 #include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
 #define IDO_TYPE_RANGE         (ido_range_get_type ())
 #define IDO_RANGE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IDO_TYPE_RANGE, IdoRange))
 #define IDO_RANGE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), IDO_TYPE_RANGE, IdoRangeClass))

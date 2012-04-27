@@ -10,7 +10,7 @@ V         = @
 Q         = $(V:1=)
 QUIET_GEN = $(Q:@=@echo '  GEN   '$@;)
 
-SUBDIRS = src example
+SUBDIRS = src example tests
 
 %-0.1.pc: %.pc
 	$(QUIET_GEN) cp -f $< $@

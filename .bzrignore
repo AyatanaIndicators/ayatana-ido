@@ -28,3 +28,7 @@ src/idotypebuiltins.lo
 src/libido3-0.1.la
 src/stamp-idotypebuiltins.h
 m4
+m4/gtk-doc.m4
+.deps
+.libs
+gtest-menuitems

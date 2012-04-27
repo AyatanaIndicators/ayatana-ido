@@ -57,6 +57,7 @@ dnl ===========================================================================
 # Checks for programs
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_CXX
 
 # Initialize libtool
 LT_PREREQ([2.2])
@@ -128,6 +129,12 @@ AC_SUBST(COVERAGE_CFLAGS)
 AC_SUBST(COVERAGE_CXXFLAGS)
 AC_SUBST(COVERAGE_LDFLAGS)
 
+dnl = Google Test Framework ===================================================
+
+m4_include([m4/gtest.m4])
+CHECK_GTEST
+CHECK_XORG_GTEST
+
 dnl = GTK Doc Check ===========================================================
 
 GTK_DOC_CHECK([1.8])
@@ -138,6 +145,7 @@ AC_CONFIG_FILES([
   Makefile
   src/Makefile
   example/Makefile
+  tests/Makefile
   libido.pc
   libido3.pc
 ])
