@@ -153,16 +153,6 @@ ido_range_constructed (GObject *object)
                             "knob-width", &width,
                             "knob-height", &height,
                             NULL);
-
-#ifndef USE_GTK3
-      g_snprintf (buf, sizeof (buf),
-                  "style \"ido-range\" {\n"
-                  "  GtkRange::slider-width = %d\n"
-                  "  GtkScale::slider-length = %d\n"
-                  "} widget \"*.idorange-%p\" style \"ido-range\"\n",
-                  width, height, range);
-      gtk_rc_parse_string (buf);
-#endif
     }
 
   gtk_range_set_slider_size_fixed (GTK_RANGE (range), TRUE);

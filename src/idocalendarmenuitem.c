@@ -132,11 +132,7 @@ ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
                     G_CALLBACK (calendar_move_focus_cb),
                     item);
 
-#ifdef USE_GTK3
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-#else
-  priv->box = gtk_hbox_new (FALSE, 0);
-#endif
 
   gtk_box_pack_start (GTK_BOX (priv->box), priv->calendar, FALSE, FALSE, 0);
 

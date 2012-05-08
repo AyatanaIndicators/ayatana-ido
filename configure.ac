@@ -78,19 +78,7 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
 
-AC_ARG_WITH([gtk],
-  [AS_HELP_STRING([--with-gtk],
-    [Which version of gtk to use @<:@default=3@:>@])],
-  [],
-  [with_gtk=3])
-AM_CONDITIONAL(USE_GTK3, [test "x$with_gtk" = x3])
-
-if test "x$with_gtk" = "x2"; then
-  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
-else
-  PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
-  AC_DEFINE_UNQUOTED(USE_GTK3, , [Use GTK3])
-fi
+PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
@@ -157,7 +145,6 @@ echo " ido $VERSION"
 echo " ==============================="
 echo ""
 echo " Prefix       : ${prefix}"
-echo " GTK          : ${with_gtk}"
 echo " gcov         : ${use_gcov}"
 echo ""
 echo " Documentation: ${enable_gtk_doc}"

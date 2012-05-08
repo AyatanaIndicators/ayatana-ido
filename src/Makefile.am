@@ -1,10 +1,5 @@
-if USE_GTK3
 VER=3
 lib_LTLIBRARIES = libido3-0.1.la
-else
-VER=
-lib_LTLIBRARIES = libido-0.1.la
-endif
 
 ido_built_public_sources =		\
 	idotypebuiltins.h
