@@ -82,7 +82,7 @@ libidoinclude_HEADERS =			\
 	idotimeline.h			\
 	libido.h
 
-libido_0_1_la_LIBADD = $(GTK_LIBS)
+libido_0_1_la_LIBADD = $(GTK_LIBS) $(LIBM)
 libido_0_1_la_LDFLAGS =                 \
 	$(GTK_LT_LDFLAGS)               \
 	$(COVERAGE_LDFLAGS)
