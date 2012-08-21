@@ -87,7 +87,7 @@ popdown_later_cb (gpointer widget)
   GtkWidget * parent = gtk_widget_get_parent (widget);
   if (GTK_IS_MENU (parent))
     {
-      gtk_menu_popdown (GTK_MENU(parent));
+      gtk_menu_shell_deactivate (GTK_MENU_SHELL(parent));
     }
   g_object_unref (widget);
   return FALSE; /* only call this cb once */
