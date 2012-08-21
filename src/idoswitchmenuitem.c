@@ -40,15 +40,6 @@ struct _IdoSwitchMenuItemPrivate
 G_DEFINE_TYPE (IdoSwitchMenuItem, ido_switch_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
 static void
-ido_switch_menu_item_dispose (GObject *object)
-{
-  IdoSwitchMenuItem * self = IDO_SWITCH_MENU_ITEM(object);
-  IdoSwitchMenuItemPrivate *p = self->priv;
-
-  G_OBJECT_CLASS (ido_switch_menu_item_parent_class)->dispose (object);
-}
-
-static void
 ido_switch_menu_item_class_init (IdoSwitchMenuItemClass *klass)
 {
   GObjectClass * gobject_class;
@@ -56,7 +47,6 @@ ido_switch_menu_item_class_init (IdoSwitchMenuItemClass *klass)
   GtkCheckMenuItemClass * check_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->dispose = ido_switch_menu_item_dispose;
   g_type_class_add_private (gobject_class, sizeof (IdoSwitchMenuItemPrivate));
 
   widget_class = GTK_WIDGET_CLASS (klass);
