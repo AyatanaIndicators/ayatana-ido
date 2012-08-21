@@ -24,10 +24,6 @@
 
 static gboolean ido_switch_menu_button_release_event (GtkWidget      * widget,
                                                       GdkEventButton * event);
-static gboolean ido_switch_menu_button_press_event (GtkWidget      * widget,
-                                                   GdkEventButton * event);
-static gboolean ido_switch_menu_item_motion_notify_event (GtkWidget      *menuitem,
-                                                          GdkEventMotion *event);
 
 
 struct _IdoSwitchMenuItemPrivate
@@ -54,9 +50,7 @@ ido_switch_menu_item_class_init (IdoSwitchMenuItemClass *klass)
   g_type_class_add_private (gobject_class, sizeof (IdoSwitchMenuItemPrivate));
 
   widget_class = GTK_WIDGET_CLASS (klass);
-  widget_class->button_press_event = ido_switch_menu_button_press_event;
   widget_class->button_release_event = ido_switch_menu_button_release_event;
-  widget_class->motion_notify_event  = ido_switch_menu_item_motion_notify_event;
 
   check_class = GTK_CHECK_MENU_ITEM_CLASS (klass);
   check_class->draw_indicator = NULL;
@@ -105,51 +99,6 @@ ido_switch_menu_button_release_event (GtkWidget * widget, GdkEventButton * event
   gtk_menu_item_activate (GTK_MENU_ITEM(widget));
   g_timeout_add (500, popdown_later_cb, g_object_ref(widget));
   return TRUE; /* stop the event so that it doesn't trigger popdown() */
-}
-
-/***
-****
-****
-***/
-
-static gboolean
-ido_switch_menu_button_press_event (GtkWidget * w, GdkEventButton * e)
-{
-  gboolean delegated = FALSE;
-  IdoSwitchMenuItemPrivate * p = IDO_SWITCH_MENU_ITEM(w)->priv;
-
-  GtkAllocation a;
-  gtk_widget_get_allocation (p->switch_w, &a);
-
-  if ((a.x <= e->x) && (e->x < a.x + a.width))
-    {
-      e->x -= a.x;
-      e->x_root -= a.x;
-      gtk_widget_event (p->switch_w, (GdkEvent*)e);
-      delegated = TRUE;
-    }
-
-  return delegated;
-}
-
-static gboolean
-ido_switch_menu_item_motion_notify_event (GtkWidget * w, GdkEventMotion * e)
-{
-  gboolean delegated = FALSE;
-  IdoSwitchMenuItemPrivate * p = IDO_SWITCH_MENU_ITEM(w)->priv;
-
-  GtkAllocation a;
-  gtk_widget_get_allocation (p->switch_w, &a);
-
-  if ((a.x <= e->x) && (e->x < a.x + a.width))
-    {
-      e->x -= a.x;
-      e->x_root -= a.x;
-      gtk_widget_event (p->switch_w, (GdkEvent*)e);
-      delegated = TRUE;
-    }
-
-  return delegated;
 }
 
 /***
