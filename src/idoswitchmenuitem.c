@@ -1,4 +1,6 @@
 /*
+ * A GtkCheckMenuItem that uses a GtkSwitch to show its 'active' property
+ *
  * Copyright © 2012 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -88,8 +90,8 @@ ido_switch_menu_item_init (IdoSwitchMenuItem *item)
 }
 
 /***
-**** Don't popdown immediately after clicking this...
-**** instead, wait a moment so the user can see the GtkSwitch be toggled.
+**** Don't popdown the menu immediately after clicking on a switch...
+**** wait a moment so the user can see the GtkSwitch be toggled.
 ***/
 
 static gboolean
@@ -101,7 +103,7 @@ popdown_later_cb (gpointer widget)
       gtk_menu_popdown (GTK_MENU(parent));
     }
   g_object_unref (widget);
-  return FALSE;
+  return FALSE; /* only call this cb once */
 }
 
 static gboolean
@@ -109,7 +111,7 @@ ido_switch_menu_button_release_event (GtkWidget * widget, GdkEventButton * event
 {
   gtk_menu_item_activate (GTK_MENU_ITEM(widget));
   g_timeout_add (500, popdown_later_cb, g_object_ref(widget));
-  return TRUE; /* stop the event so that popdown() won't get called yet */
+  return TRUE; /* stop the event so that it doesn't trigger popdown() */
 }
 
 /***

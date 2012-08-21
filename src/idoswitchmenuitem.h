@@ -1,4 +1,6 @@
 /*
+ * A GtkCheckMenuItem that uses a GtkSwitch to show its 'active' property.
+ *
  * Copyright © 2012 Canonical Ltd.
  *
  * This program is free software: you can redistribute it and/or modify it
