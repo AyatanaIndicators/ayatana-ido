@@ -31,7 +31,6 @@ struct _IdoSwitchMenuItemPrivate
   GtkWidget * box;
   GtkWidget * content_area;
   GtkWidget * switch_w;
-  GBinding * active_binding;
 };
 
 /***
@@ -45,8 +44,6 @@ ido_switch_menu_item_dispose (GObject *object)
 {
   IdoSwitchMenuItem * self = IDO_SWITCH_MENU_ITEM(object);
   IdoSwitchMenuItemPrivate *p = self->priv;
-
-  g_clear_object (&p->active_binding);
 
   G_OBJECT_CLASS (ido_switch_menu_item_parent_class)->dispose (object);
 }
@@ -84,9 +81,9 @@ ido_switch_menu_item_init (IdoSwitchMenuItem *item)
   gtk_container_add (GTK_CONTAINER (item), priv->box);
   gtk_widget_show_all (priv->box);
 
-  priv->active_binding = g_object_bind_property (item, "active",
-                                                 priv->switch_w, "active",
-                                                 G_BINDING_SYNC_CREATE);
+  g_object_bind_property (item, "active",
+                          priv->switch_w, "active",
+                          G_BINDING_SYNC_CREATE);
 }
 
 /***
