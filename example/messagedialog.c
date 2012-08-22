@@ -41,11 +41,7 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Message Dialogs");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
-#ifdef USE_GTK3
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#else
-  vbox = gtk_vbox_new (FALSE, 0);
-#endif
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 

@@ -1,8 +1,4 @@
-if USE_GTK3
 VER=3
-else
-VER=
-endif
 
 noinst_PROGRAMS =               \
 	messagedialog		\

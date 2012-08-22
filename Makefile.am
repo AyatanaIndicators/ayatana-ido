@@ -1,10 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-if USE_GTK3
 VER=3
-else
-VER=
-endif
 
 V         = @
 Q         = $(V:1=)

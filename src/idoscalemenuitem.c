@@ -144,27 +144,15 @@ ido_scale_menu_item_size_allocate (GtkWidget     *widget,
   switch (priv->style)
     {
     case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
-#ifdef USE_GTK3
       gtk_widget_get_preferred_size (priv->primary_image, &primary_req, NULL);
       gtk_widget_get_preferred_size (priv->secondary_image, &secondary_req, NULL);
-#else
-      gtk_widget_get_child_requisition (priv->primary_image, &primary_req);
-      gtk_widget_get_child_requisition (priv->secondary_image, &secondary_req);
-#endif
-
       primary_padding = gtk_widget_get_visible (priv->primary_image) ? primary_req.width : 0;
       secondary_padding = gtk_widget_get_visible (priv->secondary_image) ? secondary_req.width : 0;
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
-#ifdef USE_GTK3
       gtk_widget_get_preferred_size (priv->primary_label, &primary_req, NULL);
       gtk_widget_get_preferred_size (priv->secondary_label, &secondary_req, NULL);
-#else
-      gtk_widget_get_child_requisition (priv->primary_label, &primary_req);
-      gtk_widget_get_child_requisition (priv->secondary_label, &secondary_req);
-#endif
-
       primary_padding = gtk_widget_get_visible (priv->primary_label) ? primary_req.width : 0;
       secondary_padding = gtk_widget_get_visible (priv->secondary_label) ? secondary_req.width : 0;
       break;
@@ -256,11 +244,7 @@ ido_scale_menu_item_constructed (GObject *object)
                     G_CALLBACK (on_scale_button_press_or_release_event), NULL);
 
   
-#ifdef USE_GTK3
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-#else
-  hbox = gtk_hbox_new (FALSE, 0);
-#endif
 
   priv->primary_image = gtk_image_new ();
   g_signal_connect (priv->primary_image, "notify",
@@ -505,10 +489,6 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   gdouble x;
   
-#ifndef USE_GTK3
-  GtkWidget *scale = priv->scale;
-#endif
-
   // can we block emissions of "grab-notify" on parent??
 
   translate_event_coordinates (menuitem, event->x, &x);
@@ -517,16 +497,8 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
   translate_event_coordinates (menuitem, event->x_root, &x);
   event->x_root = x;
 
-#ifndef USE_GTK3
-  ubuntu_gtk_widget_set_has_grab (scale, TRUE);
-#endif
-
   gtk_widget_event (priv->scale,
                     ((GdkEvent *)(void*)(event)));
-
-#ifndef USE_GTK3
-  ubuntu_gtk_widget_set_has_grab (scale, FALSE);
-#endif
 
   if (!priv->grabbed)
     {
@@ -534,11 +506,7 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
       g_signal_emit (menuitem, signals[SLIDER_GRABBED], 0);
     }
 
-#ifdef USE_GTK3
   return FALSE;
-#else
-  return TRUE;
-#endif
 }
 
 static gboolean
