@@ -3,6 +3,7 @@
 #include "idoscalemenuitem.h"
 #include "idocalendarmenuitem.h"
 #include "idoentrymenuitem.h"
+#include "idoswitchmenuitem.h"
 #include "config.h"
 
 static void
@@ -27,6 +28,7 @@ main (int argc, char *argv[])
   GtkWidget *root;
   GtkWidget *menubar;
   GtkWidget *image;
+  GtkWidget *label;
 
   g_unsetenv ("UBUNTU_MENUPROXY");
 
@@ -70,6 +72,12 @@ main (int argc, char *argv[])
   g_signal_connect (menuitem, "slider-released", G_CALLBACK (slider_released), NULL);
 
   menuitem = ido_entry_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = ido_switch_menu_item_new ();
+  label = gtk_label_new ("This is a switch");
+  gtk_widget_show(label);
+  gtk_container_add (ido_switch_menu_item_get_content_area(IDO_SWITCH_MENU_ITEM(menuitem)), label);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   menuitem = ido_calendar_menu_item_new ();

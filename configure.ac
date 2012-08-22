@@ -1,9 +1,9 @@
 #
 # shamelessly stolen from clutter-gtk
 #
-m4_define([ido_major_version], [0])
-m4_define([ido_minor_version], [3])
-m4_define([ido_micro_version], [4])
+m4_define([ido_major_version], [12])
+m4_define([ido_minor_version], [10])
+m4_define([ido_micro_version], [0])
 
 m4_define([ido_api_version],
           [ido_major_version.ido_minor_version])
@@ -77,8 +77,14 @@ AC_C_CONST
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
+AC_CHECK_LIBM
 
-PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
+GLIB_REQUIRED_VERSION=2.32.0
+GTK_REQUIRED_VERSION=3.4.0
+
+PKG_CHECK_MODULES(GTK,[gtk+-3.0 >= $GTK_REQUIRED_VERSION
+                       glib-2.0 >= $GLIB_REQUIRED_VERSION])
+
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
