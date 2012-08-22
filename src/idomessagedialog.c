@@ -281,14 +281,6 @@ ido_message_dialog_new (GtkWindow      *parent,
                          NULL);
   dialog = GTK_DIALOG (widget);
 
-#if ! GTK_CHECK_VERSION(3, 0, 0)
-  if (flags & GTK_DIALOG_NO_SEPARATOR)
-    {
-      g_warning ("The GTK_DIALOG_NO_SEPARATOR flag cannot be used for IdoMessageDialog");
-      flags &= ~GTK_DIALOG_NO_SEPARATOR;
-    }
-#endif
-
   if (message_format)
     {
       va_start (args, message_format);
