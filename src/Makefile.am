@@ -19,6 +19,7 @@ sources_h =				\
 	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
+	idoswitchmenuitem.h		\
 	idotimeline.h			\
 	libido.h 
 
@@ -67,6 +68,7 @@ libido_0_1_la_SOURCES =			\
 	idomessagedialog.c		\
 	idorange.c			\
 	idoscalemenuitem.c		\
+	idoswitchmenuitem.c		\
 	idotimeline.c                   
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
@@ -79,6 +81,7 @@ libidoinclude_HEADERS =			\
 	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
+	idoswitchmenuitem.h		\
 	idotimeline.h			\
 	libido.h
 

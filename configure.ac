@@ -1,9 +1,9 @@
 #
 # shamelessly stolen from clutter-gtk
 #
-m4_define([ido_major_version], [0])
-m4_define([ido_minor_version], [3])
-m4_define([ido_micro_version], [4])
+m4_define([ido_major_version], [12])
+m4_define([ido_minor_version], [10])
+m4_define([ido_micro_version], [0])
 
 m4_define([ido_api_version],
           [ido_major_version.ido_minor_version])
@@ -78,6 +78,8 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([memset munmap strcasecmp strdup])
 
+GLIB_REQUIRED_VERSION=2.32.0
+
 AC_ARG_WITH([gtk],
   [AS_HELP_STRING([--with-gtk],
     [Which version of gtk to use @<:@default=3@:>@])],
@@ -86,9 +88,11 @@ AC_ARG_WITH([gtk],
 AM_CONDITIONAL(USE_GTK3, [test "x$with_gtk" = x3])
 
 if test "x$with_gtk" = "x2"; then
-  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.19.7)
+  PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.19.7
+                          glib-2.0 >= GLIB_REQUIRED_VERSION])
 else
-  PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 3.0.0)
+  PKG_CHECK_MODULES(GTK, [gtk+-3.0 >= 3.0.0
+                          glib-2.0 >= GLIB_REQUIRED_VERSION])
   AC_DEFINE_UNQUOTED(USE_GTK3, , [Use GTK3])
 fi
 AC_SUBST(GTK_CFLAGS)
