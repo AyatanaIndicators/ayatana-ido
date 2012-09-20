@@ -172,7 +172,8 @@ ido_calendar_menu_item_key_press (GtkWidget   *widget,
           gtk_widget_grab_focus (calendar);
         }
 
-      return event->keyval != GDK_KEY_Return;
+      return (event->keyval != GDK_KEY_Return) &&
+             (event->keyval != GDK_KEY_Escape);
     }
 
   return FALSE;
