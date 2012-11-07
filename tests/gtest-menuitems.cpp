@@ -79,12 +79,16 @@ TEST_F(TestMenuitems, BuildCalendar) {
 	return;
 }
 
-TEST_F(TestMenuitems, BuildEntry) {
+TEST_F(TestMenuitems, BuildEntry)
+{
 	GtkWidget * entry = ido_entry_menu_item_new();
+	EXPECT_TRUE (entry != NULL);
+	EXPECT_TRUE (IDO_IS_ENTRY_MENU_ITEM(entry));
+	EXPECT_TRUE (GTK_IS_MENU_ITEM(entry));
 
-	EXPECT_TRUE(entry != NULL);
-	EXPECT_TRUE(IDO_IS_ENTRY_MENU_ITEM(entry));
-	EXPECT_TRUE(GTK_IS_MENU_ITEM(entry));
+	GtkWidget * w = ido_entry_menu_item_get_entry (IDO_ENTRY_MENU_ITEM(entry));
+	ASSERT_TRUE (w != NULL);
+	ASSERT_TRUE (GTK_IS_ENTRY (w));
 
 	PutInMenu (entry);
 	return;
