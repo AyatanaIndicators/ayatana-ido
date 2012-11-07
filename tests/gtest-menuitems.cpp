@@ -15,6 +15,22 @@ public:
 		gtk_init(&argc, (gchar ***)&argv);
 		return;
 	}
+
+protected:
+	void PutInMenu (GtkWidget * item)
+	{
+		GtkWidget * menu = gtk_menu_new();
+		gtk_widget_show(menu);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		gtk_widget_show(item);
+		gtk_widget_realize(item);
+
+		EXPECT_TRUE(gtk_widget_get_realized(item));
+
+		g_object_ref_sink(menu);
+		g_object_unref(menu);
+	}
 };
 
 TEST_F(TestMenuitems, BuildCalendar) {
@@ -24,17 +40,7 @@ TEST_F(TestMenuitems, BuildCalendar) {
 	EXPECT_TRUE(IDO_IS_CALENDAR_MENU_ITEM(cal));
 	EXPECT_TRUE(GTK_IS_MENU_ITEM(cal));
 
-	GtkWidget * menu = gtk_menu_new();
-	gtk_widget_show(menu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), cal);
-
-	gtk_widget_show(cal);
-	gtk_widget_realize(cal);
-
-	EXPECT_TRUE(gtk_widget_get_realized(cal));
-
-	g_object_ref_sink(menu);
-	g_object_unref(menu);
+	PutInMenu (cal);
 	return;
 }
 
@@ -45,17 +51,7 @@ TEST_F(TestMenuitems, BuildEntry) {
 	EXPECT_TRUE(IDO_IS_ENTRY_MENU_ITEM(entry));
 	EXPECT_TRUE(GTK_IS_MENU_ITEM(entry));
 
-	GtkWidget * menu = gtk_menu_new();
-	gtk_widget_show(menu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), entry);
-
-	gtk_widget_show(entry);
-	gtk_widget_realize(entry);
-
-	EXPECT_TRUE(gtk_widget_get_realized(entry));
-
-	g_object_ref_sink(menu);
-	g_object_unref(menu);
+	PutInMenu (entry);
 	return;
 }
 
@@ -66,17 +62,7 @@ TEST_F(TestMenuitems, BuildScaleDefault) {
 	EXPECT_TRUE(IDO_IS_SCALE_MENU_ITEM(scale));
 	EXPECT_TRUE(GTK_IS_MENU_ITEM(scale));
 
-	GtkWidget * menu = gtk_menu_new();
-	gtk_widget_show(menu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), scale);
-
-	gtk_widget_show(scale);
-	gtk_widget_realize(scale);
-
-	EXPECT_TRUE(gtk_widget_get_realized(scale));
-
-	g_object_ref_sink(menu);
-	g_object_unref(menu);
+	PutInMenu (scale);
 	return;
 }
 
@@ -87,16 +73,6 @@ TEST_F(TestMenuitems, BuildScaleSmall) {
 	EXPECT_TRUE(IDO_IS_SCALE_MENU_ITEM(scale));
 	EXPECT_TRUE(GTK_IS_MENU_ITEM(scale));
 
-	GtkWidget * menu = gtk_menu_new();
-	gtk_widget_show(menu);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), scale);
-
-	gtk_widget_show(scale);
-	gtk_widget_realize(scale);
-
-	EXPECT_TRUE(gtk_widget_get_realized(scale));
-
-	g_object_ref_sink(menu);
-	g_object_unref(menu);
+	PutInMenu (scale);
 	return;
 }
