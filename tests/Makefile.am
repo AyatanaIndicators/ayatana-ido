@@ -45,3 +45,25 @@ gtest_menuitems_LDADD = \
 	$(IDOLIB) \
 	libgtest.a
 
+#############################
+# Dialog tests
+#############################
+
+TESTS += gtest-dialog
+check_PROGRAMS += gtest-dialog
+
+gtest_dialog_SOURCES = \
+	gtest-dialog.cpp
+gtest_dialog_CPPFLAGS = \
+	$(GCC_CFLAGS) \
+	$(GTK_CFLAGS) \
+	$(MAINTAINER_CFLAGS) \
+	$(AM_CPPFLAGS)
+gtest_dialog_LDFLAGS = \
+	-pthread
+gtest_dialog_LDADD = \
+	$(GTK_LIBS) \
+	$(IDOLIB) \
+	libgtest.a
+
+
