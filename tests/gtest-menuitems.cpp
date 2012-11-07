@@ -41,7 +41,25 @@ TEST_F(TestMenuitems, BuildCalendar) {
 	EXPECT_TRUE(IDO_IS_CALENDAR_MENU_ITEM(cal));
 	EXPECT_TRUE(GTK_IS_MENU_ITEM(cal));
 
+	const guint year_in = 1963;
+	const guint month_in = 10;
+	const guint day_in = 23;
+	ido_calendar_menu_item_set_date (IDO_CALENDAR_MENU_ITEM(cal), year_in, month_in, day_in);
+	guint year_out = 0;
+	guint month_out = 0;
+	guint day_out = 0;
+	ido_calendar_menu_item_get_date (IDO_CALENDAR_MENU_ITEM(cal), &year_out, &month_out, &day_out);
+	ASSERT_EQ (year_in, year_out);
+	ASSERT_EQ (month_in, month_out);
+	ASSERT_EQ (day_in, day_out);
+
+	const GtkCalendarDisplayOptions options_in = GTK_CALENDAR_SHOW_DAY_NAMES;
+	ido_calendar_menu_item_set_display_options (IDO_CALENDAR_MENU_ITEM(cal), options_in);
+	const GtkCalendarDisplayOptions options_out = ido_calendar_menu_item_get_display_options (IDO_CALENDAR_MENU_ITEM(cal));
+	ASSERT_EQ (options_in, options_out);
+
 	PutInMenu (cal);
+
 	return;
 }
 
@@ -80,15 +98,14 @@ TEST_F(TestMenuitems, BuildScaleSmall) {
 
 
 TEST_F(TestMenuitems, BuildSwitch) {
-        GtkWidget * item = ido_switch_menu_item_new ();
-        EXPECT_TRUE (item != NULL);
-        EXPECT_TRUE (IDO_IS_SWITCH_MENU_ITEM(item));
-        EXPECT_TRUE (GTK_IS_MENU_ITEM(item));
+	GtkWidget * item = ido_switch_menu_item_new ();
+	EXPECT_TRUE (item != NULL);
+	EXPECT_TRUE (IDO_IS_SWITCH_MENU_ITEM(item));
+	EXPECT_TRUE (GTK_IS_MENU_ITEM(item));
 
-        GtkContainer * content_area = ido_switch_menu_item_get_content_area (IDO_SWITCH_MENU_ITEM(item));
-        EXPECT_TRUE (content_area != NULL);
-        EXPECT_TRUE (GTK_IS_CONTAINER (content_area));
+	GtkContainer * content_area = ido_switch_menu_item_get_content_area (IDO_SWITCH_MENU_ITEM(item));
+	EXPECT_TRUE (content_area != NULL);
+	EXPECT_TRUE (GTK_IS_CONTAINER (content_area));
 
-        PutInMenu (item);
-        return;
+	PutInMenu (item);
 }
