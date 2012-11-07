@@ -29,6 +29,8 @@
 #ifndef __IDO_MESSAGE_DIALOG_H__
 #define __IDO_MESSAGE_DIALOG_H__
 
+G_BEGIN_DECLS
+
 #include <gtk/gtk.h>
 
 #define IDO_TYPE_MESSAGE_DIALOG         (ido_message_dialog_get_type ())
