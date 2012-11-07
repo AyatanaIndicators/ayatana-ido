@@ -74,12 +74,40 @@ TEST_F(TestMenuitems, BuildEntry) {
 	return;
 }
 
+namespace
+{
+  void increment_the_userdata (GObject * scale, gpointer userdata)
+  {
+    ++*static_cast<int*>(userdata);
+  }
+}
+
 TEST_F(TestMenuitems, BuildScaleDefault) {
 	GtkWidget * scale = ido_scale_menu_item_new("Label", IDO_RANGE_STYLE_DEFAULT, gtk_adjustment_new(0.5, 0.0, 1.0, 0.01, 0.1, 0.1));
 
 	EXPECT_TRUE(scale != NULL);
 	EXPECT_TRUE(IDO_IS_SCALE_MENU_ITEM(scale));
 	EXPECT_TRUE(GTK_IS_MENU_ITEM(scale));
+
+	const gchar * str_in = "Primary Text";
+	ido_scale_menu_item_set_primary_label (IDO_SCALE_MENU_ITEM(scale), str_in);
+	const gchar * str_out = ido_scale_menu_item_get_primary_label (IDO_SCALE_MENU_ITEM(scale));
+	ASSERT_TRUE (str_in != str_out);
+	ASSERT_STREQ (str_in, str_out);
+
+	str_in = "Secondary Text";
+	ido_scale_menu_item_set_secondary_label (IDO_SCALE_MENU_ITEM(scale), str_in);
+	str_out = ido_scale_menu_item_get_secondary_label (IDO_SCALE_MENU_ITEM(scale));
+	ASSERT_TRUE (str_in != str_out);
+	ASSERT_STREQ (str_in, str_out);
+
+	int i = 0;
+	g_signal_connect (scale, "primary-clicked", G_CALLBACK(increment_the_userdata), &i);
+	g_signal_connect (scale, "secondary-clicked", G_CALLBACK(increment_the_userdata), &i);
+	ido_scale_menu_item_primary_clicked (IDO_SCALE_MENU_ITEM (scale));
+	ASSERT_EQ (1, i);
+	ido_scale_menu_item_secondary_clicked (IDO_SCALE_MENU_ITEM (scale));
+	ASSERT_EQ (2, i);
 
 	PutInMenu (scale);
 	return;
