@@ -36,6 +36,7 @@ protected:
 
 TEST_F(TestMenuitems, BuildCalendar) {
 	GtkWidget * cal = ido_calendar_menu_item_new();
+	IdoCalendarMenuItem * c = IDO_CALENDAR_MENU_ITEM (cal);
 
 	EXPECT_TRUE(cal != NULL);
 	EXPECT_TRUE(IDO_IS_CALENDAR_MENU_ITEM(cal));
@@ -44,19 +45,34 @@ TEST_F(TestMenuitems, BuildCalendar) {
 	const guint year_in = 1963;
 	const guint month_in = 10;
 	const guint day_in = 23;
-	ido_calendar_menu_item_set_date (IDO_CALENDAR_MENU_ITEM(cal), year_in, month_in, day_in);
+	ido_calendar_menu_item_set_date (c, year_in, month_in, day_in);
 	guint year_out = 0;
 	guint month_out = 0;
 	guint day_out = 0;
-	ido_calendar_menu_item_get_date (IDO_CALENDAR_MENU_ITEM(cal), &year_out, &month_out, &day_out);
+	ido_calendar_menu_item_get_date (c, &year_out, &month_out, &day_out);
 	ASSERT_EQ (year_in, year_out);
 	ASSERT_EQ (month_in, month_out);
 	ASSERT_EQ (day_in, day_out);
 
 	const GtkCalendarDisplayOptions options_in = GTK_CALENDAR_SHOW_DAY_NAMES;
-	ido_calendar_menu_item_set_display_options (IDO_CALENDAR_MENU_ITEM(cal), options_in);
-	const GtkCalendarDisplayOptions options_out = ido_calendar_menu_item_get_display_options (IDO_CALENDAR_MENU_ITEM(cal));
+	ido_calendar_menu_item_set_display_options (c, options_in);
+	const GtkCalendarDisplayOptions options_out = ido_calendar_menu_item_get_display_options (c);
 	ASSERT_EQ (options_in, options_out);
+
+	GtkWidget * w;
+	w = ido_calendar_menu_item_get_calendar (c);
+	ASSERT_TRUE (w != NULL);
+	ASSERT_TRUE (GTK_IS_CALENDAR (w));
+
+	// test clear/mark/unmark days
+	ido_calendar_menu_item_clear_marks (c);
+	ido_calendar_menu_item_mark_day (c, 0);
+	ido_calendar_menu_item_mark_day (c, 1);
+	ido_calendar_menu_item_mark_day (c, 2);
+	ido_calendar_menu_item_unmark_day (c, 0);
+	ido_calendar_menu_item_unmark_day (c, 2);
+	for (int i=0; i<28; i++)
+		ASSERT_EQ (gtk_calendar_get_day_is_marked(GTK_CALENDAR(w), i), i==1);
 
 	PutInMenu (cal);
 
