@@ -4,6 +4,7 @@
 #include "idocalendarmenuitem.h"
 #include "idoentrymenuitem.h"
 #include "idoscalemenuitem.h"
+#include "idoswitchmenuitem.h"
 
 class TestMenuitems : public ::testing::Test
 {
@@ -75,4 +76,19 @@ TEST_F(TestMenuitems, BuildScaleSmall) {
 
 	PutInMenu (scale);
 	return;
+}
+
+
+TEST_F(TestMenuitems, BuildSwitch) {
+        GtkWidget * item = ido_switch_menu_item_new ();
+        EXPECT_TRUE (item != NULL);
+        EXPECT_TRUE (IDO_IS_SWITCH_MENU_ITEM(item));
+        EXPECT_TRUE (GTK_IS_MENU_ITEM(item));
+
+        GtkContainer * content_area = ido_switch_menu_item_get_content_area (IDO_SWITCH_MENU_ITEM(item));
+        EXPECT_TRUE (content_area != NULL);
+        EXPECT_TRUE (GTK_IS_CONTAINER (content_area));
+
+        PutInMenu (item);
+        return;
 }
