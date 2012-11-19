@@ -12,6 +12,8 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
     - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL instead of passing -c4 to
       dh_makeshlibs.
     - Override dh_autoreconf to call autogen.sh and not run configure...
+    - Temporarily disable tests via overriding dh_auto_test; they fail to
+      properly start X in a schroot.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 19 Nov 2012 14:00:05 -0500
 
