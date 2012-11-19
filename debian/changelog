@@ -4,6 +4,9 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
     - Update to match style with other indicator stack packages: use trailing
       commas at the end of dependency lists.
     - Add gnome-common to Build-Depends.
+    - Reorganize Build-Depends: move libxorg-gtest-dev up to be consistent with
+      other indicator stack packages.
+    - List libgtest-dev explicitly in Build-Depends.
   * debian/rules:
     - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL instead of passing -c4 to
       dh_makeshlibs.

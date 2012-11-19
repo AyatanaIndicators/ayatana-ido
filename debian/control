@@ -5,10 +5,11 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                gnome-common,
+               libxorg-gtest-dev,
+               libgtest-dev,
                libglib2.0-dev (>=2.14.0),
                libgtk-3-dev (>= 3.0),
                gtk-doc-tools,
-               libxorg-gtest-dev,
 Standards-Version: 3.9.3
 Homepage: https://launchpad.net/ido
 
