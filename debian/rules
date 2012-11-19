@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --with autoreconf
+
+override_dh_makeshlibs:
+	dh_makeshlibs -plibido3-0.1-0 -V'libido3-0.1-0 (>= 12.10.0)' -- -c4
+	dh_makeshlibs -Nlibido3-0.1-0
+
+override_dh_install:
+	find debian/tmp/usr/lib -name *.la -delete
+	dh_install --fail-missing
