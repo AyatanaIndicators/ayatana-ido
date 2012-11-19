@@ -3,6 +3,7 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
   * debian/control:
     - Update to match style with other indicator stack packages: use trailing
       commas at the end of dependency lists.
+    - Add gnome-common to Build-Depends.
   * debian/rules:
     - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL instead of passing -c4 to
       dh_makeshlibs.
