@@ -7,6 +7,7 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
     - Reorganize Build-Depends: move libxorg-gtest-dev up to be consistent with
       other indicator stack packages.
     - List libgtest-dev explicitly in Build-Depends.
+    - Add Vcs-Bzr, Vcs-Browser fields with a notice to uploaders.
   * debian/rules:
     - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL instead of passing -c4 to
       dh_makeshlibs.
