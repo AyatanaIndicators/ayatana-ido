@@ -1,10 +1,12 @@
 #!/usr/bin/make -f
 
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 4 
+
 %:
 	dh $@ --with autoreconf
 
 override_dh_makeshlibs:
-	dh_makeshlibs -plibido3-0.1-0 -V'libido3-0.1-0 (>= 12.10.0)' -- -c4
+	dh_makeshlibs -plibido3-0.1-0 -V'libido3-0.1-0 (>= 12.10.0)'
 	dh_makeshlibs -Nlibido3-0.1-0
 
 override_dh_install:
