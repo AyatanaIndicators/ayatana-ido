@@ -12,6 +12,3 @@ override_dh_install:
 	find debian/tmp/usr/lib -name *.la -delete
 	dh_install --fail-missing
 
-override_dh_auto_test:
-	# Tests temporarily disabled: needs work to fix X initialization issues.
-
