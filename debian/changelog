@@ -1,5 +1,6 @@
 ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
 
+  [ Mathieu Trudel-Lapierre ]
   * debian/control:
     - Update to match style with other indicator stack packages: use trailing
       commas at the end of dependency lists.
@@ -13,6 +14,9 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
       dh_makeshlibs.
     - Override dh_autoreconf to call autogen.sh and not run configure...
     - Drop the override for dh_makeshlibs.
+
+  [ Didier Roche ]
+  * Automatic snapshot from revision 118 (bootstrap)
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 19 Nov 2012 14:00:05 -0500
 
