@@ -9,11 +9,13 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
       other indicator stack packages.
     - List libgtest-dev explicitly in Build-Depends.
     - Add Vcs-Bzr, Vcs-Browser fields with a notice to uploaders.
+    - Add xvfb to Build-Depends.
   * debian/rules:
     - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL instead of passing -c4 to
       dh_makeshlibs.
     - Override dh_autoreconf to call autogen.sh and not run configure...
     - Drop the override for dh_makeshlibs.
+    - Override dh_auto_test to run them through xvfb-run.
 
   [ Didier Roche ]
   * Automatic snapshot from revision 118 (bootstrap)
