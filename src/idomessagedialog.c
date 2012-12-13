@@ -258,7 +258,7 @@ ido_message_dialog_init (IdoMessageDialog *dialog)
  * dialog it will expand to provide the secondary message
  * and the action buttons.
  *
- * Return value: a new #IdoMessageDialog
+ * Return Value: a new #IdoMessageDialog
  **/
 GtkWidget*
 ido_message_dialog_new (GtkWindow      *parent,
@@ -305,6 +305,25 @@ ido_message_dialog_new (GtkWindow      *parent,
   return widget;
 }
 
+/**
+ * ido_message_dialog_new_with_markup:
+ * @parent: transient parent, or %NULL for none
+ * @flags: flags
+ * @type: type of message
+ * @buttons: a set of buttons to use
+ * @message_format: printf()-style format string, or %NULL
+ * @Varargs: arguments for @message_format. They will be escaped to allow valid XML.
+ *
+ * Creates a new message dialog, which is based upon
+ * GtkMessageDialog so it shares API and functionality
+ * with it.  IdoMessageDialog differs in that it has two
+ * states.  The initial state hides the action buttons
+ * and the secondary message.  When a user clicks on the
+ * dialog it will expand to provide the secondary message
+ * and the action buttons.
+ *
+ * Return Value: a new #IdoMessageDialog
+ **/
 GtkWidget*
 ido_message_dialog_new_with_markup (GtkWindow      *parent,
                                     GtkDialogFlags  flags,

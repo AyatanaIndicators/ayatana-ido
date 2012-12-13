@@ -123,6 +123,14 @@ AC_SUBST(COVERAGE_CFLAGS)
 AC_SUBST(COVERAGE_CXXFLAGS)
 AC_SUBST(COVERAGE_LDFLAGS)
 
+dnl = GObject Introspection ===================================================
+
+GOBJECT_INTROSPECTION_CHECK([0.6.7])
+
+dnl = Vala API Generation =====================================================
+
+AC_PATH_PROG([VALA_API_GEN], [vapigen])
+
 dnl = Google Test Framework ===================================================
 
 m4_include([m4/gtest.m4])
@@ -152,6 +160,7 @@ echo " ==============================="
 echo ""
 echo " Prefix       : ${prefix}"
 echo " gcov         : ${use_gcov}"
+echo " introspection: ${enable_introspection}"
 echo ""
 echo " Documentation: ${enable_gtk_doc}"
 echo ""

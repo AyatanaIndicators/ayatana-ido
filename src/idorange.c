@@ -172,6 +172,8 @@ ido_range_init (IdoRange *range)
  * @style: The range style
  *
  * Creates a new #IdoRange widget.
+ *
+ * Return Value: A new #IdoRange
  **/
 GtkWidget *
 ido_range_new (GObject *adj,

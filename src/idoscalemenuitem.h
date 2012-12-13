@@ -61,8 +61,8 @@ struct _IdoScaleMenuItemClass
   GtkMenuItemClass parent_class;
 
   /* signal default handlers */
-  void (*primary_clicked)(IdoScaleMenuItem * self);
-  void (*secondary_clicked)(IdoScaleMenuItem * self);
+  void (*primary_clicked)(IdoScaleMenuItem * menuitem);
+  void (*secondary_clicked)(IdoScaleMenuItem * menuitem);
 };
 
 

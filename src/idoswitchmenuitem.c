@@ -101,16 +101,27 @@ ido_switch_menu_button_release_event (GtkWidget * widget, GdkEventButton * event
   return TRUE; /* stop the event so that it doesn't trigger popdown() */
 }
 
-/***
-**** Public API
-***/
-
+/**
+ * ido_switch_menu_item_new:
+ *
+ * Creates a new #IdoSwitchMenuItem
+ *
+ * Return Value: a new #IdoSwitchMenuItem.
+ **/
 GtkWidget *
 ido_switch_menu_item_new (void)
 {
   return g_object_new (IDO_TYPE_SWITCH_MENU_ITEM, NULL);
 }
 
+/**
+ * ido_switch_menu_item_get_content_area:
+ * @item: The #IdoSwitchMenuItem.
+ *
+ * Get the #GtkContainer to add additional widgets into.
+ *
+ * Return Value: (transfer none): The #GtkContainer to add additional widgets into.
+ **/
 GtkContainer *
 ido_switch_menu_item_get_content_area (IdoSwitchMenuItem * item)
 {
