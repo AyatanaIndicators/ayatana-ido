@@ -49,3 +49,15 @@ Description: Shared library providing extra gtk menu items for display in
  system indicators
  .
  This package contains files that are needed to build GTK+ 3 applications.
+
+Package: gir1.2-ido3-0.1
+Section: libs
+Architecture: any
+Depends: ${misc:Depends},
+         libido3-0.1-0 (>= ${binary:Version}),
+         ${gir:Depends}
+Description: Typelib file for libido3-0.1
+ Shared library providing extra gtk menu items for display in system indicators.
+ .
+ This package can be used by other packages using the GIRepository format to
+ generate dynamic bindings for libido3-0.1.
