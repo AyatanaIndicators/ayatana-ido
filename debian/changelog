@@ -20,7 +20,13 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
   [ Didier Roche ]
   * Automatic snapshot from revision 118 (bootstrap)
 
- -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 19 Nov 2012 14:00:05 -0500
+  [ Allan LeSage ]
+  * debian/rules:
+    - Remove xvfb auto_test override which caused Jenkins failures.
+  * debian/control:
+    - Remove xvfb from Build-Depends.
+
+ -- Allan LeSage <allan.lesage@canonical.com>  Mon, 17 Dec 2012 16:44:20 -0600
 
 ido (12.10.2-0ubuntu1) quantal; urgency=low
 
