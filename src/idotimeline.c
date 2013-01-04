@@ -132,6 +132,12 @@ ido_timeline_class_init (IdoTimelineClass *klass)
 							GDK_TYPE_SCREEN,
 							G_PARAM_READWRITE));
 
+  /**
+   * IdoTimeline::started:
+   * @timeline: The #IdoTimeline emitting the signal.
+   * 
+   * The ::started signal is emitted when the timeline starts.
+   */
   signals[STARTED] =
     g_signal_new ("started",
 		  G_TYPE_FROM_CLASS (object_class),
@@ -141,6 +147,12 @@ ido_timeline_class_init (IdoTimelineClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * IdoTimeline::paused:
+   * @timeline: The #IdoTimeline emitting the signal.
+   * 
+   * The ::paused signal is emitted when the timeline pauses.
+   */
   signals[PAUSED] =
     g_signal_new ("paused",
 		  G_TYPE_FROM_CLASS (object_class),
@@ -150,6 +162,12 @@ ido_timeline_class_init (IdoTimelineClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * IdoTimeline::finished:
+   * @timeline: The #IdoTimeline emitting the signal.
+   * 
+   * The ::paused signal is emitted when the timeline finishes.
+   */
   signals[FINISHED] =
     g_signal_new ("finished",
 		  G_TYPE_FROM_CLASS (object_class),
@@ -159,6 +177,13 @@ ido_timeline_class_init (IdoTimelineClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * IdoTimeline::frame:
+   * @timeline: The #IdoTimeline emitting the signal.
+   * @progress: The progress position for this frame from 0.0 (start) to 1.0 (end).
+   * 
+   * The ::frame signal is emitted when a frame should be drawn.
+   */
   signals[FRAME] =
     g_signal_new ("frame",
 		  G_TYPE_FROM_CLASS (object_class),
@@ -342,6 +367,15 @@ ido_timeline_new (guint duration)
 		       NULL);
 }
 
+/**
+ * ido_timeline_new_for_screen:
+ * @duration: duration in milliseconds for the timeline
+ * @screen: Screen to start on.
+ *
+ * Creates a new #IdoTimeline with the specified number of frames on the given screen.
+ *
+ * Return Value: the newly created #IdoTimeline
+ **/
 IdoTimeline *
 ido_timeline_new_for_screen (guint      duration,
                              GdkScreen *screen)
@@ -573,6 +607,13 @@ ido_timeline_set_loop (IdoTimeline *timeline,
     }
 }
 
+/**
+ * ido_timeline_set_duration:
+ * @timeline: A #IdoTimeline
+ * @duration: Duration in milliseconds.
+ *
+ * Set the animation duration.
+ */
 void
 ido_timeline_set_duration (IdoTimeline *timeline,
                            guint        duration)
@@ -590,6 +631,14 @@ ido_timeline_set_duration (IdoTimeline *timeline,
     }
 }
 
+/**
+ * ido_timeline_get_duration:
+ * @timeline: A #IdoTimeline
+ *
+ * Set the animation duration.
+ *
+ * Return Value: Duration in milliseconds.
+ */
 guint
 ido_timeline_get_duration (IdoTimeline *timeline)
 {
@@ -645,6 +694,13 @@ ido_timeline_get_direction (IdoTimeline *timeline)
   return priv->direction;
 }
 
+/**
+ * ido_timeline_set_screen:
+ * @timeline: A #IdoTimeline
+ * @screen: A #GdkScreen to use
+ *
+ * Set the screen the timeline is running on.
+ */
 void
 ido_timeline_set_screen (IdoTimeline *timeline,
                          GdkScreen   *screen)
@@ -664,6 +720,14 @@ ido_timeline_set_screen (IdoTimeline *timeline,
   g_object_notify (G_OBJECT (timeline), "screen");
 }
 
+/**
+ * ido_timeline_get_screen:
+ * @timeline: A #IdoTimeline
+ * 
+ * Get the screen this timeline is running on.
+ *
+ * Return Value: (transfer none): The #GdkScreen this timeline is running on.
+ */
 GdkScreen *
 ido_timeline_get_screen (IdoTimeline *timeline)
 {
@@ -675,6 +739,14 @@ ido_timeline_get_screen (IdoTimeline *timeline)
   return priv->screen;
 }
 
+/**
+ * ido_timeline_get_progress:
+ * @timeline: A #IdoTimeline
+ *
+ * Get the progress on the timeline.
+ *
+ * Return Value: The progress from 0.0 (start) to 1.0 (end)
+ */
 gdouble
 ido_timeline_get_progress (IdoTimeline *timeline)
 {
@@ -686,6 +758,13 @@ ido_timeline_get_progress (IdoTimeline *timeline)
   return priv->progress;
 }
 
+/**
+ * ido_timeline_set_progress:
+ * @timeline: A #IdoTimeline
+ * @progress: The progress from 0.0 (start) to 1.0 (end)
+ *
+ * Set the progress on the timeline.
+ */
 void
 ido_timeline_set_progress (IdoTimeline *timeline, gdouble progress)
 {
@@ -707,6 +786,15 @@ ido_timeline_set_progress (IdoTimeline *timeline, gdouble progress)
   ido_timeline_start (timeline);
 }
 
+/**
+ * ido_timeline_calculate_progress:
+ * @linear_progress: The progress from 0.0 (start) to 1.0 (end)
+ * @progress_type: The progress transform to apply
+ *
+ * Transform a linear progress position using the given transform.
+ *
+ * Return Value: the progress position using the provided transform.
+ */
 gdouble
 ido_timeline_calculate_progress (gdouble                 linear_progress,
                                  IdoTimelineProgressType progress_type)

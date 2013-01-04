@@ -309,6 +309,12 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                                          FALSE,
                                                          G_PARAM_READWRITE));
 
+  /**
+   * IdoScaleMenuItem::slider-grabbed:
+   * @menuitem: The #IdoScaleMenuItem emitting the signal.
+   *
+   * The ::slider-grabbed signal is emitted when the pointer selects the slider. 
+   */
   signals[SLIDER_GRABBED] = g_signal_new ("slider-grabbed",
                                           G_OBJECT_CLASS_TYPE (gobject_class),
                                           G_SIGNAL_RUN_FIRST,
@@ -317,6 +323,12 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                           g_cclosure_marshal_VOID__VOID,
                                           G_TYPE_NONE, 0);
 
+  /**
+   * IdoScaleMenuItem::slider-released:
+   * @menuitem: The #IdoScaleMenuItem emitting the signal.
+   *
+   * The ::slider-released signal is emitted when the pointer releases the slider.
+   */
   signals[SLIDER_RELEASED] = g_signal_new ("slider-released",
                                            G_OBJECT_CLASS_TYPE (gobject_class),
                                            G_SIGNAL_RUN_FIRST,
@@ -325,6 +337,12 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                            g_cclosure_marshal_VOID__VOID,
                                            G_TYPE_NONE, 0);
 
+  /**
+   * IdoScaleMenuItem::primary-clicked:
+   * @menuitem: The #IdoScaleMenuItem emitting the signal.
+   *
+   * The ::primary-clicked signal is emitted when the pointer clicks the primary label.
+   */
   signals[PRIMARY_CLICKED] = g_signal_new ("primary-clicked",
                                            G_TYPE_FROM_CLASS (item_class),
                                            G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
@@ -334,6 +352,12 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                            G_TYPE_NONE, /* return type */
                                            0 /* n_params */);
 
+  /**
+   * IdoScaleMenuItem::secondary-clicked:
+   * @menuitem: The #IdoScaleMenuItem emitting the signal.
+   *
+   * The ::secondary-clicked signal is emitted when the pointer clicks the secondary label.
+   */
   signals[SECONDARY_CLICKED] = g_signal_new ("secondary-clicked",
                                              G_TYPE_FROM_CLASS (item_class),
                                              G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
@@ -625,9 +649,10 @@ ido_scale_menu_item_secondary_image_notify (GtkImage         *image,
  * @label: the text of the new menu item.
  * @size: The size style of the range.
  * @adjustment: A #GtkAdjustment describing the slider value.
- * @returns: a new #IdoScaleMenuItem.
  *
  * Creates a new #IdoScaleMenuItem with an empty label.
+ *
+ * Return Value: a new #IdoScaleMenuItem.
  **/
 GtkWidget*
 ido_scale_menu_item_new (const gchar   *label,
@@ -647,9 +672,10 @@ ido_scale_menu_item_new (const gchar   *label,
  * @min: The minimum value of the slider.
  * @max: The maximum value of the slider.
  * @step: The step increment of the slider.
- * @returns: a new #IdoScaleMenuItem.
  *
  * Creates a new #IdoScaleMenuItem containing a label.
+ *
+ * Return Value: a new #IdoScaleMenuItem.
  **/
 GtkWidget*
 ido_scale_menu_item_new_with_range (const gchar  *label,
@@ -671,9 +697,10 @@ ido_scale_menu_item_new_with_range (const gchar  *label,
 /**
  * ido_scale_menu_item_get_scale:
  * @menuitem: The #IdoScaleMenuItem
- * @returns: A pointer to the scale widget.
  *
  * Retrieves the scale widget.
+ *
+ * Return Value: (transfer none): The #IdoRange in this item
  **/
 GtkWidget*
 ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
@@ -690,10 +717,11 @@ ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
 /**
  * ido_scale_menu_item_get_style:
  * @menuitem: The #IdoScaleMenuItem
- * @returns: A #IdoScaleMenuItemStyle enum describing the style.
  *
  * Retrieves the type of widgets being used for the primary and
  * secondary widget slots.  This could be images, labels, or nothing.
+ *
+ * Return Value: A #IdoScaleMenuItemStyle enum describing the style.
  **/
 IdoScaleMenuItemStyle
 ido_scale_menu_item_get_style (IdoScaleMenuItem *menuitem)
@@ -707,6 +735,14 @@ ido_scale_menu_item_get_style (IdoScaleMenuItem *menuitem)
   return priv->style;
 }
 
+/**
+ * ido_scale_menu_item_set_style:
+ * @menuitem: The #IdoScaleMenuItem
+ * @style: Set the style use for the primary and secondary widget slots.
+ *
+ * Sets the type of widgets being used for the primary and
+ * secondary widget slots.  This could be images, labels, or nothing.
+ **/
 void
 ido_scale_menu_item_set_style (IdoScaleMenuItem      *menuitem,
                                IdoScaleMenuItemStyle  style)
@@ -725,11 +761,12 @@ ido_scale_menu_item_set_style (IdoScaleMenuItem      *menuitem,
 /**
  * ido_scale_menu_item_get_primary_image:
  * @menuitem: The #IdoScaleMenuItem
- * @returns: A #GtkWidget pointer for the primary image.
  *
  * Retrieves a pointer to the image widget used in the primary slot.
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
+ *
+ * Return Value: (transfer none): A #GtkWidget pointer for the primary image.
  **/
 GtkWidget *
 ido_scale_menu_item_get_primary_image (IdoScaleMenuItem *menuitem)
@@ -746,11 +783,12 @@ ido_scale_menu_item_get_primary_image (IdoScaleMenuItem *menuitem)
 /**
  * ido_scale_menu_item_get_secondary_image:
  * @menuitem: The #IdoScaleMenuItem
- * @returns: A #GtkWidget pointer for the secondary image.
  *
  * Retrieves a pointer to the image widget used in the secondary slot.
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
+ *
+ * Return Value: (transfer none): A #GtkWidget pointer for the secondary image.
  **/
 GtkWidget *
 ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
@@ -767,11 +805,12 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
 /**
  * ido_scale_menu_item_get_primary_label:
  * @menuitem: The #IdoScaleMenuItem
- * @returns: A const gchar* string of the label text.
  *
  * Retrieves a string of the text for the primary label widget.
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
+ *
+ * Return Value: The label text.
  **/
 const gchar*
 ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
@@ -786,13 +825,14 @@ ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
 }
 
 /**
- * ido_scale_menu_item_get_primary_label:
+ * ido_scale_menu_item_get_secondary_label:
  * @menuitem: The #IdoScaleMenuItem
- * @returns: A const gchar* string of the label text.
  *
- * Retrieves a string of the text for the primary label widget.
+ * Retrieves a string of the text for the secondary label widget.
  * Whether this is visible depends upon the return value from
  * ido_scale_menu_item_get_style().
+ *
+ * Return Value: The label text.
  **/
 const gchar*
 ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem *menuitem)
@@ -809,7 +849,7 @@ ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem *menuitem)
 /**
  * ido_scale_menu_item_set_primary_label:
  * @menuitem: The #IdoScaleMenuItem
- * @label: A string containing the label text
+ * @label: The label text
  *
  * Sets the text for the label widget in the primary slot.  This
  * widget will only be visibile if the return value of
@@ -832,11 +872,11 @@ ido_scale_menu_item_set_primary_label (IdoScaleMenuItem *menuitem,
 }
 
 /**
- * ido_scale_menu_item_set_primary_label:
+ * ido_scale_menu_item_set_secondary_label:
  * @menuitem: The #IdoScaleMenuItem
- * @label: A string containing the label text
+ * @label: The label text
  *
- * Sets the text for the label widget in the primary slot.  This
+ * Sets the text for the label widget in the secondary slot.  This
  * widget will only be visibile if the return value of
  * ido_scale_menu_item_get_style() is set to %IDO_SCALE_MENU_ITEM_STYLE_LABEL.
  **/
@@ -859,16 +899,16 @@ ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem *menuitem,
 /**
  * ido_scale_menu_item_primary_clicked:
  * @menuitem: the #IdoScaleMenuItem
- * 
+ *
  * Emits the "primary-clicked" signal.
  *
  * The default handler for this signal lowers the scale's
  * adjustment to its lower bound.
  */
 void
-ido_scale_menu_item_primary_clicked (IdoScaleMenuItem * item)
+ido_scale_menu_item_primary_clicked (IdoScaleMenuItem * menuitem)
 {
-  g_signal_emit (item, signals[PRIMARY_CLICKED], 0);
+  g_signal_emit (menuitem, signals[PRIMARY_CLICKED], 0);
 }
 static void
 default_primary_clicked_handler (IdoScaleMenuItem * item)
@@ -880,18 +920,18 @@ default_primary_clicked_handler (IdoScaleMenuItem * item)
 }
 
 /**
- * ido_scale_menu_item_primary_clicked:
+ * ido_scale_menu_item_secondary_clicked:
  * @menuitem: the #IdoScaleMenuItem
- * 
- * Emits the "primary-clicked" signal.
+ *
+ * Emits the "secondary-clicked" signal.
  *
  * The default handler for this signal raises the scale's
  * adjustment to its upper bound.
  */
 void
-ido_scale_menu_item_secondary_clicked (IdoScaleMenuItem * item)
+ido_scale_menu_item_secondary_clicked (IdoScaleMenuItem * menuitem)
 {
-  g_signal_emit (item, signals[SECONDARY_CLICKED], 0);
+  g_signal_emit (menuitem, signals[SECONDARY_CLICKED], 0);
 }
 static void
 default_secondary_clicked_handler (IdoScaleMenuItem * item)

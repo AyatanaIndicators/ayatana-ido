@@ -324,21 +324,44 @@ calendar_day_selected_double_click_cb (GtkWidget        *widget,
   g_signal_emit_by_name (item, "day-selected-double-click", NULL);
 }
 
-/* Public API */
+/**
+ * ido_calendar_menu_item_new:
+ *
+ * Creates a new #IdoCalendarMenuItem
+ *
+ * Return Value: a new #IdoCalendarMenuItem.
+ **/
 GtkWidget *
 ido_calendar_menu_item_new (void)
 {
   return g_object_new (IDO_TYPE_CALENDAR_MENU_ITEM, NULL);
 }
 
+/**
+ * ido_calendar_menu_item_get_calendar:
+ * @menuitem: A #IdoCalendarMenuItem
+ *
+ * Returns the calendar associated with this menu item.
+ *
+ * Return Value: (transfer none): The #GtkCalendar used in this item.
+ */
 GtkWidget *
-ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *item)
+ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *menuitem)
 {
-  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM (item), NULL);
+  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM (menuitem), NULL);
 
-  return item->priv->calendar;
+  return menuitem->priv->calendar;
 }
 
+/**
+ * ido_calendar_menu_item_mark_day:
+ * @menuitem: A #IdoCalendarMenuItem
+ * @day: the day number to unmark between 1 and 31.
+ *
+ * Places a visual marker on a particular day. 
+ *
+ * Return Value: #TRUE
+ */
 gboolean
 ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
 {
@@ -348,6 +371,15 @@ ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
   return TRUE;
 }
 
+/**
+ * ido_calendar_menu_item_unmark_day:
+ * @menuitem: A #IdoCalendarMenuItem
+ * @day: the day number to unmark between 1 and 31.
+ * 
+ * Removes the visual marker from a particular day.
+ *
+ * Return Value: #TRUE
+ */
 gboolean
 ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
 {
@@ -357,6 +389,12 @@ ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
   return TRUE;
 }
 
+/**
+ * ido_calendar_menu_item_clear_marks:
+ * @menuitem: A #IdoCalendarMenuItem
+ *
+ * Remove all visual markers. 
+ */
 void
 ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
 {
@@ -365,6 +403,13 @@ ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
   gtk_calendar_clear_marks(GTK_CALENDAR (menuitem->priv->calendar));
 }
 
+/**
+ * ido_calendar_menu_item_set_display_options:
+ * @menuitem: A #IdoCalendarMenuItem
+ * @flags: the display options to set
+ *
+ * Set the display options for the calendar.
+ */
 void
 ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCalendarDisplayOptions flags)
 {
@@ -373,6 +418,14 @@ ido_calendar_menu_item_set_display_options (IdoCalendarMenuItem *menuitem, GtkCa
   gtk_calendar_set_display_options (GTK_CALENDAR (menuitem->priv->calendar), flags);
 }
 
+/**
+ * ido_calendar_menu_item_get_display_options:
+ * @menuitem: A #IdoCalendarMenuItem
+ *
+ * Get the display options for the calendar.
+ *
+ * Return Value: the display options in use
+ */
 GtkCalendarDisplayOptions
 ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem)
 {
@@ -381,6 +434,15 @@ ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem)
   return gtk_calendar_get_display_options (GTK_CALENDAR (menuitem->priv->calendar));
 }
 
+/**
+ * ido_calendar_menu_item_get_date:
+ * @menuitem: A #IdoCalendarMenuItem
+ * @year: (out) (allow-none): location to store the year as a decimal number (e.g. 2011), or #NULL.
+ * @month: (out) (allow-none): location to store the month number (between 0 and 11), or #NULL.
+ * @day: (out) (allow-none): location to store the day number (between 1 and 31), or #NULL.
+ *
+ * Gets the selected date.
+ */
 void 
 ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
                                  guint *year,
@@ -391,6 +453,17 @@ ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
   gtk_calendar_get_date (GTK_CALENDAR (menuitem->priv->calendar), year, month, day);
 }
 
+/**
+ * ido_calendar_menu_item_set_date:
+ * @menuitem: A #IdoCalendarMenuItem
+ * @year: the year to show (e.g. 2011).
+ * @month: a month number (between 0 and 11).
+ * @day: The day number (between 1 and 31).
+ *
+ * Set the date shown on the calendar.
+ *
+ * Return Value: #TRUE
+ */
 gboolean
 ido_calendar_menu_item_set_date (IdoCalendarMenuItem *menuitem,
                                  guint year,
@@ -402,6 +475,3 @@ ido_calendar_menu_item_set_date (IdoCalendarMenuItem *menuitem,
   gtk_calendar_select_day (GTK_CALENDAR (menuitem->priv->calendar), day);
   return TRUE;
 }
-
-
-

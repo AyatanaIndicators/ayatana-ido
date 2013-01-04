@@ -260,17 +260,31 @@ entry_move_focus_cb (GtkWidget        *widget,
                          GTK_DIR_TAB_FORWARD);
 }
 
-/* Public API */
+/**
+ * ido_entry_menu_item_new:
+ *
+ * Creates a new #IdoEntryMenuItem.
+ *
+ * Return Value: the newly created #IdoEntryMenuItem.
+ */
 GtkWidget *
 ido_entry_menu_item_new (void)
 {
   return g_object_new (IDO_TYPE_ENTRY_MENU_ITEM, NULL);
 }
 
+/**
+ * ido_entry_menu_item_get_entry:
+ * @menuitem: The #IdoEntryMenuItem.
+ *
+ * Get the #GtkEntry used in this menu item.
+ *
+ * Return Value: (transfer none): The #GtkEntry inside this menu item.
+ */
 GtkWidget *
-ido_entry_menu_item_get_entry (IdoEntryMenuItem *item)
+ido_entry_menu_item_get_entry (IdoEntryMenuItem *menuitem)
 {
-  g_return_val_if_fail (IDO_IS_ENTRY_MENU_ITEM (item), NULL);
+  g_return_val_if_fail (IDO_IS_ENTRY_MENU_ITEM (menuitem), NULL);
 
-  return item->priv->entry;
+  return menuitem->priv->entry;
 }

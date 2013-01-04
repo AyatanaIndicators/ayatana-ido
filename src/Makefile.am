@@ -1,3 +1,5 @@
+CLEANFILES =
+
 VER=3
 lib_LTLIBRARIES = libido3-0.1.la
 
@@ -94,3 +96,54 @@ DISTCLEANFILES =			\
 	idotypebuiltins.h		\
 	idotypebuiltins.c
 
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = \
+        --symbol-prefix=ido \
+        --warn-all \
+        --identifier-prefix=Ido
+
+if HAVE_INTROSPECTION
+
+Ido3-0.1.gir: libido3-0.1.la
+Ido3_0_1_gir_INCLUDES = Gtk-3.0
+Ido3_0_1_gir_CFLAGS =
+Ido3_0_1_gir_LIBS = libido3-0.1.la
+Ido3_0_1_gir_FILES = \
+	idocalendarmenuitem.h		\
+	idoentrymenuitem.h		\
+	idomessagedialog.h		\
+	idorange.h			\
+	idoscalemenuitem.h		\
+	idoswitchmenuitem.h		\
+	idotimeline.h			\
+	$(libido_0_1_la_SOURCES)
+Ido3_0_1_gir_NAMESPACE = Ido3
+Ido3_0_1_gir_VERSION = 0.1
+Ido3_0_1_gir_SCANNER_FLAGS = $(INTROSPECTION_SCANNER_ARGS)
+
+INTROSPECTION_GIRS += Ido3-0.1.gir
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(libdir)/girepository-1.0
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(gir_DATA) $(typelib_DATA)
+
+endif
+
+if HAVE_INTROSPECTION
+
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = Ido3-0.1.vapi
+
+Ido3-0.1.vapi: Ido3-0.1.gir
+	$(VALA_API_GEN) --library=Ido3-0.1 \
+			--pkg gtk+-3.0 \
+			$<
+
+CLEANFILES += $(vapi_DATA)
+
+endif
