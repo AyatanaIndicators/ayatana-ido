@@ -1,4 +1,4 @@
-ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
+ido (12.10.3daily13.01.11-0ubuntu1) raring; urgency=low
 
   [ Mathieu Trudel-Lapierre ]
   * debian/control:
@@ -26,7 +26,13 @@ ido (12.10.3-0ubuntu1) UNRELEASED; urgency=low
   * debian/control:
     - Remove xvfb from Build-Depends.
 
- -- Allan LeSage <allan.lesage@canonical.com>  Mon, 17 Dec 2012 16:44:20 -0600
+  [ Robert Ancell ]
+  * Add GObject introspection support to IDO (LP: #582985)
+
+  [ Automatic PS uploader ]
+  * Automatic snapshot from revision 122
+
+ -- Automatic PS uploader <ps-jenkins@lists.canonical.com>  Fri, 11 Jan 2013 02:02:27 +0000
 
 ido (12.10.2-0ubuntu1) quantal; urgency=low
 
