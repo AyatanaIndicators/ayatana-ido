@@ -1,3 +1,10 @@
+ido (12.10.3daily13.01.11-0ubuntu2) UNRELEASED; urgency=low
+
+  * Fix build against libgtest/libxorg-gtest failing due to paths to gtest
+    source being incorrect. (LP: #1112775)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 05 Feb 2013 16:19:25 -0500
+
 ido (12.10.3daily13.01.11-0ubuntu1) raring; urgency=low
 
   [ Mathieu Trudel-Lapierre ]

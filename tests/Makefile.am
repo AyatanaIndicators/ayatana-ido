@@ -15,7 +15,7 @@ AM_CPPFLAGS = \
 
 nodist_libgtest_a_SOURCES = \
 	$(XORG_GTEST_SOURCE)/src/xorg-gtest-all.cpp \
-	$(GTEST_SOURCE)/src/gtest-all.cc \
+	$(GTEST_SOURCE)/gtest-all.cc \
 	$(XORG_GTEST_SOURCE)/src/xorg-gtest_main.cpp
 libgtest_a_CPPFLAGS = \
 	$(XORG_GTEST_CPPFLAGS) \
