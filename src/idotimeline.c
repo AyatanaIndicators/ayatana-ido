@@ -409,8 +409,8 @@ ido_timeline_start (IdoTimeline *timeline)
       else
         priv->timer = g_timer_new ();
 
-      /* sanity check */
-      g_assert (priv->fps > 0);
+      /* sanity check; CID: 12651 */
+      priv->fps = priv->fps > 0 ? priv->fps : DEFAULT_FPS;
 
       if (priv->screen)
         {
@@ -549,7 +549,8 @@ ido_timeline_set_fps (IdoTimeline *timeline,
 
   priv = IDO_TIMELINE_GET_PRIV (timeline);
 
-  priv->fps = fps;
+  /* Coverity CID: 12650/12651: guard against division by 0. */
+  priv->fps = fps > 0 ? fps : priv->fps;
 
   if (ido_timeline_is_running (timeline))
     {
