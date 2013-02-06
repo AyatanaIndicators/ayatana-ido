@@ -409,8 +409,8 @@ ido_timeline_start (IdoTimeline *timeline)
       else
         priv->timer = g_timer_new ();
 
-      /* sanity check */
-      g_assert (priv->fps > 0);
+      /* sanity check; CID: 12651 */
+      priv->fps = priv->fps > 0 ? priv->fps : DEFAULT_FPS;
 
       if (priv->screen)
         {
