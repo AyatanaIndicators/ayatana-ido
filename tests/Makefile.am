@@ -43,5 +43,6 @@ gtest_menuitems_LDFLAGS = \
 gtest_menuitems_LDADD = \
 	$(GTK_LIBS) \
 	$(IDOLIB) \
-	libgtest.a
+	libgtest.a \
+	-lX11 -lXi
 
