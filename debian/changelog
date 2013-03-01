@@ -1,9 +1,15 @@
-ido (12.10.3daily13.01.11-0ubuntu2) UNRELEASED; urgency=low
+ido (12.10.3daily13.03.01-0ubuntu1) raring; urgency=low
 
+  [ Mathieu Trudel-Lapierre ]
   * Fix build against libgtest/libxorg-gtest failing due to paths to gtest
     source being incorrect. (LP: #1112775)
+  * Jenkins build failure on libgtest_xorg "undefined reference to
+    symbol '_XDefaultError'" (LP: #1126353)
 
- -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 05 Feb 2013 16:19:25 -0500
+  [ Automatic PS uploader ]
+  * Automatic snapshot from revision 125
+
+ -- Automatic PS uploader <ps-jenkins@lists.canonical.com>  Fri, 01 Mar 2013 02:02:29 +0000
 
 ido (12.10.3daily13.01.11-0ubuntu1) raring; urgency=low
 
