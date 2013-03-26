@@ -17,6 +17,7 @@ sources_h =				\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
+	idousermenuitem.h		\
 	idotimeline.h			\
 	libido.h 
 
@@ -66,6 +67,7 @@ libido_0_1_la_SOURCES =			\
 	idorange.c			\
 	idoscalemenuitem.c		\
 	idoswitchmenuitem.c		\
+	idousermenuitem.c		\
 	idotimeline.c                   
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)

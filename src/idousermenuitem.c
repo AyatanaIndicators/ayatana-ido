@@ -25,15 +25,12 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <gtk/gtk.h>
 
-#include <libindicator/indicator-image-helper.h>
-
-#include "shared-names.h"
-#include "user-widget.h"
+#include "idousermenuitem.h"
 
 
-typedef struct _UserWidgetPrivate UserWidgetPrivate;
+typedef struct _IdoUserMenuItemPrivate IdoUserMenuItemPrivate;
 
-struct _UserWidgetPrivate
+struct _IdoUserMenuItemPrivate
 {
   DbusmenuMenuitem* twin_item;
   GtkWidget* user_image;
@@ -44,40 +41,40 @@ struct _UserWidgetPrivate
   gboolean sessions_active;
 };
 
-#define USER_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), USER_WIDGET_TYPE, UserWidgetPrivate))
+#define USER_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), USER_WIDGET_TYPE, IdoUserMenuItemPrivate))
 
 /* Prototypes */
-static void user_widget_class_init    (UserWidgetClass *klass);
-static void user_widget_init          (UserWidget *self);
+static void user_widget_class_init    (IdoUserMenuItemClass *klass);
+static void user_widget_init          (IdoUserMenuItem *self);
 static void user_widget_dispose       (GObject *object);
 static void user_widget_finalize      (GObject *object);
 
-static void user_widget_set_twin_item (UserWidget* self,
+static void user_widget_set_twin_item (IdoUserMenuItem* self,
                                        DbusmenuMenuitem* twin_item);
 
 static gboolean user_widget_primitive_draw_cb_gtk_3 (GtkWidget *image,
                                                          cairo_t* cr,
                                                          gpointer user_data);
 
-G_DEFINE_TYPE (UserWidget, user_widget, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE (IdoUserMenuItem, user_widget, GTK_TYPE_MENU_ITEM);
 
 static void
-user_widget_class_init (UserWidgetClass *klass)
+user_widget_class_init (IdoUserMenuItemClass *klass)
 {
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
 
-  g_type_class_add_private (klass, sizeof (UserWidgetPrivate));
+  g_type_class_add_private (klass, sizeof (IdoUserMenuItemPrivate));
 
   gobject_class->dispose = user_widget_dispose;
   gobject_class->finalize = user_widget_finalize;
 }
 
 static void
-user_widget_init (UserWidget *self)
+user_widget_init (IdoUserMenuItem *self)
 {
   self->priv = USER_WIDGET_GET_PRIVATE(self);
 
-  UserWidgetPrivate * priv = self->priv;
+  IdoUserMenuItemPrivate * priv = self->priv;
 
   priv->user_image = NULL;
   priv->user_name  = NULL;
@@ -150,8 +147,8 @@ user_widget_primitive_draw_cb_gtk_3 (GtkWidget *widget,
                                      gpointer user_data)
 {
   g_return_val_if_fail(IS_USER_WIDGET(user_data), FALSE);
-  UserWidget* meta = USER_WIDGET(user_data);
-  UserWidgetPrivate * priv = USER_WIDGET_GET_PRIVATE(meta);
+  IdoUserMenuItem* meta = USER_WIDGET(user_data);
+  IdoUserMenuItemPrivate * priv = USER_WIDGET_GET_PRIVATE(meta);
 
   // Draw dot only when user is the current user.
   if (dbusmenu_menuitem_property_get_bool (priv->twin_item, USER_ITEM_PROP_IS_CURRENT_USER))
@@ -180,7 +177,7 @@ user_widget_primitive_draw_cb_gtk_3 (GtkWidget *widget,
 ***/
 
 static void
-update_icon (UserWidget * self, DbusmenuMenuitem * mi)
+update_icon (IdoUserMenuItem * self, DbusmenuMenuitem * mi)
 {
   gboolean updated = FALSE;
   GtkImage * image = GTK_IMAGE(self->priv->user_image);
@@ -220,7 +217,7 @@ update_icon (UserWidget * self, DbusmenuMenuitem * mi)
 }
 
 static void
-update_logged_in (UserWidget * self, DbusmenuMenuitem * mi)
+update_logged_in (IdoUserMenuItem * self, DbusmenuMenuitem * mi)
 {
   const gboolean b = dbusmenu_menuitem_property_get_bool (mi, USER_ITEM_PROP_LOGGED_IN);
 
@@ -232,7 +229,7 @@ update_logged_in (UserWidget * self, DbusmenuMenuitem * mi)
 }
 
 static void
-update_name (UserWidget * self, DbusmenuMenuitem * mi)
+update_name (IdoUserMenuItem * self, DbusmenuMenuitem * mi)
 {
   gtk_label_set_label (GTK_LABEL(self->priv->user_name),
                        dbusmenu_menuitem_property_get (mi, USER_ITEM_PROP_NAME));
@@ -242,7 +239,7 @@ static void
 user_widget_property_update (DbusmenuMenuitem  * mi,
                              const gchar       * property,
                              GVariant          * value,
-                             UserWidget        * self)
+                             IdoUserMenuItem        * self)
 {
   g_return_if_fail (IS_USER_WIDGET (self));
 
@@ -265,7 +262,7 @@ user_widget_property_update (DbusmenuMenuitem  * mi,
 }
 
 static void
-user_widget_set_twin_item (UserWidget * self, DbusmenuMenuitem * mi)
+user_widget_set_twin_item (IdoUserMenuItem * self, DbusmenuMenuitem * mi)
 {
   self->priv->twin_item = mi;
 
@@ -281,7 +278,7 @@ user_widget_set_twin_item (UserWidget * self, DbusmenuMenuitem * mi)
   * user_widget_new:
   * @item: the #DbusmenuMenuitem this widget will render.
   *
-  * Returns: (transfer full): a new #UserWidget.
+  * Returns: (transfer full): a new #IdoUserMenuItem.
   **/
 GtkWidget*
 user_widget_new (DbusmenuMenuitem *item)
