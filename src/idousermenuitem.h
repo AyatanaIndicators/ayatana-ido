@@ -20,7 +20,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __IDO_USER_MENU_ITEM_H__
 
 #include <gtk/gtk.h>
-#include <libdbusmenu-gtk/menuitem.h>
 
 G_BEGIN_DECLS
 
@@ -35,6 +34,12 @@ typedef struct _IdoUserMenuItem        IdoUserMenuItem;
 typedef struct _IdoUserMenuItemClass   IdoUserMenuItemClass;
 typedef struct _IdoUserMenuItemPrivate IdoUserMenuItemPrivate;
 
+/* property keys */
+#define IDO_USER_MENU_ITEM_PROP_LABEL           "label"
+#define IDO_USER_MENU_ITEM_PROP_ICON            "icon"
+#define IDO_USER_MENU_ITEM_PROP_IS_LOGGED_IN    "is-logged-in"
+#define IDO_USER_MENU_ITEM_PROP_IS_CURRENT_USER "is-current-user"
+
 struct _IdoUserMenuItemClass
 {
   GtkMenuItemClass parent_class;
@@ -48,7 +53,13 @@ struct _IdoUserMenuItem
 };
 
 GType ido_user_menu_item_get_type (void) G_GNUC_CONST;
-GtkWidget* ido_user_menu_item_new(DbusmenuMenuitem *twin_item);
+
+GtkWidget* ido_user_menu_item_new(void);
+
+void ido_user_menu_item_set_icon         (IdoUserMenuItem * self, const char * icon_name);
+void ido_user_menu_item_set_logged_in    (IdoUserMenuItem * self, gboolean     is_logged_in);
+void ido_user_menu_item_set_current_user (IdoUserMenuItem * self, gboolean     is_current_user);
+void ido_user_menu_item_set_label        (IdoUserMenuItem * self, const char * label);
 
 G_END_DECLS
 
