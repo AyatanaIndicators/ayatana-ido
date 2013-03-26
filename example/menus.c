@@ -4,6 +4,7 @@
 #include "idocalendarmenuitem.h"
 #include "idoentrymenuitem.h"
 #include "idoswitchmenuitem.h"
+#include "idousermenuitem.h"
 #include "config.h"
 
 static void
@@ -92,9 +93,51 @@ main (int argc, char *argv[])
   image = ido_scale_menu_item_get_secondary_image (IDO_SCALE_MENU_ITEM (menuitem));
   gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
   g_signal_connect (menuitem, "slider-grabbed", G_CALLBACK (slider_grabbed), NULL);
   g_signal_connect (menuitem, "slider-released", G_CALLBACK (slider_released), NULL);
+
+  /**
+  ***  Users
+  **/
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = ido_user_menu_item_new ();
+  g_object_set (menuitem,
+                "label", "Guest",
+                "icon", NULL,
+                "is-logged-in", FALSE,
+                "is-current-user", FALSE,
+                NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = ido_user_menu_item_new ();
+  g_object_set (menuitem,
+                "label", "Bobby Fischer",
+                "icon", "/usr/share/pixmaps/faces/chess.jpg",
+                "is-logged-in", FALSE,
+                "is-current-user", FALSE,
+                NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = ido_user_menu_item_new ();
+  g_object_set (menuitem,
+                "label", "Linus Torvalds",
+                "icon", "/usr/share/pixmaps/faces/penguin.jpg",
+                "is-logged-in", TRUE,
+                "is-current-user", FALSE,
+                NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = ido_user_menu_item_new ();
+  g_object_set (menuitem, "label", "Mark Shuttleworth",
+                          "icon", "/usr/share/pixmaps/faces/astronaut.jpg",
+                          "is-logged-in", TRUE,
+                          "is-current-user", TRUE,
+                          NULL);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
 
   /* Add the menubar */
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), root);
