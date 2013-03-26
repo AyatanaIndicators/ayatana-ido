@@ -256,9 +256,15 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
   /* Draw dot only when user is the current user. */
   if (priv->is_current_user)
     {
+      GtkStyleContext * style_context;
+      GtkStateFlags state_flags;
+      GdkRGBA color;
       gdouble x, y;
-      GtkStyle * style = gtk_widget_get_style (widget);
-      const GtkStateType state = gtk_widget_get_state (widget);
+
+      /* get the foreground color */
+      style_context = gtk_widget_get_style_context (widget);
+      state_flags = gtk_widget_get_state_flags (widget);
+      gtk_style_context_get_color (style_context, state_flags, &color);
 
       GtkAllocation allocation;
       gtk_widget_get_allocation (widget, &allocation);
@@ -267,9 +273,8 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
 
       cairo_arc (cr, x, y, 3.0, 0.0, 2 * G_PI);
 
-      cairo_set_source_rgb (cr, style->fg[state].red/65535.0,
-                                style->fg[state].green/65535.0,
-                                style->fg[state].blue/65535.0);
+      gdk_cairo_set_source_rgba (cr, &color);
+
       cairo_fill (cr);
     }
 
