@@ -36,7 +36,7 @@ typedef struct _IdoUserMenuItemPrivate IdoUserMenuItemPrivate;
 
 /* property keys */
 #define IDO_USER_MENU_ITEM_PROP_LABEL           "label"
-#define IDO_USER_MENU_ITEM_PROP_ICON            "icon"
+#define IDO_USER_MENU_ITEM_PROP_ICON_FILENAME   "icon-filename"
 #define IDO_USER_MENU_ITEM_PROP_IS_LOGGED_IN    "is-logged-in"
 #define IDO_USER_MENU_ITEM_PROP_IS_CURRENT_USER "is-current-user"
 

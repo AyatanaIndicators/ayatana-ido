@@ -33,7 +33,7 @@ enum
 {
   PROP_0,
   PROP_LABEL,
-  PROP_ICON,
+  PROP_ICON_FILENAME,
   PROP_IS_LOGGED_IN,
   PROP_IS_CURRENT_USER,
   PROP_LAST
@@ -50,7 +50,7 @@ struct _IdoUserMenuItemPrivate
   gboolean is_logged_in;
   gboolean is_current_user;
   gchar * label;
-  gchar * icon_name;
+  gchar * icon_filename;
 };
 
 G_DEFINE_TYPE (IdoUserMenuItem, ido_user_menu_item, GTK_TYPE_MENU_ITEM);
@@ -75,8 +75,8 @@ my_get_property (GObject     * o,
         g_value_set_string (value, self->priv->label);
         break;
 
-      case PROP_ICON:
-        g_value_set_string (value, self->priv->icon_name);
+      case PROP_ICON_FILENAME:
+        g_value_set_string (value, self->priv->icon_filename);
         break;
 
       case PROP_IS_LOGGED_IN:
@@ -107,7 +107,7 @@ my_set_property (GObject       * o,
         ido_user_menu_item_set_label (self, g_value_get_string (value));
         break;
 
-      case PROP_ICON:
+      case PROP_ICON_FILENAME:
         ido_user_menu_item_set_icon (self, g_value_get_string (value));
         break;
 
@@ -138,7 +138,7 @@ my_finalize (GObject *object)
   IdoUserMenuItem * self = IDO_USER_MENU_ITEM (object);
 
   g_free (self->priv->label);
-  g_free (self->priv->icon_name);
+  g_free (self->priv->icon_filename);
 
   G_OBJECT_CLASS (ido_user_menu_item_parent_class)->finalize (object);
 }
@@ -166,11 +166,11 @@ ido_user_menu_item_class_init (IdoUserMenuItemClass *klass)
                                                 "J. Random User",
                                                 prop_flags);
 
-  properties[PROP_ICON] = g_param_spec_string ("icon",
-                                               "The icon's name",
-                                               "The icon to display",
-                                               NULL,
-                                               prop_flags);
+  properties[PROP_ICON_FILENAME] = g_param_spec_string ("icon-filename",
+                                                        "The icon's filename",
+                                                        "The icon to display",
+                                                        NULL,
+                                                        prop_flags);
 
   properties[PROP_IS_LOGGED_IN] = g_param_spec_boolean ("is-logged-in",
                                                         "is logged in",
@@ -286,18 +286,18 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
 ***/
 
 void
-ido_user_menu_item_set_icon (IdoUserMenuItem * self, const char * icon_name)
+ido_user_menu_item_set_icon (IdoUserMenuItem * self, const char * icon_filename)
 {
   gboolean updated = FALSE;
   IdoUserMenuItemPrivate * p = self->priv;
   GtkImage * image = GTK_IMAGE (p->user_image);
 
   /* make a private copy of the icon name */
-  g_free (p->icon_name);
-  self->priv->icon_name = g_strdup (icon_name);
+  g_free (p->icon_filename);
+  self->priv->icon_filename = g_strdup (icon_filename);
 
   /* now try to use it */
-  if (icon_name && *icon_name)
+  if (icon_filename && *icon_filename)
     {
       int width = 18; /* arbitrary default values */
       int height = 18;
@@ -306,7 +306,8 @@ ido_user_menu_item_set_icon (IdoUserMenuItem * self, const char * icon_name)
 
       /* load the image */
       gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
-      pixbuf = gdk_pixbuf_new_from_file_at_size (icon_name, width, height, &err);
+      pixbuf = gdk_pixbuf_new_from_file_at_size (icon_filename,
+                                                 width, height, &err);
       if (err == NULL)
         {
           gtk_image_set_from_pixbuf (image, pixbuf);
@@ -315,7 +316,8 @@ ido_user_menu_item_set_icon (IdoUserMenuItem * self, const char * icon_name)
         }
       else
         {
-          g_warning ("Couldn't load the image \"%s\": %s", icon_name, err->message);
+          g_warning ("Couldn't load the image \"%s\": %s",
+                     icon_filename, err->message);
           g_clear_error (&err);
         }
     }

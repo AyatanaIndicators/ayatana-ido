@@ -106,7 +106,7 @@ main (int argc, char *argv[])
   menuitem = ido_user_menu_item_new ();
   g_object_set (menuitem,
                 "label", "Guest",
-                "icon", NULL,
+                "icon-filename", NULL,
                 "is-logged-in", FALSE,
                 "is-current-user", FALSE,
                 NULL);
@@ -115,7 +115,7 @@ main (int argc, char *argv[])
   menuitem = ido_user_menu_item_new ();
   g_object_set (menuitem,
                 "label", "Bobby Fischer",
-                "icon", "/usr/share/pixmaps/faces/chess.jpg",
+                "icon-filename", "/usr/share/pixmaps/faces/chess.jpg",
                 "is-logged-in", FALSE,
                 "is-current-user", FALSE,
                 NULL);
@@ -124,7 +124,7 @@ main (int argc, char *argv[])
   menuitem = ido_user_menu_item_new ();
   g_object_set (menuitem,
                 "label", "Linus Torvalds",
-                "icon", "/usr/share/pixmaps/faces/penguin.jpg",
+                "icon-filename", "/usr/share/pixmaps/faces/penguin.jpg",
                 "is-logged-in", TRUE,
                 "is-current-user", FALSE,
                 NULL);
@@ -132,7 +132,7 @@ main (int argc, char *argv[])
 
   menuitem = ido_user_menu_item_new ();
   g_object_set (menuitem, "label", "Mark Shuttleworth",
-                          "icon", "/usr/share/pixmaps/faces/astronaut.jpg",
+                          "icon-filename", "/usr/share/pixmaps/faces/astronaut.jpg",
                           "is-logged-in", TRUE,
                           "is-current-user", TRUE,
                           NULL);
