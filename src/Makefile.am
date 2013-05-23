@@ -18,7 +18,8 @@ sources_h =				\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
 	idotimeline.h			\
-	libido.h
+	libido.h			\
+	idoactionhelper.h
 
 EXTRA_DIST =				\
 	ido.list			\
@@ -68,7 +69,8 @@ libido_0_1_la_SOURCES =			\
 	idoscalemenuitem.c		\
 	idoswitchmenuitem.c		\
 	idotimeline.c			\
-	idomenuitemfactory.c
+	idomenuitemfactory.c		\
+	idoactionhelper.c
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
 
