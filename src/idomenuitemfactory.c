@@ -18,6 +18,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <gtk/ubuntu-private.h>
 
 #include "idoactionhelper.h"
 #include "idousermenuitem.h"
@@ -30,11 +31,11 @@ typedef GObject      IdoMenuItemFactory;
 typedef GObjectClass IdoMenuItemFactoryClass;
 
 GType       ido_menu_item_factory_get_type (void);
-static void ido_menu_item_factory_interface_init (GtkMenuItemFactoryInterface *iface);
+static void ido_menu_item_factory_interface_init (UbuntuMenuItemFactoryInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdoMenuItemFactory, ido_menu_item_factory, G_TYPE_OBJECT,
-  G_IMPLEMENT_INTERFACE (GTK_TYPE_MENU_ITEM_FACTORY, ido_menu_item_factory_interface_init)
-  g_io_extension_point_implement (GTK_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME,
+  G_IMPLEMENT_INTERFACE (UBUNTU_TYPE_MENU_ITEM_FACTORY, ido_menu_item_factory_interface_init)
+  g_io_extension_point_implement (UBUNTU_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME,
                                   g_define_type_id, "ido", 0);)
 
 /**
@@ -134,10 +135,10 @@ create_user_menu_item (GMenuItem    *menuitem,
 }
 
 static GtkMenuItem *
-ido_menu_item_factory_create_menu_item (GtkMenuItemFactory *factory,
-                                        const gchar        *type,
-                                        GMenuItem          *menuitem,
-                                        GActionGroup       *actions)
+ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
+                                        const gchar           *type,
+                                        GMenuItem             *menuitem,
+                                        GActionGroup          *actions)
 {
   GtkMenuItem *item = NULL;
 
@@ -153,7 +154,7 @@ ido_menu_item_factory_class_init (IdoMenuItemFactoryClass *class)
 }
 
 static void
-ido_menu_item_factory_interface_init (GtkMenuItemFactoryInterface *iface)
+ido_menu_item_factory_interface_init (UbuntuMenuItemFactoryInterface *iface)
 {
   iface->create_menu_item = ido_menu_item_factory_create_menu_item;
 }
