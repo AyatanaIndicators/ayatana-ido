@@ -242,6 +242,15 @@ ido_action_helper_class_init (IdoActionHelperClass *class)
   object_class->set_property = ido_action_helper_set_property;
   object_class->finalize = ido_action_helper_finalize;
 
+  /**
+   * IdoActionHelper::action-state-changed:
+   * @helper: the #IdoActionHelper watching the action
+   * @state: the new state of the action
+   *
+   * Emitted when the widget must be updated from the action's state,
+   * which happens every time the action appears in the group and when
+   * the action changes its state.
+   */
   signals[ACTION_STATE_CHANGED] = g_signal_new ("action-state-changed",
                                                 IDO_TYPE_ACTION_HELPER,
                                                 G_SIGNAL_RUN_FIRST,
@@ -249,23 +258,53 @@ ido_action_helper_class_init (IdoActionHelperClass *class)
                                                 g_cclosure_marshal_VOID__VARIANT,
                                                 G_TYPE_NONE, 1, G_TYPE_VARIANT);
 
+  /**
+   * IdoActionHelper:widget:
+   *
+   * The widget that is associated with this action helper. The action
+   * helper updates the widget's "sensitive" property to reflect whether
+   * the action #IdoActionHelper:action-name exists in
+   * #IdoActionHelper:action-group.
+   */
   properties[PROP_WIDGET] = g_param_spec_object ("widget", "", "",
                                                  GTK_TYPE_WIDGET,
                                                  G_PARAM_CONSTRUCT_ONLY |
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_STATIC_STRINGS);
 
+  /**
+   * IdoActionHelper:action-group:
+   *
+   * The action group that eventually contains the action that
+   * #IdoActionHelper:widget should be bound to.
+   */
   properties[PROP_ACTION_GROUP] = g_param_spec_object ("action-group", "", "",
                                                        G_TYPE_ACTION_GROUP,
                                                        G_PARAM_CONSTRUCT_ONLY |
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS);
 
+  /**
+   * IdoActionHelper:action-name:
+   *
+   * The name of the action in #IdoActionHelper:action-group that
+   * should be bound to #IdoActionHelper:widget
+   */
   properties[PROP_ACTION_NAME] = g_param_spec_string ("action-name", "", "", NULL,
                                                       G_PARAM_CONSTRUCT_ONLY |
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_STATIC_STRINGS);
 
+  /**
+   * IdoActionHelper:action-target:
+   *
+   * The target of #IdoActionHelper:widget. ido_action_helper_activate()
+   * passes the target as parameter when activating the action.
+   *
+   * The handler of #IdoActionHelper:action-state-changed is responsible
+   * for comparing this target with the action's state and updating the
+   * #IdoActionHelper:widget appropriately.
+   */
   properties[PROP_ACTION_TARGET] = g_param_spec_variant ("action-target", "", "",
                                                          G_VARIANT_TYPE_ANY, NULL,
                                                          G_PARAM_CONSTRUCT_ONLY |
