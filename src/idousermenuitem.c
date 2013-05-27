@@ -26,6 +26,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <gtk/gtk.h>
 
 #include "idousermenuitem.h"
+#include "idoactionhelper.h"
 
 #define FALLBACK_ICON_NAME "avatar-default"
 
@@ -355,3 +356,100 @@ ido_user_menu_item_new (void)
 {
   return GTK_WIDGET (g_object_new (IDO_USER_MENU_ITEM_TYPE, NULL));
 }
+
+/**
+ * user_menu_item_state_changed:
+ *
+ * Updates an IdoUserMenuItem from @state. The state contains a
+ * dictionary with keys 'active-user' (for the user that the current
+ * session belongs too) and 'logged-in-users' (a list of all currently
+ * logged in users).
+ */
+static void
+user_menu_item_state_changed (IdoActionHelper *helper,
+                              GVariant        *state,
+                              gpointer         user_data)
+{
+  IdoUserMenuItem *item;
+  GVariant *target;
+  GVariant *v;
+
+  item = IDO_USER_MENU_ITEM (ido_action_helper_get_widget (helper));
+
+  ido_user_menu_item_set_current_user (item, FALSE);
+  ido_user_menu_item_set_logged_in (item, FALSE);
+
+  target = ido_action_helper_get_action_target (helper);
+  g_return_if_fail (g_variant_is_of_type (target, G_VARIANT_TYPE_STRING));
+
+  if ((v = g_variant_lookup_value (state, "active-user", G_VARIANT_TYPE_STRING)))
+    {
+      if (g_variant_equal (v, target))
+        ido_user_menu_item_set_current_user (item, TRUE);
+
+      g_variant_unref (v);
+    }
+
+  if ((v = g_variant_lookup_value (state, "logged-in-users", G_VARIANT_TYPE_STRING_ARRAY)))
+    {
+      GVariantIter it;
+      GVariant *user;
+
+      g_variant_iter_init (&it, v);
+      while ((user = g_variant_iter_next_value (&it)))
+        {
+          if (g_variant_equal (user, target))
+            ido_user_menu_item_set_logged_in (item, TRUE);
+          g_variant_unref (user);
+        }
+
+      g_variant_unref (v);
+    }
+}
+
+/**
+ * ido_user_menu_item_create:
+ *
+ * Creates an IdoUserMenuItem. If @menuitem contains an action, the
+ * widget is bound to that action in @actions.
+ */
+GtkMenuItem *
+ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
+                                   GActionGroup *actions)
+{
+  IdoUserMenuItem *item;
+  gchar *label;
+  gchar *action;
+
+  item = IDO_USER_MENU_ITEM (ido_user_menu_item_new ());
+
+  if (g_menu_item_get_attribute (menuitem, "label", "s", &label))
+    {
+      ido_user_menu_item_set_label (item, label);
+      g_free (label);
+    }
+
+  if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
+    {
+      IdoActionHelper *helper;
+      GVariant *target;
+
+      target = g_menu_item_get_attribute_value (menuitem, "target", G_VARIANT_TYPE_ANY);
+
+      helper = ido_action_helper_new (GTK_WIDGET (item), actions, action, target);
+      g_signal_connect (helper, "action-state-changed",
+                        G_CALLBACK (user_menu_item_state_changed), NULL);
+
+      g_signal_connect_object (item, "activate",
+                               G_CALLBACK (ido_action_helper_activate),
+                               helper, G_CONNECT_SWAPPED);
+      g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
+
+      if (target)
+        g_variant_unref (target);
+      g_free (action);
+    }
+
+  return GTK_MENU_ITEM (item);
+}
+

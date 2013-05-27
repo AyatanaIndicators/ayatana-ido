@@ -61,6 +61,9 @@ void ido_user_menu_item_set_logged_in    (IdoUserMenuItem * self, gboolean     i
 void ido_user_menu_item_set_current_user (IdoUserMenuItem * self, gboolean     is_current_user);
 void ido_user_menu_item_set_label        (IdoUserMenuItem * self, const char * label);
 
+GtkMenuItem * ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
+                                                 GActionGroup *actions);
+
 G_END_DECLS
 
 #endif
