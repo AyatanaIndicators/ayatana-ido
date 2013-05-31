@@ -30,6 +30,7 @@
 #include "idorange.h"
 #include "idoscalemenuitem.h"
 #include "idotypebuiltins.h"
+#include "idoactionhelper.h"
 
 static void     ido_scale_menu_item_set_property           (GObject               *object,
                                                             guint                  prop_id,
@@ -803,6 +804,37 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
 }
 
 /**
+ * ido_scale_menu_item_set_icons:
+ * @item: a #IdoScaleMenuItem
+ * @primary-icon: (allow-none): the primary icon, or %NULL
+ * @secondary-icon: (allow-non): the secondary icon, %NULL
+ *
+ * Sets the icons of @item to  @primary_icon and @secondary_icon.
+ * Pass %NULL for either of them to unset the icon.
+ */
+static void
+ido_scale_menu_item_set_icons (IdoScaleMenuItem *item,
+                               GIcon            *primary_icon,
+                               GIcon            *secondary_icon)
+{
+  GtkWidget *primary;
+  GtkWidget *secondary;
+
+  primary = ido_scale_menu_item_get_primary_image (item);
+  secondary = ido_scale_menu_item_get_secondary_image (item);
+
+  if (primary_icon)
+    gtk_image_set_from_gicon (GTK_IMAGE (primary), primary_icon, GTK_ICON_SIZE_MENU);
+  else
+    gtk_image_clear (GTK_IMAGE (primary));
+
+  if (secondary_icon)
+    gtk_image_set_from_gicon (GTK_IMAGE (secondary), secondary_icon, GTK_ICON_SIZE_MENU);
+  else
+    gtk_image_clear (GTK_IMAGE (secondary));
+}
+
+/**
  * ido_scale_menu_item_get_primary_label:
  * @menuitem: The #IdoScaleMenuItem
  *
@@ -940,6 +972,101 @@ default_secondary_clicked_handler (IdoScaleMenuItem * item)
   IdoScaleMenuItemPrivate * priv = GET_PRIVATE (item);
   GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
   gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
+}
+
+/**
+ * ido_scale_menu_item_state_changed:
+ *
+ * Updates a IdoScaleMenuItem from @state. State must be a double which
+ * contains the current value of the slider.
+ */
+static void
+ido_scale_menu_item_state_changed (IdoActionHelper *helper,
+                                   GVariant        *state,
+                                   gpointer         user_data)
+{
+  GtkWidget *scale;
+
+  scale = ido_scale_menu_item_get_scale (IDO_SCALE_MENU_ITEM (ido_action_helper_get_widget (helper)));
+  gtk_range_set_value (GTK_RANGE (scale), g_variant_get_double (state));
+}
+
+static void
+ido_scale_menu_item_value_changed (GtkScale *scale,
+                                   gpointer  user_data)
+{
+  IdoActionHelper *helper = user_data;
+  gdouble value;
+
+  value = gtk_range_get_value (GTK_RANGE (scale));
+  ido_action_helper_change_action_state (helper, g_variant_new_double (value));
+}
+
+static GIcon *
+menu_item_get_icon (GMenuItem   *menuitem,
+                    const gchar *attribute)
+{
+  GVariant *value;
+
+  value = g_menu_item_get_attribute_value (menuitem, attribute, NULL);
+
+  return value ? g_icon_deserialize (value) : NULL;
+}
+
+/**
+ * ido_scale_menu_item_new_from_model:
+ *
+ * Creates a new #IdoScaleMenuItem. If @menuitem contains an action, it
+ * will be bound to that action in @actions.
+ *
+ * Returns: (transfer full): a new #IdoScaleMenuItem
+ */
+GtkMenuItem *
+ido_scale_menu_item_new_from_model (GMenuItem    *menuitem,
+                                    GActionGroup *actions)
+{
+  GtkWidget *item;
+  gchar *action;
+  gdouble min = 0.0;
+  gdouble max = 100.0;
+  gdouble step = 1.0;
+  GIcon *primary_icon;
+  GIcon *secondary_icon;
+
+  g_menu_item_get_attribute (menuitem, "min-value", "d", &min);
+  g_menu_item_get_attribute (menuitem, "max-value", "d", &max);
+  g_menu_item_get_attribute (menuitem, "step", "d", &step);
+
+  item = ido_scale_menu_item_new_with_range ("Volume", IDO_RANGE_STYLE_DEFAULT, 0.0, min, max, step);
+  ido_scale_menu_item_set_style (IDO_SCALE_MENU_ITEM (item), IDO_SCALE_MENU_ITEM_STYLE_IMAGE);
+
+  if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
+    {
+      IdoActionHelper *helper;
+      GtkWidget *scale;
+
+      helper = ido_action_helper_new (item, actions, action, NULL);
+      g_signal_connect (helper, "action-state-changed",
+                        G_CALLBACK (ido_scale_menu_item_state_changed), NULL);
+
+      scale = ido_scale_menu_item_get_scale (IDO_SCALE_MENU_ITEM (item));
+      g_signal_connect (scale, "value-changed", G_CALLBACK (ido_scale_menu_item_value_changed), helper);
+
+      g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
+
+      g_free (action);
+    }
+
+  primary_icon = menu_item_get_icon (menuitem, "primary-icon");
+  secondary_icon = menu_item_get_icon (menuitem, "secondary-icon");
+  ido_scale_menu_item_set_icons (IDO_SCALE_MENU_ITEM (item), primary_icon, secondary_icon);
+
+  if (primary_icon)
+    g_object_unref (primary_icon);
+  if (secondary_icon)
+  g_object_unref (secondary_icon);
+
+  return GTK_MENU_ITEM (item);
 }
 
 #define __IDO_SCALE_MENU_ITEM_C__

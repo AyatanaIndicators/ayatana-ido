@@ -92,6 +92,9 @@ void                   ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem
 void                   ido_scale_menu_item_primary_clicked     (IdoScaleMenuItem      *menuitem);
 void                   ido_scale_menu_item_secondary_clicked   (IdoScaleMenuItem      *menuitem);
 
+GtkMenuItem *          ido_scale_menu_item_new_from_model      (GMenuItem             *menuitem,
+                                                                GActionGroup          *actions);
+
 G_END_DECLS
 
 #endif /* __IDO_SCALE_MENU_ITEM_H__ */
