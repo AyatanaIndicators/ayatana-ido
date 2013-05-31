@@ -408,10 +408,12 @@ user_menu_item_state_changed (IdoActionHelper *helper,
 }
 
 /**
- * ido_user_menu_item_create:
+ * ido_user_menu_item_new_from_model:
  *
- * Creates an IdoUserMenuItem. If @menuitem contains an action, the
+ * Creates an #IdoUserMenuItem. If @menuitem contains an action, the
  * widget is bound to that action in @actions.
+ *
+ * Returns: (transfer full): a new #IdoUserMenuItem
  */
 GtkMenuItem *
 ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
