@@ -401,3 +401,28 @@ ido_action_helper_activate (IdoActionHelper *helper)
   if (helper->actions && helper->action_name)
     g_action_group_activate_action (helper->actions, helper->action_name, helper->action_target);
 }
+
+/**
+ * ido_action_helper_change_action_state:
+ * @helper: an #IdoActionHelper
+ * @state: the proposed new state of the action
+ *
+ * Requests changing the state of the action that is associated with
+ * @helper to @state.
+ *
+ * If @state is floating, it is consumed.
+ */
+void
+ido_action_helper_change_action_state (IdoActionHelper *helper,
+                                       GVariant        *state)
+{
+  g_return_if_fail (IDO_IS_ACTION_HELPER (helper));
+  g_return_if_fail (state != NULL);
+
+  g_variant_ref_sink (state);
+
+  if (helper->actions && helper->action_name)
+    g_action_group_change_action_state (helper->actions, helper->action_name, state);
+
+  g_variant_unref (state);
+}
