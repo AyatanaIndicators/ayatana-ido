@@ -33,6 +33,7 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_scale_menu_item_set_secondary_label@Base 0.1.9
  ido_scale_menu_item_set_style@Base 0.1.9
  ido_scale_menu_item_style_get_type@Base 0.1.9
+ ido_scale_menu_item_new_from_model@Base 0replaceme
  ido_switch_menu_item_get_content_area@Base 12.10.0
  ido_switch_menu_item_get_type@Base 12.10.0
  ido_switch_menu_item_new@Base 12.10.0
@@ -59,6 +60,7 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_timeline_set_screen@Base 0.1.8
  ido_timeline_start@Base 0.1.8
  ido_action_helper_activate@Base 0replaceme
+ ido_action_helper_change_action_state@Base 0replaceme
  ido_action_helper_get_action_target@Base 0replaceme
  ido_action_helper_get_type@Base 0replaceme
  ido_action_helper_get_widget@Base 0replaceme
