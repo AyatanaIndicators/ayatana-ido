@@ -389,18 +389,18 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style)
     {
     case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
       gtk_box_pack_start (box, priv->primary_image, FALSE, FALSE, 0);
-      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, TRUE, TRUE, 0);
       gtk_box_pack_start (box, priv->secondary_image, FALSE, FALSE, 0);
       break;
 
     case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
       gtk_box_pack_start (box, priv->primary_label, FALSE, FALSE, 0);
-      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, TRUE, TRUE, 0);
       gtk_box_pack_start (box, priv->secondary_label, FALSE, FALSE, 0);
       break;
 
     default:
-      gtk_box_pack_start (box, priv->scale, FALSE, FALSE, 0);
+      gtk_box_pack_start (box, priv->scale, TRUE, TRUE, 0);
       break;
     }
 
