@@ -17,8 +17,10 @@ sources_h =				\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
+	idousermenuitem.h		\
 	idotimeline.h			\
-	libido.h 
+	libido.h			\
+	idoactionhelper.h
 
 EXTRA_DIST =				\
 	ido.list			\
@@ -59,6 +61,7 @@ AM_CFLAGS =                             \
 	$(COVERAGE_CFLAGS)
 
 libido_0_1_la_SOURCES =			\
+	libido.c			\
 	idotypebuiltins.c		\
 	idocalendarmenuitem.c		\
 	idoentrymenuitem.c		\
@@ -66,7 +69,10 @@ libido_0_1_la_SOURCES =			\
 	idorange.c			\
 	idoscalemenuitem.c		\
 	idoswitchmenuitem.c		\
-	idotimeline.c                   
+	idotimeline.c			\
+	idomenuitemfactory.c		\
+	idoactionhelper.c		\
+	idousermenuitem.c
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
 

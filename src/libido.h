@@ -31,4 +31,6 @@
 #include <libido/idoentrymenuitem.h>
 #include <libido/idomessagedialog.h>
 
+void ido_init (void);
+
 #endif /* __IDO__ */

@@ -58,3 +58,17 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_timeline_set_progress@Base 0.1.10
  ido_timeline_set_screen@Base 0.1.8
  ido_timeline_start@Base 0.1.8
+ ido_action_helper_activate@Base 0replaceme
+ ido_action_helper_get_action_target@Base 0replaceme
+ ido_action_helper_get_type@Base 0replaceme
+ ido_action_helper_get_widget@Base 0replaceme
+ ido_action_helper_new@Base 0replaceme
+ ido_user_menu_item_get_type@Base 0replaceme
+ ido_user_menu_item_new@Base 0replaceme
+ ido_user_menu_item_set_current_user@Base 0replaceme
+ ido_user_menu_item_set_icon@Base 0replaceme
+ ido_user_menu_item_set_label@Base 0replaceme
+ ido_user_menu_item_set_logged_in@Base 0replaceme
+ ido_user_menu_item_new_from_model@Base 0replaceme
+ ido_init@Base 0replaceme
+ ido_menu_item_factory_get_type@Base 0replaceme
