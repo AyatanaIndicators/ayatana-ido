@@ -1030,8 +1030,8 @@ ido_scale_menu_item_new_from_model (GMenuItem    *menuitem,
   gdouble min = 0.0;
   gdouble max = 100.0;
   gdouble step = 1.0;
-  GIcon *primary_icon;
-  GIcon *secondary_icon;
+  GIcon *min_icon;
+  GIcon *max_icon;
 
   g_menu_item_get_attribute (menuitem, "min-value", "d", &min);
   g_menu_item_get_attribute (menuitem, "max-value", "d", &max);
@@ -1057,14 +1057,14 @@ ido_scale_menu_item_new_from_model (GMenuItem    *menuitem,
       g_free (action);
     }
 
-  primary_icon = menu_item_get_icon (menuitem, "primary-icon");
-  secondary_icon = menu_item_get_icon (menuitem, "secondary-icon");
-  ido_scale_menu_item_set_icons (IDO_SCALE_MENU_ITEM (item), primary_icon, secondary_icon);
+  min_icon = menu_item_get_icon (menuitem, "min-icon");
+  max_icon = menu_item_get_icon (menuitem, "max-icon");
+  ido_scale_menu_item_set_icons (IDO_SCALE_MENU_ITEM (item), min_icon, max_icon);
 
-  if (primary_icon)
-    g_object_unref (primary_icon);
-  if (secondary_icon)
-  g_object_unref (secondary_icon);
+  if (min_icon)
+    g_object_unref (min_icon);
+  if (max_icon)
+  g_object_unref (max_icon);
 
   return GTK_MENU_ITEM (item);
 }
