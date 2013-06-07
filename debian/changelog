@@ -1,12 +1,13 @@
-ido (13.10.0-0ubuntu1) UNRELEASED; urgency=low
+ido (13.10.0daily13.06.07-0ubuntu1) saucy; urgency=low
 
   [ Lars Uebernickel ]
   * New upstream release
 
   [ Ubuntu daily release ]
   * debian/*symbols: auto-update new symbols to released version
+  * Automatic snapshot from revision 127
 
- -- Lars Uebernickel <lars.uebernickel@ubuntu.com>  Mon, 27 May 2013 10:56:11 -0400
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 07 Jun 2013 02:02:40 +0000
 
 ido (12.10.3daily13.03.01-0ubuntu1) raring; urgency=low
 
