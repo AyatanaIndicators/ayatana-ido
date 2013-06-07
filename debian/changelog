@@ -1,6 +1,10 @@
 ido (13.10.0-0ubuntu1) UNRELEASED; urgency=low
 
+  [ Lars Uebernickel ]
   * New upstream release
+
+  [ Ubuntu daily release ]
+  * debian/*symbols: auto-update new symbols to released version
 
  -- Lars Uebernickel <lars.uebernickel@ubuntu.com>  Mon, 27 May 2013 10:56:11 -0400
 
