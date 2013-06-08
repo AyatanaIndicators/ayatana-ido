@@ -14,9 +14,7 @@ Build-Depends: debhelper (>= 9),
                gtk-doc-tools,
                gobject-introspection,
                libgirepository1.0-dev,
-               gir1.2-glib-2.0,
-               gir1.2-gtk-2.0,
-               valac-0.16
+               valac (>= 0.16)
 Standards-Version: 3.9.3
 Homepage: https://launchpad.net/ido
 # If you aren't a member of ~indicator-applet-developers but need to upload
@@ -42,6 +40,7 @@ Section: libdevel
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
+         gir1.2-ido3-0.1 (= ${binary:Version}),
          libido3-0.1-0 (= ${binary:Version}),
          pkg-config,
          libglib2.0-dev (>=2.14.0),
@@ -52,7 +51,7 @@ Description: Shared library providing extra gtk menu items for display in
  This package contains files that are needed to build GTK+ 3 applications.
 
 Package: gir1.2-ido3-0.1
-Section: libs
+Section: introspection
 Architecture: any
 Depends: ${misc:Depends},
          libido3-0.1-0 (>= ${binary:Version}),
