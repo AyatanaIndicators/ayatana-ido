@@ -40,9 +40,8 @@ struct _IdoLocationMenuItemClass
 /**
  * A menuitem that indicates a location.
  *
- * It gives the location's name in the primary label,
- * and a right-aligned secondary label shows the
- * current time in that location's timezone
+ * It contains a primary label giving the location's name and a
+ * right-aligned secondary label showing the location's current time
  */
 struct _IdoLocationMenuItem
 {

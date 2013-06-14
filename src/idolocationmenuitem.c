@@ -139,7 +139,6 @@ calculate_seconds_until_next_minute (void)
   g_date_time_unref (next);
   g_date_time_unref (now);
 
-  g_message ("%s %s the next minute will be here in %u seconds", G_STRLOC, G_STRFUNC, seconds);
   return seconds;
 }
 
