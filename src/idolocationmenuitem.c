@@ -152,9 +152,9 @@ start_timestamp_timer (IdoLocationMenuItem * self)
 
   stop_timestamp_timer (self);
 
-  timestamp_shows_seconds = fmt && (strstr(fmt,"%s") ||
-                                    strstr(fmt,"%S") ||
-                                    strstr(fmt,"%T"));
+  timestamp_shows_seconds = fmt && (strstr(fmt,"%s") || strstr(fmt,"%S") ||
+                                    strstr(fmt,"%T") || strstr(fmt,"%X") ||
+                                    strstr(fmt,"%c"));
 
   if (timestamp_shows_seconds)
     interval_sec = 1;
