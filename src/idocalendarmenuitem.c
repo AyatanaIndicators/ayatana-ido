@@ -512,7 +512,7 @@ activate_current_day (IdoCalendarMenuItem * ido_calendar,
 
       ido_calendar_menu_item_get_date (ido_calendar, &y, &m, &d);
       m++; /* adjust month from GtkCalendar (0 based) to GDateTime (1 based) */
-      date_time = g_date_time_new_utc (y, m, d, 9, 0, 0);
+      date_time = g_date_time_new_local (y, m, d, 9, 0, 0);
       target = g_variant_new_int64 (g_date_time_to_unix (date_time));
   
       g_action_group_activate_action (action_group, action_name, target);
@@ -547,17 +547,17 @@ on_action_state_changed (IdoActionHelper * helper,
   g_return_if_fail (ido_calendar != NULL);
   g_return_if_fail (g_variant_is_of_type (state, G_VARIANT_TYPE_DICTIONARY));
 
-  /* an int64 representing a utc time_t indicating which year and month should
+  /* an int64 representing a time_t indicating which year and month should
      be visible in the calendar and which day should be given the cursor. */
   key = "calendar-day";
   if ((v = g_variant_lookup_value (state, key, G_VARIANT_TYPE_INT64)))
     {
       int y, m, d;
-      gint64 unix_utc;
+      time_t t;
       GDateTime * date_time;
 
-      unix_utc = g_variant_get_int64 (v);
-      date_time = g_date_time_new_from_unix_local (unix_utc);
+      t = g_variant_get_int64 (v);
+      date_time = g_date_time_new_from_unix_local (t);
       g_date_time_get_ymd (date_time, &y, &m, &d);
       m--; /* adjust month from GDateTime (1 based) to GtkCalendar (0 based) */
       ido_calendar_menu_item_set_date (ido_calendar, y, m, d);
