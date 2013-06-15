@@ -24,6 +24,7 @@
  */
 
 #include <gdk/gdkkeysyms.h>
+#include "idoactionhelper.h"
 #include "idocalendarmenuitem.h"
 #include "config.h"
 
@@ -470,8 +471,178 @@ ido_calendar_menu_item_set_date (IdoCalendarMenuItem *menuitem,
                                  guint month,
                                  guint day)
 {
-  g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
-  gtk_calendar_select_month (GTK_CALENDAR (menuitem->priv->calendar), month, year);
-  gtk_calendar_select_day (GTK_CALENDAR (menuitem->priv->calendar), day);
+  guint old_y, old_m, old_d;
+
+  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
+
+  ido_calendar_menu_item_get_date (menuitem, &old_y, &old_m, &old_d);
+
+  if ((old_y != year) || (old_m != month))
+    gtk_calendar_select_month (GTK_CALENDAR (menuitem->priv->calendar), month, year);
+
+  if (old_d != day)
+    gtk_calendar_select_day (GTK_CALENDAR (menuitem->priv->calendar), day);
+
   return TRUE;
+}
+
+/***
+****
+****
+****
+***/
+
+static void
+activate_current_day (IdoCalendarMenuItem * ido_calendar,
+                      const char          * action_name_key)
+{
+  GObject * o;
+  const char * action_name;
+  GActionGroup * action_group;
+
+  o = G_OBJECT (ido_calendar);
+  action_name = g_object_get_data (o, action_name_key);
+  action_group = g_object_get_data (o, "ido-action-group");
+
+  if (action_group && action_name)
+    {
+      guint y, m, d;
+      GDateTime * date_time;
+      GVariant * target;
+
+      ido_calendar_menu_item_get_date (ido_calendar, &y, &m, &d);
+      m++; /* adjust month from GtkCalendar (0 based) to GDateTime (1 based) */
+      date_time = g_date_time_new_local (y, m, d, 9, 0, 0);
+      target = g_variant_new_int64 (g_date_time_to_unix (date_time));
+  
+      g_action_group_activate_action (action_group, action_name, target);
+
+      g_date_time_unref (date_time);
+    }
+}
+
+static void
+on_day_selected (IdoCalendarMenuItem * ido_calendar)
+{
+  activate_current_day (ido_calendar, "ido-selection-action-name");
+}
+
+static void
+on_day_double_clicked (IdoCalendarMenuItem * ido_calendar)
+{
+  activate_current_day (ido_calendar, "ido-activation-action-name");
+}
+
+static void
+on_action_state_changed (IdoActionHelper * helper,
+                         GVariant        * state,
+                         gpointer          unused G_GNUC_UNUSED)
+{
+  GVariant * v;
+  const char * key;
+  IdoCalendarMenuItem * ido_calendar;
+
+  ido_calendar = IDO_CALENDAR_MENU_ITEM (ido_action_helper_get_widget (helper));
+
+  g_return_if_fail (ido_calendar != NULL);
+  g_return_if_fail (g_variant_is_of_type (state, G_VARIANT_TYPE_DICTIONARY));
+
+  /* an int64 representing a time_t indicating which year and month should
+     be visible in the calendar and which day should be given the cursor. */
+  key = "calendar-day";
+  if ((v = g_variant_lookup_value (state, key, G_VARIANT_TYPE_INT64)))
+    {
+      int y, m, d;
+      time_t t;
+      GDateTime * date_time;
+
+      t = g_variant_get_int64 (v);
+      date_time = g_date_time_new_from_unix_local (t);
+      g_date_time_get_ymd (date_time, &y, &m, &d);
+      m--; /* adjust month from GDateTime (1 based) to GtkCalendar (0 based) */
+      ido_calendar_menu_item_set_date (ido_calendar, y, m, d);
+
+      g_date_time_unref (date_time);
+      g_variant_unref (v);
+    }
+
+  /* a boolean value of whether or not to show the week numbers */
+  key = "show-week-numbers";
+  if ((v = g_variant_lookup_value (state, key, G_VARIANT_TYPE_BOOLEAN)))
+    {
+      const GtkCalendarDisplayOptions old_flags = ido_calendar_menu_item_get_display_options (ido_calendar);
+      GtkCalendarDisplayOptions new_flags = old_flags;
+
+      if (g_variant_get_boolean (v))
+        new_flags |= GTK_CALENDAR_SHOW_WEEK_NUMBERS;
+      else
+        new_flags &= ~GTK_CALENDAR_SHOW_WEEK_NUMBERS;
+
+      if (new_flags != old_flags)
+        ido_calendar_menu_item_set_display_options (ido_calendar, new_flags);
+
+      g_variant_unref (v);
+    }
+
+  /* an array of int32 day-of-months denoting days that have appointments */
+  key = "appointment-days";
+  ido_calendar_menu_item_clear_marks (ido_calendar);
+  if ((v = g_variant_lookup_value (state, key, G_VARIANT_TYPE("ai"))))
+    {
+      gint32 day;
+      GVariantIter iter;
+
+      g_variant_iter_init (&iter, v);
+      while (g_variant_iter_next (&iter, "i", &day))
+        ido_calendar_menu_item_mark_day (ido_calendar, day);
+
+      g_variant_unref (v);
+    }
+}
+
+GtkMenuItem *
+ido_calendar_menu_item_new_from_model (GMenuItem    * menu_item,
+                                       GActionGroup * actions)
+{
+  GObject * o;
+  GtkWidget * calendar;
+  IdoCalendarMenuItem * ido_calendar;
+  gchar * selection_action_name;
+  gchar * activation_action_name;
+
+  /* get the select & activate action names */
+  g_menu_item_get_attribute (menu_item, "action", "s", &selection_action_name);
+  g_menu_item_get_attribute (menu_item, "activation-action", "s", &activation_action_name);
+
+  /* remember the action group & action names so that we can poke them
+     when user selects and double-clicks */
+  ido_calendar = IDO_CALENDAR_MENU_ITEM (ido_calendar_menu_item_new ());
+  o = G_OBJECT (ido_calendar);
+  g_object_set_data_full (o, "ido-action-group", g_object_ref(actions), g_object_unref);
+  g_object_set_data_full (o, "ido-selection-action-name", selection_action_name, g_free);
+  g_object_set_data_full (o, "ido-activation-action-name", activation_action_name, g_free);
+  calendar = ido_calendar_menu_item_get_calendar (ido_calendar);
+  g_signal_connect_swapped (calendar, "day-selected",
+                            G_CALLBACK(on_day_selected), ido_calendar);
+  g_signal_connect_swapped (calendar, "day-selected-double-click",
+                            G_CALLBACK(on_day_double_clicked), ido_calendar);
+
+  /* Use an IdoActionHelper for state updates.
+     Since we have two separate actions for selection & activation,
+     we'll do the activation & targets logic here in ido-calendar */
+  if (selection_action_name != NULL)
+    {
+      IdoActionHelper * helper;
+
+      helper = ido_action_helper_new (GTK_WIDGET(ido_calendar),
+                                      actions,
+                                      selection_action_name,
+                                      NULL);
+      g_signal_connect (helper, "action-state-changed",
+                        G_CALLBACK (on_action_state_changed), NULL);
+      g_signal_connect_swapped (ido_calendar, "destroy",
+                                G_CALLBACK (g_object_unref), helper);
+    }
+
+  return GTK_MENU_ITEM (ido_calendar);
 }

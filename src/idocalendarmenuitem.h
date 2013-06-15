@@ -69,7 +69,12 @@ void       ido_calendar_menu_item_get_date            (IdoCalendarMenuItem *menu
 gboolean   ido_calendar_menu_item_set_date            (IdoCalendarMenuItem *menuitem,
                                                        guint year,
                                                        guint month,
-                                                       guint day);                                                
+                                                       guint day);
+
+GtkMenuItem * ido_calendar_menu_item_new_from_model   (GMenuItem    * menuitem,
+                                                       GActionGroup * actions);
+
+
 G_END_DECLS
 
 #endif /* __IDO_CALENDAR_MENU_ITEM_H__ */
