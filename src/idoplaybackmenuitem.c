@@ -69,7 +69,11 @@ ido_playback_menu_item_dispose (GObject *object)
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (object);
 
-  g_clear_object (&item->action_group);
+  if (item->action_group)
+    {
+      g_signal_handlers_disconnect_by_data (item->action_group, item);
+      g_clear_object (&item->action_group);
+    }
 
   G_OBJECT_CLASS (ido_playback_menu_item_parent_class)->dispose (object);
 }
@@ -315,6 +319,68 @@ ido_playback_menu_item_init (IdoPlaybackMenuItem *self)
   gtk_widget_set_size_request (GTK_WIDGET (self), 200, 43);
 }
 
+static void
+ido_playback_menu_item_set_state_from_string (IdoPlaybackMenuItem *self,
+                                              const gchar         *state)
+{
+  if (g_str_equal (state, "Playing"))
+    self->current_state = STATE_PLAYING;
+  else if (g_str_equal (state, "Launching"))
+    self->current_state = STATE_LAUNCHING;
+  else /* "Paused" and fallback */
+    self->current_state = STATE_PAUSED;
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+ido_playback_menu_item_action_added (GActionGroup *action_group,
+                                     const gchar  *action_name,
+                                     gpointer      user_data)
+{
+  IdoPlaybackMenuItem *self = user_data;
+
+  if (self->play_action && g_str_equal (action_name, self->play_action))
+    {
+      GVariant *state;
+
+      state = g_action_group_get_action_state (action_group, self->play_action);
+      if (g_variant_is_of_type (state, G_VARIANT_TYPE_STRING))
+        ido_playback_menu_item_set_state_from_string (self, g_variant_get_string (state, NULL));
+
+      g_variant_unref (state);
+    }
+}
+
+static void
+ido_playback_menu_item_action_removed (GActionGroup *action_group,
+                                       const gchar  *action_name,
+                                       gpointer      user_data)
+{
+  IdoPlaybackMenuItem *self = user_data;
+
+  if (self->play_action && g_str_equal (action_name, self->play_action))
+    {
+      self->current_state = STATE_PAUSED;
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+}
+
+static void
+ido_playback_menu_item_action_state_changed (GActionGroup *action_group,
+                                             const gchar  *action_name,
+                                             GVariant     *value,
+                                             gpointer      user_data)
+{
+  IdoPlaybackMenuItem *self = user_data;
+
+  if (self->play_action && g_str_equal (action_name, self->play_action))
+    {
+      if (g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        ido_playback_menu_item_set_state_from_string (self, g_variant_get_string (value, NULL));
+    }
+}
+
 GtkMenuItem *
 ido_playback_menu_item_new_from_model (GMenuItem    *item,
                                        GActionGroup *actions)
@@ -322,11 +388,18 @@ ido_playback_menu_item_new_from_model (GMenuItem    *item,
   IdoPlaybackMenuItem *widget;
 
   widget = g_object_new (IDO_TYPE_PLAYBACK_MENU_ITEM, NULL);
+
   widget->action_group = g_object_ref (actions);
+  g_signal_connect (actions, "action-state-changed", G_CALLBACK (ido_playback_menu_item_action_state_changed), widget);
+  g_signal_connect (actions, "action-added", G_CALLBACK (ido_playback_menu_item_action_added), widget);
+  g_signal_connect (actions, "action-removed", G_CALLBACK (ido_playback_menu_item_action_removed), widget);
 
   g_menu_item_get_attribute (item, "x-canonical-play-action", "s", &widget->play_action);
   g_menu_item_get_attribute (item, "x-canonical-next-action", "s", &widget->next_action);
   g_menu_item_get_attribute (item, "x-canonical-previous-action", "s", &widget->prev_action);
+
+  if (widget->play_action && g_action_group_has_action (actions, widget->play_action))
+    ido_playback_menu_item_action_added (actions, widget->play_action, widget);
 
   return GTK_MENU_ITEM (widget);
 }
