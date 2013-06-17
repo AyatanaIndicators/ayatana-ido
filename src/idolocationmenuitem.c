@@ -324,6 +324,7 @@ ido_location_menu_item_init (IdoLocationMenuItem *self)
 ****  Public API
 ***/
 
+/* create a new IdoLocationMenuItemType */
 GtkWidget *
 ido_location_menu_item_new (void)
 {
@@ -331,7 +332,10 @@ ido_location_menu_item_new (void)
 }
 
 /**
+ * ido_location_menu_item_set_name:
  * @name: human-readable name, such as a city (eg: "Oklahoma City")
+ *
+ * Sets this location's name, for display in the menuitem's primary label.
  */
 void
 ido_location_menu_item_set_name (IdoLocationMenuItem * self,
@@ -348,7 +352,11 @@ ido_location_menu_item_set_name (IdoLocationMenuItem * self,
 }
 
 /**
+ * ido_location_menu_item_set_timezone:
  * @timezone: timezone identifier (eg: "America/Chicago")
+ *
+ * Set this location's timezone. This will be used to show the location's
+ * current time in menuitem's right-justified secondary label.
  */
 void
 ido_location_menu_item_set_timezone (IdoLocationMenuItem   * self,
@@ -365,11 +373,17 @@ ido_location_menu_item_set_timezone (IdoLocationMenuItem   * self,
 }
 
 /**
- * @strftime_fmt: the format string used to build the location's time string
+ * ido_location_menu_item_set_format:
+ * @format: the format string used when showing the location's time
+ *
+ * Set the format string for rendering the location's time
+ * in its right-justified secondary label.
+ *
+ * See strfrtime(3) for more information on the format string.
  */
 void
 ido_location_menu_item_set_format (IdoLocationMenuItem   * self,
-                                   const char            * strftime_fmt)
+                                   const char            * format)
 {
   priv_t * p;
 
@@ -377,11 +391,22 @@ ido_location_menu_item_set_format (IdoLocationMenuItem   * self,
   p = self->priv;
 
   g_free (p->format);
-  p->format = g_strdup (strftime_fmt);
+  p->format = g_strdup (format);
   update_timestamp_label (self);
   start_timestamp_timer (self);
 }
 
+/**
+ * ido_location_menu_item_new_from_model:
+ * @menu_item: the corresponding menuitem
+ * @actions: action group to tell when this GtkMenuItem is activated
+ *
+ * Creates a new IdoLocationMenuItem with properties initialized from
+ * the menuitem's attributes.
+ *
+ * If the menuitem's 'action' attribute is set, trigger that action
+ * in @actions when this IdoLocationMenuItem is activated.
+ */
 GtkMenuItem *
 ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
                                        GActionGroup * actions)

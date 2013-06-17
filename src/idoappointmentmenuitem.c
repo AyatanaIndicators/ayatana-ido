@@ -294,12 +294,22 @@ update_timestamp_label (IdoAppointmentMenuItem * self)
 ****  Public API
 ***/
 
+/* create  a new IdoAppointmentMenuItem */
 GtkWidget *
 ido_appointment_menu_item_new (void)
 {
   return GTK_WIDGET (g_object_new (IDO_APPOINTMENT_MENU_ITEM_TYPE, NULL));
 }
 
+/**
+ * ido_appointment_menu_item_set_color:
+ * @color: parseable color string
+ *
+ * When this is set, the menuitem will include an icon with this color.
+ *
+ * These colors can be set in the end user's calendar app as a quick visual cue
+ * to show what kind of appointment this is.
+ */
 void
 ido_appointment_menu_item_set_color (IdoAppointmentMenuItem * self,
                                      const char             * color_string)
@@ -317,6 +327,12 @@ ido_appointment_menu_item_set_color (IdoAppointmentMenuItem * self,
   g_object_unref (G_OBJECT(pixbuf));
 }
 
+/**
+ * ido_appointment_menu_item_set_summary:
+ * @summary: short string describing the appointment.
+ *
+ * Set the menuitem's primary label with a short description of the appointment
+ */
 void
 ido_appointment_menu_item_set_summary (IdoAppointmentMenuItem * self,
                                        const char             * summary)
@@ -331,6 +347,13 @@ ido_appointment_menu_item_set_summary (IdoAppointmentMenuItem * self,
   gtk_label_set_text (GTK_LABEL(p->summary_label), p->summary);
 }
 
+/**
+ * ido_appointment_menu_item_set_time:
+ * @time: the time to be rendered in the appointment's timestamp label.
+ *
+ * Set the time that will be displayed in the menuitem's
+ * right-justified timestamp label
+ */
 void
 ido_appointment_menu_item_set_time (IdoAppointmentMenuItem * self,
                                     time_t                   time)
@@ -346,7 +369,13 @@ ido_appointment_menu_item_set_time (IdoAppointmentMenuItem * self,
 }
 
 /**
- * @strftime_fmt: the format string used to build the appointment's time string
+ * ido_appointment_menu_item_set_format:
+ * @format: the format string used when showing the appointment's time
+ *
+ * Set the format string for rendering the location's time
+ * in its right-justified secondary label.
+ *
+ * See strfrtime(3) for more information on the format string.
  */
 void
 ido_appointment_menu_item_set_format (IdoAppointmentMenuItem * self,
@@ -362,6 +391,17 @@ ido_appointment_menu_item_set_format (IdoAppointmentMenuItem * self,
   update_timestamp_label (self);
 }
 
+/**
+ * ido_location_menu_item_new_from_model:
+ * @menu_item: the corresponding menuitem
+ * @actions: action group to tell when this GtkMenuItem is activated
+ *
+ * Creates a new IdoLocationMenuItem with properties initialized from
+ * the menuitem's attributes.
+ *
+ * If the menuitem's 'action' attribute is set, trigger that action
+ * in @actions when this IdoLocationMenuItem is activated.
+ */
 GtkMenuItem *
 ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
                                           GActionGroup * actions)
