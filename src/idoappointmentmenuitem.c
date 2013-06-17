@@ -375,7 +375,7 @@ ido_appointment_menu_item_set_time (IdoAppointmentMenuItem * self,
  * ido_appointment_menu_item_set_format:
  * @format: the format string used when showing the appointment's time
  *
- * Set the format string for rendering the location's time
+ * Set the format string for rendering the appointment's time
  * in its right-justified secondary label.
  *
  * See strfrtime(3) for more information on the format string.
@@ -395,15 +395,15 @@ ido_appointment_menu_item_set_format (IdoAppointmentMenuItem * self,
 }
 
 /**
- * ido_location_menu_item_new_from_model:
+ * ido_appointment_menu_item_new_from_model:
  * @menu_item: the corresponding menuitem
  * @actions: action group to tell when this GtkMenuItem is activated
  *
- * Creates a new IdoLocationMenuItem with properties initialized from
+ * Creates a new IdoAppointmentMenuItem with properties initialized from
  * the menuitem's attributes.
  *
  * If the menuitem's 'action' attribute is set, trigger that action
- * in @actions when this IdoLocationMenuItem is activated.
+ * in @actions when this IdoAppointmentMenuItem is activated.
  */
 GtkMenuItem *
 ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
