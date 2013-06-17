@@ -236,6 +236,7 @@ ido_appointment_menu_item_init (IdoAppointmentMenuItem *self)
 ****
 ***/
 
+/* creates a menu-sized pixbuf filled with specified color */
 static GdkPixbuf *
 create_color_icon_pixbuf (const char * color_spec)
 {
@@ -283,7 +284,11 @@ update_timestamp_label (IdoAppointmentMenuItem * self)
   char * str;
   priv_t * p = self->priv;
 
-  str = g_date_time_format (p->date_time, p->format);
+  if (p->date_time && p->format)
+    str = g_date_time_format (p->date_time, p->format);
+  else
+    str = NULL;
+
   gtk_label_set_text (GTK_LABEL(p->timestamp_label), str);
   g_free (str);
 }
@@ -292,12 +297,22 @@ update_timestamp_label (IdoAppointmentMenuItem * self)
 ****  Public API
 ***/
 
+/* create  a new IdoAppointmentMenuItem */
 GtkWidget *
 ido_appointment_menu_item_new (void)
 {
   return GTK_WIDGET (g_object_new (IDO_APPOINTMENT_MENU_ITEM_TYPE, NULL));
 }
 
+/**
+ * ido_appointment_menu_item_set_color:
+ * @color: parseable color string
+ *
+ * When this is set, the menuitem will include an icon with this color.
+ *
+ * These colors can be set in the end user's calendar app as a quick visual cue
+ * to show what kind of appointment this is.
+ */
 void
 ido_appointment_menu_item_set_color (IdoAppointmentMenuItem * self,
                                      const char             * color_string)
@@ -315,6 +330,12 @@ ido_appointment_menu_item_set_color (IdoAppointmentMenuItem * self,
   g_object_unref (G_OBJECT(pixbuf));
 }
 
+/**
+ * ido_appointment_menu_item_set_summary:
+ * @summary: short string describing the appointment.
+ *
+ * Set the menuitem's primary label with a short description of the appointment
+ */
 void
 ido_appointment_menu_item_set_summary (IdoAppointmentMenuItem * self,
                                        const char             * summary)
@@ -329,6 +350,13 @@ ido_appointment_menu_item_set_summary (IdoAppointmentMenuItem * self,
   gtk_label_set_text (GTK_LABEL(p->summary_label), p->summary);
 }
 
+/**
+ * ido_appointment_menu_item_set_time:
+ * @time: the time to be rendered in the appointment's timestamp label.
+ *
+ * Set the time that will be displayed in the menuitem's
+ * right-justified timestamp label
+ */
 void
 ido_appointment_menu_item_set_time (IdoAppointmentMenuItem * self,
                                     time_t                   time)
@@ -344,7 +372,13 @@ ido_appointment_menu_item_set_time (IdoAppointmentMenuItem * self,
 }
 
 /**
- * @strftime_fmt: the format string used to build the appointment's time string
+ * ido_appointment_menu_item_set_format:
+ * @format: the format string used when showing the appointment's time
+ *
+ * Set the format string for rendering the appointment's time
+ * in its right-justified secondary label.
+ *
+ * See strfrtime(3) for more information on the format string.
  */
 void
 ido_appointment_menu_item_set_format (IdoAppointmentMenuItem * self,
@@ -360,38 +394,72 @@ ido_appointment_menu_item_set_format (IdoAppointmentMenuItem * self,
   update_timestamp_label (self);
 }
 
+/**
+ * ido_appointment_menu_item_new_from_model:
+ * @menu_item: the corresponding menuitem
+ * @actions: action group to tell when this GtkMenuItem is activated
+ *
+ * Creates a new IdoAppointmentMenuItem with properties initialized from
+ * the menuitem's attributes.
+ *
+ * If the menuitem's 'action' attribute is set, trigger that action
+ * in @actions when this IdoAppointmentMenuItem is activated.
+ */
 GtkMenuItem *
 ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
                                           GActionGroup * actions)
 {
+  guint i;
+  guint n;
   gint64 i64;
   gchar * str;
   IdoAppointmentMenuItem * ido_appointment;
+  GParameter parameters[8];
 
-  ido_appointment = IDO_APPOINTMENT_MENU_ITEM (ido_appointment_menu_item_new());
+  /* create the ido_appointment */
+
+  n = 0;
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      ido_appointment_menu_item_set_summary (ido_appointment, str);
-      g_free (str);
+      GParameter p = { "summary", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-color", "s", &str))
     {
-      ido_appointment_menu_item_set_color (ido_appointment, str);
-      g_free (str);
-    }
-
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
-    {
-      ido_appointment_menu_item_set_time (ido_appointment, (time_t)i64);
+      GParameter p = { "color", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
     {
-      ido_appointment_menu_item_set_format (ido_appointment, str);
-      g_free (str);
+      GParameter p = { "format", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
+
+  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
+    {
+      GParameter p = { "time", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_INT64);
+      g_value_set_int64 (&p.value, i64);
+      parameters[n++] = p;
+    }
+
+  g_assert (n <= G_N_ELEMENTS (parameters));
+  ido_appointment = g_object_newv (IDO_APPOINTMENT_MENU_ITEM_TYPE, n, parameters);
+
+  for (i=0; i<n; i++)
+    g_value_unset (&parameters[i].value);
+
+
+  /* add an ActionHelper */
 
   if (g_menu_item_get_attribute (menu_item, "action", "s", &str))
     {
