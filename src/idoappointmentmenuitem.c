@@ -280,12 +280,14 @@ create_color_icon_pixbuf (const char * color_spec)
 static void
 update_timestamp_label (IdoAppointmentMenuItem * self)
 {
-  char * str;
   priv_t * p = self->priv;
 
-  str = g_date_time_format (p->date_time, p->format);
-  gtk_label_set_text (GTK_LABEL(p->timestamp_label), str);
-  g_free (str);
+  if (p->date_time && p->format)
+    {
+      char * str = g_date_time_format (p->date_time, p->format);
+      gtk_label_set_text (GTK_LABEL(p->timestamp_label), str);
+      g_free (str);
+    }
 }
 
 /***
