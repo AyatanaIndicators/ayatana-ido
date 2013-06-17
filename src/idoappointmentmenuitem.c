@@ -366,34 +366,57 @@ GtkMenuItem *
 ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
                                           GActionGroup * actions)
 {
+  guint i;
+  guint n;
   gint64 i64;
   gchar * str;
   IdoAppointmentMenuItem * ido_appointment;
+  GParameter parameters[8];
 
-  ido_appointment = IDO_APPOINTMENT_MENU_ITEM (ido_appointment_menu_item_new());
+  /* create the ido_appointment */
+
+  n = 0;
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      ido_appointment_menu_item_set_summary (ido_appointment, str);
-      g_free (str);
+      GParameter p = { "summary", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-color", "s", &str))
     {
-      ido_appointment_menu_item_set_color (ido_appointment, str);
-      g_free (str);
-    }
-
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
-    {
-      ido_appointment_menu_item_set_time (ido_appointment, (time_t)i64);
+      GParameter p = { "color", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
     {
-      ido_appointment_menu_item_set_format (ido_appointment, str);
-      g_free (str);
+      GParameter p = { "format", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
+
+  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
+    {
+      GParameter p = { "time", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_INT64);
+      g_value_set_int64 (&p.value, i64);
+      parameters[n++] = p;
+    }
+
+  g_assert (n <= G_N_ELEMENTS (parameters));
+  ido_appointment = g_object_newv (IDO_APPOINTMENT_MENU_ITEM_TYPE, n, parameters);
+
+  for (i=0; i<n; i++)
+    g_value_unset (&parameters[i].value);
+
+
+  /* add an ActionHelper */
 
   if (g_menu_item_get_attribute (menu_item, "action", "s", &str))
     {

@@ -386,28 +386,48 @@ GtkMenuItem *
 ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
                                        GActionGroup * actions)
 {
+  guint i;
+  guint n;
   gchar * str;
   IdoLocationMenuItem * ido_location;
+  GParameter parameters[4];
 
-  ido_location = IDO_LOCATION_MENU_ITEM (ido_location_menu_item_new ());
+  /* create the ido_location */
+
+  n = 0;
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      ido_location_menu_item_set_name (ido_location, str);
-      g_free (str);
+      GParameter p = { "name", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-timezone", "s", &str))
     {
-      ido_location_menu_item_set_timezone (ido_location, str);
-      g_free (str);
+      GParameter p = { "timezone", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
     {
-      ido_location_menu_item_set_format (ido_location, str);
-      g_free (str);
+      GParameter p = { "format", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
+
+  g_assert (n <= G_N_ELEMENTS (parameters));
+  ido_location = g_object_newv (IDO_LOCATION_MENU_ITEM_TYPE, n, parameters);
+
+  for (i=0; i<n; i++)
+    g_value_unset (&parameters[i].value);
+
+
+  /* give it an ActionHelper */
 
   if (g_menu_item_get_attribute (menu_item, "action", "s", &str))
     {
