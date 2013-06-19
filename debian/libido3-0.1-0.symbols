@@ -88,3 +88,7 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_user_menu_item_set_icon@Base 13.10.0daily13.06.19
  ido_user_menu_item_set_label@Base 13.10.0daily13.06.19
  ido_user_menu_item_set_logged_in@Base 13.10.0daily13.06.19
+ ido_media_player_menu_item_get_type@Base 0replaceme
+ ido_media_player_menu_item_new_from_model@Base 0replaceme
+ ido_playback_menu_item_get_type@Base 0replaceme
+ ido_playback_menu_item_new_from_model@Base 0replaceme
