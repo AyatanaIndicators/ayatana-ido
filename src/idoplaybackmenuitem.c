@@ -94,6 +94,14 @@ static Button
 ido_playback_menu_item_get_button_at_pos (gint x,
                                           gint y)
 {
+  /*     57   101     143   187
+   *  5        +------+
+   * 12  +-----+      +-----+
+   *     |prev   play   next|
+   * 40  +-----+      +-----+
+   * 47        +------+
+   */
+
   if (x > 57 && x < 102 && y > 12 && y < 40)
     return BUTTON_PREVIOUS;
   else if (x > 101 && x < 143 && y > 5 && y < 47)
