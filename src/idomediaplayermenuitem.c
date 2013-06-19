@@ -24,6 +24,8 @@
 #include "idomediaplayermenuitem.h"
 #include "idoactionhelper.h"
 
+#define ALBUM_ART_SIZE 60
+
 typedef GtkMenuItemClass IdoMediaPlayerMenuItemClass;
 
 struct _IdoMediaPlayerMenuItem
@@ -203,7 +205,7 @@ ido_media_player_menu_item_set_album_art (IdoMediaPlayerMenuItem *self,
       GError *error = NULL;
 
       path = g_file_get_path (file);
-      img = gdk_pixbuf_new_from_file_at_size (path, 60, 60, &error);
+      img = gdk_pixbuf_new_from_file_at_size (path, ALBUM_ART_SIZE, ALBUM_ART_SIZE, &error);
       if (img)
         {
           gtk_image_set_from_pixbuf (GTK_IMAGE (self->album_art), img);
