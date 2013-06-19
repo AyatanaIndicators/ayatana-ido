@@ -308,10 +308,10 @@ ido_media_player_menu_item_state_changed (IdoActionHelper *helper,
 {
   IdoMediaPlayerMenuItem *widget;
   gboolean running = FALSE;
-  gchar *title = NULL;
-  gchar *artist = NULL;
-  gchar *album = NULL;
-  gchar *art_url = NULL;
+  const gchar *title = NULL;
+  const gchar *artist = NULL;
+  const gchar *album = NULL;
+  const gchar *art_url = NULL;
 
   g_variant_lookup (state, "running", "b", &running);
   g_variant_lookup (state, "title", "&s", &title);
