@@ -1,3 +1,29 @@
+ido (13.10.0daily13.06.19-0ubuntu1) saucy; urgency=low
+
+  [ Ubuntu daily release ]
+  * debian/*symbols: auto-update new symbols to released version
+
+  [ Charles Kerr ]
+  * adds the ido widgets needed for indicator-datetime.
+    http://bazaar.launchpad.net/~charlesk/indicator-
+    datetime/gmenuify/view/head:/README documents the actions &
+    menuitems.
+  * Better handling of IdoMenuItem construction from GMenuItems, better
+    public API documentation.
+
+  [ Jeremy Bicha ]
+  * Depend on valac instead of valac-0.16 for easier transitions Have
+    libido3-0.1-dev depend on gir1.2-ido3-0.1 Drop unnecessary gir
+    build-depends.
+
+  [ Lars Uebernickel ]
+  * Add support for creating scale menu items from a menu model.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 132
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 19 Jun 2013 02:02:27 +0000
+
 ido (13.10.0daily13.06.07-0ubuntu1) saucy; urgency=low
 
   [ Lars Uebernickel ]
