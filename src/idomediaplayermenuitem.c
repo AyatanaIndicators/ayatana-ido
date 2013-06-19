@@ -32,6 +32,7 @@ struct _IdoMediaPlayerMenuItem
 {
   GtkMenuItem parent;
 
+  GCancellable *cancellable;
   GtkWidget* player_label;
   GtkWidget* player_icon;
   GtkWidget* metadata_widget;
@@ -44,6 +45,20 @@ struct _IdoMediaPlayerMenuItem
 };
 
 G_DEFINE_TYPE (IdoMediaPlayerMenuItem, ido_media_player_menu_item, GTK_TYPE_MENU_ITEM);
+
+static void
+ido_media_player_menu_item_dispose (GObject *object)
+{
+  IdoMediaPlayerMenuItem *self = IDO_MEDIA_PLAYER_MENU_ITEM (object);
+
+  if (self->cancellable)
+    {
+      g_cancellable_cancel (self->cancellable);
+      g_clear_object (&self->cancellable);
+    }
+
+  G_OBJECT_CLASS (ido_media_player_menu_item_parent_class)->dispose (object);
+}
 
 static gboolean
 ido_media_player_menu_item_draw (GtkWidget *widget,
@@ -97,7 +112,10 @@ ido_media_player_menu_item_get_preferred_width (GtkWidget *widget,
 static void
 ido_media_player_menu_item_class_init (IdoMediaPlayerMenuItemClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = ido_media_player_menu_item_dispose;
 
   widget_class->get_preferred_width = ido_media_player_menu_item_get_preferred_width;
   widget_class->draw = ido_media_player_menu_item_draw;
@@ -108,6 +126,8 @@ ido_media_player_menu_item_init (IdoMediaPlayerMenuItem *self)
 {
   GtkWidget *grid;
 
+  self->cancellable = g_cancellable_new ();
+
   self->player_icon = gtk_image_new();
   gtk_widget_set_margin_right (self->player_icon, 6);
   gtk_widget_set_halign (self->player_icon, GTK_ALIGN_START);
@@ -117,6 +137,7 @@ ido_media_player_menu_item_init (IdoMediaPlayerMenuItem *self)
   gtk_widget_set_hexpand (self->player_label, TRUE);
 
   self->album_art = gtk_image_new();
+  gtk_widget_set_size_request (self->album_art, ALBUM_ART_SIZE, ALBUM_ART_SIZE);
   gtk_widget_set_margin_right (self->album_art, 8);
 
   self->artist_label = gtk_label_new (NULL);
@@ -184,6 +205,56 @@ ido_media_player_menu_item_set_is_running (IdoMediaPlayerMenuItem *self,
 }
 
 static void
+album_art_received (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  IdoMediaPlayerMenuItem *self = user_data;
+  GdkPixbuf *pixbuf;
+  GError *error = NULL;
+
+  pixbuf = gdk_pixbuf_new_from_stream_finish (result, &error);
+  if (pixbuf == NULL)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("unable to fetch album art: %s", error->message);
+
+      g_error_free (error);
+      return;
+    }
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (self->album_art), pixbuf);
+  g_object_unref (pixbuf);
+}
+
+static void
+album_art_file_opened (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  IdoMediaPlayerMenuItem *self = user_data;
+  GFileInputStream *input;
+  GError *error = NULL;
+
+  input = g_file_read_finish (G_FILE (object), result, &error);
+  if (input == NULL)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("unable to fetch album art: %s", error->message);
+
+      g_error_free (error);
+      return;
+    }
+
+  gdk_pixbuf_new_from_stream_at_scale_async (G_INPUT_STREAM (input),
+                                             ALBUM_ART_SIZE, ALBUM_ART_SIZE, TRUE,
+                                             self->cancellable,
+                                             album_art_received, self);
+
+  g_object_unref (input);
+}
+
+static void
 ido_media_player_menu_item_set_album_art (IdoMediaPlayerMenuItem *self,
                                           const gchar            *url)
 {
@@ -191,36 +262,13 @@ ido_media_player_menu_item_set_album_art (IdoMediaPlayerMenuItem *self,
 
   g_return_if_fail (IDO_IS_MEDIA_PLAYER_MENU_ITEM (self));
 
+  gtk_image_clear (GTK_IMAGE (self->album_art));
+
   if (url == NULL)
-    {
-      gtk_image_clear (GTK_IMAGE (self->album_art));
-      return;
-    }
+    return;
 
   file = g_file_new_for_uri (url);
-  if (g_file_is_native (file))
-    {
-      gchar *path;
-      GdkPixbuf *img;
-      GError *error = NULL;
-
-      path = g_file_get_path (file);
-      img = gdk_pixbuf_new_from_file_at_size (path, ALBUM_ART_SIZE, ALBUM_ART_SIZE, &error);
-      if (img)
-        {
-          gtk_image_set_from_pixbuf (GTK_IMAGE (self->album_art), img);
-          g_object_unref (img);
-        }
-      else
-        {
-          g_warning ("unable to load image: %s", error->message);
-          g_error_free (error);
-        }
-
-      g_free (path);
-    }
-  else
-    gtk_image_clear (GTK_IMAGE (self->album_art));
+  g_file_read_async (file, G_PRIORITY_DEFAULT, self->cancellable, album_art_file_opened, self);
 
   g_object_unref (file);
 }
