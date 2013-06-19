@@ -331,6 +331,8 @@ static void
 ido_playback_menu_item_set_state_from_string (IdoPlaybackMenuItem *self,
                                               const gchar         *state)
 {
+  g_return_if_fail (state != NULL);
+
   if (g_str_equal (state, "Playing"))
     self->current_state = STATE_PLAYING;
   else if (g_str_equal (state, "Launching"))
@@ -381,6 +383,8 @@ ido_playback_menu_item_action_state_changed (GActionGroup *action_group,
                                              gpointer      user_data)
 {
   IdoPlaybackMenuItem *self = user_data;
+
+  g_return_if_fail (action_name != NULL);
 
   if (self->play_action && g_str_equal (action_name, self->play_action))
     {
