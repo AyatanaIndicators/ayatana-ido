@@ -149,7 +149,7 @@ ido_playback_menu_item_parent_key_press_event (GtkWidget   *widget,
       self->cur_pushed_button = BUTTON_NONE;
     }
 
-  if (self->cur_pushed_button)
+  if (self->cur_pushed_button != BUTTON_NONE)
     {
       self->keyboard_activated = TRUE;
       gtk_widget_queue_draw (widget);
