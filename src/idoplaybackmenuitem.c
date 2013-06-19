@@ -459,9 +459,6 @@ typedef struct
   double b;
 } CairoColorRGB;
 
-void _color_shade (const CairoColorRGB *a, float k, CairoColorRGB *b);
-
-
 static void
 draw_gradient (cairo_t* cr,
                double   x,
@@ -880,7 +877,7 @@ _color_hls_to_rgb (gdouble *h,
   }
 }
 
-void
+static void
 _color_shade (const CairoColorRGB *a, float k, CairoColorRGB *b)
 {
   double red;
@@ -1043,7 +1040,7 @@ _blurcol (guchar* pixels,
           zprec);
 }
 
-void
+static void
 _expblur (guchar* pixels,
     gint    width,
     gint    height,
@@ -1087,7 +1084,7 @@ _expblur (guchar* pixels,
   return;
 }
 
-void
+static void
 _surface_blur (cairo_surface_t* surface,
                guint            radius)
 {
