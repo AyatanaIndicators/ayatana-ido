@@ -104,9 +104,11 @@ ido_playback_menu_item_get_button_at_pos (gint x,
 
   if (x > 57 && x < 102 && y > 12 && y < 40)
     return BUTTON_PREVIOUS;
-  else if (x > 101 && x < 143 && y > 5 && y < 47)
+
+  if (x > 101 && x < 143 && y > 5 && y < 47)
     return BUTTON_PLAYPAUSE;
-  else if (x > 142 && x < 187 && y > 12 && y < 40)
+
+  if (x > 142 && x < 187 && y > 12 && y < 40)
     return BUTTON_NEXT;
 
   return BUTTON_NONE;
