@@ -22,7 +22,9 @@ sources_h =				\
 	idolocationmenuitem.h		\
 	idotimeline.h			\
 	libido.h			\
-	idoactionhelper.h
+	idoactionhelper.h		\
+	idomediaplayermenuitem.h	\
+	idoplaybackmenuitem.h
 
 EXTRA_DIST =				\
 	ido.list			\
@@ -74,9 +76,11 @@ libido_0_1_la_SOURCES =			\
 	idotimeline.c			\
 	idomenuitemfactory.c		\
 	idoactionhelper.c		\
+	idousermenuitem.c		\
+	idomediaplayermenuitem.c	\
+	idoplaybackmenuitem.c		\
 	idoappointmentmenuitem.c	\
-	idolocationmenuitem.c		\
-	idousermenuitem.c
+	idolocationmenuitem.c
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
 

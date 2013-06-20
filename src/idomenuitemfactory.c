@@ -25,6 +25,8 @@
 #include "idolocationmenuitem.h"
 #include "idoscalemenuitem.h"
 #include "idousermenuitem.h"
+#include "idomediaplayermenuitem.h"
+#include "idoplaybackmenuitem.h"
 
 #define IDO_TYPE_MENU_ITEM_FACTORY         (ido_menu_item_factory_get_type ())
 #define IDO_MENU_ITEM_FACTORY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IDO_TYPE_MENU_ITEM_FACTORY, IdoMenuItemFactory))
@@ -63,6 +65,12 @@ ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
 
   else if (g_str_equal (type, "com.canonical.unity.slider"))
     item = ido_scale_menu_item_new_from_model (menuitem, actions);
+
+  else if (g_str_equal (type, "com.canonical.unity.media-player"))
+    item = ido_media_player_menu_item_new_from_model (menuitem, actions);
+
+  else if (g_str_equal (type, "com.canonical.unity.playback-item"))
+    item = ido_playback_menu_item_new_from_model (menuitem, actions);
 
   return item;
 }
