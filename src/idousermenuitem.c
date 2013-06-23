@@ -308,8 +308,8 @@ ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
 void
 ido_user_menu_item_set_icon_from_file (IdoUserMenuItem * self, const char * filename)
 {
-  GFile * file = g_file_new_for_path (filename);
-  GIcon * icon = g_file_icon_new (file);
+  GFile * file = filename ? g_file_new_for_path (filename) : NULL;
+  GIcon * icon = file ? g_file_icon_new (file) : NULL;
 
   ido_user_menu_item_set_icon (self, icon);
 

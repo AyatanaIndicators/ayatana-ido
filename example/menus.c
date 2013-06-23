@@ -26,8 +26,8 @@ create_user_menu (const char * username,
                   gboolean is_active)
 {
   GtkWidget * ret;
-  GFile * file = g_file_new_for_path (filename);
-  GIcon * icon = g_file_icon_new (file);
+  GFile * file = filename ? g_file_new_for_path (filename) : NULL;
+  GIcon * icon = file ? g_file_icon_new (file) : NULL;
 
   ret = g_object_new (IDO_USER_MENU_ITEM_TYPE,
                       "label", username,
@@ -36,8 +36,8 @@ create_user_menu (const char * username,
                       "is-current-user", is_active,
                       NULL);
 
-  g_object_unref (icon);
-  g_object_unref (file);
+  g_clear_object (&icon);
+  g_clear_object (&file);
   return ret;
 }
 
@@ -122,23 +122,28 @@ main (int argc, char *argv[])
   ***  Users
   **/
 
-  menuitem = create_user_menu ("Guest", NULL, FALSE, FALSE);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Guest",
+                                           NULL,
+                                           FALSE, FALSE));
 
-  menuitem = ido_user_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Bobby Fischer",
+                                           "/usr/share/pixmaps/faces/chess.jpg",
+                                           FALSE, FALSE));
 
-  menuitem = create_user_menu ("Bobby Fischer", "/usr/share/pixmaps/faces/chess.jpg", FALSE, FALSE);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Linus Torvalds",
+                                           "/usr/share/pixmaps/faces/penguin.jpg",
+                                           TRUE, FALSE));
+ 
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Mark Shuttleworth",
+                                           "/usr/share/pixmaps/faces/astronaut.jpg",
+                                           TRUE, TRUE));
 
-  menuitem = create_user_menu ("Linus Torvalds", "/usr/share/pixmaps/faces/penguin.jpg", TRUE, FALSE);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-  menuitem = create_user_menu ("Mark Shuttleworth", "/usr/share/pixmaps/faces/astronaut.jpg", TRUE, TRUE);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), ido_user_menu_item_new ());
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
 
   /* Add the menubar */
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), root);
