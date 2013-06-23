@@ -34,7 +34,7 @@ enum
 {
   PROP_0,
   PROP_LABEL,
-  PROP_ICON_FILENAME,
+  PROP_ICON,
   PROP_IS_LOGGED_IN,
   PROP_IS_CURRENT_USER,
   PROP_LAST
@@ -51,7 +51,7 @@ struct _IdoUserMenuItemPrivate
   gboolean is_logged_in;
   gboolean is_current_user;
   gchar * label;
-  gchar * icon_filename;
+  GIcon * icon;
 };
 
 G_DEFINE_TYPE (IdoUserMenuItem, ido_user_menu_item, GTK_TYPE_MENU_ITEM);
@@ -76,8 +76,8 @@ my_get_property (GObject     * o,
         g_value_set_string (value, self->priv->label);
         break;
 
-      case PROP_ICON_FILENAME:
-        g_value_set_string (value, self->priv->icon_filename);
+      case PROP_ICON:
+        g_value_set_object (value, self->priv->icon);
         break;
 
       case PROP_IS_LOGGED_IN:
@@ -108,8 +108,8 @@ my_set_property (GObject       * o,
         ido_user_menu_item_set_label (self, g_value_get_string (value));
         break;
 
-      case PROP_ICON_FILENAME:
-        ido_user_menu_item_set_icon (self, g_value_get_string (value));
+      case PROP_ICON:
+        ido_user_menu_item_set_icon (self, g_value_get_object (value));
         break;
 
       case PROP_IS_LOGGED_IN:
@@ -130,6 +130,10 @@ my_set_property (GObject       * o,
 static void
 my_dispose (GObject *object)
 {
+  IdoUserMenuItem * self = IDO_USER_MENU_ITEM (object);
+
+  g_clear_object (&self->priv->icon);
+
   G_OBJECT_CLASS (ido_user_menu_item_parent_class)->dispose (object);
 }
 
@@ -139,7 +143,6 @@ my_finalize (GObject *object)
   IdoUserMenuItem * self = IDO_USER_MENU_ITEM (object);
 
   g_free (self->priv->label);
-  g_free (self->priv->icon_filename);
 
   G_OBJECT_CLASS (ido_user_menu_item_parent_class)->finalize (object);
 }
@@ -167,11 +170,11 @@ ido_user_menu_item_class_init (IdoUserMenuItemClass *klass)
                                                 "J. Random User",
                                                 prop_flags);
 
-  properties[PROP_ICON_FILENAME] = g_param_spec_string ("icon-filename",
-                                                        "The icon's filename",
-                                                        "The icon to display",
-                                                        NULL,
-                                                        prop_flags);
+  properties[PROP_ICON] = g_param_spec_object ("icon",
+                                               "Icon",
+                                               "The user's GIcon",
+                                               G_TYPE_OBJECT,
+                                               prop_flags);
 
   properties[PROP_IS_LOGGED_IN] = g_param_spec_boolean ("is-logged-in",
                                                         "is logged in",
@@ -287,49 +290,31 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
 ***/
 
 void
-ido_user_menu_item_set_icon (IdoUserMenuItem * self, const char * icon_filename)
+ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
 {
-  gboolean updated = FALSE;
   IdoUserMenuItemPrivate * p = self->priv;
   GtkImage * image = GTK_IMAGE (p->user_image);
 
-  /* make a private copy of the icon name */
-  g_free (p->icon_filename);
-  self->priv->icon_filename = g_strdup (icon_filename);
+  g_clear_object (&p->icon);
 
-  /* now try to use it */
-  if (icon_filename && *icon_filename)
-    {
-      int width = 18; /* arbitrary default values */
-      int height = 18;
-      GError * err = NULL;
-      GdkPixbuf * pixbuf = NULL;
+  if (icon != NULL)
+    g_object_ref (icon);
+  else
+    icon = g_themed_icon_new_with_default_fallbacks (FALLBACK_ICON_NAME);
 
-      /* load the image */
-      gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
-      pixbuf = gdk_pixbuf_new_from_file_at_size (icon_filename,
-                                                 width, height, &err);
-      if (err == NULL)
-        {
-          gtk_image_set_from_pixbuf (image, pixbuf);
-          g_object_unref (pixbuf);
-          updated = TRUE;
-        }
-      else
-        {
-          g_warning ("Couldn't load the image \"%s\": %s",
-                     icon_filename, err->message);
-          g_clear_error (&err);
-        }
-    }
+  gtk_image_set_from_gicon (image, icon, GTK_ICON_SIZE_MENU);
+}
 
-  /* as a fallback, use the default user icon */
-  if (!updated)
-    {
-      gtk_image_set_from_icon_name (image,
-                                    FALLBACK_ICON_NAME,
-                                    GTK_ICON_SIZE_MENU);
-    }
+void
+ido_user_menu_item_set_icon_from_file (IdoUserMenuItem * self, const char * filename)
+{
+  GFile * file = g_file_new_for_path (filename);
+  GIcon * icon = g_file_icon_new (file);
+
+  ido_user_menu_item_set_icon (self, icon);
+
+  g_clear_object (&icon);
+  g_clear_object (&file);
 }
 
 void
@@ -419,17 +404,43 @@ GtkMenuItem *
 ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
                                    GActionGroup *actions)
 {
-  IdoUserMenuItem *item;
-  gchar *label;
-  gchar *action;
+  guint i;
+  guint n;
+  IdoUserMenuItem * ido_user;
+  gchar * str;
+  gchar * action;
+  GVariant * v;
+  GParameter parameters[4];
 
-  item = IDO_USER_MENU_ITEM (ido_user_menu_item_new ());
+  /* create the ido_user */
 
-  if (g_menu_item_get_attribute (menuitem, "label", "s", &label))
+  n = 0;
+
+  if (g_menu_item_get_attribute (menuitem, "label", "s", &str))
     {
-      ido_user_menu_item_set_label (item, label);
-      g_free (label);
+      GParameter p = { "label", G_VALUE_INIT };
+      g_value_init (&p.value, G_TYPE_STRING);
+      g_value_take_string (&p.value, str);
+      parameters[n++] = p;
     }
+
+  if ((v = g_menu_item_get_attribute_value (menuitem, G_MENU_ATTRIBUTE_ICON, NULL)))
+    {
+      GParameter p = { "icon", G_VALUE_INIT };
+      GIcon * icon = g_icon_deserialize (v);
+      g_value_init (&p.value, G_TYPE_OBJECT);
+      g_value_take_object (&p.value, icon);
+      g_variant_unref (v);
+      parameters[n++] = p;
+    }
+
+  g_assert (n <= G_N_ELEMENTS (parameters));
+  ido_user = g_object_newv (IDO_USER_MENU_ITEM_TYPE, n, parameters);
+
+  for (i=0; i<n; i++)
+    g_value_unset (&parameters[i].value);
+
+  /* gie it an ActionHelper */
 
   if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
     {
@@ -438,20 +449,20 @@ ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
 
       target = g_menu_item_get_attribute_value (menuitem, "target", G_VARIANT_TYPE_ANY);
 
-      helper = ido_action_helper_new (GTK_WIDGET (item), actions, action, target);
+      helper = ido_action_helper_new (GTK_WIDGET (ido_user), actions, action, target);
       g_signal_connect (helper, "action-state-changed",
                         G_CALLBACK (user_menu_item_state_changed), NULL);
 
-      g_signal_connect_object (item, "activate",
+      g_signal_connect_object (ido_user, "activate",
                                G_CALLBACK (ido_action_helper_activate),
                                helper, G_CONNECT_SWAPPED);
-      g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
+      g_signal_connect_swapped (ido_user, "destroy", G_CALLBACK (g_object_unref), helper);
 
       if (target)
         g_variant_unref (target);
       g_free (action);
     }
 
-  return GTK_MENU_ITEM (item);
+  return GTK_MENU_ITEM (ido_user);
 }
 
