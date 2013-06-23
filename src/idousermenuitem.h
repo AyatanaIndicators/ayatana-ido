@@ -65,6 +65,9 @@ void ido_user_menu_item_set_label          (IdoUserMenuItem * self, const char *
 GtkMenuItem * ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
                                                  GActionGroup *actions);
 
+GtkMenuItem * ido_guest_menu_item_new_from_model (GMenuItem    *menuitem,
+                                                  GActionGroup *actions);
+
 G_END_DECLS
 
 #endif

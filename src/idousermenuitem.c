@@ -342,67 +342,19 @@ ido_user_menu_item_new (void)
   return GTK_WIDGET (g_object_new (IDO_USER_MENU_ITEM_TYPE, NULL));
 }
 
-/**
- * user_menu_item_state_changed:
- *
- * Updates an IdoUserMenuItem from @state. The state contains a
- * dictionary with keys 'active-user' (for the user that the current
- * session belongs too) and 'logged-in-users' (a list of all currently
- * logged in users).
- */
-static void
-user_menu_item_state_changed (IdoActionHelper *helper,
-                              GVariant        *state,
-                              gpointer         user_data)
-{
-  IdoUserMenuItem *item;
-  GVariant *target;
-  GVariant *v;
-
-  item = IDO_USER_MENU_ITEM (ido_action_helper_get_widget (helper));
-
-  ido_user_menu_item_set_current_user (item, FALSE);
-  ido_user_menu_item_set_logged_in (item, FALSE);
-
-  target = ido_action_helper_get_action_target (helper);
-  g_return_if_fail (g_variant_is_of_type (target, G_VARIANT_TYPE_STRING));
-
-  if ((v = g_variant_lookup_value (state, "active-user", G_VARIANT_TYPE_STRING)))
-    {
-      if (g_variant_equal (v, target))
-        ido_user_menu_item_set_current_user (item, TRUE);
-
-      g_variant_unref (v);
-    }
-
-  if ((v = g_variant_lookup_value (state, "logged-in-users", G_VARIANT_TYPE_STRING_ARRAY)))
-    {
-      GVariantIter it;
-      GVariant *user;
-
-      g_variant_iter_init (&it, v);
-      while ((user = g_variant_iter_next_value (&it)))
-        {
-          if (g_variant_equal (user, target))
-            ido_user_menu_item_set_logged_in (item, TRUE);
-          g_variant_unref (user);
-        }
-
-      g_variant_unref (v);
-    }
-}
+/***
+****
+***/
 
 /**
- * ido_user_menu_item_new_from_model:
- *
- * Creates an #IdoUserMenuItem. If @menuitem contains an action, the
- * widget is bound to that action in @actions.
- *
- * Returns: (transfer full): a new #IdoUserMenuItem
+ * This is a helper function for creating user menuitems for both
+ * "indicator.user-menu-item" and "indicator.guest-menu-item",
+ * since they only differ in how they use their action's state.
  */
-GtkMenuItem *
-ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
-                                   GActionGroup *actions)
+static GtkMenuItem *
+user_menu_item_new_from_model (GMenuItem    * menuitem,
+                               GActionGroup * actions,
+                               GCallback      state_changed_callback)
 {
   guint i;
   guint n;
@@ -416,7 +368,7 @@ ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
 
   n = 0;
 
-  if (g_menu_item_get_attribute (menuitem, "label", "s", &str))
+  if (g_menu_item_get_attribute (menuitem, G_MENU_ATTRIBUTE_LABEL, "s", &str))
     {
       GParameter p = { "label", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_STRING);
@@ -442,16 +394,16 @@ ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
 
   /* gie it an ActionHelper */
 
-  if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
+  if (g_menu_item_get_attribute (menuitem, G_MENU_ATTRIBUTE_ACTION, "s", &action))
     {
       IdoActionHelper *helper;
       GVariant *target;
 
-      target = g_menu_item_get_attribute_value (menuitem, "target", G_VARIANT_TYPE_ANY);
+      target = g_menu_item_get_attribute_value (menuitem, G_MENU_ATTRIBUTE_TARGET, G_VARIANT_TYPE_ANY);
 
       helper = ido_action_helper_new (GTK_WIDGET (ido_user), actions, action, target);
       g_signal_connect (helper, "action-state-changed",
-                        G_CALLBACK (user_menu_item_state_changed), NULL);
+                        state_changed_callback, NULL);
 
       g_signal_connect_object (ido_user, "activate",
                                G_CALLBACK (ido_action_helper_activate),
@@ -464,5 +416,115 @@ ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
     }
 
   return GTK_MENU_ITEM (ido_user);
+}
+
+/***
+****  indicator.user-menu-item handler
+***/
+
+/**
+ * user_menu_item_state_changed:
+ *
+ * Updates an IdoUserMenuItem from @state. The state contains a
+ * dictionary with keys 'active-user' (for the user that the current
+ * session belongs too) and 'logged-in-users' (a list of all currently
+ * logged in users).
+ */
+static void
+user_menu_item_state_changed (IdoActionHelper *helper,
+                              GVariant        *state,
+                              gpointer         user_data)
+{
+  gboolean is_logged_in = FALSE;
+  gboolean is_current_user = FALSE;
+  IdoUserMenuItem *item;
+  GVariant *target;
+  GVariant *v;
+
+  item = IDO_USER_MENU_ITEM (ido_action_helper_get_widget (helper));
+
+  target = ido_action_helper_get_action_target (helper);
+  g_return_if_fail (g_variant_is_of_type (target, G_VARIANT_TYPE_STRING));
+
+  if ((v = g_variant_lookup_value (state, "active-user", G_VARIANT_TYPE_STRING)))
+    {
+      if (g_variant_equal (v, target))
+        is_current_user = TRUE;
+
+      g_variant_unref (v);
+    }
+
+  if ((v = g_variant_lookup_value (state, "logged-in-users", G_VARIANT_TYPE_STRING_ARRAY)))
+    {
+      GVariantIter it;
+      GVariant *user;
+
+      g_variant_iter_init (&it, v);
+      while ((user = g_variant_iter_next_value (&it)))
+        {
+          if (g_variant_equal (user, target))
+            is_logged_in = TRUE;
+
+          g_variant_unref (user);
+        }
+
+      g_variant_unref (v);
+    }
+
+  ido_user_menu_item_set_logged_in (item, is_logged_in);
+  ido_user_menu_item_set_current_user (item, is_current_user);
+}
+
+/**
+ * ido_user_menu_item_new_from_model:
+ *
+ * Creates an #IdoUserMenuItem. If @menuitem contains an action, the
+ * widget is bound to that action in @actions.
+ *
+ * Returns: (transfer full): a new #IdoUserMenuItem
+ */
+GtkMenuItem *
+ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
+                                   GActionGroup *actions)
+{
+  return user_menu_item_new_from_model (menuitem,
+                                        actions,
+                                        G_CALLBACK(user_menu_item_state_changed));
+}
+
+/***
+****  indicator.guest-menu-item handler
+***/
+
+static void
+guest_menu_item_state_changed (IdoActionHelper *helper,
+                               GVariant        *state,
+                               gpointer         user_data)
+{
+  IdoUserMenuItem * item = IDO_USER_MENU_ITEM (ido_action_helper_get_widget (helper));
+  gboolean b;
+
+  if ((g_variant_lookup (state, "is-active", "b", &b)))
+    ido_user_menu_item_set_current_user (item, b);
+
+  if ((g_variant_lookup (state, "is-logged-in", "b", &b)))
+    ido_user_menu_item_set_current_user (item, b);
+}
+
+/**
+ * ido_guest_menu_item_new_from_model:
+ *
+ * Creates an #IdoUserMenuItem. If @menuitem contains an action, the
+ * widget is bound to that action in @actions.
+ *
+ * Returns: (transfer full): a new #IdoUserMenuItem
+ */
+GtkMenuItem *
+ido_guest_menu_item_new_from_model (GMenuItem    *menuitem,
+                                    GActionGroup *actions)
+{
+  return user_menu_item_new_from_model (menuitem,
+                                        actions,
+                                        G_CALLBACK(guest_menu_item_state_changed));
 }
 
