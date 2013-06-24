@@ -54,6 +54,9 @@ ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
   if (g_str_equal (type, "indicator.user-menu-item"))
     item = ido_user_menu_item_new_from_model (menuitem, actions);
 
+  if (g_str_equal (type, "indicator.guest-menu-item"))
+    item = ido_guest_menu_item_new_from_model (menuitem, actions);
+
   else if (g_str_equal (type, "com.canonical.indicator.calendar"))
     item = ido_calendar_menu_item_new_from_model (menuitem, actions);
 

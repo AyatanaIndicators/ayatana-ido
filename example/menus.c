@@ -19,6 +19,28 @@ slider_released (GtkWidget *widget, gpointer user_data)
   g_print ("released\n");
 }
 
+static GtkWidget *
+create_user_menu (const char * username,
+                  const char * filename,
+                  gboolean is_logged_in,
+                  gboolean is_active)
+{
+  GtkWidget * ret;
+  GFile * file = filename ? g_file_new_for_path (filename) : NULL;
+  GIcon * icon = file ? g_file_icon_new (file) : NULL;
+
+  ret = g_object_new (IDO_USER_MENU_ITEM_TYPE,
+                      "label", username,
+                      "icon", icon,
+                      "is-logged-in", is_logged_in,
+                      "is-current-user", is_active,
+                      NULL);
+
+  g_clear_object (&icon);
+  g_clear_object (&file);
+  return ret;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -100,44 +122,28 @@ main (int argc, char *argv[])
   ***  Users
   **/
 
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Guest",
+                                           NULL,
+                                           FALSE, FALSE));
 
-  menuitem = ido_user_menu_item_new ();
-  g_object_set (menuitem,
-                "label", "Guest",
-                "icon-filename", NULL,
-                "is-logged-in", FALSE,
-                "is-current-user", FALSE,
-                NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Bobby Fischer",
+                                           "/usr/share/pixmaps/faces/chess.jpg",
+                                           FALSE, FALSE));
 
-  menuitem = ido_user_menu_item_new ();
-  g_object_set (menuitem,
-                "label", "Bobby Fischer",
-                "icon-filename", "/usr/share/pixmaps/faces/chess.jpg",
-                "is-logged-in", FALSE,
-                "is-current-user", FALSE,
-                NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Linus Torvalds",
+                                           "/usr/share/pixmaps/faces/penguin.jpg",
+                                           TRUE, FALSE));
+ 
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         create_user_menu ("Mark Shuttleworth",
+                                           "/usr/share/pixmaps/faces/astronaut.jpg",
+                                           TRUE, TRUE));
 
-  menuitem = ido_user_menu_item_new ();
-  g_object_set (menuitem,
-                "label", "Linus Torvalds",
-                "icon-filename", "/usr/share/pixmaps/faces/penguin.jpg",
-                "is-logged-in", TRUE,
-                "is-current-user", FALSE,
-                NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-  menuitem = ido_user_menu_item_new ();
-  g_object_set (menuitem, "label", "Mark Shuttleworth",
-                          "icon-filename", "/usr/share/pixmaps/faces/astronaut.jpg",
-                          "is-logged-in", TRUE,
-                          "is-current-user", TRUE,
-                          NULL);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), ido_user_menu_item_new ());
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
 
   /* Add the menubar */
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), root);

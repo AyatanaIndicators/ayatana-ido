@@ -56,13 +56,17 @@ GType ido_user_menu_item_get_type (void) G_GNUC_CONST;
 
 GtkWidget* ido_user_menu_item_new(void);
 
-void ido_user_menu_item_set_icon         (IdoUserMenuItem * self, const char * icon_name);
-void ido_user_menu_item_set_logged_in    (IdoUserMenuItem * self, gboolean     is_logged_in);
-void ido_user_menu_item_set_current_user (IdoUserMenuItem * self, gboolean     is_current_user);
-void ido_user_menu_item_set_label        (IdoUserMenuItem * self, const char * label);
+void ido_user_menu_item_set_icon           (IdoUserMenuItem * self, GIcon      * icon);
+void ido_user_menu_item_set_icon_from_file (IdoUserMenuItem * self, const char * filename);
+void ido_user_menu_item_set_logged_in      (IdoUserMenuItem * self, gboolean     is_logged_in);
+void ido_user_menu_item_set_current_user   (IdoUserMenuItem * self, gboolean     is_current_user);
+void ido_user_menu_item_set_label          (IdoUserMenuItem * self, const char * label);
 
 GtkMenuItem * ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
                                                  GActionGroup *actions);
+
+GtkMenuItem * ido_guest_menu_item_new_from_model (GMenuItem    *menuitem,
+                                                  GActionGroup *actions);
 
 G_END_DECLS
 
