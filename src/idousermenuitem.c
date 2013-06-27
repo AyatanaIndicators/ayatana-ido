@@ -508,7 +508,7 @@ guest_menu_item_state_changed (IdoActionHelper *helper,
     ido_user_menu_item_set_current_user (item, b);
 
   if ((g_variant_lookup (state, "is-logged-in", "b", &b)))
-    ido_user_menu_item_set_current_user (item, b);
+    ido_user_menu_item_set_logged_in (item, b);
 }
 
 /**
