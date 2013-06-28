@@ -1,8 +1,24 @@
-ido (13.10.0daily13.06.19-0ubuntu2) UNRELEASED; urgency=low
+ido (13.10.0+13.10.20130628-0ubuntu1) saucy; urgency=low
 
+  [ Ubuntu daily release ]
   * debian/*symbols: auto-update new symbols to released version
 
- -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Jun 2013 02:02:57 +0000
+  [ Charles Kerr ]
+  * Adds support for the guest menuitem. A guest menuitem is the same as
+    a user menuitem except for how it uses its action's state, so
+    instead of adding a new class, this patch adds a new factory method
+    (ido_guest_menu_item_new_from_model) and private action state
+    handler.
+  * one-liner fix to a copy-paste error in GuestMenuItem's handling of
+    online/active guests.
+
+  [ Lars Uebernickel ]
+  * Add IdoMediaPlayerMenuItem and IdoPlaybackMenuItem.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 136
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Jun 2013 02:03:07 +0000
 
 ido (13.10.0daily13.06.19-0ubuntu1) saucy; urgency=low
 
