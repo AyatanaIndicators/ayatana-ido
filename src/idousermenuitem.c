@@ -61,6 +61,103 @@ static gboolean ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * image,
                                                             cairo_t   * cr,
                                                             gpointer    gself);
 
+/***
+****  Avatar
+***/
+
+static GdkPixbuf *
+load_gicon (GtkWidget * self, GIcon * icon, GError ** error)
+{
+  GtkSettings * settings;
+  gint width;
+  gint height;
+  GdkScreen * screen;
+  GtkIconTheme * icon_theme;
+  GtkIconInfo * info;
+  GtkStyleContext * style_context;
+  GdkPixbuf * pixbuf;
+
+  settings = gtk_widget_get_settings (self);
+  if (settings == NULL) /* not attached to a toplevel yet */
+    settings = gtk_settings_get_default ();
+
+  if (!gtk_icon_size_lookup_for_settings (settings,
+                                          GTK_ICON_SIZE_MENU,
+                                          &width,
+                                          &height))
+    {
+      /* arbitrary default size in case _size_lookup fails */
+      width = 12;
+      height = 12;
+    }
+
+  if ((screen = gtk_widget_get_screen (self)))
+    icon_theme = gtk_icon_theme_get_for_screen (screen);
+  else
+    icon_theme = gtk_icon_theme_get_default (); 
+  
+
+  info = gtk_icon_theme_lookup_by_gicon (icon_theme,
+                                         icon,
+                                         MIN (width, height),
+                                         GTK_ICON_LOOKUP_USE_BUILTIN |
+                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK |
+                                         GTK_ICON_LOOKUP_FORCE_SIZE);
+
+  style_context = gtk_widget_get_style_context (self);
+
+  pixbuf = gtk_icon_info_load_symbolic_for_context (info,
+                                                    style_context,
+                                                    NULL,
+                                                    error);
+
+  g_clear_object (&info);
+  return pixbuf;
+}
+
+static void
+update_avatar (IdoUserMenuItem * self)
+{
+  IdoUserMenuItemPrivate * p = self->priv;
+  GdkPixbuf * pixbuf;
+  GtkImage * image;
+
+  if (p->icon == NULL)
+    {
+      pixbuf = NULL;
+    }
+  else
+    {
+      GError * error = NULL;
+
+      pixbuf = load_gicon (GTK_WIDGET(self), p->icon, &error);
+
+      if (error != NULL)
+        {
+          g_warning ("Can't load user avatar icon: %s", error->message);
+          g_error_free (error);
+        }
+    }
+
+  image = GTK_IMAGE (p->user_image);
+
+  if (pixbuf != NULL)
+    {
+      gtk_image_set_from_pixbuf (image, pixbuf);
+      g_object_unref (G_OBJECT (pixbuf));
+    }
+  else
+    {
+      GIcon * icon;
+      icon = g_themed_icon_new_with_default_fallbacks (FALLBACK_ICON_NAME);
+      gtk_image_set_from_gicon (image, icon, GTK_ICON_SIZE_MENU);
+      g_object_unref (icon);
+    }
+}
+
+/***
+****  GObject virtual functions
+***/
 
 static void
 my_get_property (GObject     * o,
@@ -241,6 +338,11 @@ ido_user_menu_item_init (IdoUserMenuItem *self)
   g_signal_connect_after (GTK_WIDGET(self), "draw",
                           G_CALLBACK(ido_user_menu_item_primitive_draw_cb_gtk_3),
                           GTK_WIDGET(self));
+
+  /* load_gicon()'s behavior depends on the current screen/toplevel/etc,
+     so reload the avatar whenever the widget is realized */
+  g_signal_connect_swapped (self, "realize",
+                            G_CALLBACK(update_avatar), self);
 }
 
 
@@ -293,16 +395,16 @@ void
 ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
 {
   IdoUserMenuItemPrivate * p = self->priv;
-  GtkImage * image = GTK_IMAGE (p->user_image);
 
-  g_clear_object (&p->icon);
+  if (p->icon != icon)
+    {
+      g_clear_object (&p->icon);
 
-  if (icon != NULL)
-    g_object_ref (icon);
-  else
-    icon = g_themed_icon_new_with_default_fallbacks (FALLBACK_ICON_NAME);
+      if (icon != NULL)
+        p->icon = g_object_ref (icon);
 
-  gtk_image_set_from_gicon (image, icon, GTK_ICON_SIZE_MENU);
+      update_avatar (self);
+    }
 }
 
 void
