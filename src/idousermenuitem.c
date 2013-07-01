@@ -285,6 +285,48 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
   return FALSE;
 }
 
+/* Tests for basic icon errors such as missing or unreadable icon files. */
+static gboolean
+icon_is_loadable (GtkWidget * self, GIcon * icon, GError ** error)
+{
+  gint width;
+  gint height;
+  GtkIconInfo * info;
+  GdkPixbuf * pixbuf;
+  GtkStyleContext * style_context;
+  gboolean is_loadable;
+
+  style_context = gtk_widget_get_style_context (self);
+
+  if (!gtk_icon_size_lookup_for_settings (gtk_settings_get_default(),
+                                          GTK_ICON_SIZE_MENU,
+                                          &width,
+                                          &height))
+    {
+      /* arbitrary default size in case _size_lookup fails */
+      width = 12;
+      height = 12;
+    }
+
+  info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default(),
+                                         icon,
+                                         MIN (width, height),
+                                         GTK_ICON_LOOKUP_USE_BUILTIN |
+                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK |
+                                         GTK_ICON_LOOKUP_FORCE_SIZE);
+
+  pixbuf = gtk_icon_info_load_symbolic_for_context (info,
+                                                    style_context,
+                                                    NULL,
+                                                    error);
+
+  is_loadable = pixbuf != NULL;
+
+  g_clear_object (&pixbuf);
+  g_clear_object (&info);
+  return is_loadable;
+}
+
 /***
 ****  PUBLIC API
 ***/
@@ -294,8 +336,14 @@ ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
 {
   IdoUserMenuItemPrivate * p = self->priv;
   GtkImage * image = GTK_IMAGE (p->user_image);
+  GError * error = NULL;
 
-  g_clear_object (&p->icon);
+  if (icon && !icon_is_loadable (GTK_WIDGET(self), icon, &error))
+    {
+      g_warning ("Can't load user avatar icon: %s", error->message);
+      g_error_free (error);
+      icon = NULL;
+    }
 
   if (icon != NULL)
     g_object_ref (icon);
