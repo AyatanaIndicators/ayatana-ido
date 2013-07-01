@@ -400,7 +400,8 @@ ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
     {
       g_clear_object (&p->icon);
 
-      p->icon = g_object_ref (icon);
+      if (icon != NULL)
+        p->icon = g_object_ref (icon);
 
       update_avatar (self);
     }
