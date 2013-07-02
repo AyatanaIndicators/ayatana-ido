@@ -1,3 +1,16 @@
+ido (13.10.0+13.10.20130702-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * Test to see if a user's avatar is loadable before we use it. If it's
+    not, use the fallback avatar instead. This fixes the issue reported
+    by lars of having the "gtk-missing-image" used when his avatar file
+    wasn't readable.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 138
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 02 Jul 2013 02:02:50 +0000
+
 ido (13.10.0+13.10.20130628-0ubuntu1) saucy; urgency=low
 
   [ Ubuntu daily release ]
