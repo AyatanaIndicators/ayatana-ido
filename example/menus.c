@@ -55,7 +55,7 @@ main (int argc, char *argv[])
     { "Kuntzig", "Europe/Paris", "%a %H:%M" }
   };
 
-  g_setenv ("UBUNTU_MENUPROXY", "0", TRUE);
+  g_unsetenv ("UBUNTU_MENUPROXY");
 
   gtk_init (&argc, &argv);
 
