@@ -297,8 +297,8 @@ static void
 ido_location_menu_item_init (IdoLocationMenuItem *self)
 {
   priv_t * p;
-  GtkBox * box;
   GtkWidget * w;
+  GtkGrid * grid;
 
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             IDO_LOCATION_MENU_ITEM_TYPE,
@@ -307,13 +307,26 @@ ido_location_menu_item_init (IdoLocationMenuItem *self)
   p = self->priv;
 
   p->name_label = gtk_label_new (NULL);
-  p->timestamp_label = gtk_label_new (NULL);
+  gtk_misc_set_alignment (GTK_MISC(p->name_label), 0.0, 0.5);
 
-  w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+  p->timestamp_label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC(p->timestamp_label), 1.0, 0.5);
-  box = GTK_BOX (w);
-  gtk_box_pack_start (box, p->name_label, FALSE, FALSE, 3);
-  gtk_box_pack_end (box, p->timestamp_label, FALSE, FALSE, 5);
+
+  w = gtk_grid_new ();
+  grid = GTK_GRID (w);
+  gtk_grid_attach (grid, p->name_label, 0, 0, 1, 1);
+  gtk_grid_attach (grid, p->timestamp_label, 1, 0, 1, 1);
+  g_object_set (p->name_label,
+                "halign", GTK_ALIGN_START,
+                "hexpand", TRUE,
+                "margin-right", 6,
+                "valign", GTK_ALIGN_CENTER,
+                NULL);
+  g_object_set (p->timestamp_label,
+                "halign", GTK_ALIGN_END,
+                "hexpand", FALSE,
+                "valign", GTK_ALIGN_CENTER,
+                NULL);
 
   gtk_widget_show_all (w);
   gtk_container_add (GTK_CONTAINER (self), w);

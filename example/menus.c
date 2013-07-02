@@ -3,6 +3,7 @@
 #include "idoscalemenuitem.h"
 #include "idocalendarmenuitem.h"
 #include "idoentrymenuitem.h"
+#include "idolocationmenuitem.h"
 #include "idoswitchmenuitem.h"
 #include "idousermenuitem.h"
 #include "config.h"
@@ -19,31 +20,10 @@ slider_released (GtkWidget *widget, gpointer user_data)
   g_print ("released\n");
 }
 
-static GtkWidget *
-create_user_menu (const char * username,
-                  const char * filename,
-                  gboolean is_logged_in,
-                  gboolean is_active)
-{
-  GtkWidget * ret;
-  GFile * file = filename ? g_file_new_for_path (filename) : NULL;
-  GIcon * icon = file ? g_file_icon_new (file) : NULL;
-
-  ret = g_object_new (IDO_USER_MENU_ITEM_TYPE,
-                      "label", username,
-                      "icon", icon,
-                      "is-logged-in", is_logged_in,
-                      "is-current-user", is_active,
-                      NULL);
-
-  g_clear_object (&icon);
-  g_clear_object (&file);
-  return ret;
-}
-
 int
 main (int argc, char *argv[])
 {
+  guint i;
   GtkWidget *window;
   GtkWidget *vbox;
   GtkWidget *menu;
@@ -52,6 +32,28 @@ main (int argc, char *argv[])
   GtkWidget *menubar;
   GtkWidget *image;
   GtkWidget *label;
+
+  const struct {
+    const char * username;
+    const char * icon_filename;
+    gboolean is_logged_in;
+    gboolean is_active;
+  } users[] = {
+    { "Guest", NULL, FALSE, FALSE },
+    { "Bobby Fischer", "/usr/share/pixmaps/faces/chess.jpg", FALSE, FALSE },
+    { "Linus Torvalds", "/usr/share/pixmaps/faces/penguin.jpg", TRUE, FALSE },
+    { "Mark Shuttleworth", "/usr/share/pixmaps/faces/astronaut.jpg", TRUE, TRUE }
+  };
+
+  const struct {
+    const char * name;
+    const char * timezone;
+    const char * format;
+  } locations[] = {
+    { "Oklahoma City", "America/Chicago", "%I:%M %p" },
+    { "Magdeburg", "Europe/Berlin", "%T" },
+    { "Kuntzig", "Europe/Paris", "%a %H:%M" }
+  };
 
   g_unsetenv ("UBUNTU_MENUPROXY");
 
@@ -81,6 +83,7 @@ main (int argc, char *argv[])
   menuitem = gtk_menu_item_new_with_label ("Open");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
+  /* Scale */
   menuitem = ido_scale_menu_item_new_with_range ("Volume",
                                                  IDO_RANGE_STYLE_DEFAULT,
                                                  65, 0, 100, 1);
@@ -94,56 +97,55 @@ main (int argc, char *argv[])
   g_signal_connect (menuitem, "slider-grabbed", G_CALLBACK (slider_grabbed), NULL);
   g_signal_connect (menuitem, "slider-released", G_CALLBACK (slider_released), NULL);
 
+  /* Entry */
   menuitem = ido_entry_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
+  /* Switch */
   menuitem = ido_switch_menu_item_new ();
   label = gtk_label_new ("This is a switch");
   gtk_widget_show(label);
   gtk_container_add (ido_switch_menu_item_get_content_area(IDO_SWITCH_MENU_ITEM(menuitem)), label);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
+  /* Calendar */
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
   menuitem = ido_calendar_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-  menuitem = ido_scale_menu_item_new_with_range ("Volume",
-                                                 IDO_RANGE_STYLE_SMALL,
-                                                 65, 0, 100, 1);
-  ido_scale_menu_item_set_style (IDO_SCALE_MENU_ITEM (menuitem), IDO_SCALE_MENU_ITEM_STYLE_IMAGE);
-  image = ido_scale_menu_item_get_primary_image (IDO_SCALE_MENU_ITEM (menuitem));
-  gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_NEW, GTK_ICON_SIZE_MENU);
-  image = ido_scale_menu_item_get_secondary_image (IDO_SCALE_MENU_ITEM (menuitem));
-  gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  g_signal_connect (menuitem, "slider-grabbed", G_CALLBACK (slider_grabbed), NULL);
-  g_signal_connect (menuitem, "slider-released", G_CALLBACK (slider_released), NULL);
-
-  /**
-  ***  Users
-  **/
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         create_user_menu ("Guest",
-                                           NULL,
-                                           FALSE, FALSE));
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         create_user_menu ("Bobby Fischer",
-                                           "/usr/share/pixmaps/faces/chess.jpg",
-                                           FALSE, FALSE));
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         create_user_menu ("Linus Torvalds",
-                                           "/usr/share/pixmaps/faces/penguin.jpg",
-                                           TRUE, FALSE));
- 
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         create_user_menu ("Mark Shuttleworth",
-                                           "/usr/share/pixmaps/faces/astronaut.jpg",
-                                           TRUE, TRUE));
+  /* Users */
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
+  for (i=0; i<G_N_ELEMENTS(users); i++)
+    {
+      const char * const filename = users[i].icon_filename;
+      GFile * file = filename ? g_file_new_for_path (filename) : NULL;
+      GIcon * icon = file ? g_file_icon_new (file) : NULL;
+      GtkWidget * w = g_object_new (IDO_USER_MENU_ITEM_TYPE,
+                                   "label", users[i].username,
+                                   "icon", icon,
+                                   "is-logged-in", users[i].is_logged_in,
+                                   "is-current-user", users[i].is_active,
+                                   NULL);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
+      g_clear_object (&icon);
+      g_clear_object (&file);
+    }
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), ido_user_menu_item_new ());
+
+  /* Locations */
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
+  for (i=0; i<G_N_ELEMENTS(locations); i++)
+    {
+      GtkWidget * w = g_object_new (IDO_LOCATION_MENU_ITEM_TYPE,
+                                    "name", locations[i].name,
+                                    "timezone", locations[i].timezone,
+                                    "format", locations[i].format,
+                                    NULL);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
+    }
+      
+
 
   /* Add the menubar */
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), root);
