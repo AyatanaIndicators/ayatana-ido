@@ -448,7 +448,7 @@ ido_user_menu_item_new (void)
 ****
 ***/
 
-/**
+/*
  * This is a helper function for creating user menuitems for both
  * "indicator.user-menu-item" and "indicator.guest-menu-item",
  * since they only differ in how they use their action's state.

@@ -807,7 +807,7 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
  * ido_scale_menu_item_set_icons:
  * @item: a #IdoScaleMenuItem
  * @primary-icon: (allow-none): the primary icon, or %NULL
- * @secondary-icon: (allow-non): the secondary icon, %NULL
+ * @secondary-icon: (allow-none): the secondary icon, %NULL
  *
  * Sets the icons of @item to  @primary_icon and @secondary_icon.
  * Pass %NULL for either of them to unset the icon.
