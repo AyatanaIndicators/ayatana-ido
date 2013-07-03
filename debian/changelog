@@ -1,3 +1,16 @@
+ido (13.10.0+13.10.20130703.1-0ubuntu1) saucy; urgency=low
+
+  [ Charles Kerr ]
+  * fix IdoLocationMenuItem label alignment issue reported by ted.
+
+  [ Ted Gould ]
+  * Fix broken comments for the introspection scanner.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 141
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 03 Jul 2013 14:16:50 +0000
+
 ido (13.10.0+13.10.20130702-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
