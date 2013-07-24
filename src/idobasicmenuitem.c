@@ -21,8 +21,6 @@
  #include "config.h"
 #endif
 
-#include <string.h> /* strstr() */
-
 #include <gtk/gtk.h>
 
 #include "idoactionhelper.h"
@@ -304,7 +302,7 @@ ido_basic_menu_item_set_secondary_text (IdoBasicMenuItem * self, const char * se
 
 /***
 ****
-****
+****  Progress Menu Item
 ****
 ***/
 
@@ -364,11 +362,6 @@ ido_progress_menu_item_new_from_model (GMenuItem    * menu_item,
 
   for (i=0; i<n; i++)
     g_value_unset (&parameters[i].value);
-
-  /* as per the spec, draw the progress widget greyed out */
-
-  gtk_widget_set_sensitive (ido_menu_item->priv->label, FALSE);
-  gtk_widget_set_sensitive (ido_menu_item->priv->secondary_label, FALSE);
 
   /* give it an ActionHelper */
 
