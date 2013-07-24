@@ -19,6 +19,7 @@ sources_h =				\
 	idoswitchmenuitem.h		\
 	idousermenuitem.h		\
 	idoappointmentmenuitem.h	\
+	idobasicmenuitem.h		\
 	idolocationmenuitem.h		\
 	idotimeline.h			\
 	libido.h			\
@@ -80,6 +81,7 @@ libido_0_1_la_SOURCES =			\
 	idomediaplayermenuitem.c	\
 	idoplaybackmenuitem.c		\
 	idoappointmentmenuitem.c	\
+	idobasicmenuitem.c		\
 	idolocationmenuitem.c
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
