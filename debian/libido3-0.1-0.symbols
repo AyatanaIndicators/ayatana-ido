@@ -12,6 +12,12 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_appointment_menu_item_set_format@Base 13.10.0daily13.06.19
  ido_appointment_menu_item_set_summary@Base 13.10.0daily13.06.19
  ido_appointment_menu_item_set_time@Base 13.10.0daily13.06.19
+ ido_basic_menu_item_get_type@Base 0replaceme
+ ido_basic_menu_item_new@Base 0replaceme
+ ido_basic_menu_item_set_icon@Base 0replaceme
+ ido_basic_menu_item_set_icon_from_file@Base 0replaceme
+ ido_basic_menu_item_set_secondary_text@Base 0replaceme
+ ido_basic_menu_item_set_text@Base 0replaceme
  ido_calendar_menu_item_clear_marks@Base 0.2.1
  ido_calendar_menu_item_get_calendar@Base 0.1.10
  ido_calendar_menu_item_get_date@Base 0.2.1
@@ -38,6 +44,7 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_message_dialog_get_type@Base 0.1.8
  ido_message_dialog_new@Base 0.1.8
  ido_message_dialog_new_with_markup@Base 0.1.8
+ ido_progress_menu_item_new_from_model@Base 0replaceme
  ido_range_get_type@Base 0.1.9
  ido_range_new@Base 0.1.9
  ido_range_style_get_type@Base 0.1.9
