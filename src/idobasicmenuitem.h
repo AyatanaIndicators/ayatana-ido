@@ -24,9 +24,9 @@
 
 G_BEGIN_DECLS
 
-#define IDO_BASIC_MENU_ITEM_TYPE    (ido_basic_menu_item_get_type ())
-#define IDO_BASIC_MENU_ITEM(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDO_BASIC_MENU_ITEM_TYPE, IdoBasicMenuItem))
-#define IDO_IS_BASIC_MENU_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDO_BASIC_MENU_ITEM_TYPE))
+#define IDO_TYPE_BASIC_MENU_ITEM    (ido_basic_menu_item_get_type ())
+#define IDO_BASIC_MENU_ITEM(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDO_TYPE_BASIC_MENU_ITEM, IdoBasicMenuItem))
+#define IDO_IS_BASIC_MENU_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDO_TYPE_BASIC_MENU_ITEM))
 
 typedef struct _IdoBasicMenuItem        IdoBasicMenuItem;
 typedef struct _IdoBasicMenuItemClass   IdoBasicMenuItemClass;

@@ -186,7 +186,7 @@ ido_basic_menu_item_init (IdoBasicMenuItem *self)
   GtkGrid * grid;
 
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            IDO_BASIC_MENU_ITEM_TYPE,
+                                            IDO_TYPE_BASIC_MENU_ITEM,
                                             IdoBasicMenuItemPrivate);
 
   p = self->priv;
@@ -228,7 +228,7 @@ ido_basic_menu_item_init (IdoBasicMenuItem *self)
 GtkWidget *
 ido_basic_menu_item_new (void)
 {
-  return GTK_WIDGET (g_object_new (IDO_BASIC_MENU_ITEM_TYPE, NULL));
+  return GTK_WIDGET (g_object_new (IDO_TYPE_BASIC_MENU_ITEM, NULL));
 }
 
 void
@@ -358,7 +358,7 @@ ido_progress_menu_item_new_from_model (GMenuItem    * menu_item,
     }
 
   g_assert (n <= G_N_ELEMENTS (parameters));
-  ido_menu_item = g_object_newv (IDO_BASIC_MENU_ITEM_TYPE, n, parameters);
+  ido_menu_item = g_object_newv (IDO_TYPE_BASIC_MENU_ITEM, n, parameters);
 
   for (i=0; i<n; i++)
     g_value_unset (&parameters[i].value);
