@@ -5,13 +5,8 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_action_helper_get_type@Base 13.10.0daily13.06.19
  ido_action_helper_get_widget@Base 13.10.0daily13.06.19
  ido_action_helper_new@Base 13.10.0daily13.06.19
- ido_appointment_menu_item_get_type@Base 13.10.0daily13.06.19
- ido_appointment_menu_item_new@Base 13.10.0daily13.06.19
+ ido_alarm_menu_item_new_from_model@Base 0replaceme
  ido_appointment_menu_item_new_from_model@Base 13.10.0daily13.06.19
- ido_appointment_menu_item_set_color@Base 13.10.0daily13.06.19
- ido_appointment_menu_item_set_format@Base 13.10.0daily13.06.19
- ido_appointment_menu_item_set_summary@Base 13.10.0daily13.06.19
- ido_appointment_menu_item_set_time@Base 13.10.0daily13.06.19
  ido_basic_menu_item_get_type@Base 0replaceme
  ido_basic_menu_item_new@Base 0replaceme
  ido_basic_menu_item_set_icon@Base 0replaceme

@@ -11,6 +11,7 @@ stamp_files =				\
 	idotypebuiltins.c
 
 sources_h =				\
+	idoalarmmenuitem.h		\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
@@ -20,6 +21,7 @@ sources_h =				\
 	idousermenuitem.h		\
 	idoappointmentmenuitem.h	\
 	idobasicmenuitem.h		\
+	idotimestampmenuitem.h		\
 	idolocationmenuitem.h		\
 	idotimeline.h			\
 	libido.h			\
@@ -69,6 +71,7 @@ libido_0_1_la_SOURCES =			\
 	libido.c			\
 	idotypebuiltins.c		\
 	idocalendarmenuitem.c		\
+	idoalarmmenuitem.c		\
 	idoentrymenuitem.c		\
 	idomessagedialog.c		\
 	idorange.c			\
@@ -82,6 +85,7 @@ libido_0_1_la_SOURCES =			\
 	idoplaybackmenuitem.c		\
 	idoappointmentmenuitem.c	\
 	idobasicmenuitem.c		\
+	idotimestampmenuitem.c		\
 	idolocationmenuitem.c
 
 libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
