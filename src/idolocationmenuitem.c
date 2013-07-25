@@ -31,7 +31,6 @@
 enum
 {
   PROP_0,
-  PROP_NAME,
   PROP_TIMEZONE,
   PROP_FORMAT,
   PROP_LAST
@@ -41,19 +40,15 @@ static GParamSpec *properties[PROP_LAST];
 
 struct _IdoLocationMenuItemPrivate
 {
-  char * name;
   char * timezone;
   char * format;
 
   guint timestamp_timer;
-
-  GtkWidget * name_label;
-  GtkWidget * timestamp_label;
 };
 
 typedef IdoLocationMenuItemPrivate priv_t;
 
-G_DEFINE_TYPE (IdoLocationMenuItem, ido_location_menu_item, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE (IdoLocationMenuItem, ido_location_menu_item, IDO_TYPE_BASIC_MENU_ITEM);
 
 /***
 ****  Timestamp Label
@@ -62,30 +57,32 @@ G_DEFINE_TYPE (IdoLocationMenuItem, ido_location_menu_item, GTK_TYPE_MENU_ITEM);
 static void
 update_timestamp_label (IdoLocationMenuItem * self)
 {
+  char * str;
   priv_t * p = self->priv;
 
   if (p->format && *p->format)
     {
       GTimeZone * tz;
       GDateTime * now;
-      char * str;
 
       tz = g_time_zone_new (p->timezone);
       if (tz == NULL)
         tz = g_time_zone_new_local ();
       now = g_date_time_new_now (tz);
+
       str = g_date_time_format (now, p->format);
 
-      gtk_label_set_text (GTK_LABEL(p->timestamp_label), str);
-
-      g_free (str);
       g_date_time_unref (now);
       g_time_zone_unref (tz);
     }
   else
     {
-      gtk_label_set_text (GTK_LABEL(p->timestamp_label), "");
+      str = NULL;
     }
+
+  ido_basic_menu_item_set_secondary_text (IDO_BASIC_MENU_ITEM(self), str);
+
+  g_free (str);
 }
 
 static void
@@ -181,10 +178,6 @@ my_get_property (GObject     * o,
 
   switch (property_id)
     {
-      case PROP_NAME:
-        g_value_set_string (value, p->name);
-        break;
-
       case PROP_TIMEZONE:
         g_value_set_string (value, p->timezone);
         break;
@@ -209,10 +202,6 @@ my_set_property (GObject       * o,
 
   switch (property_id)
     {
-      case PROP_NAME:
-        ido_location_menu_item_set_name (self, g_value_get_string (value));
-        break;
-
       case PROP_TIMEZONE:
         ido_location_menu_item_set_timezone (self, g_value_get_string (value));
         break;
@@ -242,7 +231,6 @@ my_finalize (GObject * object)
   priv_t * p = self->priv;
 
   g_free (p->format);
-  g_free (p->name);
   g_free (p->timezone);
 
   G_OBJECT_CLASS (ido_location_menu_item_parent_class)->finalize (object);
@@ -269,13 +257,6 @@ ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
              | G_PARAM_READWRITE
              | G_PARAM_STATIC_STRINGS;
 
-  properties[PROP_NAME] = g_param_spec_string (
-    "name",
-    "The location's name",
-    "The name to display; eg, 'Oklahoma City'",
-    "Location",
-    prop_flags);
-
   properties[PROP_TIMEZONE] = g_param_spec_string (
     "timezone",
     "timezone identifier",
@@ -296,42 +277,10 @@ ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
 static void
 ido_location_menu_item_init (IdoLocationMenuItem *self)
 {
-  priv_t * p;
-  GtkWidget * w;
-  GtkGrid * grid;
-
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             IDO_LOCATION_MENU_ITEM_TYPE,
                                             IdoLocationMenuItemPrivate);
-
-  p = self->priv;
-
-  p->name_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC(p->name_label), 0.0, 0.5);
-
-  p->timestamp_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC(p->timestamp_label), 1.0, 0.5);
-
-  w = gtk_grid_new ();
-  grid = GTK_GRID (w);
-  gtk_grid_attach (grid, p->name_label, 0, 0, 1, 1);
-  gtk_grid_attach (grid, p->timestamp_label, 1, 0, 1, 1);
-  g_object_set (p->name_label,
-                "halign", GTK_ALIGN_START,
-                "hexpand", TRUE,
-                "margin-right", 6,
-                "valign", GTK_ALIGN_CENTER,
-                NULL);
-  g_object_set (p->timestamp_label,
-                "halign", GTK_ALIGN_END,
-                "hexpand", FALSE,
-                "valign", GTK_ALIGN_CENTER,
-                NULL);
-
-  gtk_widget_show_all (w);
-  gtk_container_add (GTK_CONTAINER (self), w);
 }
-
 
 /***
 ****  Public API
@@ -342,26 +291,6 @@ GtkWidget *
 ido_location_menu_item_new (void)
 {
   return GTK_WIDGET (g_object_new (IDO_LOCATION_MENU_ITEM_TYPE, NULL));
-}
-
-/**
- * ido_location_menu_item_set_name:
- * @name: human-readable name, such as a city (eg: "Oklahoma City")
- *
- * Sets this location's name, for display in the menuitem's primary label.
- */
-void
-ido_location_menu_item_set_name (IdoLocationMenuItem * self,
-                                 const char          * name)
-{
-  priv_t * p;
-
-  g_return_if_fail (IDO_IS_LOCATION_MENU_ITEM (self));
-  p = self->priv;
-
-  g_free (p->name);
-  p->name = g_strdup (name);
-  gtk_label_set_text (GTK_LABEL(p->name_label), p->name);
 }
 
 /**
@@ -436,7 +365,7 @@ ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      GParameter p = { "name", G_VALUE_INIT };
+      GParameter p = { "text", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_STRING);
       g_value_take_string (&p.value, str);
       parameters[n++] = p;

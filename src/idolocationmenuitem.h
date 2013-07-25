@@ -21,6 +21,7 @@
 #define __IDO_LOCATION_MENU_ITEM_H__
 
 #include <gtk/gtk.h>
+#include "idobasicmenuitem.h"
 
 G_BEGIN_DECLS
 
@@ -34,7 +35,7 @@ typedef struct _IdoLocationMenuItemPrivate IdoLocationMenuItemPrivate;
 
 struct _IdoLocationMenuItemClass
 {
-  GtkMenuItemClass parent_class;
+  IdoBasicMenuItemClass parent_class;
 };
 
 /**
@@ -46,7 +47,7 @@ struct _IdoLocationMenuItemClass
 struct _IdoLocationMenuItem
 {
   /*< private >*/
-  GtkMenuItem parent;
+  IdoBasicMenuItem parent;
   IdoLocationMenuItemPrivate * priv;
 };
 
@@ -57,9 +58,6 @@ GtkWidget * ido_location_menu_item_new (void);
 
 GtkMenuItem * ido_location_menu_item_new_from_model (GMenuItem    * menuitem,
                                                      GActionGroup * actions);
-
-void ido_location_menu_item_set_name (IdoLocationMenuItem * menuitem,
-                                      const char          * name);
 
 void ido_location_menu_item_set_timezone (IdoLocationMenuItem * menuitem,
                                           const char          * timezone);
