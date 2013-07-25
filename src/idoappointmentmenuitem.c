@@ -33,7 +33,6 @@ enum
 {
   PROP_0,
   PROP_COLOR,
-  PROP_SUMMARY,
   PROP_TIME,
   PROP_FORMAT,
   PROP_LAST
@@ -47,17 +46,13 @@ struct _IdoAppointmentMenuItemPrivate
   char * format;
   char * color_string;
   GDateTime * date_time;
-
-  GtkWidget * color_image;
-  GtkWidget * summary_label;
-  GtkWidget * timestamp_label;
 };
 
 typedef IdoAppointmentMenuItemPrivate priv_t;
 
 G_DEFINE_TYPE (IdoAppointmentMenuItem,
                ido_appointment_menu_item,
-               GTK_TYPE_MENU_ITEM);
+               IDO_TYPE_BASIC_MENU_ITEM);
 
 /***
 ****  GObject Virtual Functions
@@ -76,10 +71,6 @@ my_get_property (GObject     * o,
     {
       case PROP_COLOR:
         g_value_set_string (v, p->color_string);
-        break;
-
-      case PROP_SUMMARY:
-        g_value_set_string (v, p->summary);
         break;
 
       case PROP_FORMAT:
@@ -108,10 +99,6 @@ my_set_property (GObject       * o,
     {
       case PROP_COLOR:
         ido_appointment_menu_item_set_color (self, g_value_get_string (v));
-        break;
-
-      case PROP_SUMMARY:
-        ido_appointment_menu_item_set_summary (self, g_value_get_string (v));
         break;
 
       case PROP_FORMAT:
@@ -180,13 +167,6 @@ ido_appointment_menu_item_class_init (IdoAppointmentMenuItemClass *klass)
     "White",
     prop_flags);
 
-  properties[PROP_SUMMARY] = g_param_spec_string (
-    "summary",
-    "Summary",
-    "Brief description of the appointment",
-    "",
-    prop_flags);
-
   properties[PROP_TIME] = g_param_spec_int64 (
     "time",
     "Time",
@@ -207,29 +187,10 @@ ido_appointment_menu_item_class_init (IdoAppointmentMenuItemClass *klass)
 static void
 ido_appointment_menu_item_init (IdoAppointmentMenuItem *self)
 {
-  priv_t * p;
-  GtkBox * box;
-  GtkWidget * w;
-
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             IDO_APPOINTMENT_MENU_ITEM_TYPE,
                                             IdoAppointmentMenuItemPrivate);
 
-  p = self->priv;
-
-  p->color_image = gtk_image_new ();
-  p->summary_label = gtk_label_new (NULL);
-  p->timestamp_label = gtk_label_new (NULL);
-  w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-
-  gtk_misc_set_alignment (GTK_MISC(p->timestamp_label), 1.0, 0.5);
-  box = GTK_BOX (w);
-  gtk_box_pack_start (box, p->color_image, FALSE, FALSE, 2);
-  gtk_box_pack_start (box, p->summary_label, FALSE, FALSE, 2);
-  gtk_box_pack_end (box, p->timestamp_label, FALSE, FALSE, 5);
-
-  gtk_widget_show_all (w);
-  gtk_container_add (GTK_CONTAINER (self), w);
 }
 
 /***
@@ -289,7 +250,7 @@ update_timestamp_label (IdoAppointmentMenuItem * self)
   else
     str = NULL;
 
-  gtk_label_set_text (GTK_LABEL(p->timestamp_label), str);
+  ido_basic_menu_item_set_secondary_text (IDO_BASIC_MENU_ITEM (self), str);
   g_free (str);
 }
 
@@ -325,29 +286,10 @@ ido_appointment_menu_item_set_color (IdoAppointmentMenuItem * self,
 
   g_free (p->color_string);
   p->color_string = g_strdup (color_string);
+
   pixbuf = create_color_icon_pixbuf (p->color_string);
-  gtk_image_set_from_pixbuf (GTK_IMAGE(p->color_image), pixbuf);
+  ido_basic_menu_item_set_icon (IDO_BASIC_MENU_ITEM(self), G_ICON(pixbuf));
   g_object_unref (G_OBJECT(pixbuf));
-}
-
-/**
- * ido_appointment_menu_item_set_summary:
- * @summary: short string describing the appointment.
- *
- * Set the menuitem's primary label with a short description of the appointment
- */
-void
-ido_appointment_menu_item_set_summary (IdoAppointmentMenuItem * self,
-                                       const char             * summary)
-{
-  priv_t * p;
-
-  g_return_if_fail (IDO_IS_APPOINTMENT_MENU_ITEM (self));
-  p = self->priv;
-
-  g_free (p->summary);
-  p->summary = g_strdup (summary);
-  gtk_label_set_text (GTK_LABEL(p->summary_label), p->summary);
 }
 
 /**
@@ -420,9 +362,9 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
 
   n = 0;
 
-  if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, G_MENU_ATTRIBUTE_LABEL, "s", &str))
     {
-      GParameter p = { "summary", G_VALUE_INIT };
+      GParameter p = { "text", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_STRING);
       g_value_take_string (&p.value, str);
       parameters[n++] = p;

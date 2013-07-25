@@ -23,6 +23,7 @@
 #include <time.h> /* time_t */
 
 #include <gtk/gtk.h>
+#include "idobasicmenuitem.h"
 
 G_BEGIN_DECLS
 
@@ -36,7 +37,7 @@ typedef struct _IdoAppointmentMenuItemPrivate IdoAppointmentMenuItemPrivate;
 
 struct _IdoAppointmentMenuItemClass
 {
-  GtkMenuItemClass parent_class;
+  IdoBasicMenuItemClass parent_class;
 };
 
 /**
@@ -49,7 +50,7 @@ struct _IdoAppointmentMenuItemClass
 struct _IdoAppointmentMenuItem
 {
   /*< private >*/
-  GtkMenuItem parent;
+  IdoBasicMenuItem parent;
   IdoAppointmentMenuItemPrivate * priv;
 };
 
@@ -60,9 +61,6 @@ GtkWidget * ido_appointment_menu_item_new (void);
 
 GtkMenuItem * ido_appointment_menu_item_new_from_model (GMenuItem    * menuitem,
                                                         GActionGroup * actions);
-
-void ido_appointment_menu_item_set_summary (IdoAppointmentMenuItem * menuitem,
-                                            const char             * summary);
 
 void ido_appointment_menu_item_set_time (IdoAppointmentMenuItem * menuitem,
                                          time_t                   time);
