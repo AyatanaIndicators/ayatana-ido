@@ -203,6 +203,12 @@ ido_basic_menu_item_init (IdoBasicMenuItem *self)
   gtk_grid_attach (grid, p->image, 0, 0, 1, 1);
   gtk_grid_attach (grid, p->label, 1, 0, 1, 1);
   gtk_grid_attach (grid, p->secondary_label, 2, 0, 1, 1);
+  g_object_set (p->image,
+                "halign", GTK_ALIGN_START,
+                "hexpand", FALSE,
+                "valign", GTK_ALIGN_CENTER,
+                "margin-right", 6,
+                NULL);
   g_object_set (p->label,
                 "halign", GTK_ALIGN_START,
                 "hexpand", TRUE,
