@@ -21,7 +21,7 @@
 #define __IDO_LOCATION_MENU_ITEM_H__
 
 #include <gtk/gtk.h>
-#include "idobasicmenuitem.h"
+#include "idotimestampmenuitem.h"
 
 G_BEGIN_DECLS
 
@@ -35,7 +35,7 @@ typedef struct _IdoLocationMenuItemPrivate IdoLocationMenuItemPrivate;
 
 struct _IdoLocationMenuItemClass
 {
-  IdoBasicMenuItemClass parent_class;
+  IdoTimeStampMenuItemClass parent_class;
 };
 
 /**
@@ -47,7 +47,7 @@ struct _IdoLocationMenuItemClass
 struct _IdoLocationMenuItem
 {
   /*< private >*/
-  IdoBasicMenuItem parent;
+  IdoTimeStampMenuItem parent;
   IdoLocationMenuItemPrivate * priv;
 };
 
