@@ -20,7 +20,9 @@
 #include <gtk/gtk.h>
 #include <gtk/ubuntu-private.h>
 
+#include "idoalarmmenuitem.h"
 #include "idoappointmentmenuitem.h"
+#include "idobasicmenuitem.h"
 #include "idocalendarmenuitem.h"
 #include "idolocationmenuitem.h"
 #include "idoscalemenuitem.h"
@@ -65,6 +67,12 @@ ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
 
   else if (g_str_equal (type, "com.canonical.indicator.appointment"))
     item = ido_appointment_menu_item_new_from_model (menuitem, actions);
+
+  else if (g_str_equal (type, "com.canonical.indicator.alarm"))
+    item = ido_alarm_menu_item_new_from_model (menuitem, actions);
+
+  else if (g_str_equal (type, "com.canonical.indicator.progress"))
+    item = ido_progress_menu_item_new_from_model (menuitem, actions);
 
   else if (g_str_equal (type, "com.canonical.unity.slider"))
     item = ido_scale_menu_item_new_from_model (menuitem, actions);

@@ -27,50 +27,8 @@
 #include "idoactionhelper.h"
 #include "idotimestampmenuitem.h"
 
-/* create a menu-sized pixbuf filled with specified color */
-static GdkPixbuf *
-create_color_icon_pixbuf (const char * color_spec)
-{
-  static int width = -1;
-  static int height = -1;
-  GdkPixbuf * pixbuf = NULL;
-
-  if (width == -1)
-    {
-      gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
-      width = CLAMP (width, 10, 30);
-      height = CLAMP (height, 10, 30);
-    }
-
-  if (color_spec && *color_spec)
-    {
-      cairo_surface_t * surface;
-      cairo_t * cr;
-      GdkRGBA rgba;
-
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-      cr = cairo_create (surface);
-
-      if (gdk_rgba_parse (&rgba, color_spec))
-        gdk_cairo_set_source_rgba (cr, &rgba);
-
-      cairo_paint (cr);
-      cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
-      cairo_set_line_width (cr, 1);
-      cairo_rectangle (cr, 0.5, 0.5, width-1, height-1);
-      cairo_stroke (cr);
-
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-
-      cairo_destroy (cr);
-      cairo_surface_destroy (surface);
-    }
-
-  return pixbuf;
-}
-
 /**
- * ido_appointment_menu_item_new_from_model:
+ * ido_alarm_menu_item_new_from_model:
  * @menu_item: the corresponding menuitem
  * @actions: action group to tell when this GtkMenuItem is activated
  *
@@ -81,8 +39,8 @@ create_color_icon_pixbuf (const char * color_spec)
  * in @actions when this IdoAppointmentMenuItem is activated.
  */
 GtkMenuItem *
-ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
-                                          GActionGroup * actions)
+ido_alarm_menu_item_new_from_model (GMenuItem    * menu_item,
+                                    GActionGroup * actions)
 {
   guint i;
   guint n;
@@ -103,13 +61,12 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       parameters[n++] = p;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-color", "s", &str))
+  if (TRUE)
     {
       GParameter p = { "icon", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_OBJECT);
-      g_value_take_object (&p.value, create_color_icon_pixbuf (str));
+      g_value_take_object (&p.value, g_themed_icon_new_with_default_fallbacks ("alarm-symbolic"));
       parameters[n++] = p;
-      g_free (str);
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))

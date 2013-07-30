@@ -138,7 +138,7 @@ main (int argc, char *argv[])
   for (i=0; i<G_N_ELEMENTS(locations); i++)
     {
       GtkWidget * w = g_object_new (IDO_LOCATION_MENU_ITEM_TYPE,
-                                    "name", locations[i].name,
+                                    "text", locations[i].name,
                                     "timezone", locations[i].timezone,
                                     "format", locations[i].format,
                                     NULL);

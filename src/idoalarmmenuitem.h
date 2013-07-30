@@ -17,15 +17,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __IDO_APPOINTMENT_MENU_ITEM_H__
-#define __IDO_APPOINTMENT_MENU_ITEM_H__
+#ifndef __IDO_ALARM_MENU_ITEM_H__
+#define __IDO_ALARM_MENU_ITEM_H__
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-GtkMenuItem * ido_appointment_menu_item_new_from_model (GMenuItem    * menuitem,
-                                                        GActionGroup * actions);
+GtkMenuItem * ido_alarm_menu_item_new_from_model (GMenuItem    * menuitem,
+                                                  GActionGroup * actions);
 
 G_END_DECLS
 

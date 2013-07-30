@@ -31,9 +31,7 @@
 enum
 {
   PROP_0,
-  PROP_NAME,
   PROP_TIMEZONE,
-  PROP_FORMAT,
   PROP_LAST
 };
 
@@ -41,51 +39,35 @@ static GParamSpec *properties[PROP_LAST];
 
 struct _IdoLocationMenuItemPrivate
 {
-  char * name;
   char * timezone;
-  char * format;
 
   guint timestamp_timer;
-
-  GtkWidget * name_label;
-  GtkWidget * timestamp_label;
 };
 
 typedef IdoLocationMenuItemPrivate priv_t;
 
-G_DEFINE_TYPE (IdoLocationMenuItem, ido_location_menu_item, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE (IdoLocationMenuItem, ido_location_menu_item, IDO_TYPE_TIME_STAMP_MENU_ITEM);
 
 /***
 ****  Timestamp Label
 ***/
 
 static void
-update_timestamp_label (IdoLocationMenuItem * self)
+update_timestamp (IdoLocationMenuItem * self)
 {
-  priv_t * p = self->priv;
+  GTimeZone * tz;
+  GDateTime * date_time;
 
-  if (p->format && *p->format)
-    {
-      GTimeZone * tz;
-      GDateTime * now;
-      char * str;
+  tz = g_time_zone_new (self->priv->timezone);
+  if (tz == NULL)
+    tz = g_time_zone_new_local ();
+  date_time = g_date_time_new_now (tz);
 
-      tz = g_time_zone_new (p->timezone);
-      if (tz == NULL)
-        tz = g_time_zone_new_local ();
-      now = g_date_time_new_now (tz);
-      str = g_date_time_format (now, p->format);
+  ido_time_stamp_menu_item_set_date_time (IDO_TIME_STAMP_MENU_ITEM(self),
+                                          date_time);
 
-      gtk_label_set_text (GTK_LABEL(p->timestamp_label), str);
-
-      g_free (str);
-      g_date_time_unref (now);
-      g_time_zone_unref (tz);
-    }
-  else
-    {
-      gtk_label_set_text (GTK_LABEL(p->timestamp_label), "");
-    }
+  g_date_time_unref (date_time);
+  g_time_zone_unref (tz);
 }
 
 static void
@@ -100,16 +82,16 @@ stop_timestamp_timer (IdoLocationMenuItem * self)
     }
 }
 
-static void start_timestamp_timer (IdoLocationMenuItem * self);
+static void restart_timestamp_timer (IdoLocationMenuItem * self);
 
 static gboolean
 on_timestamp_timer (gpointer gself)
 {
   IdoLocationMenuItem * self = IDO_LOCATION_MENU_ITEM (gself);
 
-  update_timestamp_label (self);
+  update_timestamp (self);
 
-  start_timestamp_timer (self);
+  restart_timestamp_timer (self);
   return G_SOURCE_REMOVE;
 }
 
@@ -143,12 +125,11 @@ calculate_seconds_until_next_minute (void)
 }
 
 static void
-start_timestamp_timer (IdoLocationMenuItem * self)
+restart_timestamp_timer (IdoLocationMenuItem * self)
 {
-  int interval_sec;
+  const char * fmt = ido_time_stamp_menu_item_get_format (IDO_TIME_STAMP_MENU_ITEM (self));
   gboolean timestamp_shows_seconds;
-  priv_t * p = self->priv;
-  const char * const fmt = p->format;
+  int interval_sec;
 
   stop_timestamp_timer (self);
 
@@ -161,9 +142,9 @@ start_timestamp_timer (IdoLocationMenuItem * self)
   else
     interval_sec = calculate_seconds_until_next_minute();
 
-  p->timestamp_timer = g_timeout_add_seconds (interval_sec,
-                                              on_timestamp_timer,
-                                              self);
+  self->priv->timestamp_timer = g_timeout_add_seconds (interval_sec,
+                                                       on_timestamp_timer,
+                                                       self);
 }
 
 /***
@@ -181,16 +162,8 @@ my_get_property (GObject     * o,
 
   switch (property_id)
     {
-      case PROP_NAME:
-        g_value_set_string (value, p->name);
-        break;
-
       case PROP_TIMEZONE:
         g_value_set_string (value, p->timezone);
-        break;
-
-      case PROP_FORMAT:
-        g_value_set_string (value, p->format);
         break;
 
       default:
@@ -209,16 +182,8 @@ my_set_property (GObject       * o,
 
   switch (property_id)
     {
-      case PROP_NAME:
-        ido_location_menu_item_set_name (self, g_value_get_string (value));
-        break;
-
       case PROP_TIMEZONE:
         ido_location_menu_item_set_timezone (self, g_value_get_string (value));
-        break;
-
-      case PROP_FORMAT:
-        ido_location_menu_item_set_format (self, g_value_get_string (value));
         break;
 
       default:
@@ -239,11 +204,8 @@ static void
 my_finalize (GObject * object)
 {
   IdoLocationMenuItem * self = IDO_LOCATION_MENU_ITEM (object);
-  priv_t * p = self->priv;
 
-  g_free (p->format);
-  g_free (p->name);
-  g_free (p->timezone);
+  g_free (self->priv->timezone);
 
   G_OBJECT_CLASS (ido_location_menu_item_parent_class)->finalize (object);
 }
@@ -255,7 +217,6 @@ my_finalize (GObject * object)
 static void
 ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
 {
-  GParamFlags prop_flags;
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
 
   g_type_class_add_private (klass, sizeof (IdoLocationMenuItemPrivate));
@@ -265,30 +226,12 @@ ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
   gobject_class->dispose = my_dispose;
   gobject_class->finalize = my_finalize;
 
-  prop_flags = G_PARAM_CONSTRUCT
-             | G_PARAM_READWRITE
-             | G_PARAM_STATIC_STRINGS;
-
-  properties[PROP_NAME] = g_param_spec_string (
-    "name",
-    "The location's name",
-    "The name to display; eg, 'Oklahoma City'",
-    "Location",
-    prop_flags);
-
   properties[PROP_TIMEZONE] = g_param_spec_string (
     "timezone",
     "timezone identifier",
     "string used to identify a timezone; eg, 'America/Chicago'",
     NULL,
-    prop_flags);
-
-  properties[PROP_FORMAT] = g_param_spec_string (
-    "format",
-    "strftime format",
-    "strftime-style format string for the timestamp",
-    "%T",
-    prop_flags);
+    G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, PROP_LAST, properties);
 }
@@ -296,42 +239,15 @@ ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
 static void
 ido_location_menu_item_init (IdoLocationMenuItem *self)
 {
-  priv_t * p;
-  GtkWidget * w;
-  GtkGrid * grid;
-
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             IDO_LOCATION_MENU_ITEM_TYPE,
                                             IdoLocationMenuItemPrivate);
 
-  p = self->priv;
-
-  p->name_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC(p->name_label), 0.0, 0.5);
-
-  p->timestamp_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC(p->timestamp_label), 1.0, 0.5);
-
-  w = gtk_grid_new ();
-  grid = GTK_GRID (w);
-  gtk_grid_attach (grid, p->name_label, 0, 0, 1, 1);
-  gtk_grid_attach (grid, p->timestamp_label, 1, 0, 1, 1);
-  g_object_set (p->name_label,
-                "halign", GTK_ALIGN_START,
-                "hexpand", TRUE,
-                "margin-right", 6,
-                "valign", GTK_ALIGN_CENTER,
-                NULL);
-  g_object_set (p->timestamp_label,
-                "halign", GTK_ALIGN_END,
-                "hexpand", FALSE,
-                "valign", GTK_ALIGN_CENTER,
-                NULL);
-
-  gtk_widget_show_all (w);
-  gtk_container_add (GTK_CONTAINER (self), w);
+  /* Update the timer whenever the format string changes
+     because it determines whether we update once per second or per minute */
+  g_signal_connect (self, "notify::format",
+                    G_CALLBACK(restart_timestamp_timer), NULL);
 }
-
 
 /***
 ****  Public API
@@ -342,26 +258,6 @@ GtkWidget *
 ido_location_menu_item_new (void)
 {
   return GTK_WIDGET (g_object_new (IDO_LOCATION_MENU_ITEM_TYPE, NULL));
-}
-
-/**
- * ido_location_menu_item_set_name:
- * @name: human-readable name, such as a city (eg: "Oklahoma City")
- *
- * Sets this location's name, for display in the menuitem's primary label.
- */
-void
-ido_location_menu_item_set_name (IdoLocationMenuItem * self,
-                                 const char          * name)
-{
-  priv_t * p;
-
-  g_return_if_fail (IDO_IS_LOCATION_MENU_ITEM (self));
-  p = self->priv;
-
-  g_free (p->name);
-  p->name = g_strdup (name);
-  gtk_label_set_text (GTK_LABEL(p->name_label), p->name);
 }
 
 /**
@@ -382,31 +278,7 @@ ido_location_menu_item_set_timezone (IdoLocationMenuItem   * self,
 
   g_free (p->timezone);
   p->timezone = g_strdup (timezone);
-  update_timestamp_label (self);
-}
-
-/**
- * ido_location_menu_item_set_format:
- * @format: the format string used when showing the location's time
- *
- * Set the format string for rendering the location's time
- * in its right-justified secondary label.
- *
- * See strfrtime(3) for more information on the format string.
- */
-void
-ido_location_menu_item_set_format (IdoLocationMenuItem   * self,
-                                   const char            * format)
-{
-  priv_t * p;
-
-  g_return_if_fail (IDO_IS_LOCATION_MENU_ITEM (self));
-  p = self->priv;
-
-  g_free (p->format);
-  p->format = g_strdup (format);
-  update_timestamp_label (self);
-  start_timestamp_timer (self);
+  update_timestamp (self);
 }
 
 /**
@@ -436,7 +308,7 @@ ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      GParameter p = { "name", G_VALUE_INIT };
+      GParameter p = { "text", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_STRING);
       g_value_take_string (&p.value, str);
       parameters[n++] = p;
