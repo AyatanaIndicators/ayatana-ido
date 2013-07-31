@@ -1,3 +1,17 @@
+ido (13.10.0+13.10.20130731-0ubuntu1) saucy; urgency=low
+
+  [ Ubuntu daily release ]
+  * debian/*symbols: auto-update new symbols to released version
+
+  [ Charles Kerr ]
+  * Support x-canonical-type: "com.canonical.indicator.progress" and
+    "com.canonical.indicator.alarm".
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 143
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 31 Jul 2013 02:02:57 +0000
+
 ido (13.10.0+13.10.20130703.1-0ubuntu1) saucy; urgency=low
 
   [ Charles Kerr ]
