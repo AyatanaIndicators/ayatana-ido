@@ -403,6 +403,26 @@ ido_action_helper_activate (IdoActionHelper *helper)
 }
 
 /**
+ * ido_action_helper_activate_with_parameter:
+ * @helper: an #IdoActionHelper
+ * @parameter: a #GVariant containing the parameter
+ *
+ * Activates the action that is associated with this helper passing
+ * @parameter instead the "target" associated with the menu item this
+ * helper is bound to.
+ */
+void
+ido_action_helper_activate_with_parameter (IdoActionHelper *helper,
+                                           GVariant        *parameter)
+{
+  g_return_if_fail (IDO_IS_ACTION_HELPER (helper));
+  g_return_if_fail (parameter != NULL);
+
+  if (helper->actions && helper->action_name)
+    g_action_group_activate_action (helper->actions, helper->action_name, parameter);
+}
+
+/**
  * ido_action_helper_change_action_state:
  * @helper: an #IdoActionHelper
  * @state: the proposed new state of the action
