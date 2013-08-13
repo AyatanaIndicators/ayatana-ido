@@ -41,6 +41,9 @@ GVariant *          ido_action_helper_get_action_target (IdoActionHelper *helper
 
 void                ido_action_helper_activate          (IdoActionHelper *helper);
 
+void                ido_action_helper_activate_with_parameter (IdoActionHelper *helper,
+                                                               GVariant        *parameter);
+
 void                ido_action_helper_change_action_state (IdoActionHelper *helper,
                                                            GVariant        *state);
 
