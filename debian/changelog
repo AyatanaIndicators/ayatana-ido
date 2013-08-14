@@ -1,8 +1,18 @@
-ido (13.10.0+13.10.20130731-0ubuntu2) UNRELEASED; urgency=low
+ido (13.10.0+13.10.20130814-0ubuntu1) saucy; urgency=low
 
+  [ Ubuntu daily release ]
   * debian/*symbols: auto-update new symbols to released version
 
- -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 14 Aug 2013 02:58:07 +0000
+  [ Ted Gould ]
+  * Add widgets for messaging menu.
+
+  [ Lars Uebernickel ]
+  * Add widgets for messaging menu.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 145
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 14 Aug 2013 02:58:11 +0000
 
 ido (13.10.0+13.10.20130731-0ubuntu1) saucy; urgency=low
 
