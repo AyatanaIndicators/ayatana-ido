@@ -1,3 +1,9 @@
+ido (13.10.0+13.10.20130731-0ubuntu2) UNRELEASED; urgency=low
+
+  * debian/*symbols: auto-update new symbols to released version
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 14 Aug 2013 02:58:07 +0000
+
 ido (13.10.0+13.10.20130731-0ubuntu1) saucy; urgency=low
 
   [ Ubuntu daily release ]
