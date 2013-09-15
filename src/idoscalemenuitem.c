@@ -307,7 +307,7 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                    g_param_spec_boolean ("reverse-scroll-events",
                                                          "Reverse scroll events",
                                                          "Reverses how up/down scroll events are interpreted",
-                                                         FALSE,
+                                                         TRUE,
                                                          G_PARAM_READWRITE));
 
   /**
@@ -411,6 +411,9 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style)
 static void
 ido_scale_menu_item_init (IdoScaleMenuItem *self)
 {
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+
+  priv->reverse_scroll = TRUE;
 }
 
 static void
