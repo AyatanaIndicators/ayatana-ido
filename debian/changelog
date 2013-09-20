@@ -1,3 +1,13 @@
+ido (13.10.0+13.10.20130920-0ubuntu1) saucy; urgency=low
+
+  [ Lars Uebernickel ]
+  * Reverse slider movement when scrolling by default. (LP: #1225330)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 147
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 20 Sep 2013 10:20:27 +0000
+
 ido (13.10.0+13.10.20130814-0ubuntu1) saucy; urgency=low
 
   [ Ubuntu daily release ]
