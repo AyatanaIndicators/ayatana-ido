@@ -76,6 +76,7 @@ struct _IdoScaleMenuItemPrivate {
   IdoScaleMenuItemStyle style;
   IdoRangeStyle         range_style;
   gint                  toggle_size;
+  gboolean              ignore_value_changed;
 };
 
 enum {
@@ -83,6 +84,7 @@ enum {
   SLIDER_RELEASED,
   PRIMARY_CLICKED,
   SECONDARY_CLICKED,
+  VALUE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -207,6 +209,20 @@ ido_scale_menu_item_toggle_size_allocate (IdoScaleMenuItem *item,
 }
 
 static void
+ido_scale_menu_item_scale_value_changed (GtkRange *range,
+                                         gpointer  user_data)
+{
+  IdoScaleMenuItem *self = user_data;
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+
+  /* The signal is not sent when it was set through
+   * ido_scale_menu_item_set_value().  */
+
+  if (!priv->ignore_value_changed)
+    g_signal_emit (self, signals[VALUE_CHANGED], 0, gtk_range_get_value (range));
+}
+
+static void
 ido_scale_menu_item_constructed (GObject *object)
 {
   IdoScaleMenuItem *self = IDO_SCALE_MENU_ITEM (object);
@@ -222,6 +238,7 @@ ido_scale_menu_item_constructed (GObject *object)
                 NULL);
 
   priv->scale = ido_range_new (adj, range_style);
+  g_signal_connect (priv->scale, "value-changed", G_CALLBACK (ido_scale_menu_item_scale_value_changed), self);
   g_object_ref (priv->scale);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
 
@@ -367,6 +384,23 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                              g_cclosure_marshal_VOID__VOID,
                                              G_TYPE_NONE, /* return type */
                                              0 /* n_params */);
+
+  /**
+   * IdoScaleMenuItem::value-changed:
+   * @menuitem: the #IdoScaleMenuItem for which the value changed
+   * @value: the new value
+   *
+   * Emitted whenever the value of the contained scale changes because
+   * of user input.
+   */
+  signals[VALUE_CHANGED] = g_signal_new ("value-changed",
+                                         IDO_TYPE_SCALE_MENU_ITEM,
+                                         G_SIGNAL_RUN_LAST,
+                                         0, NULL, NULL,
+                                         g_cclosure_marshal_VOID__DOUBLE,
+                                         G_TYPE_NONE,
+                                         1, G_TYPE_DOUBLE);
+
 
   g_type_class_add_private (item_class, sizeof (IdoScaleMenuItemPrivate));
 }
@@ -977,6 +1011,26 @@ default_secondary_clicked_handler (IdoScaleMenuItem * item)
   gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
 }
 
+/* ido_scale_menu_item_set_value:
+ *
+ * Sets the value of the scale inside @item to @value, without emitting
+ * "value-changed".
+ */
+static void
+ido_scale_menu_item_set_value (IdoScaleMenuItem *item,
+                               gdouble           value)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+
+  /* set ignore_value_changed to signify to the scale menu item that it
+   * should not emit its own value-changed signal, as that should only
+   * be emitted when the value is changed by the user. */
+
+  priv->ignore_value_changed = TRUE;
+  gtk_range_set_value (GTK_RANGE (priv->scale), value);
+  priv->ignore_value_changed = FALSE;
+}
+
 /**
  * ido_scale_menu_item_state_changed:
  *
@@ -988,20 +1042,19 @@ ido_scale_menu_item_state_changed (IdoActionHelper *helper,
                                    GVariant        *state,
                                    gpointer         user_data)
 {
-  GtkWidget *scale;
+  GtkWidget *menuitem;
 
-  scale = ido_scale_menu_item_get_scale (IDO_SCALE_MENU_ITEM (ido_action_helper_get_widget (helper)));
-  gtk_range_set_value (GTK_RANGE (scale), g_variant_get_double (state));
+  menuitem = ido_action_helper_get_widget (helper);
+  ido_scale_menu_item_set_value (IDO_SCALE_MENU_ITEM (menuitem), g_variant_get_double (state));
 }
 
 static void
 ido_scale_menu_item_value_changed (GtkScale *scale,
+                                   gdouble   value,
                                    gpointer  user_data)
 {
   IdoActionHelper *helper = user_data;
-  gdouble value;
 
-  value = gtk_range_get_value (GTK_RANGE (scale));
   ido_action_helper_change_action_state (helper, g_variant_new_double (value));
 }
 
@@ -1046,15 +1099,12 @@ ido_scale_menu_item_new_from_model (GMenuItem    *menuitem,
   if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
     {
       IdoActionHelper *helper;
-      GtkWidget *scale;
 
       helper = ido_action_helper_new (item, actions, action, NULL);
       g_signal_connect (helper, "action-state-changed",
                         G_CALLBACK (ido_scale_menu_item_state_changed), NULL);
 
-      scale = ido_scale_menu_item_get_scale (IDO_SCALE_MENU_ITEM (item));
-      g_signal_connect (scale, "value-changed", G_CALLBACK (ido_scale_menu_item_value_changed), helper);
-
+      g_signal_connect (item, "value-changed", G_CALLBACK (ido_scale_menu_item_value_changed), helper);
       g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
 
       g_free (action);
