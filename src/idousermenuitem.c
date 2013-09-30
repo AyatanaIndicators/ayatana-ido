@@ -301,11 +301,10 @@ ido_user_menu_item_init (IdoUserMenuItem *self)
 
   // Create the UI elements.
   priv->user_image = gtk_image_new ();
-  gtk_misc_set_alignment(GTK_MISC(priv->user_image), 0.0, 0.0);
 
   priv->user_name = gtk_label_new (NULL);
 
-  priv->container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  priv->container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   priv->tick_icon = gtk_image_new_from_icon_name ("account-logged-in",
                                                    GTK_ICON_SIZE_MENU);
@@ -315,7 +314,7 @@ ido_user_menu_item_init (IdoUserMenuItem *self)
   gtk_box_pack_start (GTK_BOX (priv->container),
                       priv->user_image,
                       FALSE,
-                      FALSE,
+                      TRUE,
                       0);
   gtk_box_pack_start (GTK_BOX (priv->container),
                       priv->user_name,
