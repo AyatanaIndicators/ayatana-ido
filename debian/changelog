@@ -1,3 +1,21 @@
+ido (13.10.0+13.10.20130930-0ubuntu1) saucy; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoscalemenuitem: don't update the action state when the action
+    state changes GtkRange has the same weird semantics for its "value-
+    changed" signal that the check menu items have: it is emitted not
+    only on user interaction, but also when gtk_range_set_value() is
+    called. The handler to "value-changed" updates the action.
+    gtk_range_set_value() is called when the action notifies about a
+    state change. Loop, meet loop. This patch works around that by
+    adding a "value-changed" to IdoScaleMenuItem that is only emitted
+    when the user changes the slider's value. . (LP: #1229076)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 149
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 30 Sep 2013 06:32:59 +0000
+
 ido (13.10.0+13.10.20130920-0ubuntu1) saucy; urgency=low
 
   [ Lars Uebernickel ]
