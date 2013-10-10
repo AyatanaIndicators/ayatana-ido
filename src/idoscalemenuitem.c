@@ -448,6 +448,8 @@ ido_scale_menu_item_init (IdoScaleMenuItem *self)
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
 
   priv->reverse_scroll = TRUE;
+
+  gtk_widget_set_size_request (GTK_WIDGET (self), 200, -1);
 }
 
 static void
