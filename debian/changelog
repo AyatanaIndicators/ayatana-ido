@@ -1,3 +1,14 @@
+ido (13.10.0+13.10.20131011-0ubuntu1) saucy; urgency=low
+
+  [ Lars Uebernickel ]
+  * idousermenuitem: center avatar and adjust spacing.
+  * idoscalemenuitem: request a minimum width of 200px.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 152
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 11 Oct 2013 04:28:12 +0000
+
 ido (13.10.0+13.10.20130930-0ubuntu1) saucy; urgency=low
 
   [ Lars Uebernickel ]
