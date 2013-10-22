@@ -30,6 +30,8 @@ struct _IdoSwitchMenuItemPrivate
 {
   GtkWidget * box;
   GtkWidget * content_area;
+  GtkWidget * label;
+  GtkWidget * image;
   GtkWidget * switch_w;
 };
 
@@ -63,7 +65,7 @@ ido_switch_menu_item_init (IdoSwitchMenuItem *item)
 
   priv = item->priv = G_TYPE_INSTANCE_GET_PRIVATE (item, IDO_TYPE_SWITCH_MENU_ITEM, IdoSwitchMenuItemPrivate);
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  priv->content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   priv->switch_w = gtk_switch_new ();
 
   gtk_box_pack_start (GTK_BOX (priv->box), priv->content_area, TRUE, TRUE, 0);
@@ -120,12 +122,87 @@ ido_switch_menu_item_new (void)
  *
  * Get the #GtkContainer to add additional widgets into.
  *
+ * This function is dperecated.
+ *
  * Return Value: (transfer none): The #GtkContainer to add additional widgets into.
  **/
 GtkContainer *
 ido_switch_menu_item_get_content_area (IdoSwitchMenuItem * item)
 {
+  static gboolean warned = FALSE;
+
   g_return_val_if_fail (IDO_IS_SWITCH_MENU_ITEM(item), NULL);
 
+  if (!warned)
+    {
+      g_warning ("%s is deprecated. Please don't use it, especially if you're using"
+                 "ido_switch_menu_set_{label,icon}()", G_STRFUNC);
+      warned = TRUE;
+    }
+
   return GTK_CONTAINER (item->priv->content_area);
+}
+
+/**
+ * ido_switch_menu_item_set_label:
+ * @item: a #IdoSwitchMenuItem.
+ * @label: a string to set as the label of @item
+ *
+ * Set the label of @item to @label.
+ **/
+void
+ido_switch_menu_item_set_label (IdoSwitchMenuItem *item,
+                                const gchar       *label)
+{
+  IdoSwitchMenuItemPrivate *priv;
+
+  g_return_if_fail (IDO_IS_SWITCH_MENU_ITEM (item));
+  g_return_if_fail (label != NULL);
+
+  priv = item->priv;
+
+  if (priv->label == NULL)
+    {
+      priv->label = gtk_label_new (NULL);
+      gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
+      gtk_widget_show (priv->label);
+      gtk_box_pack_end (GTK_BOX (priv->content_area), priv->label, TRUE, TRUE, 0);
+    }
+
+  gtk_label_set_text (GTK_LABEL (priv->label), label);
+}
+
+/**
+ * ido_switch_menu_item_set_icon:
+ * @item: a #IdoSwitchMenuItem.
+ * @icon: (allow-none): a #GIcon 
+ *
+ * Set the icon of @item to @icon.
+ **/
+void
+ido_switch_menu_item_set_icon (IdoSwitchMenuItem *item,
+                               GIcon             *icon)
+{
+  IdoSwitchMenuItemPrivate *priv;
+
+  g_return_if_fail (IDO_IS_SWITCH_MENU_ITEM (item));
+  g_return_if_fail (icon == NULL || G_IS_ICON (icon));
+
+  priv = item->priv;
+
+  if (icon)
+    {
+      if (priv->image == NULL)
+        {
+          priv->image = gtk_image_new ();
+          gtk_widget_show (priv->image);
+          gtk_box_pack_start (GTK_BOX (priv->content_area), priv->image, FALSE, FALSE, 0);
+        }
+
+      gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_MENU);
+    }
+  else
+    {
+      gtk_image_clear (GTK_IMAGE (priv->image));
+    }
 }
