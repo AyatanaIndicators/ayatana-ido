@@ -70,6 +70,9 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_switch_menu_item_get_content_area@Base 12.10.0
  ido_switch_menu_item_get_type@Base 12.10.0
  ido_switch_menu_item_new@Base 12.10.0
+ ido_switch_menu_item_new_from_menu_model@Base 0replaceme
+ ido_switch_menu_item_set_icon@Base 0replaceme
+ ido_switch_menu_item_set_label@Base 0replaceme
  ido_timeline_calculate_progress@Base 0.1.8
  ido_timeline_direction_get_type@Base 0.1.8
  ido_timeline_get_direction@Base 0.1.8
