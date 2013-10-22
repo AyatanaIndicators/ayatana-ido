@@ -52,6 +52,9 @@ GType         ido_switch_menu_item_get_type         (void) G_GNUC_CONST;
 GtkWidget    *ido_switch_menu_item_new              (void);
 GtkContainer *ido_switch_menu_item_get_content_area (IdoSwitchMenuItem * item);
 
+GtkMenuItem  * ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
+                                                         GActionGroup *actions);
+
 void          ido_switch_menu_item_set_label        (IdoSwitchMenuItem *item,
                                                      const gchar       *label);
 

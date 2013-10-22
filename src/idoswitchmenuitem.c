@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "idoswitchmenuitem.h"
+#include "idoactionhelper.h"
 
 static gboolean ido_switch_menu_button_release_event (GtkWidget      * widget,
                                                       GdkEventButton * event);
@@ -205,4 +206,64 @@ ido_switch_menu_item_set_icon (IdoSwitchMenuItem *item,
     {
       gtk_image_clear (GTK_IMAGE (priv->image));
     }
+}
+
+static void
+ido_source_menu_item_state_changed (IdoActionHelper *helper,
+                                    GVariant        *state,
+                                    gpointer         user_data)
+{
+  IdoSwitchMenuItem *item = user_data;
+
+  if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
+    gtk_switch_set_active (GTK_SWITCH (item->priv->switch_w),
+                           g_variant_get_boolean (state));
+}
+
+GtkMenuItem *
+ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
+                                          GActionGroup *actions)
+{
+  GtkMenuItem *item;
+  gchar *label;
+  GVariant *serialized_icon;
+  gchar *action = NULL;
+
+  item = g_object_new (IDO_TYPE_SWITCH_MENU_ITEM, NULL);
+
+  if (g_menu_item_get_attribute (menuitem, "label", "s", &label))
+    {
+      ido_switch_menu_item_set_label (IDO_SWITCH_MENU_ITEM (item), label);
+      g_free (label);
+    }
+
+  serialized_icon = g_menu_item_get_attribute_value (menuitem, "icon", NULL);
+  if (serialized_icon)
+    {
+      GIcon *icon;
+
+      icon = g_icon_deserialize (serialized_icon);
+      if (icon)
+        {
+          ido_switch_menu_item_set_icon (IDO_SWITCH_MENU_ITEM (item), icon);
+          g_object_unref (icon);
+        }
+    }
+
+  if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
+    {
+      IdoActionHelper *helper;
+
+      helper = ido_action_helper_new (GTK_WIDGET (item), actions, action, NULL);
+      g_signal_connect (helper, "action-state-changed",
+                        G_CALLBACK (ido_source_menu_item_state_changed), item);
+      g_signal_connect_object (item, "activate",
+                               G_CALLBACK (ido_action_helper_activate), helper,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
+
+      g_free (action);
+    }
+
+  return item;
 }
