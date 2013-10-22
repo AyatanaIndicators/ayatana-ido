@@ -248,6 +248,8 @@ ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
           ido_switch_menu_item_set_icon (IDO_SWITCH_MENU_ITEM (item), icon);
           g_object_unref (icon);
         }
+
+      g_variant_unref (serialized_icon);
     }
 
   if (g_menu_item_get_attribute (menuitem, "action", "s", &action))
