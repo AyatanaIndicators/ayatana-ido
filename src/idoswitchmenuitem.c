@@ -202,7 +202,7 @@ ido_switch_menu_item_set_icon (IdoSwitchMenuItem *item,
 
       gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_MENU);
     }
-  else
+  else if (priv->image)
     {
       gtk_image_clear (GTK_IMAGE (priv->image));
     }
