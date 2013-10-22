@@ -31,7 +31,6 @@ main (int argc, char *argv[])
   GtkWidget *root;
   GtkWidget *menubar;
   GtkWidget *image;
-  GtkWidget *label;
 
   const struct {
     const char * username;
@@ -103,9 +102,7 @@ main (int argc, char *argv[])
 
   /* Switch */
   menuitem = ido_switch_menu_item_new ();
-  label = gtk_label_new ("This is a switch");
-  gtk_widget_show(label);
-  gtk_container_add (ido_switch_menu_item_get_content_area(IDO_SWITCH_MENU_ITEM(menuitem)), label);
+  ido_switch_menu_item_set_label (IDO_SWITCH_MENU_ITEM (menuitem), "This is a switch.");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   /* Calendar */
