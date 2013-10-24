@@ -553,10 +553,14 @@ ido_scale_menu_item_parent_key_press_event (GtkWidget   *widget,
   switch (event->keyval)
     {
     case GDK_KEY_Left:
+    case GDK_KEY_minus:
+    case GDK_KEY_KP_Subtract:
       GTK_RANGE_GET_CLASS (priv->scale)->move_slider (GTK_RANGE (priv->scale), GTK_SCROLL_STEP_LEFT);
       return TRUE;
 
     case GDK_KEY_Right:
+    case GDK_KEY_plus:
+    case GDK_KEY_KP_Add:
       GTK_RANGE_GET_CLASS (priv->scale)->move_slider (GTK_RANGE (priv->scale), GTK_SCROLL_STEP_RIGHT);
       return TRUE;
     }
