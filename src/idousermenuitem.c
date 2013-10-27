@@ -293,7 +293,7 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
 /***
 ****  Avatar
 ***/
-gboolean
+static gboolean
 ido_user_menu_item_set_icon_from_file_icon (IdoUserMenuItem *self,
                                             GFileIcon       *icon)
 {
