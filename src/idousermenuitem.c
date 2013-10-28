@@ -299,14 +299,15 @@ ido_user_menu_item_set_icon_from_file_icon (IdoUserMenuItem *self,
 {
   GFile *file;
   gchar *path;
-  gint width = 12;
-  gint height = 12;
+  gint width;
+  gint height;
   GdkPixbuf *pixbuf;
 
   file = g_file_icon_get_file (G_FILE_ICON (icon));
   path = g_file_get_path (file);
   g_object_unref (file);
 
+  /* width and height will always be set by this function */
   gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (GTK_WIDGET (self)),
                                      GTK_ICON_SIZE_MENU,
                                      &width, &height);
