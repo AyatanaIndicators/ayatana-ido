@@ -52,9 +52,8 @@ static void     ido_scale_menu_item_primary_image_notify   (GtkImage            
 static void     ido_scale_menu_item_secondary_image_notify (GtkImage              *image,
                                                             GParamSpec            *pspec,
                                                             IdoScaleMenuItem      *item);
-static void     ido_scale_menu_item_notify                 (IdoScaleMenuItem      *item,
-                                                            GParamSpec            *pspec,
-                                                            gpointer               user_data);
+static void     ido_scale_menu_item_parent_set             (GtkWidget             *item,
+                                                            GtkWidget             *previous_parent);
 static void     update_packing                             (IdoScaleMenuItem      *self,
                                                             IdoScaleMenuItemStyle  style);
 static void     default_primary_clicked_handler            (IdoScaleMenuItem      *self);
@@ -265,10 +264,6 @@ ido_scale_menu_item_constructed (GObject *object)
                     G_CALLBACK (ido_scale_menu_item_toggle_size_allocate),
                     NULL);
 
-  g_signal_connect (self, "notify",
-                    G_CALLBACK (ido_scale_menu_item_notify),
-                    NULL);
-
   gtk_container_add (GTK_CONTAINER (self), hbox);
 
   gtk_widget_add_events (GTK_WIDGET(self), GDK_SCROLL_MASK);
@@ -288,6 +283,7 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
   widget_class->motion_notify_event  = ido_scale_menu_item_motion_notify_event;
   widget_class->scroll_event         = ido_scale_menu_item_scroll_event;
   widget_class->size_allocate        = ido_scale_menu_item_size_allocate;
+  widget_class->parent_set           = ido_scale_menu_item_parent_set;
 
   gobject_class->constructed  = ido_scale_menu_item_constructed;
   gobject_class->set_property = ido_scale_menu_item_set_property;
@@ -645,21 +641,18 @@ menu_hidden (GtkWidget        *menu,
 }
 
 static void
-ido_scale_menu_item_notify (IdoScaleMenuItem *item,
-                            GParamSpec       *pspec,
-                            gpointer          user_data)
-{
-  if (g_strcmp0 (pspec->name, "parent"))
-    {
-      GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (item));
+ido_scale_menu_item_parent_set (GtkWidget *item,
+                                GtkWidget *previous_parent)
 
-      if (parent)
-        {
-          g_signal_connect (parent, "hide",
-                            G_CALLBACK (menu_hidden),
-                            item);
-        }
-    }
+{
+  GtkWidget *parent;
+
+  if (previous_parent)
+    g_signal_handlers_disconnect_by_func (previous_parent, menu_hidden, item);
+
+  parent = gtk_widget_get_parent (item);
+  if (parent)
+    g_signal_connect (parent, "hide", G_CALLBACK (menu_hidden), item);
 }
 
 static void
