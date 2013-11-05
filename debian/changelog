@@ -1,8 +1,25 @@
-ido (13.10.0+13.10.20131011-0ubuntu2) UNRELEASED; urgency=low
+ido (13.10.0+14.04.20131105.1-0ubuntu1) trusty; urgency=low
 
+  [ Ubuntu daily release ]
   * debian/*symbols: auto-update new symbols to released version
 
- -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 05 Nov 2013 11:01:41 +0000
+  [ Lars Uebernickel ]
+  * Make IdoSwitchMenuItem accessible from gtk_menu_new_from_model.
+  * IdoUserMenuItem: only allow file icons as avatars In practice, all
+    avatars are file icons. This restriction allowed for quite some
+    cleanup, as we don't need to worry about symbolic icons and themes
+    aymore. Note: this patch removes the warning when the user avatar
+    image was not found. This is a common enough case that the warning
+    just clutters up logs.
+  * idoscalemenuitem: disconnect signal from parent This fixes a crash:
+    the widget installed a handler for the parent's hide signal, but was
+    destroyed before the parent without disconnecting the signal. (LP:
+    #1246536)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 156
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 05 Nov 2013 11:01:56 +0000
 
 ido (13.10.0+13.10.20131011-0ubuntu1) saucy; urgency=low
 
