@@ -1,3 +1,14 @@
+ido (13.10.0+14.04.20131106-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * ido_user_menu_item: remove superfluous unref The return value of
+    g_file_icon_get_file() is transfer-none. (LP: #1248446)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 158
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 06 Nov 2013 11:23:53 +0000
+
 ido (13.10.0+14.04.20131105.1-0ubuntu1) trusty; urgency=low
 
   [ Ubuntu daily release ]
