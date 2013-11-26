@@ -607,8 +607,8 @@ ido_calendar_menu_item_new_from_model (GMenuItem    * menu_item,
   GObject * o;
   GtkWidget * calendar;
   IdoCalendarMenuItem * ido_calendar;
-  gchar * selection_action_name;
-  gchar * activation_action_name;
+  gchar * selection_action_name = NULL;
+  gchar * activation_action_name = NULL;
 
   /* get the select & activate action names */
   g_menu_item_get_attribute (menu_item, "action", "s", &selection_action_name);
