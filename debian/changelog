@@ -1,3 +1,15 @@
+ido (13.10.0+14.04.20131126-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * ido_calendar_menu_item_new_from_model: initialize local variables
+    with NULL Both of these variables will be passed to g_free() without
+    checking whether g_menu_item_get_attribute() failed. (LP: #1255076)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 160
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 26 Nov 2013 19:28:37 +0000
+
 ido (13.10.0+14.04.20131106-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
