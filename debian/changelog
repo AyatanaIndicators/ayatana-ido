@@ -1,3 +1,14 @@
+ido (13.10.0+14.04.20131127-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoactionhelper: remove potentially stray idle source when
+    finalizing.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 162
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 27 Nov 2013 11:37:40 +0000
+
 ido (13.10.0+14.04.20131126-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
