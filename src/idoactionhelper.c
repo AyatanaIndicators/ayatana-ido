@@ -29,6 +29,7 @@ struct _IdoActionHelper
   GActionGroup *actions;
   gchar *action_name;
   GVariant *action_target;
+  guint idle_source_id;
 };
 
 G_DEFINE_TYPE (IdoActionHelper, ido_action_helper, G_TYPE_OBJECT)
@@ -123,6 +124,7 @@ call_action_added (gpointer user_data)
 
   ido_action_helper_action_added (helper->actions, helper->action_name, helper);
 
+  helper->idle_source_id = 0;
   return G_SOURCE_REMOVE;
 }
 
@@ -146,7 +148,7 @@ ido_action_helper_constructed (GObject *object)
        * state-changed signal during construction (nobody could have
        * connected by then).
        */
-      g_idle_add (call_action_added, helper);
+      helper->idle_source_id = g_idle_add (call_action_added, helper);
     }
 
   G_OBJECT_CLASS (ido_action_helper_parent_class)->constructed (object);
@@ -218,6 +220,9 @@ static void
 ido_action_helper_finalize (GObject *object)
 {
   IdoActionHelper *helper = IDO_ACTION_HELPER (object);
+
+  if (helper->idle_source_id)
+    g_source_remove (helper->idle_source_id);
 
   g_object_unref (helper->widget);
 
