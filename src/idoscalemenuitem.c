@@ -40,6 +40,11 @@ static void     ido_scale_menu_item_get_property           (GObject             
                                                             guint                  prop_id,
                                                             GValue                *value,
                                                             GParamSpec            *pspec);
+static gboolean ido_scale_menu_item_parent_key_press_event (GtkWidget             *widget,
+                                                            GdkEventKey           *event,
+                                                            gpointer               user_data);
+static void     ido_scale_menu_item_select                  (GtkMenuItem          *item);
+static void     ido_scale_menu_item_deselect                (GtkMenuItem          *item);
 static gboolean ido_scale_menu_item_button_press_event     (GtkWidget             *menuitem,
                                                             GdkEventButton        *event);
 static gboolean ido_scale_menu_item_button_release_event   (GtkWidget             *menuitem,
@@ -76,6 +81,7 @@ struct _IdoScaleMenuItemPrivate {
   IdoRangeStyle         range_style;
   gint                  toggle_size;
   gboolean              ignore_value_changed;
+  gboolean              has_focus;
 };
 
 enum {
@@ -274,9 +280,13 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
 {
   GObjectClass      *gobject_class = G_OBJECT_CLASS (item_class);
   GtkWidgetClass    *widget_class = GTK_WIDGET_CLASS (item_class);
+  GtkMenuItemClass  *menuitem_class = GTK_MENU_ITEM_CLASS (item_class);
 
   item_class->primary_clicked        = default_primary_clicked_handler;
   item_class->secondary_clicked      = default_secondary_clicked_handler;
+
+  menuitem_class->select = ido_scale_menu_item_select;
+  menuitem_class->deselect = ido_scale_menu_item_deselect;
 
   widget_class->button_press_event   = ido_scale_menu_item_button_press_event;
   widget_class->button_release_event = ido_scale_menu_item_button_release_event;
@@ -523,6 +533,55 @@ translate_event_coordinates (GtkWidget *widget,
 }
 
 static gboolean
+ido_scale_menu_item_parent_key_press_event (GtkWidget   *widget,
+                                            GdkEventKey *event,
+                                            gpointer     user_data)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (user_data);
+
+  /* only listen to events when the playback menu item is selected */
+  if (!priv->has_focus)
+    return FALSE;
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_Left:
+    case GDK_KEY_minus:
+    case GDK_KEY_KP_Subtract:
+      GTK_RANGE_GET_CLASS (priv->scale)->move_slider (GTK_RANGE (priv->scale), GTK_SCROLL_STEP_LEFT);
+      return TRUE;
+
+    case GDK_KEY_Right:
+    case GDK_KEY_plus:
+    case GDK_KEY_KP_Add:
+      GTK_RANGE_GET_CLASS (priv->scale)->move_slider (GTK_RANGE (priv->scale), GTK_SCROLL_STEP_RIGHT);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ido_scale_menu_item_select (GtkMenuItem *item)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+
+  priv->has_focus = TRUE;
+
+  GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->select (item);
+}
+
+static void
+ido_scale_menu_item_deselect (GtkMenuItem *item)
+{
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+
+  priv->has_focus = FALSE;
+
+  GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->deselect (item);
+}
+
+static gboolean
 ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
@@ -648,11 +707,22 @@ ido_scale_menu_item_parent_set (GtkWidget *item,
   GtkWidget *parent;
 
   if (previous_parent)
-    g_signal_handlers_disconnect_by_func (previous_parent, menu_hidden, item);
+    {
+      g_signal_handlers_disconnect_by_func (previous_parent, menu_hidden, item);
+      g_signal_handlers_disconnect_by_func (previous_parent, ido_scale_menu_item_parent_key_press_event, item);
+    }
 
   parent = gtk_widget_get_parent (item);
+
   if (parent)
-    g_signal_connect (parent, "hide", G_CALLBACK (menu_hidden), item);
+    {
+      g_signal_connect (parent, "hide", G_CALLBACK (menu_hidden), item);
+
+      /* Menus don't pass key events to their children. This works around
+       * that by listening to key events on the parent widget. */
+      g_signal_connect (parent, "key-press-event",
+                        G_CALLBACK (ido_scale_menu_item_parent_key_press_event), item);
+    }
 }
 
 static void
