@@ -1,3 +1,9 @@
+ido (13.10.0+14.04.20131127-0ubuntu2) trusty; urgency=medium
+
+  * Build with -Wno-error=deprecated-declarations.
+
+ -- Matthias Klose <doko@ubuntu.com>  Wed, 18 Dec 2013 23:59:33 +0100
+
 ido (13.10.0+14.04.20131127-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
