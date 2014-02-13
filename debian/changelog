@@ -1,3 +1,17 @@
+ido (13.10.0+14.04.20140213-0ubuntu1) trusty; urgency=low
+
+  [ Ted Gould ]
+  * No error for deprecations
+  * Allow gcov 1.10
+
+  [ Lars Uebernickel ]
+  * IdoScaleMenuItem: intercept left and right keys. (LP: #1242550)
+
+  [ Sebastien Bacher ]
+  * Update the Standards-Version
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 13 Feb 2014 15:54:16 +0000
+
 ido (13.10.0+14.04.20131127-0ubuntu2) trusty; urgency=medium
 
   * Build with -Wno-error=deprecated-declarations.
