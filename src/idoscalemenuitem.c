@@ -167,7 +167,7 @@ ido_scale_menu_item_constructed (GObject *object)
   g_object_ref (priv->scale);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   priv->primary_image = gtk_image_new ();
   g_signal_connect (priv->primary_image, "notify",
