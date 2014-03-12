@@ -76,7 +76,6 @@ struct _IdoScaleMenuItemPrivate {
   gboolean              grabbed;
   IdoScaleMenuItemStyle style;
   IdoRangeStyle         range_style;
-  gint                  toggle_size;
   gboolean              ignore_value_changed;
   gboolean              has_focus;
 };
@@ -135,16 +134,6 @@ ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
 }
 
 static void
-ido_scale_menu_item_toggle_size_allocate (IdoScaleMenuItem *item,
-                                          gint              toggle_size,
-                                          gpointer          user_data)
-{
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
-
-  priv->toggle_size = toggle_size;
-}
-
-static void
 ido_scale_menu_item_scale_value_changed (GtkRange *range,
                                          gpointer  user_data)
 {
@@ -196,10 +185,6 @@ ido_scale_menu_item_constructed (GObject *object)
   priv->hbox = hbox;
 
   update_packing (self, priv->style);
-
-  g_signal_connect (self, "toggle-size-allocate",
-                    G_CALLBACK (ido_scale_menu_item_toggle_size_allocate),
-                    NULL);
 
   gtk_container_add (GTK_CONTAINER (self), hbox);
 
