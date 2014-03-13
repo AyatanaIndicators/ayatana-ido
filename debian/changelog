@@ -1,3 +1,11 @@
+ido (13.10.0+14.04.20140313-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoscalemenuitem: use the scale's actual size allocation for events
+    (LP: #1069762)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 13 Mar 2014 10:15:45 +0000
+
 ido (13.10.0+14.04.20140213-0ubuntu1) trusty; urgency=low
 
   [ Ted Gould ]
