@@ -72,14 +72,10 @@ struct _IdoScaleMenuItemPrivate {
   GtkWidget            *primary_label;
   GtkWidget            *secondary_label;
   GtkWidget            *hbox;
-  GtkAllocation         child_allocation;
-  gdouble               left_padding;
-  gdouble               right_padding;
   gboolean              reverse_scroll;
   gboolean              grabbed;
   IdoScaleMenuItemStyle style;
   IdoRangeStyle         range_style;
-  gint                  toggle_size;
   gboolean              ignore_value_changed;
   gboolean              has_focus;
 };
@@ -138,82 +134,6 @@ ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
 }
 
 static void
-ido_scale_menu_item_size_allocate (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
-{
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (widget);
-  GtkRequisition primary_req;
-  GtkRequisition secondary_req;
-  gint horizontal_padding;
-  gint primary_padding, secondary_padding;
-
-  GTK_WIDGET_CLASS (ido_scale_menu_item_parent_class)->size_allocate (widget, allocation);
-
-  switch (priv->style)
-    {
-    case IDO_SCALE_MENU_ITEM_STYLE_IMAGE:
-      gtk_widget_get_preferred_size (priv->primary_image, &primary_req, NULL);
-      gtk_widget_get_preferred_size (priv->secondary_image, &secondary_req, NULL);
-      primary_padding = gtk_widget_get_visible (priv->primary_image) ? primary_req.width : 0;
-      secondary_padding = gtk_widget_get_visible (priv->secondary_image) ? secondary_req.width : 0;
-      break;
-
-    case IDO_SCALE_MENU_ITEM_STYLE_LABEL:
-      gtk_widget_get_preferred_size (priv->primary_label, &primary_req, NULL);
-      gtk_widget_get_preferred_size (priv->secondary_label, &secondary_req, NULL);
-      primary_padding = gtk_widget_get_visible (priv->primary_label) ? primary_req.width : 0;
-      secondary_padding = gtk_widget_get_visible (priv->secondary_label) ? secondary_req.width : 0;
-      break;
-
-    default:
-      primary_req.width = primary_req.height = 0;
-      secondary_req.width = secondary_req.height = 0;
-      primary_padding = 0;
-      secondary_padding = 0;
-      break;
-    }
-
-  gtk_widget_style_get (widget,
-                        "horizontal-padding", &horizontal_padding,
-                        NULL);
-
-  priv->left_padding = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ? primary_padding : secondary_padding;
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    {
-      priv->left_padding = primary_padding;
-      priv->right_padding = secondary_padding;
-    }
-  else
-    {
-      priv->left_padding = secondary_padding;
-      priv->right_padding = primary_padding;
-    }
-
-  priv->child_allocation.x = gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->xthickness;
-  priv->child_allocation.y = gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->ythickness;
-
-  priv->child_allocation.x += horizontal_padding;
-  priv->child_allocation.x += priv->toggle_size;
-
-  priv->child_allocation.width = MAX (1, (gint)allocation->width - priv->child_allocation.x * 2);
-  priv->child_allocation.width -= (primary_padding + secondary_padding);
-  priv->child_allocation.height = MAX (1, (gint)allocation->height - priv->child_allocation.y * 2);
-
-  gtk_widget_set_size_request (priv->scale, priv->child_allocation.width, -1);
-}
-
-static void
-ido_scale_menu_item_toggle_size_allocate (IdoScaleMenuItem *item,
-                                          gint              toggle_size,
-                                          gpointer          user_data)
-{
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
-
-  priv->toggle_size = toggle_size;
-}
-
-static void
 ido_scale_menu_item_scale_value_changed (GtkRange *range,
                                          gpointer  user_data)
 {
@@ -247,7 +167,7 @@ ido_scale_menu_item_constructed (GObject *object)
   g_object_ref (priv->scale);
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   priv->primary_image = gtk_image_new ();
   g_signal_connect (priv->primary_image, "notify",
@@ -265,10 +185,6 @@ ido_scale_menu_item_constructed (GObject *object)
   priv->hbox = hbox;
 
   update_packing (self, priv->style);
-
-  g_signal_connect (self, "toggle-size-allocate",
-                    G_CALLBACK (ido_scale_menu_item_toggle_size_allocate),
-                    NULL);
 
   gtk_container_add (GTK_CONTAINER (self), hbox);
 
@@ -292,7 +208,6 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
   widget_class->button_release_event = ido_scale_menu_item_button_release_event;
   widget_class->motion_notify_event  = ido_scale_menu_item_motion_notify_event;
   widget_class->scroll_event         = ido_scale_menu_item_scroll_event;
-  widget_class->size_allocate        = ido_scale_menu_item_size_allocate;
   widget_class->parent_set           = ido_scale_menu_item_parent_set;
 
   gobject_class->constructed  = ido_scale_menu_item_constructed;
@@ -523,13 +438,17 @@ ido_scale_menu_item_get_property (GObject         *object,
 }
 
 static void
-translate_event_coordinates (GtkWidget *widget,
-                             gdouble    in_x,
-                             gdouble   *out_x)
+ido_scale_menu_item_get_scale_allocation (IdoScaleMenuItem *menuitem,
+                                          GtkAllocation    *allocation)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (widget);
+  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  GtkAllocation parent_allocation;
 
-  *out_x = in_x - priv->child_allocation.x - priv->left_padding;
+  gtk_widget_get_allocation (GTK_WIDGET (menuitem), &parent_allocation);
+  gtk_widget_get_allocation (priv->scale, allocation);
+
+  allocation->x -= parent_allocation.x;
+  allocation->y -= parent_allocation.y;
 }
 
 static gboolean
@@ -586,15 +505,17 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  gdouble x;
-  
+  GtkAllocation alloc;
+
+  ido_scale_menu_item_get_scale_allocation (IDO_SCALE_MENU_ITEM (menuitem), &alloc);
+
   // can we block emissions of "grab-notify" on parent??
 
-  translate_event_coordinates (menuitem, event->x, &x);
-  event->x = x;
+  event->x -= alloc.x;
+  event->y -= alloc.y;
 
-  translate_event_coordinates (menuitem, event->x_root, &x);
-  event->x_root = x;
+  event->x_root -= alloc.x;
+  event->y_root -= alloc.y;
 
   gtk_widget_event (priv->scale,
                     ((GdkEvent *)(void*)(event)));
@@ -615,11 +536,12 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   IdoScaleMenuItem *item = IDO_SCALE_MENU_ITEM (menuitem);
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
-  gdouble x;
+  GtkAllocation alloc;
+
+  ido_scale_menu_item_get_scale_allocation (IDO_SCALE_MENU_ITEM (menuitem), &alloc);
 
   /* if user clicked to the left of the scale... */
-  if (event->x > priv->child_allocation.x &&
-      event->x < priv->child_allocation.x + priv->left_padding)
+  if (event->x < alloc.x)
     {
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
@@ -632,8 +554,7 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
     }
 
   /* if user clicked to the right of the scale... */
-  else if (event->x < priv->child_allocation.x + priv->child_allocation.width + priv->right_padding + priv->left_padding &&
-      event->x > priv->child_allocation.x + priv->child_allocation.width + priv->left_padding)
+  else if (event->x > alloc.x + alloc.width)
     {
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
@@ -648,11 +569,11 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   /* user clicked on the scale... */
   else
     {
-      translate_event_coordinates (menuitem, event->x, &x);
-      event->x = x;
+      event->x -= alloc.x;
+      event->y -= alloc.y;
 
-      translate_event_coordinates (menuitem, event->x_root, &x);
-      event->x_root= x;
+      event->x_root -= alloc.x;
+      event->y_root -= alloc.y;
 
       gtk_widget_event (scale, (GdkEvent*)event);
     }
@@ -672,13 +593,15 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
-  gdouble x;
+  GtkAllocation alloc;
 
-  translate_event_coordinates (menuitem, event->x, &x);
-  event->x = x;
+  ido_scale_menu_item_get_scale_allocation (IDO_SCALE_MENU_ITEM (menuitem), &alloc);
 
-  translate_event_coordinates (menuitem, event->x_root, &x);
-  event->x_root= x;
+  event->x -= alloc.x;
+  event->y -= alloc.y;
+
+  event->x_root -= alloc.x;
+  event->y_root -= alloc.y;
 
   gtk_widget_event (scale,
                     ((GdkEvent *)(void*)(event)));
