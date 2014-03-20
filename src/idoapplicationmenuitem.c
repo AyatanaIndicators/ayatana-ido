@@ -39,8 +39,12 @@ ido_application_menu_item_constructed (GObject *object)
 {
   IdoApplicationMenuItem *item = IDO_APPLICATION_MENU_ITEM (object);
   GtkWidget *grid;
+  gint icon_height;
+
+  gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, NULL, &icon_height);
 
   item->icon = g_object_ref (gtk_image_new ());
+  gtk_image_set_pixel_size (GTK_IMAGE (item->icon), icon_height);
   gtk_widget_set_margin_right (item->icon, 6);
 
   item->label = g_object_ref (gtk_label_new (""));
