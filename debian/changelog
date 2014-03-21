@@ -1,3 +1,12 @@
+ido (13.10.0+14.04.20140321-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoapplicationmenuitem: request correct size for empty icons Empty
+    icons request more space than GTK_ICON_SIZE_MENU, which makes menu
+    items unnecessarily high.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 21 Mar 2014 06:56:56 +0000
+
 ido (13.10.0+14.04.20140313-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
