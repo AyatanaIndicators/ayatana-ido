@@ -1,3 +1,14 @@
+ido (13.10.0+14.04.20140324-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoplaybackmenuitem: set active flag when player is launching The
+    active flag is used to signal the theme that the spinner should
+    animate. Using that flag is a bit weird, but it's consistent with
+    GtkSpinner and thus doesn't require special handling in the theme.
+    (LP: #1231796)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 24 Mar 2014 17:45:12 +0000
+
 ido (13.10.0+14.04.20140321-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
