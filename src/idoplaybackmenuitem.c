@@ -1151,8 +1151,6 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
 
   GtkStyle *style;
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (button),
-                               GTK_STYLE_CLASS_MENU);
   CairoColorRGB bg_color, fg_color, bg_selected, bg_prelight;
   CairoColorRGB color_middle[2], color_middle_prelight[2], color_outer[2], color_outer_prelight[2],
                 color_play_outer[2], color_play_outer_prelight[2],
