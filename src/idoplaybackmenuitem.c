@@ -330,19 +330,31 @@ ido_playback_menu_item_init (IdoPlaybackMenuItem *self)
 }
 
 static void
+ido_playback_menu_item_set_state (IdoPlaybackMenuItem *self,
+                                  State                state)
+{
+  self->current_state = state;
+
+  if (self->current_state == STATE_LAUNCHING)
+    gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE, FALSE);
+  else
+    gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 ido_playback_menu_item_set_state_from_string (IdoPlaybackMenuItem *self,
                                               const gchar         *state)
 {
   g_return_if_fail (state != NULL);
 
   if (g_str_equal (state, "Playing"))
-    self->current_state = STATE_PLAYING;
+    ido_playback_menu_item_set_state (self, STATE_PLAYING);
   else if (g_str_equal (state, "Launching"))
-    self->current_state = STATE_LAUNCHING;
+    ido_playback_menu_item_set_state (self, STATE_LAUNCHING);
   else /* "Paused" and fallback */
-    self->current_state = STATE_PAUSED;
-
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+    ido_playback_menu_item_set_state (self, STATE_PAUSED);
 }
 
 static void
@@ -372,10 +384,7 @@ ido_playback_menu_item_action_removed (GActionGroup *action_group,
   IdoPlaybackMenuItem *self = user_data;
 
   if (self->play_action && g_str_equal (action_name, self->play_action))
-    {
-      self->current_state = STATE_PAUSED;
-      gtk_widget_queue_draw (GTK_WIDGET (self));
-    }
+    ido_playback_menu_item_set_state (self, STATE_PAUSED);
 }
 
 static void
