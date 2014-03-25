@@ -135,7 +135,10 @@ ido_playback_menu_item_parent_key_press_event (GtkWidget   *widget,
       break;
 
     case GDK_KEY_space:
-      self->cur_pushed_button = BUTTON_PLAYPAUSE;
+      if (self->cur_hover_button != BUTTON_NONE)
+        self->cur_pushed_button = self->cur_hover_button;
+      else
+        self->cur_pushed_button = BUTTON_PLAYPAUSE;
       break;
 
     default:
@@ -1425,7 +1428,8 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   }
 
   // draw previous-button drop-shadow
-  if (item->cur_pushed_button == BUTTON_PREVIOUS && item->keyboard_activated )
+  if ((item->cur_pushed_button == BUTTON_PREVIOUS && item->keyboard_activated) ||
+      item->cur_hover_button == BUTTON_PREVIOUS)
   {
     _setup (&cr_surf, &surf, PREV_WIDTH+6, PREV_HEIGHT+6);
     _mask_prev (cr_surf,
@@ -1485,7 +1489,8 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   _finalize (cr, &cr_surf, &surf, PREV_X, PREV_Y);
 
   // draw next-button drop-shadow
-  if (item->cur_pushed_button == BUTTON_NEXT && item->keyboard_activated)
+  if ((item->cur_pushed_button == BUTTON_NEXT && item->keyboard_activated) ||
+      item->cur_hover_button == BUTTON_NEXT)
   {
     _setup (&cr_surf, &surf, NEXT_WIDTH+6, NEXT_HEIGHT+6);
     _mask_next (cr_surf,
@@ -1548,6 +1553,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   if (item->current_state == STATE_PLAYING)
   {
     if (item->has_focus &&
+        (item->cur_hover_button == BUTTON_NONE || item->cur_hover_button == BUTTON_PLAYPAUSE) &&
         (item->cur_pushed_button == BUTTON_NONE || item->cur_pushed_button == BUTTON_PLAYPAUSE))
     {
       _setup (&cr_surf, &surf, PAUSE_WIDTH+6, PAUSE_HEIGHT+6);
@@ -1610,6 +1616,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   else if (item->current_state == STATE_PAUSED)
   {
     if (item->has_focus &&
+        (item->cur_hover_button == BUTTON_NONE || item->cur_hover_button == BUTTON_PLAYPAUSE) &&
         (item->cur_pushed_button == BUTTON_NONE || item->cur_pushed_button == BUTTON_PLAYPAUSE))
     {
       _setup (&cr_surf, &surf, PLAY_WIDTH+6, PLAY_HEIGHT+6);
