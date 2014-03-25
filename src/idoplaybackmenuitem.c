@@ -39,7 +39,8 @@ typedef enum
   BUTTON_NONE,
   BUTTON_PREVIOUS,
   BUTTON_PLAYPAUSE,
-  BUTTON_NEXT
+  BUTTON_NEXT,
+  N_BUTTONS
 } Button;
 
 typedef GtkMenuItemClass IdoPlaybackMenuItemClass;
@@ -55,9 +56,7 @@ struct _IdoPlaybackMenuItem
   gboolean keyboard_activated; /* TRUE if the current button was activated with a key */
 
   GActionGroup *action_group;
-  gchar *play_action;
-  gchar *next_action;
-  gchar *prev_action;
+  gchar *button_actions[N_BUTTONS];
 };
 
 G_DEFINE_TYPE (IdoPlaybackMenuItem, ido_playback_menu_item, GTK_TYPE_MENU_ITEM);
@@ -82,10 +81,10 @@ static void
 ido_playback_menu_item_finalize (GObject *object)
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (object);
+  gint i;
 
-  g_free (item->play_action);
-  g_free (item->next_action);
-  g_free (item->prev_action);
+  for (i = 0; i < N_BUTTONS; i++)
+    g_free (item->button_actions[i]);
 
   G_OBJECT_CLASS (ido_playback_menu_item_parent_class)->finalize (object);
 }
@@ -129,20 +128,14 @@ ido_playback_menu_item_parent_key_press_event (GtkWidget   *widget,
     {
     case GDK_KEY_Left:
       self->cur_pushed_button = BUTTON_PREVIOUS;
-      if (self->action_group && self->prev_action)
-        g_action_group_activate_action (self->action_group, self->prev_action, NULL);
       break;
 
     case GDK_KEY_Right:
       self->cur_pushed_button = BUTTON_NEXT;
-      if (self->action_group && self->next_action)
-        g_action_group_activate_action (self->action_group, self->next_action, NULL);
       break;
 
     case GDK_KEY_space:
       self->cur_pushed_button = BUTTON_PLAYPAUSE;
-      if (self->action_group && self->play_action)
-        g_action_group_activate_action (self->action_group, self->play_action, NULL);
       break;
 
     default:
@@ -151,6 +144,11 @@ ido_playback_menu_item_parent_key_press_event (GtkWidget   *widget,
 
   if (self->cur_pushed_button != BUTTON_NONE)
     {
+      const gchar *action = self->button_actions[self->cur_pushed_button];
+
+      if (self->action_group && action)
+        g_action_group_activate_action (self->action_group, action, NULL);
+
       self->keyboard_activated = TRUE;
       gtk_widget_queue_draw (widget);
       return TRUE;
@@ -243,31 +241,15 @@ ido_playback_menu_item_button_release_event (GtkWidget      *menuitem,
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (menuitem);
   Button button;
+  const gchar *action = action;
 
   button = ido_playback_menu_item_get_button_at_pos (event->x, event->y);
   if (button != item->cur_pushed_button)
     button = BUTTON_NONE;
 
-  switch (button)
-    {
-    case BUTTON_NONE:
-      break;
-
-    case BUTTON_PREVIOUS:
-      if (item->action_group && item->prev_action)
-        g_action_group_activate_action (item->action_group, item->prev_action, NULL);
-      break;
-
-    case BUTTON_NEXT:
-      if (item->action_group && item->next_action)
-        g_action_group_activate_action (item->action_group, item->next_action, NULL);
-      break;
-
-    case BUTTON_PLAYPAUSE:
-      if (item->action_group && item->play_action)
-        g_action_group_activate_action (item->action_group, item->play_action, NULL);
-      break;
-    }
+  action = item->button_actions[item->cur_pushed_button];
+  if (item->action_group && action)
+    g_action_group_activate_action (item->action_group, action, NULL);
 
   item->cur_pushed_button = BUTTON_NONE;
   gtk_widget_queue_draw (menuitem);
@@ -363,12 +345,14 @@ ido_playback_menu_item_action_added (GActionGroup *action_group,
                                      gpointer      user_data)
 {
   IdoPlaybackMenuItem *self = user_data;
+  const gchar *action;
 
-  if (self->play_action && g_str_equal (action_name, self->play_action))
+  action = self->button_actions[BUTTON_PLAYPAUSE];
+  if (action && g_str_equal (action_name, action))
     {
       GVariant *state;
 
-      state = g_action_group_get_action_state (action_group, self->play_action);
+      state = g_action_group_get_action_state (action_group, action);
       if (g_variant_is_of_type (state, G_VARIANT_TYPE_STRING))
         ido_playback_menu_item_set_state_from_string (self, g_variant_get_string (state, NULL));
 
@@ -382,8 +366,10 @@ ido_playback_menu_item_action_removed (GActionGroup *action_group,
                                        gpointer      user_data)
 {
   IdoPlaybackMenuItem *self = user_data;
+  const gchar *action;
 
-  if (self->play_action && g_str_equal (action_name, self->play_action))
+  action = self->button_actions[BUTTON_PLAYPAUSE];
+  if (action && g_str_equal (action_name, action))
     ido_playback_menu_item_set_state (self, STATE_PAUSED);
 }
 
@@ -394,10 +380,13 @@ ido_playback_menu_item_action_state_changed (GActionGroup *action_group,
                                              gpointer      user_data)
 {
   IdoPlaybackMenuItem *self = user_data;
+  const gchar *action;
 
   g_return_if_fail (action_name != NULL);
 
-  if (self->play_action && g_str_equal (action_name, self->play_action))
+  action = self->button_actions[BUTTON_PLAYPAUSE];
+
+  if (action && g_str_equal (action_name, action))
     {
       if (g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         ido_playback_menu_item_set_state_from_string (self, g_variant_get_string (value, NULL));
@@ -409,6 +398,7 @@ ido_playback_menu_item_new_from_model (GMenuItem    *item,
                                        GActionGroup *actions)
 {
   IdoPlaybackMenuItem *widget;
+  gchar *play_action;
 
   widget = g_object_new (IDO_TYPE_PLAYBACK_MENU_ITEM, NULL);
 
@@ -417,12 +407,13 @@ ido_playback_menu_item_new_from_model (GMenuItem    *item,
   g_signal_connect (actions, "action-added", G_CALLBACK (ido_playback_menu_item_action_added), widget);
   g_signal_connect (actions, "action-removed", G_CALLBACK (ido_playback_menu_item_action_removed), widget);
 
-  g_menu_item_get_attribute (item, "x-canonical-play-action", "s", &widget->play_action);
-  g_menu_item_get_attribute (item, "x-canonical-next-action", "s", &widget->next_action);
-  g_menu_item_get_attribute (item, "x-canonical-previous-action", "s", &widget->prev_action);
+  g_menu_item_get_attribute (item, "x-canonical-play-action", "s", &widget->button_actions[BUTTON_PLAYPAUSE]);
+  g_menu_item_get_attribute (item, "x-canonical-next-action", "s", &widget->button_actions[BUTTON_NEXT]);
+  g_menu_item_get_attribute (item, "x-canonical-previous-action", "s", &widget->button_actions[BUTTON_PREVIOUS]);
 
-  if (widget->play_action && g_action_group_has_action (actions, widget->play_action))
-    ido_playback_menu_item_action_added (actions, widget->play_action, widget);
+  play_action = widget->button_actions[BUTTON_PLAYPAUSE];
+  if (play_action && g_action_group_has_action (actions, play_action))
+    ido_playback_menu_item_action_added (actions, play_action, widget);
 
   return GTK_MENU_ITEM (widget);
 }
