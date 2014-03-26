@@ -32,6 +32,7 @@
 #include "idoapplicationmenuitem.h"
 #include "idosourcemenuitem.h"
 #include "idoswitchmenuitem.h"
+#include "idoprogressmenuitem.h"
 
 #define IDO_TYPE_MENU_ITEM_FACTORY         (ido_menu_item_factory_get_type ())
 #define IDO_MENU_ITEM_FACTORY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IDO_TYPE_MENU_ITEM_FACTORY, IdoMenuItemFactory))

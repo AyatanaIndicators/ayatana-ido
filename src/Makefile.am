@@ -21,6 +21,7 @@ sources_h =				\
 	idousermenuitem.h		\
 	idoappointmentmenuitem.h	\
 	idobasicmenuitem.h		\
+	idoprogressmenuitem.h		\
 	idotimestampmenuitem.h		\
 	idolocationmenuitem.h		\
 	idotimeline.h			\
@@ -88,6 +89,7 @@ libido_0_1_la_SOURCES =			\
 	idoplaybackmenuitem.c		\
 	idoappointmentmenuitem.c	\
 	idobasicmenuitem.c		\
+	idoprogressmenuitem.c		\
 	idotimestampmenuitem.c		\
 	idolocationmenuitem.c		\
 	idoapplicationmenuitem.c	\
