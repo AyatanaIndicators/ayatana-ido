@@ -305,3 +305,62 @@ ido_basic_menu_item_set_secondary_text (IdoBasicMenuItem * self, const char * se
                     NULL);
     }
 }
+
+static void
+ido_basic_menu_item_activate (GtkMenuItem *item,
+                              gpointer     user_data)
+{
+  IdoActionHelper *helper = user_data;
+
+  ido_action_helper_activate (helper);
+}
+
+GtkMenuItem *
+ido_basic_menu_item_new_from_model (GMenuItem    * menu_item,
+                                    GActionGroup * actions)
+{
+  GtkWidget *item;
+  gchar *label;
+  gchar *action;
+  GVariant *serialized_icon;
+
+  item = ido_basic_menu_item_new ();
+
+  if (g_menu_item_get_attribute (menu_item, "label", "s", &label))
+    {
+      ido_basic_menu_item_set_text (IDO_BASIC_MENU_ITEM (item), label);
+      g_free (label);
+    }
+
+  serialized_icon = g_menu_item_get_attribute_value (menu_item, "icon", NULL);
+  if (serialized_icon)
+    {
+      GIcon *icon;
+
+      icon = g_icon_deserialize (serialized_icon);
+      ido_basic_menu_item_set_icon (IDO_BASIC_MENU_ITEM (item), icon);
+
+      g_object_unref (icon);
+      g_variant_unref (serialized_icon);
+    }
+
+  if (g_menu_item_get_attribute (menu_item, "action", "s", &action))
+    {
+      IdoActionHelper *helper;
+      GVariant *target;
+
+      target = g_menu_item_get_attribute_value (menu_item, "target", NULL);
+
+      helper = ido_action_helper_new (item, actions, action, target);
+      g_signal_connect_object (item, "activate",
+                               G_CALLBACK (ido_basic_menu_item_activate), helper,
+                               0);
+      g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
+
+      if (target)
+        g_variant_unref (target);
+      g_free (action);
+    }
+
+  return GTK_MENU_ITEM (item);
+}

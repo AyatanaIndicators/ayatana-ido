@@ -75,6 +75,9 @@ ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
   else if (g_str_equal (type, "com.canonical.indicator.alarm"))
     item = ido_alarm_menu_item_new_from_model (menuitem, actions);
 
+  else if (g_str_equal (type, "com.canonical.indicator.basic"))
+    item = ido_basic_menu_item_new_from_model (menuitem, actions);
+
   else if (g_str_equal (type, "com.canonical.indicator.progress"))
     item = ido_progress_menu_item_new_from_model (menuitem, actions);
 
