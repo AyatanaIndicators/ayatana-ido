@@ -253,9 +253,21 @@ ido_basic_menu_item_set_icon (IdoBasicMenuItem * self, GIcon * icon)
         }
       else
         {
+          GtkIconInfo *info;
+          const gchar *filename;
+          GdkPixbuf *pixbuf;
+
           p->icon = g_object_ref (icon);
-          gtk_image_set_from_gicon (GTK_IMAGE(p->image), p->icon, GTK_ICON_SIZE_MENU);
+
+          info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (), p->icon, 16, 0);
+          filename = gtk_icon_info_get_filename (info);
+          pixbuf = gdk_pixbuf_new_from_file_at_scale (filename, -1, 16, TRUE, NULL);
+
+          gtk_image_set_from_pixbuf (GTK_IMAGE(p->image), pixbuf);
           gtk_widget_set_visible (p->image, TRUE);
+
+          g_object_unref (info);
+          g_object_unref (pixbuf);
         }
     }
 }
