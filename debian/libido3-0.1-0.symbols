@@ -16,6 +16,7 @@ libido3-0.1.so.0 libido3-0.1-0 #MINVER#
  ido_basic_menu_item_set_icon_from_file@Base 13.10.0+13.10.20130731
  ido_basic_menu_item_set_secondary_text@Base 13.10.0+13.10.20130731
  ido_basic_menu_item_set_text@Base 13.10.0+13.10.20130731
+ ido_basic_menu_item_new_from_model@Base 0replaceme
  ido_calendar_menu_item_clear_marks@Base 0.2.1
  ido_calendar_menu_item_get_calendar@Base 0.1.10
  ido_calendar_menu_item_get_date@Base 0.2.1
