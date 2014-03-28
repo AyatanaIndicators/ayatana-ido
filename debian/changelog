@@ -1,8 +1,19 @@
-ido (13.10.0+14.04.20140324-0ubuntu2) UNRELEASED; urgency=low
+ido (13.10.0+14.04.20140328-0ubuntu1) trusty; urgency=low
 
+  [ Ubuntu daily release ]
   * debian/*symbols: auto-update new symbols to released version
 
- -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Mar 2014 11:27:50 +0000
+  [ Lars Uebernickel ]
+  * Highlight back/forward buttons when hovering them with the pointer
+    Space bar still activates play/pause, unless the mouse pointer
+    hovers another button. (LP: #733285)
+  * expose idobasicmenuitem, a normal menu item that supports non-square
+    icons
+  * idoplaybackmenuitem: propagate events in the menu keyrelease handler
+    To issue a redraw on the menu items as well. Fixes lp:1297818. (LP:
+    #1297818)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Mar 2014 11:27:53 +0000
 
 ido (13.10.0+14.04.20140324-0ubuntu1) trusty; urgency=low
 
