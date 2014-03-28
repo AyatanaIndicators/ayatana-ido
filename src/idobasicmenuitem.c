@@ -245,17 +245,35 @@ ido_basic_menu_item_set_icon (IdoBasicMenuItem * self, GIcon * icon)
   if (p->icon != icon)
     {
       g_clear_object (&p->icon);
+      gtk_image_clear (GTK_IMAGE(p->image));
 
       if (icon == NULL)
         {
-          gtk_image_clear (GTK_IMAGE(p->image));
           gtk_widget_set_visible (p->image, FALSE);
         }
       else
         {
+          GtkIconInfo *info;
+          const gchar *filename;
+
           p->icon = g_object_ref (icon);
-          gtk_image_set_from_gicon (GTK_IMAGE(p->image), p->icon, GTK_ICON_SIZE_MENU);
-          gtk_widget_set_visible (p->image, TRUE);
+
+          info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (), p->icon, 16, 0);
+          filename = gtk_icon_info_get_filename (info);
+
+          if (filename)
+            {
+              GdkPixbuf *pixbuf;
+
+              pixbuf = gdk_pixbuf_new_from_file_at_scale (filename, -1, 16, TRUE, NULL);
+              gtk_image_set_from_pixbuf (GTK_IMAGE(p->image), pixbuf);
+
+              g_object_unref (pixbuf);
+            }
+
+          gtk_widget_set_visible (p->image, filename != NULL);
+
+          g_object_unref (info);
         }
     }
 }
@@ -306,86 +324,61 @@ ido_basic_menu_item_set_secondary_text (IdoBasicMenuItem * self, const char * se
     }
 }
 
-/***
-****
-****  Progress Menu Item
-****
-***/
-
 static void
-on_progress_action_state_changed (IdoActionHelper * helper,
-                                  GVariant        * state,
-                                  gpointer          unused G_GNUC_UNUSED)
+ido_basic_menu_item_activate (GtkMenuItem *item,
+                              gpointer     user_data)
 {
-  IdoBasicMenuItem * ido_menu_item;
-  char * str;
+  IdoActionHelper *helper = user_data;
 
-  ido_menu_item = IDO_BASIC_MENU_ITEM (ido_action_helper_get_widget (helper));
-
-  g_return_if_fail (ido_menu_item != NULL);
-  g_return_if_fail (g_variant_is_of_type (state, G_VARIANT_TYPE_UINT32));
-
-  str = g_strdup_printf ("%"G_GUINT32_FORMAT"%%", g_variant_get_uint32 (state));
-  ido_basic_menu_item_set_secondary_text (ido_menu_item, str);
-  g_free (str);
+  ido_action_helper_activate (helper);
 }
 
-/**
- * ido_progress_menu_item_new_from_model:
- * @menu_item: the corresponding menuitem
- * @actions: action group to tell when this GtkMenuItem is activated
- *
- * Creates a new progress menuitem with properties initialized from
- * the menuitem's attributes.
- *
- * If the menuitem's 'action' attribute is set, trigger that action
- * in @actions when this IdoBasicMenuItem is activated.
- */
 GtkMenuItem *
-ido_progress_menu_item_new_from_model (GMenuItem    * menu_item,
-                                       GActionGroup * actions)
+ido_basic_menu_item_new_from_model (GMenuItem    * menu_item,
+                                    GActionGroup * actions)
 {
-  guint i;
-  guint n;
-  gchar * str;
-  IdoBasicMenuItem * ido_menu_item;
-  GParameter parameters[4];
+  GtkWidget *item;
+  gchar *label;
+  gchar *action;
+  GVariant *serialized_icon;
 
-  /* create the ido menuitem */;
+  item = ido_basic_menu_item_new ();
 
-  n = 0;
-
-  if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "label", "s", &label))
     {
-      GParameter p = { "text", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      ido_basic_menu_item_set_text (IDO_BASIC_MENU_ITEM (item), label);
+      g_free (label);
     }
 
-  g_assert (n <= G_N_ELEMENTS (parameters));
-  ido_menu_item = g_object_newv (IDO_TYPE_BASIC_MENU_ITEM, n, parameters);
-
-  for (i=0; i<n; i++)
-    g_value_unset (&parameters[i].value);
-
-  /* give it an ActionHelper */
-
-  if (g_menu_item_get_attribute (menu_item, "action", "s", &str))
+  serialized_icon = g_menu_item_get_attribute_value (menu_item, "icon", NULL);
+  if (serialized_icon)
     {
-      IdoActionHelper * helper;
+      GIcon *icon;
 
-      helper = ido_action_helper_new (GTK_WIDGET(ido_menu_item),
-                                      actions,
-                                      str,
-                                      NULL);
-      g_signal_connect (helper, "action-state-changed",
-                        G_CALLBACK (on_progress_action_state_changed), NULL);
-      g_signal_connect_swapped (ido_menu_item, "destroy",
-                                G_CALLBACK (g_object_unref), helper);
+      icon = g_icon_deserialize (serialized_icon);
+      ido_basic_menu_item_set_icon (IDO_BASIC_MENU_ITEM (item), icon);
 
-      g_free (str);
+      g_object_unref (icon);
+      g_variant_unref (serialized_icon);
     }
 
-  return GTK_MENU_ITEM (ido_menu_item);
+  if (g_menu_item_get_attribute (menu_item, "action", "s", &action))
+    {
+      IdoActionHelper *helper;
+      GVariant *target;
+
+      target = g_menu_item_get_attribute_value (menu_item, "target", NULL);
+
+      helper = ido_action_helper_new (item, actions, action, target);
+      g_signal_connect_object (item, "activate",
+                               G_CALLBACK (ido_basic_menu_item_activate), helper,
+                               0);
+      g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
+
+      if (target)
+        g_variant_unref (target);
+      g_free (action);
+    }
+
+  return GTK_MENU_ITEM (item);
 }

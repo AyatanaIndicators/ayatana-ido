@@ -64,13 +64,8 @@ void ido_basic_menu_item_set_text                (IdoBasicMenuItem * self,
 void ido_basic_menu_item_set_secondary_text      (IdoBasicMenuItem * self,
                                                   const char       * text);
 
-/**
-***
-**/
-
-GtkMenuItem * ido_progress_menu_item_new_from_model (GMenuItem    * menuitem,
-                                                     GActionGroup * actions);
-
+GtkMenuItem * ido_basic_menu_item_new_from_model (GMenuItem    * menuitem,
+                                                  GActionGroup * actions);
 
 G_END_DECLS
 
