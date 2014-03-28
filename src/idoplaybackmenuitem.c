@@ -175,7 +175,7 @@ ido_playback_menu_item_parent_key_release_event (GtkWidget   *widget,
       self->cur_pushed_button = BUTTON_NONE;
       self->keyboard_activated = FALSE;
       gtk_widget_queue_draw (widget);
-      return TRUE;
+      break;
     }
 
   return FALSE;
