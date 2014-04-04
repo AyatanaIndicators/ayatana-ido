@@ -136,7 +136,7 @@ my_finalize (GObject * object)
   G_OBJECT_CLASS (ido_basic_menu_item_parent_class)->finalize (object);
 }
 
-void
+static void
 ido_basic_menu_item_update_image (IdoBasicMenuItem *self)
 {
   IdoBasicMenuItemPrivate * p = self->priv;
