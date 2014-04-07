@@ -1,3 +1,10 @@
+ido (13.10.0+14.04.20140407-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * idobasicmenuitem: update icon when the theme changes
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 07 Apr 2014 12:30:17 +0000
+
 ido (13.10.0+14.04.20140328-0ubuntu1) trusty; urgency=low
 
   [ Ubuntu daily release ]
