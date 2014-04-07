@@ -136,6 +136,50 @@ my_finalize (GObject * object)
   G_OBJECT_CLASS (ido_basic_menu_item_parent_class)->finalize (object);
 }
 
+static void
+ido_basic_menu_item_update_image (IdoBasicMenuItem *self)
+{
+  IdoBasicMenuItemPrivate * p = self->priv;
+
+  gtk_image_clear (GTK_IMAGE (p->image));
+
+  if (p->icon == NULL)
+    {
+      gtk_widget_set_visible (p->image, FALSE);
+    }
+  else
+    {
+      GtkIconInfo *info;
+      const gchar *filename;
+
+      info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (), p->icon, 16, 0);
+      filename = gtk_icon_info_get_filename (info);
+
+      if (filename)
+        {
+          GdkPixbuf *pixbuf;
+
+          pixbuf = gdk_pixbuf_new_from_file_at_scale (filename, -1, 16, TRUE, NULL);
+          gtk_image_set_from_pixbuf (GTK_IMAGE (p->image), pixbuf);
+
+          g_object_unref (pixbuf);
+        }
+
+      gtk_widget_set_visible (p->image, filename != NULL);
+
+      g_object_unref (info);
+    }
+}
+
+static void
+ido_basic_menu_item_style_updated (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (ido_basic_menu_item_parent_class)->style_updated (widget);
+
+  ido_basic_menu_item_update_image (IDO_BASIC_MENU_ITEM (widget));
+  gtk_widget_queue_draw (widget);
+}
+
 /***
 ****  Instantiation
 ***/
@@ -145,6 +189,7 @@ ido_basic_menu_item_class_init (IdoBasicMenuItemClass *klass)
 {
   GParamFlags prop_flags;
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   g_type_class_add_private (klass, sizeof (IdoBasicMenuItemPrivate));
 
@@ -152,6 +197,8 @@ ido_basic_menu_item_class_init (IdoBasicMenuItemClass *klass)
   gobject_class->set_property = my_set_property;
   gobject_class->dispose = my_dispose;
   gobject_class->finalize = my_finalize;
+
+  widget_class->style_updated = ido_basic_menu_item_style_updated;
 
   prop_flags = G_PARAM_CONSTRUCT
              | G_PARAM_READWRITE
@@ -244,37 +291,11 @@ ido_basic_menu_item_set_icon (IdoBasicMenuItem * self, GIcon * icon)
 
   if (p->icon != icon)
     {
-      g_clear_object (&p->icon);
-      gtk_image_clear (GTK_IMAGE(p->image));
+      if (p->icon)
+        g_object_unref (p->icon);
 
-      if (icon == NULL)
-        {
-          gtk_widget_set_visible (p->image, FALSE);
-        }
-      else
-        {
-          GtkIconInfo *info;
-          const gchar *filename;
-
-          p->icon = g_object_ref (icon);
-
-          info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (), p->icon, 16, 0);
-          filename = gtk_icon_info_get_filename (info);
-
-          if (filename)
-            {
-              GdkPixbuf *pixbuf;
-
-              pixbuf = gdk_pixbuf_new_from_file_at_scale (filename, -1, 16, TRUE, NULL);
-              gtk_image_set_from_pixbuf (GTK_IMAGE(p->image), pixbuf);
-
-              g_object_unref (pixbuf);
-            }
-
-          gtk_widget_set_visible (p->image, filename != NULL);
-
-          g_object_unref (info);
-        }
+      p->icon = icon ? g_object_ref (icon) : NULL;
+      ido_basic_menu_item_update_image (self);
     }
 }
 
