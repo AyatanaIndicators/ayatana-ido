@@ -1,3 +1,14 @@
+ido (13.10.0+14.04.20140423-0ubuntu1) trusty; urgency=low
+
+  [ Lars Uebernickel ]
+  * Make long track infos better readable By (a) making the width of the
+    menu slightly larger and (b) reducing the font size. Also removes
+    the hard-coded width of 200px in favor of a width based on font size
+    (25 characters) and center the playback widget horizontally. (LP:
+    #1080076)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 23 Apr 2014 17:03:35 +0000
+
 ido (13.10.0+14.04.20140407-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
