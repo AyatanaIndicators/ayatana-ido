@@ -40,13 +40,16 @@
 #define TRI_WIDTH  11.0f
 #define TRI_HEIGHT 13.0f
 #define TRI_OFFSET  6.0f
+#define PREV_X -2.0f
 #define PREV_Y 13.0f
+#define NEXT_X 76.0f //prev_y
 #define NEXT_Y 13.0f //prev_y
 #define PAUSE_WIDTH 21.0f
 #define PAUSE_HEIGHT 27.0f
 #define BAR_WIDTH 4.5f
 #define BAR_HEIGHT 24.0f
 #define BAR_OFFSET 10.0f
+#define PAUSE_X 41.0f
 #define PAUSE_Y 7.0f
 #define PLAY_WIDTH 28.0f
 #define PLAY_HEIGHT 29.0f
@@ -1150,9 +1153,9 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (button);
   GtkAllocation alloc;
   gint X;
-  gint PAUSE_X;
-  gint PREV_X;
-  gint NEXT_X;
+  gint abs_pause_x;
+  gint abs_prev_x;
+  gint abs_next_x;
 
   g_return_val_if_fail(IDO_IS_PLAYBACK_MENU_ITEM (button), FALSE);
   g_return_val_if_fail(cr != NULL, FALSE);
@@ -1238,9 +1241,9 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
 
   gtk_widget_get_allocation (button, &alloc);
   X = alloc.x + (alloc.width - RECT_WIDTH) / 2 + OUTER_RADIUS;
-  PAUSE_X = X + 41;
-  PREV_X = X - 2;
-  NEXT_X = X + 76;
+  abs_pause_x = X + PAUSE_X;
+  abs_prev_x = X + PREV_X;
+  abs_next_x = X + NEXT_X;
 
   draw_gradient (cr,
                  X,
@@ -1460,7 +1463,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
            BUTTON_SHADOW_FOCUS,
            FALSE);
     _surface_blur (surf, 3);
-    _finalize_repaint (cr, &cr_surf, &surf, PREV_X, PREV_Y + 0.5f, 3);
+    _finalize_repaint (cr, &cr_surf, &surf, abs_prev_x, PREV_Y + 0.5f, 3);
   }
   else
   {
@@ -1480,7 +1483,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
            BUTTON_SHADOW,
            FALSE);
     _surface_blur (surf, 1);
-    _finalize (cr, &cr_surf, &surf, PREV_X, PREV_Y + 1.0f);
+    _finalize (cr, &cr_surf, &surf, abs_prev_x, PREV_Y + 1.0f);
   }
 
   // draw previous-button
@@ -1499,7 +1502,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
        BUTTON_START,
        BUTTON_END,
        FALSE);
-  _finalize (cr, &cr_surf, &surf, PREV_X, PREV_Y);
+  _finalize (cr, &cr_surf, &surf, abs_prev_x, PREV_Y);
 
   // draw next-button drop-shadow
   if ((item->cur_pushed_button == BUTTON_NEXT && item->keyboard_activated) ||
@@ -1521,7 +1524,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
            BUTTON_SHADOW_FOCUS,
            FALSE);
     _surface_blur (surf, 3);
-    _finalize_repaint (cr, &cr_surf, &surf, NEXT_X, NEXT_Y + 0.5f, 3);
+    _finalize_repaint (cr, &cr_surf, &surf, abs_next_x, NEXT_Y + 0.5f, 3);
   }
   else
   {
@@ -1541,7 +1544,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
            BUTTON_SHADOW,
            FALSE);
     _surface_blur (surf, 1);
-    _finalize (cr, &cr_surf, &surf, NEXT_X, NEXT_Y + 1.0f);
+    _finalize (cr, &cr_surf, &surf, abs_next_x, NEXT_Y + 1.0f);
   }
 
   // draw next-button
@@ -1560,7 +1563,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
          BUTTON_START,
          BUTTON_END,
          FALSE);
-  _finalize (cr, &cr_surf, &surf, NEXT_X, NEXT_Y);
+  _finalize (cr, &cr_surf, &surf, abs_next_x, NEXT_Y);
 
   // draw pause-button drop-shadow
   if (item->current_state == STATE_PLAYING)
@@ -1585,7 +1588,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
              BUTTON_SHADOW_FOCUS,
              TRUE);
       _surface_blur (surf, 3);
-      _finalize_repaint (cr, &cr_surf, &surf, PAUSE_X, PAUSE_Y + 0.5f, 3);
+      _finalize_repaint (cr, &cr_surf, &surf, abs_pause_x, PAUSE_Y + 0.5f, 3);
     }
     else
     {
@@ -1605,7 +1608,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
              BUTTON_SHADOW,
              TRUE);
       _surface_blur (surf, 1);
-      _finalize (cr, &cr_surf, &surf, PAUSE_X, PAUSE_Y + 1.0f);
+      _finalize (cr, &cr_surf, &surf, abs_pause_x, PAUSE_Y + 1.0f);
     }
 
     // draw pause-button
@@ -1624,7 +1627,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
            BUTTON_START,
            BUTTON_END,
            TRUE);
-    _finalize (cr, &cr_surf, &surf, PAUSE_X, PAUSE_Y);
+    _finalize (cr, &cr_surf, &surf, abs_pause_x, PAUSE_Y);
   }
   else if (item->current_state == STATE_PAUSED)
   {
@@ -1647,7 +1650,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
              BUTTON_SHADOW_FOCUS,
              FALSE);
       _surface_blur (surf, 3);
-      _finalize_repaint (cr, &cr_surf, &surf, PAUSE_X-0.5f, PAUSE_Y + 0.5f, 3);
+      _finalize_repaint (cr, &cr_surf, &surf, abs_pause_x-0.5f, PAUSE_Y + 0.5f, 3);
     }
     else
     {
@@ -1666,7 +1669,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
              BUTTON_SHADOW,
              FALSE);
       _surface_blur (surf, 1);
-      _finalize (cr, &cr_surf, &surf, PAUSE_X-0.75f, PAUSE_Y + 1.0f);
+      _finalize (cr, &cr_surf, &surf, abs_pause_x-0.75f, PAUSE_Y + 1.0f);
     }
 
     // draw play-button
@@ -1687,7 +1690,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
            BUTTON_START,
            BUTTON_END,
            FALSE);
-    _finalize (cr, &cr_surf, &surf, PAUSE_X-0.5f, PAUSE_Y);
+    _finalize (cr, &cr_surf, &surf, abs_pause_x-0.5f, PAUSE_Y);
   }
   else if (item->current_state == STATE_LAUNCHING)
   {
