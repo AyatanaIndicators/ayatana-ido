@@ -102,14 +102,6 @@ ido_media_player_menu_item_draw (GtkWidget *widget,
 }
 
 static void
-ido_media_player_menu_item_get_preferred_width (GtkWidget *widget,
-                                                gint      *minimum,
-                                                gint      *natural)
-{
-  *minimum = *natural = 200;
-}
-
-static void
 ido_media_player_menu_item_class_init (IdoMediaPlayerMenuItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -117,8 +109,22 @@ ido_media_player_menu_item_class_init (IdoMediaPlayerMenuItemClass *klass)
 
   object_class->dispose = ido_media_player_menu_item_dispose;
 
-  widget_class->get_preferred_width = ido_media_player_menu_item_get_preferred_width;
   widget_class->draw = ido_media_player_menu_item_draw;
+}
+
+static GtkWidget *
+track_info_label_new ()
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_width_chars (GTK_LABEL (label), 25);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 25);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
+
+  return label;
 }
 
 static void
@@ -140,19 +146,12 @@ ido_media_player_menu_item_init (IdoMediaPlayerMenuItem *self)
   gtk_widget_set_size_request (self->album_art, ALBUM_ART_SIZE, ALBUM_ART_SIZE);
   gtk_widget_set_margin_right (self->album_art, 8);
 
-  self->artist_label = gtk_label_new (NULL);
-  gtk_widget_set_halign (self->artist_label, GTK_ALIGN_START);
-  gtk_label_set_ellipsize (GTK_LABEL (self->artist_label), PANGO_ELLIPSIZE_MIDDLE);
+  self->artist_label = track_info_label_new ();
+  self->piece_label = track_info_label_new ();
 
-  self->piece_label = gtk_label_new (NULL);
-  gtk_widget_set_halign (self->piece_label, GTK_ALIGN_START);
-  gtk_label_set_ellipsize (GTK_LABEL (self->piece_label), PANGO_ELLIPSIZE_MIDDLE);
-
-  self->container_label = gtk_label_new (NULL);
-  gtk_widget_set_halign (self->container_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (self->container_label, GTK_ALIGN_START);
+  self->container_label = track_info_label_new ();
   gtk_widget_set_vexpand (self->container_label, TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (self->container_label), PANGO_ELLIPSIZE_MIDDLE);
+  gtk_widget_set_valign (self->container_label, GTK_ALIGN_START);
 
   self->metadata_widget = gtk_grid_new ();
   gtk_grid_attach (GTK_GRID (self->metadata_widget), self->album_art, 0, 0, 1, 4);
