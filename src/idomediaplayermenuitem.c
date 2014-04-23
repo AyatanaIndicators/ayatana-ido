@@ -274,6 +274,22 @@ ido_media_player_menu_item_set_album_art (IdoMediaPlayerMenuItem *self,
 }
 
 static void
+gtk_label_set_markup_printf_escaped (GtkLabel    *label,
+                                     const gchar *format,
+                                     ...)
+{
+  va_list args;
+  gchar *str;
+
+  va_start (args, format);
+  str = g_markup_vprintf_escaped (format, args);
+  gtk_label_set_markup (label, str);
+  va_end (args);
+
+  g_free (str);
+}
+
+static void
 ido_media_player_menu_item_set_metadata (IdoMediaPlayerMenuItem *self,
                                          const gchar            *title,
                                          const gchar            *artist,
@@ -293,9 +309,9 @@ ido_media_player_menu_item_set_metadata (IdoMediaPlayerMenuItem *self,
     }
   else
     {
-      gtk_label_set_label (GTK_LABEL (self->piece_label), title);
-      gtk_label_set_label (GTK_LABEL (self->artist_label), artist);
-      gtk_label_set_label (GTK_LABEL (self->container_label), album);
+      gtk_label_set_markup_printf_escaped (GTK_LABEL (self->piece_label), "<small>%s</small>", title);
+      gtk_label_set_markup_printf_escaped (GTK_LABEL (self->artist_label), "<small>%s</small>", artist);
+      gtk_label_set_markup_printf_escaped (GTK_LABEL (self->container_label), "<small>%s</small>", album);
       ido_media_player_menu_item_set_album_art (self, art_url);
       gtk_widget_show (self->metadata_widget);
     }
