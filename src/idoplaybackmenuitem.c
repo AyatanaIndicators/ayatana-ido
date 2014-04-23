@@ -27,6 +27,45 @@
 #include <gdk/gdkkeysyms.h>
 #include <math.h>
 
+#define RECT_WIDTH 130.0f
+#define Y 7.0f
+#define INNER_RADIUS 12.5
+#define MIDDLE_RADIUS 13.0f
+#define OUTER_RADIUS  14.5f
+#define CIRCLE_RADIUS 21.0f
+#define PREV_WIDTH  25.0f
+#define PREV_HEIGHT 17.0f
+#define NEXT_WIDTH  25.0f //PREV_WIDTH
+#define NEXT_HEIGHT 17.0f //PREV_HEIGHT
+#define TRI_WIDTH  11.0f
+#define TRI_HEIGHT 13.0f
+#define TRI_OFFSET  6.0f
+#define PREV_Y 13.0f
+#define NEXT_Y 13.0f //prev_y
+#define PAUSE_WIDTH 21.0f
+#define PAUSE_HEIGHT 27.0f
+#define BAR_WIDTH 4.5f
+#define BAR_HEIGHT 24.0f
+#define BAR_OFFSET 10.0f
+#define PAUSE_Y 7.0f
+#define PLAY_WIDTH 28.0f
+#define PLAY_HEIGHT 29.0f
+#define PLAY_PADDING 5.0f
+#define INNER_START_SHADE 0.98
+#define INNER_END_SHADE 0.98
+#define MIDDLE_START_SHADE 1.0
+#define MIDDLE_END_SHADE 1.0
+#define OUTER_START_SHADE 0.75
+#define OUTER_END_SHADE 1.3
+#define SHADOW_BUTTON_SHADE 0.8
+#define OUTER_PLAY_START_SHADE 0.7
+#define OUTER_PLAY_END_SHADE 1.38
+#define BUTTON_START_SHADE 1.1
+#define BUTTON_END_SHADE 0.9
+#define BUTTON_SHADOW_SHADE 0.8
+#define INNER_COMPRESSED_START_SHADE 1.0
+#define INNER_COMPRESSED_END_SHADE 1.0
+
 typedef enum
 {
   STATE_PAUSED,
@@ -90,10 +129,14 @@ ido_playback_menu_item_finalize (GObject *object)
 }
 
 static Button
-ido_playback_menu_item_get_button_at_pos (gint x,
-                                          gint y)
+ido_playback_menu_item_get_button_at_pos (GtkWidget *item,
+                                          gint       x,
+                                          gint       y)
 {
-  /*     57   101     143   187
+  GtkAllocation alloc;
+  gint left;
+
+  /*     0    44      86    130
    *  5        +------+
    * 12  +-----+      +-----+
    *     |prev   play   next|
@@ -101,13 +144,16 @@ ido_playback_menu_item_get_button_at_pos (gint x,
    * 47        +------+
    */
 
-  if (x > 57 && x < 102 && y > 12 && y < 40)
+  gtk_widget_get_allocation (item, &alloc);
+  left = alloc.x + (alloc.width - RECT_WIDTH) / 2;
+
+  if (x > left && x < left + 44 && y > 12 && y < 40)
     return BUTTON_PREVIOUS;
 
-  if (x > 101 && x < 143 && y > 5 && y < 47)
+  if (x > left + 44 && x < left + 86 && y > 5 && y < 47)
     return BUTTON_PLAYPAUSE;
 
-  if (x > 142 && x < 187 && y > 12 && y < 40)
+  if (x > left + 86 && x < left + 130 && y > 12 && y < 40)
     return BUTTON_NEXT;
 
   return BUTTON_NONE;
@@ -232,7 +278,7 @@ ido_playback_menu_item_button_press_event (GtkWidget      *menuitem,
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (menuitem);
 
-  item->cur_pushed_button = ido_playback_menu_item_get_button_at_pos (event->x, event->y);
+  item->cur_pushed_button = ido_playback_menu_item_get_button_at_pos (menuitem, event->x, event->y);
   gtk_widget_queue_draw (menuitem);
 
   return TRUE;
@@ -246,7 +292,7 @@ ido_playback_menu_item_button_release_event (GtkWidget      *menuitem,
   Button button;
   const gchar *action = action;
 
-  button = ido_playback_menu_item_get_button_at_pos (event->x, event->y);
+  button = ido_playback_menu_item_get_button_at_pos (menuitem, event->x, event->y);
   if (button != item->cur_pushed_button)
     button = BUTTON_NONE;
 
@@ -266,7 +312,7 @@ ido_playback_menu_item_motion_notify_event (GtkWidget      *menuitem,
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (menuitem);
 
-  item->cur_hover_button = ido_playback_menu_item_get_button_at_pos (event->x, event->y);
+  item->cur_hover_button = ido_playback_menu_item_get_button_at_pos (menuitem, event->x, event->y);
   gtk_widget_queue_draw (menuitem);
 
   return TRUE;
@@ -425,49 +471,6 @@ ido_playback_menu_item_new_from_model (GMenuItem    *item,
 /*
  * Drawing
  */
-
-#define RECT_WIDTH 130.0f
-#define Y 7.0f
-#define X 70.0f
-#define INNER_RADIUS 12.5
-#define MIDDLE_RADIUS 13.0f
-#define OUTER_RADIUS  14.5f
-#define CIRCLE_RADIUS 21.0f
-#define PREV_WIDTH  25.0f
-#define PREV_HEIGHT 17.0f
-#define NEXT_WIDTH  25.0f //PREV_WIDTH
-#define NEXT_HEIGHT 17.0f //PREV_HEIGHT
-#define TRI_WIDTH  11.0f
-#define TRI_HEIGHT 13.0f
-#define TRI_OFFSET  6.0f
-#define PREV_X 68.0f
-#define PREV_Y 13.0f
-#define NEXT_X 146.0f
-#define NEXT_Y 13.0f //prev_y
-#define PAUSE_WIDTH 21.0f
-#define PAUSE_HEIGHT 27.0f
-#define BAR_WIDTH 4.5f
-#define BAR_HEIGHT 24.0f
-#define BAR_OFFSET 10.0f
-#define PAUSE_X 111.0f
-#define PAUSE_Y 7.0f
-#define PLAY_WIDTH 28.0f
-#define PLAY_HEIGHT 29.0f
-#define PLAY_PADDING 5.0f
-#define INNER_START_SHADE 0.98
-#define INNER_END_SHADE 0.98
-#define MIDDLE_START_SHADE 1.0
-#define MIDDLE_END_SHADE 1.0
-#define OUTER_START_SHADE 0.75
-#define OUTER_END_SHADE 1.3
-#define SHADOW_BUTTON_SHADE 0.8
-#define OUTER_PLAY_START_SHADE 0.7
-#define OUTER_PLAY_END_SHADE 1.38
-#define BUTTON_START_SHADE 1.1
-#define BUTTON_END_SHADE 0.9
-#define BUTTON_SHADOW_SHADE 0.8
-#define INNER_COMPRESSED_START_SHADE 1.0
-#define INNER_COMPRESSED_END_SHADE 1.0
 
 typedef struct
 {
@@ -1145,6 +1148,11 @@ static gboolean
 ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (button);
+  GtkAllocation alloc;
+  gint X;
+  gint PAUSE_X;
+  gint PREV_X;
+  gint NEXT_X;
 
   g_return_val_if_fail(IDO_IS_PLAYBACK_MENU_ITEM (button), FALSE);
   g_return_val_if_fail(cr != NULL, FALSE);
@@ -1228,6 +1236,11 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   double INNER_COMPRESSED_END[] = {color_inner_compressed[1].r, color_inner_compressed[1].g, color_inner_compressed[1].b, 1.0f};
   double INNER_COMPRESSED_START[] = {color_inner_compressed[0].r, color_inner_compressed[0].g, color_inner_compressed[0].b, 1.0f};
 
+  gtk_widget_get_allocation (button, &alloc);
+  X = alloc.x + (alloc.width - RECT_WIDTH) / 2 + OUTER_RADIUS;
+  PAUSE_X = X + 41;
+  PREV_X = X - 2;
+  NEXT_X = X + 76;
 
   draw_gradient (cr,
                  X,
