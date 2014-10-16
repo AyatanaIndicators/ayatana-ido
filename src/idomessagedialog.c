@@ -248,7 +248,7 @@ ido_message_dialog_init (IdoMessageDialog *dialog)
  * @type: type of message
  * @buttons: a set of buttons to use
  * @message_format: printf()-style format string, or %NULL
- * @Varargs: arguments for @message_format
+ * @...: arguments for @message_format
  *
  * Creates a new message dialog, which is based upon
  * GtkMessageDialog so it shares API and functionality
@@ -312,7 +312,7 @@ ido_message_dialog_new (GtkWindow      *parent,
  * @type: type of message
  * @buttons: a set of buttons to use
  * @message_format: printf()-style format string, or %NULL
- * @Varargs: arguments for @message_format. They will be escaped to allow valid XML.
+ * @...: arguments for @message_format. They will be escaped to allow valid XML.
  *
  * Creates a new message dialog, which is based upon
  * GtkMessageDialog so it shares API and functionality
