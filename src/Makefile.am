@@ -113,11 +113,12 @@ libidoinclude_HEADERS =			\
 libido_0_1_la_LIBADD = $(GTK_LIBS) $(LIBM)
 libido_0_1_la_LDFLAGS =                 \
 	$(GTK_LT_LDFLAGS)               \
-	$(COVERAGE_LDFLAGS)
+	$(COVERAGE_LDFLAGS)	\
+	-no-undefined \
+	-export-symbols-regex "^[^_].*"
 libido3_0_1_la_LIBADD = $(libido_0_1_la_LIBADD)
 libido3_0_1_la_LDFLAGS =                \
-	$(libido_0_1_la_LDFLAGS)        \
-	$(COVERAGE_LDFLAGS)
+	$(libido_0_1_la_LDFLAGS)
 
 DISTCLEANFILES =			\
 	stamp-idotypebuiltins.h		\
