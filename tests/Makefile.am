@@ -1,7 +1,8 @@
 VER=3
 IDOLIB = $(top_builddir)/src/libido3-0.1.la
 
-check_LIBRARIES = libgtest.a
+# xorg-gtest isn't buildable https://bugs.launchpad.net/ubuntu/+source/xorg-gtest/+bug/1388892
+# check_LIBRARIES = libgtest.a
 check_PROGRAMS = 
 TESTS =
 
@@ -28,8 +29,9 @@ libgtest_a_CXXFLAGS = \
 # Menuitem tests
 #############################
 
-TESTS += gtest-menuitems
-check_PROGRAMS += gtest-menuitems
+# xorg-gtest isn't buildable https://bugs.launchpad.net/ubuntu/+source/xorg-gtest/+bug/1388892
+# TESTS += gtest-menuitems
+# check_PROGRAMS += gtest-menuitems
 
 gtest_menuitems_SOURCES = \
 	gtest-menuitems.cpp
