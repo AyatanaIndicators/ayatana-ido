@@ -1,3 +1,11 @@
+ido (13.10.0+15.04.20141103-0ubuntu1) vivid; urgency=low
+
+  [ Ted Gould ]
+  * Update tags for newer GObject Introsepction Scanner and disable
+    xorg-gtest tests (LP: #1382020)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 03 Nov 2014 20:57:41 +0000
+
 ido (13.10.0+14.04.20140423-0ubuntu1) trusty; urgency=low
 
   [ Lars Uebernickel ]
