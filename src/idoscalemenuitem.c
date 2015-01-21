@@ -491,8 +491,14 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  GtkAllocation alloc;
+  gint x, y;
 
-  gtk_widget_event (priv->scale, (GdkEvent *) event);
+  gtk_widget_get_allocation (priv->scale, &alloc);
+  gtk_widget_translate_coordinates (menuitem, priv->scale, event->x, event->y, &x, &y);
+
+  if (x > 0 && x < alloc.width && y > 0 && y < alloc.height)
+    gtk_widget_event (priv->scale, (GdkEvent *) event);
 
   if (!priv->grabbed)
     {
@@ -511,11 +517,13 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
   GtkAllocation alloc;
+  gint x, y;
 
   gtk_widget_get_allocation (priv->scale, &alloc);
+  gtk_widget_translate_coordinates (menuitem, priv->scale, event->x, event->y, &x, &y);
 
   /* if user clicked to the left of the scale... */
-  if (event->x < alloc.x)
+  if (x < 0)
     {
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
@@ -528,7 +536,7 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
     }
 
   /* if user clicked to the right of the scale... */
-  else if (event->x > alloc.x + alloc.width)
+  else if (x > alloc.width)
     {
       if (gtk_widget_get_direction (menuitem) == GTK_TEXT_DIR_LTR)
         {
@@ -541,7 +549,7 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
     }
 
   /* user clicked on the scale... */
-  else
+  else if (x > 0 && x < alloc.width && y > 0 && y < alloc.height)
     {
       gtk_widget_event (scale, (GdkEvent*) event);
     }
@@ -561,7 +569,17 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
 
-  return gtk_widget_event (priv->scale, (GdkEvent *) event);
+  GtkAllocation alloc;
+  gint x, y;
+
+  gtk_widget_get_allocation (priv->scale, &alloc);
+  gtk_widget_translate_coordinates (menuitem, priv->scale, event->x, event->y, &x, &y);
+
+  if (priv->grabbed ||
+      (x > 0 && x < alloc.width && y > 0 && y < alloc.height))
+    gtk_widget_event (priv->scale, (GdkEvent *) event);
+
+  return TRUE;
 }
 
 static void
