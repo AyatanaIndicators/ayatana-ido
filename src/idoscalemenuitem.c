@@ -568,7 +568,6 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
                                          GdkEventMotion *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-
   GtkAllocation alloc;
   gint x, y;
 
