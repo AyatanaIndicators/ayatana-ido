@@ -437,20 +437,6 @@ ido_scale_menu_item_get_property (GObject         *object,
     }
 }
 
-static void
-ido_scale_menu_item_get_scale_allocation (IdoScaleMenuItem *menuitem,
-                                          GtkAllocation    *allocation)
-{
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  GtkAllocation parent_allocation;
-
-  gtk_widget_get_allocation (GTK_WIDGET (menuitem), &parent_allocation);
-  gtk_widget_get_allocation (priv->scale, allocation);
-
-  allocation->x -= parent_allocation.x;
-  allocation->y -= parent_allocation.y;
-}
-
 static gboolean
 ido_scale_menu_item_parent_key_press_event (GtkWidget   *widget,
                                             GdkEventKey *event,
@@ -505,20 +491,8 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  GtkAllocation alloc;
 
-  ido_scale_menu_item_get_scale_allocation (IDO_SCALE_MENU_ITEM (menuitem), &alloc);
-
-  // can we block emissions of "grab-notify" on parent??
-
-  event->x -= alloc.x;
-  event->y -= alloc.y;
-
-  event->x_root -= alloc.x;
-  event->y_root -= alloc.y;
-
-  gtk_widget_event (priv->scale,
-                    ((GdkEvent *)(void*)(event)));
+  gtk_widget_event (priv->scale, (GdkEvent *) event);
 
   if (!priv->grabbed)
     {
@@ -526,7 +500,7 @@ ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
       g_signal_emit (menuitem, signals[SLIDER_GRABBED], 0);
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean
@@ -538,7 +512,7 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   GtkWidget *scale = priv->scale;
   GtkAllocation alloc;
 
-  ido_scale_menu_item_get_scale_allocation (IDO_SCALE_MENU_ITEM (menuitem), &alloc);
+  gtk_widget_get_allocation (priv->scale, &alloc);
 
   /* if user clicked to the left of the scale... */
   if (event->x < alloc.x)
@@ -569,13 +543,7 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
   /* user clicked on the scale... */
   else
     {
-      event->x -= alloc.x;
-      event->y -= alloc.y;
-
-      event->x_root -= alloc.x;
-      event->y_root -= alloc.y;
-
-      gtk_widget_event (scale, (GdkEvent*)event);
+      gtk_widget_event (scale, (GdkEvent*) event);
     }
 
   if (priv->grabbed)
@@ -592,21 +560,8 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
                                          GdkEventMotion *event)
 {
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  GtkWidget *scale = priv->scale;
-  GtkAllocation alloc;
 
-  ido_scale_menu_item_get_scale_allocation (IDO_SCALE_MENU_ITEM (menuitem), &alloc);
-
-  event->x -= alloc.x;
-  event->y -= alloc.y;
-
-  event->x_root -= alloc.x;
-  event->y_root -= alloc.y;
-
-  gtk_widget_event (scale,
-                    ((GdkEvent *)(void*)(event)));
-
-  return TRUE;
+  return gtk_widget_event (priv->scale, (GdkEvent *) event);
 }
 
 static void
