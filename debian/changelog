@@ -1,3 +1,10 @@
+ido (13.10.0+15.04.20150122-0ubuntu1) vivid; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoscalemenuitem: fix slider event forwarding
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 22 Jan 2015 11:56:22 +0000
+
 ido (13.10.0+15.04.20141103-0ubuntu1) vivid; urgency=low
 
   [ Ted Gould ]
