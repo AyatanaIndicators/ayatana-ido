@@ -358,8 +358,6 @@ ido_playback_menu_item_class_init (IdoPlaybackMenuItemClass *klass)
 static void
 ido_playback_menu_item_init (IdoPlaybackMenuItem *self)
 {
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)), GTK_STYLE_CLASS_SPINNER);
-
   gtk_widget_set_size_request (GTK_WIDGET (self), 200, 43);
 }
 
