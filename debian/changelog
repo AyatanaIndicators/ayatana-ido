@@ -1,3 +1,10 @@
+ido (13.10.0+15.04.20150130-0ubuntu1) vivid; urgency=low
+
+  [ Lars Uebernickel ]
+  * idoplaybackmenuitem: don't set the spinner class
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 30 Jan 2015 14:25:14 +0000
+
 ido (13.10.0+15.04.20150122-0ubuntu1) vivid; urgency=low
 
   [ Lars Uebernickel ]
