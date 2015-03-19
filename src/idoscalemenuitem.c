@@ -472,6 +472,7 @@ ido_scale_menu_item_select (GtkMenuItem *item)
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
 
   priv->has_focus = TRUE;
+  gtk_widget_set_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED, FALSE);
 
   GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->select (item);
 }
@@ -482,6 +483,7 @@ ido_scale_menu_item_deselect (GtkMenuItem *item)
   IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
 
   priv->has_focus = FALSE;
+  gtk_widget_unset_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED);
 
   GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->deselect (item);
 }
@@ -573,6 +575,15 @@ ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
 
   gtk_widget_get_allocation (priv->scale, &alloc);
   gtk_widget_translate_coordinates (menuitem, priv->scale, event->x, event->y, &x, &y);
+
+  /* don't translate coordinates when the scale has the "grab" -
+   * GtkRange expects coords relative to its event window in that case
+   */
+  if (!priv->grabbed)
+    {
+      event->x = x;
+      event->y = y;
+    }
 
   if (priv->grabbed ||
       (x > 0 && x < alloc.width && y > 0 && y < alloc.height))
