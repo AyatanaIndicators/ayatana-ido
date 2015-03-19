@@ -1,3 +1,10 @@
+ido (13.10.0+15.04.20150319-0ubuntu1) vivid; urgency=medium
+
+  [ Lars Uebernickel ]
+  * idoscalemenuitem: fix scale hover state
+
+ -- CI Train Bot <ci-train-bot@canonical.com>  Thu, 19 Mar 2015 16:24:01 +0000
+
 ido (13.10.0+15.04.20150130-0ubuntu1) vivid; urgency=low
 
   [ Lars Uebernickel ]
