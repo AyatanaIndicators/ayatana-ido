@@ -156,6 +156,8 @@ ido_calendar_menu_item_key_press (GtkWidget   *widget,
 {
   IdoCalendarMenuItem *menuitem = (IdoCalendarMenuItem *)data;
 
+  g_return_val_if_fail (IDO_IS_CALENDAR_MENU_ITEM (menuitem), FALSE);
+
   if (menuitem->priv->selected)
     {
       GtkWidget *calendar = menuitem->priv->calendar;
