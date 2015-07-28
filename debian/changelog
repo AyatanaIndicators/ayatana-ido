@@ -1,3 +1,11 @@
+ido (13.10.0+15.10.20150728-0ubuntu1) wily; urgency=medium
+
+  [ Marco Trevisan (Treviño) ]
+  * IdoCalendarMenuItem: add crash guard on
+    ido_calendar_menu_item_key_press (LP: #1350821)
+
+ -- CI Train Bot <ci-train-bot@canonical.com>  Tue, 28 Jul 2015 21:12:27 +0000
+
 ido (13.10.0+15.04.20150319-0ubuntu1) vivid; urgency=medium
 
   [ Lars Uebernickel ]
