@@ -1,3 +1,10 @@
+ido (13.10.0+15.10.20151002-0ubuntu1) wily; urgency=medium
+
+  [ Lars Uebernickel ]
+  * idosourcemenuitem: change misplaced g_return_val_if_fail()
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 02 Oct 2015 15:32:36 +0000
+
 ido (13.10.0+15.10.20150728-0ubuntu1) wily; urgency=medium
 
   [ Marco Trevisan (Treviño) ]
