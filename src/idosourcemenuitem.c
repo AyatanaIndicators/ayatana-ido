@@ -201,7 +201,7 @@ ido_source_menu_item_state_changed (IdoActionHelper *helper,
       item->timer_id = 0;
     }
 
-  g_return_val_if_fail (g_variant_is_of_type (state, G_VARIANT_TYPE ("(uxsb)")), FALSE);
+  g_return_if_fail (g_variant_is_of_type (state, G_VARIANT_TYPE ("(uxsb)")));
 
   g_variant_get (state, "(ux&sb)", &count, &time, &str, NULL);
 
