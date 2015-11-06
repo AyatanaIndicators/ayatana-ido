@@ -26,10 +26,10 @@
 #ifndef __IDO__
 #define __IDO__
 
-#include <libido/idocalendarmenuitem.h>
-#include <libido/idoscalemenuitem.h>
-#include <libido/idoentrymenuitem.h>
-#include <libido/idomessagedialog.h>
+#include <libayatana-ido/idocalendarmenuitem.h>
+#include <libayatana-ido/idoscalemenuitem.h>
+#include <libayatana-ido/idoentrymenuitem.h>
+#include <libayatana-ido/idomessagedialog.h>
 
 void ido_init (void);
 
