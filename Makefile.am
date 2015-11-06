@@ -8,15 +8,15 @@ QUIET_GEN = $(Q:@=@echo '  GEN   '$@;)
 
 SUBDIRS = src example tests
 
-%-0.1.pc: %.pc
+%-0.4.pc: %.pc
 	$(QUIET_GEN) cp -f $< $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libido$(VER)-0.1.pc
+pkgconfig_DATA = libayatana-ido$(VER)-0.4.pc
 
-CLEANFILES = libido-0.1.pc libido3-0.1.pc
-DISTCLEANFILES = libido.pc libido3.pc
-EXTRA_DIST = libido.pc.in libido3.pc.in
+CLEANFILES = libayatana-ido-0.4.pc libayatana-ido3-0.4.pc
+DISTCLEANFILES = libayatana-ido.pc libayatana-ido3.pc
+EXTRA_DIST = libayatana-ido.pc.in libayatana-ido3.pc.in
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-gtk-doc
 

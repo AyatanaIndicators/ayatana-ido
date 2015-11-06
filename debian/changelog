@@ -1,3 +1,9 @@
+ayatana-ido (0.4.0-0) UNRELEASED; urgency=medium
+
+  * Fork from Ubuntu's ido code project.
+
+ -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Fri, 06 Nov 2015 12:32:00 +0100
+
 ido (13.10.0+15.10.20151002-0ubuntu1) wily; urgency=medium
 
   [ Lars Uebernickel ]

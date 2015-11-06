@@ -18,7 +18,7 @@
  */
 
 #include <gtk/gtk.h>
-#include <gtk/ubuntu-private.h>
+#include "ayatana-private.h"
 
 #include "idoalarmmenuitem.h"
 #include "idoappointmentmenuitem.h"
@@ -42,15 +42,15 @@ typedef GObject      IdoMenuItemFactory;
 typedef GObjectClass IdoMenuItemFactoryClass;
 
 GType       ido_menu_item_factory_get_type (void);
-static void ido_menu_item_factory_interface_init (UbuntuMenuItemFactoryInterface *iface);
+static void ido_menu_item_factory_interface_init (AyatanaMenuItemFactoryInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdoMenuItemFactory, ido_menu_item_factory, G_TYPE_OBJECT,
-  G_IMPLEMENT_INTERFACE (UBUNTU_TYPE_MENU_ITEM_FACTORY, ido_menu_item_factory_interface_init)
-  g_io_extension_point_implement (UBUNTU_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME,
+  G_IMPLEMENT_INTERFACE (AYATANA_TYPE_MENU_ITEM_FACTORY, ido_menu_item_factory_interface_init)
+  g_io_extension_point_implement (AYATANA_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME,
                                   g_define_type_id, "ido", 0);)
 
 static GtkMenuItem *
-ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
+ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
                                         const gchar           *type,
                                         GMenuItem             *menuitem,
                                         GActionGroup          *actions)
@@ -63,40 +63,40 @@ ido_menu_item_factory_create_menu_item (UbuntuMenuItemFactory *factory,
   if (g_str_equal (type, "indicator.guest-menu-item"))
     item = ido_guest_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.calendar"))
+  else if (g_str_equal (type, "org.ayatana.indicator.calendar"))
     item = ido_calendar_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.location"))
+  else if (g_str_equal (type, "org.ayatana.indicator.location"))
     item = ido_location_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.appointment"))
+  else if (g_str_equal (type, "org.ayatana.indicator.appointment"))
     item = ido_appointment_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.alarm"))
+  else if (g_str_equal (type, "org.ayatana.indicator.alarm"))
     item = ido_alarm_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.basic"))
+  else if (g_str_equal (type, "org.ayatana.indicator.basic"))
     item = ido_basic_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.progress"))
+  else if (g_str_equal (type, "org.ayatana.indicator.progress"))
     item = ido_progress_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.unity.slider"))
+  else if (g_str_equal (type, "org.ayatana.unity.slider"))
     item = ido_scale_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.unity.media-player"))
+  else if (g_str_equal (type, "org.ayatana.unity.media-player"))
     item = ido_media_player_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.unity.playback-item"))
+  else if (g_str_equal (type, "org.ayatana.unity.playback-item"))
     item = ido_playback_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.application"))
+  else if (g_str_equal (type, "org.ayatana.application"))
     item = ido_application_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.messages.source"))
+  else if (g_str_equal (type, "org.ayatana.indicator.messages.source"))
     item = ido_source_menu_item_new_from_menu_model (menuitem, actions);
 
-  else if (g_str_equal (type, "com.canonical.indicator.switch"))
+  else if (g_str_equal (type, "org.ayatana.indicator.switch"))
     item = ido_switch_menu_item_new_from_menu_model (menuitem, actions);
 
   return item;
@@ -108,7 +108,7 @@ ido_menu_item_factory_class_init (IdoMenuItemFactoryClass *class)
 }
 
 static void
-ido_menu_item_factory_interface_init (UbuntuMenuItemFactoryInterface *iface)
+ido_menu_item_factory_interface_init (AyatanaMenuItemFactoryInterface *iface)
 {
   iface->create_menu_item = ido_menu_item_factory_create_menu_item;
 }

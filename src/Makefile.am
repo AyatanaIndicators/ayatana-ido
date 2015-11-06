@@ -1,7 +1,7 @@
 CLEANFILES =
 
 VER=3
-lib_LTLIBRARIES = libido3-0.1.la
+lib_LTLIBRARIES = libayatana-ido3-0.4.la
 
 ido_built_public_sources =		\
 	idotypebuiltins.h
@@ -11,6 +11,8 @@ stamp_files =				\
 	idotypebuiltins.c
 
 sources_h =				\
+	ayatanamenuitemfactory.h	\
+	ayatana-private.h		\
 	idoalarmmenuitem.h		\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
@@ -25,7 +27,7 @@ sources_h =				\
 	idotimestampmenuitem.h		\
 	idolocationmenuitem.h		\
 	idotimeline.h			\
-	libido.h			\
+	libayatana-ido.h		\
 	idoactionhelper.h		\
 	idomediaplayermenuitem.h	\
 	idoplaybackmenuitem.h		\
@@ -71,8 +73,9 @@ AM_CPPFLAGS =				\
 AM_CFLAGS =                             \
 	$(COVERAGE_CFLAGS)
 
-libido_0_1_la_SOURCES =			\
-	libido.c			\
+libayatana_ido_0_4_la_SOURCES =		\
+	ayatanamenuitemfactory.c	\
+	libayatana-ido.c		\
 	idotypebuiltins.c		\
 	idocalendarmenuitem.c		\
 	idoalarmmenuitem.c		\
@@ -96,11 +99,11 @@ libido_0_1_la_SOURCES =			\
 	idodetaillabel.c		\
 	idosourcemenuitem.c
 
-libido3_0_1_la_SOURCES = $(libido_0_1_la_SOURCES)
+libayatana_ido3_0_4_la_SOURCES = $(libayatana_ido_0_4_la_SOURCES)
 
-libidoincludedir=$(includedir)/libido$(VER)-0.1/libido
+libayatana_idoincludedir=$(includedir)/libayatana-ido$(VER)-0.4/libayatana-ido
 
-libidoinclude_HEADERS =			\
+libayatana_idoinclude_HEADERS =		\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
@@ -108,17 +111,17 @@ libidoinclude_HEADERS =			\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
 	idotimeline.h			\
-	libido.h
+	libayatana-ido.h
 
-libido_0_1_la_LIBADD = $(GTK_LIBS) $(LIBM)
-libido_0_1_la_LDFLAGS =                 \
+libayatana_ido_0_4_la_LIBADD = $(GTK_LIBS) $(LIBM)
+libayatana_ido_0_4_la_LDFLAGS =                 \
 	$(GTK_LT_LDFLAGS)               \
 	$(COVERAGE_LDFLAGS)	\
 	-no-undefined \
 	-export-symbols-regex "^[^_].*"
-libido3_0_1_la_LIBADD = $(libido_0_1_la_LIBADD)
-libido3_0_1_la_LDFLAGS =                \
-	$(libido_0_1_la_LDFLAGS)
+libayatana_ido3_0_4_la_LIBADD = $(libayatana_ido_0_4_la_LIBADD)
+libayatana_ido3_0_4_la_LDFLAGS =                \
+	$(libayatana_ido_0_4_la_LDFLAGS)
 
 DISTCLEANFILES =			\
 	stamp-idotypebuiltins.h		\
@@ -134,11 +137,11 @@ INTROSPECTION_SCANNER_ARGS = \
 
 if HAVE_INTROSPECTION
 
-Ido3-0.1.gir: libido3-0.1.la
-Ido3_0_1_gir_INCLUDES = Gtk-3.0
-Ido3_0_1_gir_CFLAGS =
-Ido3_0_1_gir_LIBS = libido3-0.1.la
-Ido3_0_1_gir_FILES = \
+AyatanaIdo3-0.4.gir: libayatana-ido3-0.4.la
+AyatanaIdo3_0_4_gir_INCLUDES = Gtk-3.0
+AyatanaIdo3_0_4_gir_CFLAGS =
+AyatanaIdo3_0_4_gir_LIBS = libayatana-ido3-0.4.la
+AyatanaIdo3_0_4_gir_FILES = \
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
 	idomessagedialog.h		\
@@ -146,12 +149,12 @@ Ido3_0_1_gir_FILES = \
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
 	idotimeline.h			\
-	$(libido_0_1_la_SOURCES)
-Ido3_0_1_gir_NAMESPACE = Ido3
-Ido3_0_1_gir_VERSION = 0.1
-Ido3_0_1_gir_SCANNER_FLAGS = $(INTROSPECTION_SCANNER_ARGS)
+	$(libayatana_ido_0_4_la_SOURCES)
+AyatanaIdo3_0_4_gir_NAMESPACE = AyatanaIdo3
+AyatanaIdo3_0_4_gir_VERSION = 0.4
+AyatanaIdo3_0_4_gir_SCANNER_FLAGS = $(INTROSPECTION_SCANNER_ARGS)
 
-INTROSPECTION_GIRS += Ido3-0.1.gir
+INTROSPECTION_GIRS += AyatanaIdo3-0.4.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
@@ -166,10 +169,10 @@ endif
 if HAVE_INTROSPECTION
 
 vapidir = $(datadir)/vala/vapi
-vapi_DATA = Ido3-0.1.vapi
+vapi_DATA = AyatanaIdo3-0.4.vapi
 
-Ido3-0.1.vapi: Ido3-0.1.gir
-	$(VALA_API_GEN) --library=Ido3-0.1 \
+AyatanaIdo3-0.4.vapi: AyatanaIdo3-0.4.gir
+	$(VALA_API_GEN) --library=AyatanaIdo3-0.4 \
 			--pkg gtk+-3.0 \
 			$<
 

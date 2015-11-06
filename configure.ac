@@ -1,9 +1,9 @@
 #
 # shamelessly stolen from clutter-gtk
 #
-m4_define([ido_major_version], [13])
-m4_define([ido_minor_version], [10])
-m4_define([ido_micro_version], [1])
+m4_define([ido_major_version], [0])
+m4_define([ido_minor_version], [4])
+m4_define([ido_micro_version], [0])
 
 m4_define([ido_api_version],
           [ido_major_version.ido_minor_version])
@@ -147,8 +147,8 @@ AC_CONFIG_FILES([
   src/Makefile
   example/Makefile
   tests/Makefile
-  libido.pc
-  libido3.pc
+  libayatana-ido.pc
+  libayatana-ido3.pc
 ])
 
 AC_OUTPUT

@@ -75,7 +75,7 @@ create_color_icon_pixbuf (const char * color_spec)
  * @actions: action group to tell when this GtkMenuItem is activated
  *
  * Creates a new IdoTimeStampMenuItem with properties initialized
- * appropriately for a com.canonical.indicator.alarm
+ * appropriately for a org.ayatana.indicator.alarm
  *
  * If the menuitem's 'action' attribute is set, trigger that action
  * in @actions when this IdoAppointmentMenuItem is activated.

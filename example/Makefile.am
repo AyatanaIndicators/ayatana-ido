@@ -26,6 +26,6 @@ menus_CPPFLAGS =                \
         $(GTK_CFLAGS)           \
         $(MAINTAINER_CFLAGS)
 
-messagedialog_LDADD = $(top_builddir)/src/libido$(VER)-0.1.la $(GTK_LIBS)
+messagedialog_LDADD = $(top_builddir)/src/libayatana-ido$(VER)-0.4.la $(GTK_LIBS)
 
-menus_LDADD = $(top_builddir)/src/libido$(VER)-0.1.la $(GTK_LIBS)
+menus_LDADD = $(top_builddir)/src/libayatana-ido$(VER)-0.4.la $(GTK_LIBS)
