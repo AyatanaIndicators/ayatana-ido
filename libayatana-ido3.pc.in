@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libido
 Description: Ayatana Indicator Display Objects
 Version: @VERSION@
-Libs: -L${libdir} -lido3-0.1
-Cflags: -I${includedir}/libido3-0.1
+Libs: -L${libdir} -layatana-ido3-0.4
+Cflags: -I${includedir}/libayatana-ido3-0.4
 Requires: gtk+-3.0
