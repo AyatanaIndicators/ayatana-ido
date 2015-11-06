@@ -29,3 +29,5 @@ menus_CPPFLAGS =                \
 messagedialog_LDADD = $(top_builddir)/src/libayatana-ido$(VER)-0.4.la $(GTK_LIBS)
 
 menus_LDADD = $(top_builddir)/src/libayatana-ido$(VER)-0.4.la $(GTK_LIBS)
+
+DISTCLEANFILES = Makefile.in

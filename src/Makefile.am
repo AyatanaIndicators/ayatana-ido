@@ -124,6 +124,7 @@ libayatana_ido3_0_4_la_LDFLAGS =                \
 	$(libayatana_ido_0_4_la_LDFLAGS)
 
 DISTCLEANFILES =			\
+	Makefile.in			\
 	stamp-idotypebuiltins.h		\
 	idotypebuiltins.h		\
 	idotypebuiltins.c

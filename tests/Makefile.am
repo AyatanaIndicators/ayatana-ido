@@ -48,3 +48,4 @@ gtest_menuitems_LDADD = \
 	libgtest.a \
 	-lX11 -lXi
 
+DISTCLEANFILES = Makefile.in
