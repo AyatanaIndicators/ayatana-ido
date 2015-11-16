@@ -457,9 +457,9 @@ ido_playback_menu_item_new_from_model (GMenuItem    *item,
   g_signal_connect (actions, "action-added", G_CALLBACK (ido_playback_menu_item_action_added), widget);
   g_signal_connect (actions, "action-removed", G_CALLBACK (ido_playback_menu_item_action_removed), widget);
 
-  g_menu_item_get_attribute (item, "x-canonical-play-action", "s", &widget->button_actions[BUTTON_PLAYPAUSE]);
-  g_menu_item_get_attribute (item, "x-canonical-next-action", "s", &widget->button_actions[BUTTON_NEXT]);
-  g_menu_item_get_attribute (item, "x-canonical-previous-action", "s", &widget->button_actions[BUTTON_PREVIOUS]);
+  g_menu_item_get_attribute (item, "x-ayatanaindicator-play-action", "s", &widget->button_actions[BUTTON_PLAYPAUSE]);
+  g_menu_item_get_attribute (item, "x-ayatanaindicator-next-action", "s", &widget->button_actions[BUTTON_NEXT]);
+  g_menu_item_get_attribute (item, "x-ayatanaindicator-previous-action", "s", &widget->button_actions[BUTTON_PREVIOUS]);
 
   play_action = widget->button_actions[BUTTON_PLAYPAUSE];
   if (play_action && g_action_group_has_action (actions, play_action))

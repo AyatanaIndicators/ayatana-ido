@@ -103,7 +103,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       parameters[n++] = p;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-color", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatanaindicator-color", "s", &str))
     {
       GParameter p = { "icon", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_OBJECT);
@@ -112,7 +112,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       g_free (str);
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatanaindicator-time-format", "s", &str))
     {
       GParameter p = { "format", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_STRING);
@@ -120,7 +120,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       parameters[n++] = p;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatanaindicator-time", "x", &i64))
     {
       GParameter p = { "date-time", G_VALUE_INIT };
       g_value_init (&p.value, G_TYPE_DATE_TIME);
