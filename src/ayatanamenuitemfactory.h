@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 #define AYATANA_IS_MENU_ITEM_FACTORY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), AYATANA_TYPE_MENU_ITEM_FACTORY))
 #define AYATANA_MENU_ITEM_FACTORY_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE ((o), AYATANA_TYPE_MENU_ITEM_FACTORY, AyatanaMenuItemFactoryInterface))
 
-#define AYATANA_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME "ubuntu-menu-item-factory"
+#define AYATANA_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME "ayatana-menu-item-factory"
 
 typedef struct _AyatanaMenuItemFactoryInterface AyatanaMenuItemFactoryInterface;
 typedef struct _AyatanaMenuItemFactory          AyatanaMenuItemFactory;
