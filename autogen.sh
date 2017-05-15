@@ -2,11 +2,11 @@
 
 PKG_NAME="ido"
 
-which gnome-autogen.sh || {
-    echo "You need gnome-common from GNOME git"
+which mate-autogen || {
+    echo "You need mate-common from https://git.mate-desktop.org/mate-common"
     exit 1
 }
 
 USE_GNOME2_MACROS=1 \
 USE_COMMON_DOC_BUILD=yes \
-gnome-autogen.sh --enable-gtk-doc $@
+mate-autogen --enable-gtk-doc $@

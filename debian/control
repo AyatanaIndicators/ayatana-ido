@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 Build-Depends: debhelper (>= 9),
                dh-autoreconf,
-               gnome-common,
+               mate-common,
                libxi-dev,
                libx11-dev,
                libgtest-dev,
