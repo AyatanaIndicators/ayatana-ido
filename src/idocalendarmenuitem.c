@@ -28,8 +28,9 @@
 #include "idocalendarmenuitem.h"
 #include "config.h"
 
-static void     ido_calendar_menu_item_select            (GtkMenuItem        *item);
-static void     ido_calendar_menu_item_deselect          (GtkMenuItem        *item);
+static void     ido_calendar_menu_item_finalize          (GObject        *item);
+static void     ido_calendar_menu_item_select            (GtkMenuItem    *item);
+static void     ido_calendar_menu_item_deselect          (GtkMenuItem    *item);
 static gboolean ido_calendar_menu_item_button_release    (GtkWidget      *widget,
                                                           GdkEventButton *event);
 static gboolean ido_calendar_menu_item_button_press      (GtkWidget      *widget,
@@ -54,6 +55,7 @@ struct _IdoCalendarMenuItemPrivate
 {
   GtkWidget       *box;
   GtkWidget       *calendar;
+  GtkWidget       *parent;
   gboolean         selected;
 };
 
@@ -72,6 +74,8 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
 
+  gobject_class->finalize = ido_calendar_menu_item_finalize;
+
   widget_class->button_release_event = ido_calendar_menu_item_button_release;
   widget_class->button_press_event = ido_calendar_menu_item_button_press;
 
@@ -81,12 +85,12 @@ ido_calendar_menu_item_class_init (IdoCalendarMenuItemClass *klass)
   menu_item_class->hide_on_activate = TRUE;
 
   g_type_class_add_private (gobject_class, sizeof (IdoCalendarMenuItemPrivate));
-  
+
   g_signal_new("month-changed", G_TYPE_FROM_CLASS(klass),
                                 G_SIGNAL_RUN_LAST, 0, NULL, NULL,
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
-                                
+
   g_signal_new("day-selected",  G_TYPE_FROM_CLASS(klass),
                                 G_SIGNAL_RUN_LAST, 0, NULL, NULL,
                                 g_cclosure_marshal_VOID__VOID,
@@ -107,6 +111,8 @@ ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
   /* Will be disposed automatically */
   priv->calendar = g_object_new (gtk_calendar_get_type (),
                                  NULL);
+  g_object_add_weak_pointer (G_OBJECT (priv->calendar),
+                             (gpointer*) &priv->calendar);
 
   g_signal_connect (priv->calendar,
                     "realize",
@@ -124,6 +130,29 @@ ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
   gtk_container_add (GTK_CONTAINER (item), priv->box);
 
   gtk_widget_show_all (priv->box);
+}
+
+static void
+ido_calendar_menu_item_finalize (GObject *object)
+{
+  IdoCalendarMenuItem *item = IDO_CALENDAR_MENU_ITEM (object);
+  IdoCalendarMenuItemPrivate *priv = IDO_CALENDAR_MENU_ITEM_GET_PRIVATE (item);
+
+  if (G_IS_OBJECT (priv->calendar))
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->calendar),
+                                    (gpointer*) &priv->calendar);
+      g_signal_handlers_disconnect_by_data (priv->calendar, item);
+    }
+
+  if (G_IS_OBJECT (priv->parent))
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->parent),
+                                    (gpointer*) &priv->parent);
+      g_signal_handlers_disconnect_by_data (priv->parent, item);
+    }
+
+  G_OBJECT_CLASS (ido_calendar_menu_item_parent_class)->finalize (object);
 }
 
 static void
@@ -258,7 +287,6 @@ ido_calendar_menu_item_deselect (GtkMenuItem *item)
   ido_calendar_menu_item_send_focus_change (GTK_WIDGET (IDO_CALENDAR_MENU_ITEM (item)->priv->calendar), FALSE);
 }
 
-
 static void
 calendar_realized_cb (GtkWidget        *widget,
                       IdoCalendarMenuItem *item)
@@ -268,11 +296,16 @@ calendar_realized_cb (GtkWidget        *widget,
       gdk_window_raise (gtk_widget_get_window (widget));
     }
 
-  g_signal_connect (gtk_widget_get_parent (GTK_WIDGET (item)),
+  item->priv->parent = gtk_widget_get_parent (GTK_WIDGET (item));
+
+  g_object_add_weak_pointer (G_OBJECT (item->priv->parent),
+                             (gpointer*) &item->priv->parent);
+
+  g_signal_connect (item->priv->parent,
                     "key-press-event",
                     G_CALLBACK (ido_calendar_menu_item_key_press),
                     item);
-  
+
   g_signal_connect (item->priv->calendar,
                     "month-changed",
                     G_CALLBACK (calendar_month_changed_cb),
@@ -285,7 +318,7 @@ calendar_realized_cb (GtkWidget        *widget,
                     "day-selected-double-click",
                     G_CALLBACK (calendar_day_selected_double_click_cb),
                     item);
-                    
+
   ido_calendar_menu_item_send_focus_change (widget, TRUE);
 }
 
