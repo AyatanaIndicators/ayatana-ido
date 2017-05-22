@@ -1,6 +1,5 @@
 CLEANFILES =
 
-VER=3
 lib_LTLIBRARIES = libayatana-ido3-0.4.la
 
 ido_built_public_sources =		\
@@ -101,7 +100,7 @@ libayatana_ido_0_4_la_SOURCES =		\
 
 libayatana_ido3_0_4_la_SOURCES = $(libayatana_ido_0_4_la_SOURCES)
 
-libayatana_idoincludedir=$(includedir)/libayatana-ido$(VER)-0.4/libayatana-ido
+libayatana_idoincludedir=$(includedir)/libayatana-ido3-0.4/libayatana-ido
 
 libayatana_idoinclude_HEADERS =		\
 	idocalendarmenuitem.h		\

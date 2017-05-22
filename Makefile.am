@@ -1,8 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 NULL=
 
-VER=3
-
 V         = @
 Q         = $(V:1=)
 QUIET_GEN = $(Q:@=@echo '  GEN   '$@;)
@@ -13,10 +11,9 @@ SUBDIRS = src example tests
 	$(QUIET_GEN) cp -f $< $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libayatana-ido$(VER)-0.4.pc
+pkgconfig_DATA = libayatana-ido3-0.4.pc
 
 CLEANFILES = \
-	libayatana-ido-0.4.pc \
 	libayatana-ido3-0.4.pc \
 	$(NULL)
 
@@ -48,7 +45,7 @@ DISTCLEANFILES = \
 	xmldocs.make \
 	$(NULL)
 
-EXTRA_DIST = libayatana-ido.pc.in libayatana-ido3.pc.in
+EXTRA_DIST = libayatana-ido3.pc.in
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-gtk-doc
 

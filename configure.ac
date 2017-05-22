@@ -147,7 +147,6 @@ AC_CONFIG_FILES([
   src/Makefile
   example/Makefile
   tests/Makefile
-  libayatana-ido.pc
   libayatana-ido3.pc
 ])
 
