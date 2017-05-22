@@ -16,11 +16,11 @@ m4_define([ido_binary_age],
 
 AC_PREREQ([2.64])
 
-AC_INIT([ido],
+AC_INIT([ayatana-ido],
         [ido_version],
-        [http://bugs.launchpad.net/ido],
-        [ido],
-        [http://launchpad.net/ido])
+        [https://github.com/ArcticaProject/ayatana-ido/issues],
+        [ayatana-ido],
+        [https://github.com/ArcticaProject/ayatana-ido])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/libido.h])
