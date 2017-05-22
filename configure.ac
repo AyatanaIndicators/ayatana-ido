@@ -23,7 +23,7 @@ AC_INIT([ayatana-ido],
         [https://github.com/ArcticaProject/ayatana-ido])
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_SRCDIR([src/libido.h])
+AC_CONFIG_SRCDIR([src/libayatana-ido.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([check-news 1.11 foreign])
