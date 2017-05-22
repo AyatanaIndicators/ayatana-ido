@@ -1,0 +1,2307 @@
+2017-05-22 13:06:21 +0200 Mike Gabriel (ab39f3e)
+
+	* release 0.4.0 (HEAD -> master, release-builds)
+
+2017-05-22 12:56:31 +0200 Mike Gabriel (fda91d4)
+
+	* configure.ac: Update shared library name, bug tracker URL, homepage
+          URL. (origin/master)
+
+2017-05-22 12:55:25 +0200 Mike Gabriel (39d0d9f)
+
+	* Build system: Drop remnants of GTK-2+ support.
+
+2017-05-22 12:50:03 +0200 Mike Gabriel (fec55f9)
+
+	* debian/{control,gir1.2-ayatana-ido3-0.4.install}: Turn into
+          Multi-Arch: same package.
+
+2017-05-22 12:48:59 +0200 Mike Gabriel (81e6487)
+
+	* debian/control: Update SYNOPSIS and LONG_DESCRIPTION fields.
+
+2017-05-22 12:48:21 +0200 Mike Gabriel (6b027ab)
+
+	* autogen.sh: Drop references to deprecated shell variables.
+
+2017-05-22 12:31:49 +0200 Mike Gabriel (5ff2bc1)
+
+	* Drop .bzr-builddeb/default.conf. We are on Git.
+
+2017-05-16 11:01:13 +0200 Mike Gabriel (4daacc4)
+
+	* One step back... Mimick Canonical's API. Use their namespace for
+          item attributes.
+
+2017-05-16 10:33:15 +0200 Mike Gabriel (7956f5b)
+
+	* Move NEWS file from Canonical out of the way.
+
+2017-05-15 12:13:45 +0200 Marco Trevisan (Treviño) (61e95ac)
+
+	* IdoCalendarMenuItem: disconnect from parent signals on item
+          destruction (LP: #1506427)
+
+2017-05-15 10:27:21 +0200 Mike Gabriel (89f8b57)
+
+	* build system: Switch to mate-common.
+
+2015-11-16 16:04:57 +0100 Mike Gabriel (4a43575)
+
+	* Use x-ayatanaindicator-* instead of x-canonical-*.
+
+2015-11-16 15:15:09 +0100 Mike Gabriel (fcf7848)
+
+	* Makefile.am
+
+2015-11-11 05:52:47 +0100 Mike Gabriel (656e57d)
+
+	* Drop .bzrignore file.
+
+2015-11-06 15:22:44 +0000 Mike Gabriel (ffebaca)
+
+	* libayatana-ido fork: Fix include paths for public header files.
+
+2015-11-06 14:58:47 +0000 Mike Gabriel (8acfbb7)
+
+	* Adapt pkconfig .pc files to library name changes.
+
+2015-11-06 14:12:51 +0000 Mike Gabriel (3790a17)
+
+	* debian/rules: Drop override_dh_auto_test rule. Tests are disabled
+          in tests/Makefile.am at the moment, anyway.
+
+2015-11-06 14:55:02 +0100 Mike Gabriel (17de78b)
+
+	* make: Improve distclean ruleset.
+
+2015-11-06 14:56:35 +0100 Mike Gabriel (0087253)
+
+	* Re-add forgotten files after fork: libayatana-ido.pc.in,
+          libayatana-ido3.pc.in.
+
+2015-11-06 13:49:07 +0100 Mike Gabriel (76d1509)
+
+	* Fork ayatana-ido from Ubuntu's ido shared library.
+
+2015-10-02 15:32:36 +0000 CI Train Bot (d1b09d9)
+
+	* Releasing 13.10.0+15.10.20151002-0ubuntu1 (tag:
+          13.10.0+15.10.20151002-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+15.10.20151002-0ubuntu1,
+          refs/bzr/origin/heads/master)
+
+2015-10-02 15:32:33 +0000 Lars Uebernickel (771ce0c)
+
+	* idosourcemenuitem: change misplaced g_return_val_if_fail() Approved
+          by: Sebastien Bacher, PS Jenkins bot
+
+2015-10-02 14:33:56 +0200 Lars Uebernickel (fd3ea18)
+
+	* idosourcemenuitem: change misplaced g_return_val_if_fail()
+
+2015-07-28 21:12:27 +0000 CI Train Bot (f007376)
+
+	* Releasing 13.10.0+15.10.20150728-0ubuntu1 (tag:
+          13.10.0+15.10.20150728-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+15.10.20150728-0ubuntu1)
+
+2015-07-28 21:12:24 +0000 Marco Trevisan (Treviño) (0358338)
+
+	* IdoCalendarMenuItem: add crash guard on
+          ido_calendar_menu_item_key_press
+
+2015-07-22 16:00:57 +0200 Marco Trevisan (Treviño) (ac4bbf0)
+
+	* IdoCalendarMenuItem: add crash guard on
+          ido_calendar_menu_item_key_press
+
+2015-03-19 16:24:01 +0000 CI Train Bot (6f2f647)
+
+	* Releasing 13.10.0+15.04.20150319-0ubuntu1 (tag:
+          13.10.0+15.04.20150319-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+15.04.20150319-0ubuntu1)
+
+2015-03-19 16:23:58 +0000 Lars Uebernickel (4c578ba)
+
+	* idoscalemenuitem: fix scale hover state Approved by: Sebastien
+          Bacher, PS Jenkins bot, Simon Steinbeiß
+
+2015-03-10 12:38:25 +0100 Lars Uebernickel (3bef6a1)
+
+	* idoscalemenuitem: set focus flag on scale
+
+2015-03-10 12:14:50 +0100 Lars Uebernickel (07a3027)
+
+	* idoscalemenuitem: translate motion event coordinates
+
+2015-01-30 14:25:14 +0000 CI Train Bot (fced82c)
+
+	* Releasing 13.10.0+15.04.20150130-0ubuntu1 (tag:
+          13.10.0+15.04.20150130-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+15.04.20150130-0ubuntu1)
+
+2015-01-30 14:25:03 +0000 Lars Uebernickel (3445894)
+
+	* idoplaybackmenuitem: don't set the spinner class
+
+2015-01-30 15:06:46 +0100 Lars Uebernickel (1f922e5)
+
+	* idoplaybackmenuitem: don't set the spinner class
+
+2015-01-22 11:56:22 +0000 CI Train Bot (467b70e)
+
+	* Releasing 13.10.0+15.04.20150122-0ubuntu1 (tag:
+          13.10.0+15.04.20150122-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+15.04.20150122-0ubuntu1)
+
+2015-01-22 11:56:09 +0000 Lars Uebernickel (9f8609c)
+
+	* idoscalemenuitem: fix slider event forwarding Approved by: Iain
+          Lane, PS Jenkins bot
+
+2015-01-21 19:21:23 +0100 Lars Uebernickel (22e14c5)
+
+	* idoscalemenuitem: remove extraneous line
+
+2015-01-21 19:14:49 +0100 Lars Uebernickel (3ae1abb)
+
+	* idoscalemenuitem: only forward button events that are inside the
+          scale
+
+2015-01-21 18:47:36 +0100 Lars Uebernickel (b42893f)
+
+	* idoscalemenuitem: don't translate event coordinates
+
+2014-11-03 20:57:41 +0000 CI bot (d69f78b)
+
+	* Releasing 13.10.0+15.04.20141103-0ubuntu1 (tag:
+          13.10.0+15.04.20141103-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+15.04.20141103-0ubuntu1)
+
+2014-11-03 20:57:33 +0000 Ted Gould (2d4009b)
+
+	* Update tags for newer GObject Introsepction Scanner and disable
+          xorg-gtest tests Fixes: 1382020 Approved by: PS Jenkins
+          bot
+
+2014-11-03 10:42:36 -0600 Ted Gould (c3c628d)
+
+	* Filter out symbols in the library
+
+2014-11-03 10:04:09 -0600 Ted Gould (fae005a)
+
+	* Comment out xorg-gtest tests
+
+2014-10-16 08:45:32 -0500 Ted Gould (e9522b4)
+
+	* Add lcov version 1.11
+
+2014-10-16 08:17:14 -0500 Ted Gould (5c4cf2d)
+
+	* Update tags for newer GObject Introsepction Scanner
+
+2014-04-23 17:03:36 +0000 CI bot (01ce8c3)
+
+	* Releasing 13.10.0+14.04.20140423-0ubuntu1 (tag:
+          13.10.0+14.04.20140423-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140423-0ubuntu1)
+
+2014-04-23 17:03:27 +0000 Lars Uebernickel (bc444da)
+
+	* Make long track infos better readable
+
+2014-04-23 16:37:18 +0200 Lars Uebernickel (82c094a)
+
+	* idoplaybackmenuitem: don't introduce even more magic numbers
+
+2014-04-23 12:02:32 +0200 Lars Uebernickel (8844b19)
+
+	* idoplaybackmenuitem: center the controls horizontally
+
+2014-04-23 12:01:33 +0200 Lars Uebernickel (3c5e4d8)
+
+	* idomediaplayermenuitem: don't hardcode width
+
+2014-04-23 11:59:00 +0200 Lars Uebernickel (560f933)
+
+	* idomediaplayermenuitem: use small font for track info labels
+
+2014-04-07 12:30:17 +0000 CI bot (c734bb8)
+
+	* Releasing 13.10.0+14.04.20140407-0ubuntu1 (tag:
+          13.10.0+14.04.20140407-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140407-0ubuntu1)
+
+2014-04-07 12:30:06 +0000 Lars Uebernickel (c3fc9b1)
+
+	* idobasicmenuitem: update icon when the theme changes
+
+2014-04-04 19:37:23 +0200 Lars Uebernickel (220d43c)
+
+	* idobasicmenuitem: don't export update_image()
+
+2014-04-04 19:01:44 +0200 Lars Uebernickel (b7ec0fe)
+
+	* idobasicmenuitem: update icon when the theme changes
+
+2014-03-28 11:27:53 +0000 CI bot (1c842fe)
+
+	* Releasing 13.10.0+14.04.20140328-0ubuntu1 (tag:
+          13.10.0+14.04.20140328-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140328-0ubuntu1)
+
+2014-03-28 11:27:50 +0000 CI bot (0627003)
+
+	* Update symbols
+
+2014-03-28 11:27:41 +0000 Lars Uebernickel (d973b78)
+
+	* idoplaybackmenuitem: propagate events in the menu keyrelease
+          handler
+
+2014-03-28 11:27:32 +0000 Lars Uebernickel (6e90a5c)
+
+	* expose idobasicmenuitem, a normal menu item that supports
+          non-square icons
+
+2014-03-28 11:27:23 +0000 Lars Uebernickel (34b23e2)
+
+	* Highlight back/forward buttons when hovering them with the pointer
+
+2014-03-28 11:27:12 +0100 Lars Uebernickel (8269c14)
+
+	* idobasicmenuitem: check return value of
+          gtk_icon_info_get_filename() for NULL
+
+2014-03-27 17:10:17 +0100 Lars Uebernickel (ab158b1)
+
+	* idobasicmenuitem: add symbol for _new_from_model()
+
+2014-03-27 13:16:39 +0100 Lars Uebernickel (d1403eb)
+
+	* idobasicmenuitem: support non-square icons
+
+2014-03-27 13:16:10 +0100 Lars Uebernickel (b5fe1d7)
+
+	* Expose IdoBasicMenuItem as com.canonical.indicator.basic
+
+2014-03-26 17:07:21 +0100 Lars Uebernickel (7614e88)
+
+	* idobasicmenuitem: put progress menu item into its own file
+
+2014-03-26 14:35:19 +0100 Lars Uebernickel (0ddb492)
+
+	* idoplaybackmenuitem: propagate events in the menu keyrelease
+          handler
+
+2014-03-25 19:00:21 +0100 Lars Uebernickel (02c9ed6)
+
+	* Highlight back/forward buttons when hovering them with the pointer
+
+2014-03-25 18:57:25 +0100 Lars Uebernickel (a877446)
+
+	* idoplaybackmenuitem: put action names into array keyed by buttons
+
+2014-03-24 17:45:12 +0000 CI bot (e14ab5d)
+
+	* Releasing 13.10.0+14.04.20140324-0ubuntu1 (tag:
+          13.10.0+14.04.20140324-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140324-0ubuntu1)
+
+2014-03-24 17:45:04 +0000 Lars Uebernickel (f592103)
+
+	* idoplaybackmenuitem: set active flag when player is launching
+
+2014-03-24 16:09:02 +0100 Lars Uebernickel (5a77702)
+
+	* idoplaybackmenuitem: set active flag when player is launching
+
+2014-03-24 16:08:30 +0100 Lars Uebernickel (ab0798e)
+
+	* idoplaybackmenuitem: don't add .menu css class on the menu item
+
+2014-03-21 06:56:56 +0000 CI bot (bfd8fef)
+
+	* Releasing 13.10.0+14.04.20140321-0ubuntu1 (tag:
+          13.10.0+14.04.20140321-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140321-0ubuntu1)
+
+2014-03-21 06:56:47 +0000 Lars Uebernickel (96d791b)
+
+	* idoapplicationmenuitem: request correct size for empty icons
+
+2014-03-20 14:16:59 +0100 Lars Uebernickel (69e211f)
+
+	* idoapplicationmenuitem: request correct size for empty icons
+
+2014-03-13 10:15:45 +0000 CI bot (5cdbd5d)
+
+	* Releasing 13.10.0+14.04.20140313-0ubuntu1 (tag:
+          13.10.0+14.04.20140313-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140313-0ubuntu1)
+
+2014-03-13 10:15:33 +0000 Lars Uebernickel (60495e0)
+
+	* idoscalemenuitem: use the scale's actual size allocation for events
+          Fixes: 1069762
+
+2014-03-12 18:25:55 +0100 Lars Uebernickel (40079a7)
+
+	* Put some space between scale and min/max buttons
+
+2014-03-12 18:24:35 +0100 Lars Uebernickel (3c6efc9)
+
+	* Remove toggle-size-allocate handler
+
+2014-03-12 18:18:58 +0100 Lars Uebernickel (b500b83)
+
+	* idoscalemenuitem: use the scale's actual size allocation for events
+
+2014-02-13 15:54:16 +0000 CI bot (a52c1a6)
+
+	* Releasing 13.10.0+14.04.20140213-0ubuntu1 (tag:
+          13.10.0+14.04.20140213-0ubuntu1,
+          refs/bzr/origin/tags/13.10.0+14.04.20140213-0ubuntu1)
+
+2014-02-13 15:54:06 +0000 Sebastien Bacher (4a24fe6)
+
+	* Update the Standards-Version
+
+2014-02-13 10:52:33 +0100 Sebastien Bacher (a1b73d7)
+
+	* Update the Standards-Version
+
+2014-01-07 20:27:09 +0000 Ken VanDine (8f62a0c)
+
+	* Sync changes uploaded to the archive back to trunk .
+
+2014-01-07 13:57:50 -0500 Ken VanDine (3ebe5c1)
+
+	* Build with -Wno-error=deprecated-declarations.
+
+2013-12-19 08:50:47 -0600 Ted Gould (b475408)
+
+	* Allow gcov 1.10
+
+2013-12-19 08:50:11 -0600 Ted Gould (77d4d12)
+
+	* No error for deprecations
+
+2013-12-18 16:41:21 -0600 Ted Gould (abf7494)
+
+	* Allow gcov 1.10
+
+2013-12-18 15:59:07 -0600 Ted Gould (ba3a014)
+
+	* No error for deprecations
+
+2013-11-28 11:18:59 +0000 Lars Uebernickel (e3f4d1d)
+
+	* IdoScaleMenuItem: intercept left and right keys. Fixes:
+          https://bugs.launchpad.net/bugs/1242550.
+
+2013-11-28 11:28:05 +0100 Lars Uebernickel (8035c97)
+
+	* IdoScaleMenuItem: allow changing value with left/right and +/- keys
+
+2013-11-27 12:49:11 +0000 Automatic PS uploader (d0714b7)
+
+	* Releasing 13.10.0+14.04.20131127-0ubuntu1 (revision 162 from
+          lp:ido).
+
+2013-11-27 11:37:40 +0000 Automatic PS uploader (a5b1e91)
+
+	* Releasing 13.10.0+14.04.20131127-0ubuntu1, based on r162
+
+2013-11-27 10:51:10 +0000 Lars Uebernickel (b4f0d45)
+
+	* idoactionhelper: remove potentially stray idle source when
+          finalizing.
+
+2013-11-27 10:53:47 +0100 Lars Uebernickel (ee400c2)
+
+	* idoactionhelper: remove potentially stray idle source when
+          finalizing
+
+2013-11-26 22:03:58 +0000 Automatic PS uploader (74a2e43)
+
+	* Releasing 13.10.0+14.04.20131126-0ubuntu1 (revision 160 from
+          lp:ido).
+
+2013-11-26 19:28:37 +0000 Automatic PS uploader (b4af2fc)
+
+	* Releasing 13.10.0+14.04.20131126-0ubuntu1, based on r160
+
+2013-11-26 19:23:37 +0000 Lars Uebernickel (04c85ff)
+
+	* ido_calendar_menu_item_new_from_model: initialize local variables
+          with NULL
+
+2013-11-26 19:52:21 +0100 Lars Uebernickel (8d76820)
+
+	* ido_calendar_menu_item_new_from_model: initialize local variables
+          with NULL
+
+2013-11-06 13:04:14 +0000 Automatic PS uploader (d1cdca8)
+
+	* Releasing 13.10.0+14.04.20131106-0ubuntu1 (revision 158 from
+          lp:ido).
+
+2013-11-06 11:23:53 +0000 Automatic PS uploader (9bb7ffc)
+
+	* Releasing 13.10.0+14.04.20131106-0ubuntu1, based on r158
+
+2013-11-06 09:53:02 +0000 Lars Uebernickel (48b2262)
+
+	* ido_user_menu_item: remove superfluous unref
+
+2013-11-06 10:28:02 +0100 Lars Uebernickel (bb2f459)
+
+	* ido_user_menu_item: remove superfluous unref
+
+2013-11-05 17:51:51 +0000 Automatic PS uploader (0a01da4)
+
+	* Releasing 13.10.0+14.04.20131105.1-0ubuntu1 (revision 156 from
+          lp:ido).
+
+2013-11-05 11:01:57 +0000 Automatic PS uploader (3f79da9)
+
+	* Releasing 13.10.0+14.04.20131105.1-0ubuntu1, based on r156
+
+2013-11-05 11:01:43 +0000 Automatic PS uploader (447b26e)
+
+	* Update symbols
+
+2013-10-31 19:51:36 +0000 Lars Uebernickel (e1fa7c7)
+
+	* idoscalemenuitem: disconnect signal from parent
+
+2013-10-31 11:07:00 -0700 Lars Uebernickel (10c52b7)
+
+	* idoscalemenuitem: disconnect signal from parent
+
+2013-10-28 18:45:52 +0000 Lars Uebernickel (28427a3)
+
+	* IdoUserMenuItem: only allow file icons as avatars
+
+2013-10-28 10:16:39 -0700 Lars Uebernickel (6485128)
+
+	* ido_user_menu_item_set_icon_from_file_icon: don't initialize width
+          and height
+
+2013-10-28 10:12:52 -0700 Lars Uebernickel (a2e6b66)
+
+	* ido_user_menu_item_set_icon_from_file_icon: free file
+
+2013-10-27 07:24:09 -0700 Lars Uebernickel (0e079e8)
+
+	* Don't export ido_user_menu_item_set_icon_from_file_icon()
+
+2013-10-26 15:03:51 -0400 Lars Uebernickel (dc577ba)
+
+	* IdoUserMenuItem: only allow file icons as avatars
+
+2013-10-24 11:01:59 -0400 Lars Uebernickel (cd88b8a)
+
+	* Also allow using + and - keys to change the slider
+
+2013-10-22 20:13:38 +0000 Lars Uebernickel (596e38b)
+
+	* Make IdoSwitchMenuItem accessible from gtk_menu_new_from_model.
+
+2013-10-22 15:35:22 -0400 Lars Uebernickel (bccb3fb)
+
+	* Unref serialized_icon
+
+2013-10-22 15:34:23 -0400 Lars Uebernickel (180ab33)
+
+	* Don't call gtk_image_clear() on a NULL widget
+
+2013-10-22 12:11:56 -0400 Lars Uebernickel (f5c03fb)
+
+	* debian: add new ido symbols
+
+2013-10-22 12:09:37 -0400 Lars Uebernickel (d910f41)
+
+	* examples: use new IdoSwitchMenuItem API
+
+2013-10-22 11:38:57 -0400 Lars Uebernickel (898a221)
+
+	* Make IdoSwitchMenuItem accessible from gtk_menu_new_from_model
+
+2013-10-22 11:30:11 -0400 Lars Uebernickel (8a99ede)
+
+	* IdoSwitchMenuItem: deprecate get_content_area and add
+          set_{label,icon}
+
+2013-10-21 17:41:51 -0400 Lars Uebernickel (8fe2bdf)
+
+	* IdoScaleMenuItem: intercept left and right keys
+
+2013-10-11 10:23:45 +0000 Automatic PS uploader (6e849d5)
+
+	* Releasing 13.10.0+13.10.20131011-0ubuntu1 (revision 152 from
+          lp:ido).
+
+2013-10-11 04:28:12 +0000 Automatic PS uploader (845d114)
+
+	* Releasing 13.10.0+13.10.20131011-0ubuntu1, based on r152
+
+2013-10-10 21:32:13 +0000 Lars Uebernickel (302d244)
+
+	* idoscalemenuitem: request a minimum width of 200px.
+
+2013-10-10 07:30:45 +0200 Lars Uebernickel (30289d8)
+
+	* idoscalemenuitem: request a minimum width of 200px
+
+2013-09-30 14:34:36 +0000 Lars Uebernickel (ebffc6d)
+
+	* idousermenuitem: center avatar and adjust spacing.
+
+2013-09-30 12:24:55 +0000 Automatic PS uploader (5c5055d)
+
+	* Releasing 13.10.0+13.10.20130930-0ubuntu1 (revision 149 from
+          lp:ido).
+
+2013-09-30 12:48:24 +0200 Lars Uebernickel (a5ee7a6)
+
+	* idousermenuitem: center user avatars and adjust spacing
+
+2013-09-30 06:32:59 +0000 Automatic PS uploader (9db63ea)
+
+	* Releasing 13.10.0+13.10.20130930-0ubuntu1, based on r149
+
+2013-09-25 15:09:18 +0000 Lars Uebernickel (8a9333d)
+
+	* idoscalemenuitem: don't update the action state when the action
+          state changes
+
+2013-09-25 00:11:13 +0200 Lars Uebernickel (ed88015)
+
+	* idoscalemenuitem: don't update the action state when the action
+          state changes
+
+2013-09-20 12:25:24 +0000 Automatic PS uploader (4bc9bfd)
+
+	* Releasing 13.10.0+13.10.20130920-0ubuntu1 (revision 147 from
+          lp:ido).
+
+2013-09-20 10:20:28 +0000 Automatic PS uploader (93686c5)
+
+	* Releasing 13.10.0+13.10.20130920-0ubuntu1, based on r147
+
+2013-09-16 14:38:53 +0000 Lars Uebernickel (d6cd512)
+
+	* Reverse slider movement when scrolling by default. Fixes:
+          https://bugs.launchpad.net/bugs/1225330.
+
+2013-09-15 20:21:14 +0200 Lars Uebernickel (a947c80)
+
+	* Revert slider movement when scrolling by default
+
+2013-08-14 06:19:54 +0000 Automatic PS uploader (e95f316)
+
+	* Releasing 13.10.0+13.10.20130814-0ubuntu1 (revision 145 from
+          lp:ido).
+
+2013-08-14 02:58:11 +0000 Automatic PS uploader (8e3c2c4)
+
+	* Releasing 13.10.0+13.10.20130814-0ubuntu1, based on r145
+
+2013-08-14 02:58:07 +0000 Automatic PS uploader (4c88448)
+
+	* Update symbols
+
+2013-08-13 21:28:03 +0000 Lars Uebernickel (05443b6)
+
+	* Add widgets for messaging menu.
+
+2013-08-13 15:28:16 -0500 Ted Gould (bb86413)
+
+	* Library functions taking GVariant params need to ref_sink() and
+          unref() always. (reason #24 to not like GVariant)
+
+2013-08-13 14:36:18 -0500 Ted Gould (f19d539)
+
+	* Adding new symbols
+
+2013-08-13 18:50:26 +0200 Lars Uebernickel (be7301a)
+
+	* Add IdoSourceMenuItem
+
+2013-08-13 16:05:52 +0200 Lars Uebernickel (8b1bba6)
+
+	* Add IdoApplicationMenuItem
+
+2013-07-31 09:31:45 +0000 Automatic PS uploader (242477c)
+
+	* Releasing 13.10.0+13.10.20130731-0ubuntu1 (revision 143 from
+          lp:ido).
+
+2013-07-31 02:02:57 +0000 Automatic PS uploader (c835e93)
+
+	* Releasing 13.10.0+13.10.20130731-0ubuntu1, based on r143
+
+2013-07-31 02:02:53 +0000 Automatic PS uploader (a79b455)
+
+	* Update symbols
+
+2013-07-30 22:17:45 +0000 Charles Kerr (86b63cf)
+
+	* Support x-canonical-type: "com.canonical.indicator.progress" and
+          "com.canonical.indicator.alarm".
+
+2013-07-25 22:19:28 -0500 Charles Kerr (ad7dd27)
+
+	* sync two removed API functions: ido_location_menu_item_set_format,
+          ido_location_menu_item_set_name
+
+2013-07-25 18:57:29 -0500 Charles Kerr (5761e8d)
+
+	* implement IdoLocationMenuItem as a subclass of IdoTimeStampMenuItem
+
+2013-07-25 18:53:48 -0500 Charles Kerr (1b71666)
+
+	* add support for com.canonical.indicator.alarm menuitems.
+
+2013-07-25 18:34:23 -0500 Charles Kerr (c823c87)
+
+	* implement IdoAppointmentMenuItem as a specialization of
+          IdoTimeStampMenuItem
+
+2013-07-25 18:22:08 -0500 Charles Kerr (8978437)
+
+	* add IdoTimeStampMenuItem, a base class for appointments, locations,
+          and alarms
+
+2013-07-25 16:24:49 -0500 Charles Kerr (3565dad)
+
+	* subclass IdoAppointmentMenuItem from IdoBasicMenuItem
+
+2013-07-25 16:22:45 -0500 Charles Kerr (b4cc30d)
+
+	* add a 6px margin between the icon and primary text iff the icon is
+          visible
+
+2013-07-25 15:53:36 -0500 Charles Kerr (124564d)
+
+	* subclass IdoLocationMenuItem from IdoBasicMenuItem
+
+2013-07-25 15:51:57 -0500 Charles Kerr (8a9b4b8)
+
+	* add make the type macro for IdoBasicMenuItem follow the standard
+          naming scheme
+
+2013-07-24 13:10:19 -0500 Charles Kerr (2ef49dc)
+
+	* don't hardcode making com.canonical.indicator.progress insensitive;
+          its sensitivity should follow its action's sensitivity.
+
+2013-07-24 13:09:24 -0500 Charles Kerr (69f5f2c)
+
+	* add public API symbols to debian/
+
+2013-07-24 00:08:29 -0500 Charles Kerr (79875b4)
+
+	* add a menuitem that renders com.canonical.indicator.progress as
+          laid out in https://wiki.ubuntu.com/Power#Phone
+
+2013-07-03 17:35:51 +0000 Automatic PS uploader (f3e64f7)
+
+	* Releasing 13.10.0+13.10.20130703.1-0ubuntu1 to ubuntu.
+
+2013-07-03 14:16:50 +0000 Automatic PS uploader (e7bf359)
+
+	* Releasing 13.10.0+13.10.20130703.1-0ubuntu1, based on r141
+
+2013-07-03 03:19:42 +0000 Ted Gould (f40fb90)
+
+	* Fix broken comments for the introspection scanner.
+
+2013-07-02 21:13:03 -0500 Ted Gould (fd29ab9)
+
+	* Fixing some small introspection errors
+
+2013-07-02 22:54:31 +0000 Charles Kerr (829c2c2)
+
+	* fix IdoLocationMenuItem label alignment issue reported by ted.
+
+2013-07-02 15:38:01 -0500 Charles Kerr (644fe6e)
+
+	* revert the UBUNTU_MENUPROXY line since will's reverting the gtk
+          menu proxy to support it as before
+
+2013-07-02 08:54:23 -0500 Charles Kerr (3eb1596)
+
+	* add test cases of IdoLocationMenuItem to the 'menus' example app
+
+2013-07-02 08:53:21 -0500 Charles Kerr (8c347eb)
+
+	* in idolocationmenuitem, fix slight alignment issue in the city
+          label
+
+2013-07-02 09:21:41 +0000 Automatic PS uploader (20247ad)
+
+	* Releasing 13.10.0+13.10.20130702-0ubuntu1 to ubuntu.
+
+2013-07-02 02:02:50 +0000 Automatic PS uploader (4f76867)
+
+	* Releasing 13.10.0+13.10.20130702-0ubuntu1, based on r138
+
+2013-07-01 20:34:31 +0000 Charles Kerr (43222b3)
+
+	* Test to see if a user's avatar is loadable before we use it.
+
+2013-07-01 12:23:13 -0500 Charles Kerr (14e5eeb)
+
+	* in ido_user_menu_item_set_icon(), remove a g_warning iff icon is
+          NULL
+
+2013-07-01 11:56:15 -0500 Charles Kerr (059926d)
+
+	* don't load the icon twice
+
+2013-07-01 11:11:26 -0500 Charles Kerr (e31ab7b)
+
+	* if a user's avatar icon file doesn't exist or isn't readable, fall
+          back to the default avatar
+
+2013-06-28 16:55:04 +0000 Automatic PS uploader (5c6e761)
+
+	* Releasing 13.10.0+13.10.20130628-0ubuntu1 to ubuntu.
+
+2013-06-28 02:03:07 +0000 Automatic PS uploader (c0080ba)
+
+	* Releasing 13.10.0+13.10.20130628-0ubuntu1, based on r136
+
+2013-06-28 02:02:57 +0000 Automatic PS uploader (9d1a1d7)
+
+	* Update symbols
+
+2013-06-27 19:25:56 +0000 Charles Kerr (fbabe33)
+
+	* one-liner fix to a copy-paste error in GuestMenuItem's handling of
+          online/active guests.
+
+2013-06-27 12:02:41 -0500 Charles Kerr (549a1b5)
+
+	* fix a copy-paste bug in the last commit's GuestMenuItem code
+
+2013-06-24 02:34:25 +0000 Charles Kerr (49b6a15)
+
+	* Adds support for the guest menuitem.
+
+2013-06-23 19:20:58 -0500 Charles Kerr (db32e75)
+
+	* oops, that @replaceme should have been 0replaceme...
+
+2013-06-23 18:44:39 -0500 Charles Kerr (9011650)
+
+	* in debian/libido3-0.1-0.symbols, add the new symbols
+
+2013-06-23 18:37:38 -0500 Charles Kerr (1f0bfc0)
+
+	* silence console warnings when a NULL filename is passed into
+          ido_user_menu_item_set_icon_from_filename()
+
+2013-06-23 18:06:39 -0500 Charles Kerr (8008ec3)
+
+	* add ido_guest_menu_item_new_for_model()
+
+2013-06-23 17:43:19 -0500 Charles Kerr (61ce727)
+
+	* add an 'icon' property to idousermenuitem
+
+2013-06-20 01:51:44 +0000 Lars Uebernickel (8f8d487)
+
+	* Add IdoMediaPlayerMenuItem and IdoPlaybackMenuItem.
+
+2013-06-19 18:50:42 -0400 Lars Uebernickel (e88a842)
+
+	* ido_playback_menu_item_parent_key_press_event: be more explicit
+
+2013-06-19 18:49:38 -0400 Lars Uebernickel (80a024e)
+
+	* idoplaybackmenuitem: remove redundant 'else'
+
+2013-06-19 18:48:26 -0400 Lars Uebernickel (5aca3b4)
+
+	* idoplaybackmenuitem: warn before crashing in g_str_equal
+
+2013-06-19 17:16:20 -0400 Lars Uebernickel (e2de482)
+
+	* ido_playback_menu_item_get_button_at_pos: add ascii blueprint
+
+2013-06-19 17:07:59 -0400 Lars Uebernickel (5d9faae)
+
+	* ido_media_player_menu_item_state_changed: declare constant
+          variables as const
+
+2013-06-19 17:06:38 -0400 Lars Uebernickel (ba02d52)
+
+	* idomediaplayermenuitem: allow non-local album art
+
+2013-06-19 16:03:34 -0400 Lars Uebernickel (52a73fd)
+
+	* idomediaplayermenuitem: make album art size a #define
+
+2013-06-19 16:00:59 -0400 Lars Uebernickel (810627e)
+
+	* debian: add new symbols
+
+2013-06-19 16:00:36 -0400 Lars Uebernickel (bf73049)
+
+	* idoplaybackmenuitem.c: mark internal functions as static
+
+2013-06-19 10:58:55 -0400 Lars Uebernickel (9bf880d)
+
+	* Merge trunk
+
+2013-06-19 13:08:31 +0000 Automatic PS uploader (e84fd15)
+
+	* Releasing 13.10.0daily13.06.19-0ubuntu1 to ubuntu.
+
+2013-06-19 02:02:29 +0000 Automatic PS uploader (a2aa0cb)
+
+	* Releasing 13.10.0daily13.06.19-0ubuntu1, based on r132
+
+2013-06-19 02:02:15 +0000 Automatic PS uploader (f9589a7)
+
+	* Update symbols
+
+2013-06-17 17:50:43 -0400 Lars Uebernickel (bfb0755)
+
+	* IdoPlaybackMenuItem: listen to state changes of the 'play' action
+
+2013-06-17 16:37:33 +0000 Charles Kerr (7265359)
+
+	* Better handling of IdoMenuItem construction from GMenuItems, better
+          public API documentation.
+
+2013-06-17 12:15:34 -0400 Lars Uebernickel (01d0c0b)
+
+	* Add IdoPlaybackMenuItem
+
+2013-06-17 11:14:36 -0500 Charles Kerr (0aa36d9)
+
+	* copyediting: fix copy/paste errors in the documentation
+
+2013-06-17 11:09:43 -0500 Charles Kerr (3291597)
+
+	* in IdoAppointmentMenuItem's update_timestamp_label(), clear the
+          label text if either the time or format properties are
+          unset
+
+2013-06-17 10:59:26 -0500 Charles Kerr (0348539)
+
+	* add documentation for the public API calls
+
+2013-06-17 10:41:25 -0500 Charles Kerr (9205983)
+
+	* when building location and appointment menuitems from a GMenu, grab
+          all the parameters and then pass them to object_new() as a
+          block to avoid them getting set twice -- once with the
+          constructor's default values, and then once afterwards
+
+2013-06-17 10:04:35 -0500 Charles Kerr (6de8e03)
+
+	* in idoappointmentmenuitem.c, fix startup issue arising from
+          updating the timestamp label when the strftime format
+          string hasn't been initialized yet.
+
+2013-06-15 17:37:22 +0000 Charles Kerr (83e4735)
+
+	* adds the ido widgets needed for indicator-datetime.
+
+2013-06-15 10:39:53 -0500 Charles Kerr (53ee722)
+
+	* in debian/libido3-0.1-0.symbols, that should be '0replaceme'...
+
+2013-06-14 22:59:40 -0500 Charles Kerr (1a47ea1)
+
+	* add the new calendar, appointment, location symbols to debian/
+
+2013-06-14 19:10:26 -0500 Charles Kerr (2e5b7f3)
+
+	* fix time_t issue in idocalendarmenuitem's gmenu code
+
+2013-06-14 19:10:05 -0500 Charles Kerr (5d6dce1)
+
+	* bump version from 13.10.0 to 13.10.1
+
+2013-06-14 14:15:11 -0500 Charles Kerr (2e2f7e3)
+
+	* in idolocationmenuitem, assume seconds are shown in the timestamp
+          when the time format string includes '%s', '%S', '%T',
+          '%X', or '%c'
+
+2013-06-14 13:22:03 -0500 Charles Kerr (5988e06)
+
+	* add ted's name to idoappointmentmenuitem.c for
+          create_color_icon_pixbuf()
+
+2013-06-14 13:21:27 -0500 Charles Kerr (914258f)
+
+	* remove g_message that leaked into last commit
+
+2013-06-14 13:04:45 -0500 Charles Kerr (17c7bd1)
+
+	* add calendar, location, and appointment menuitems to the IDO
+          factory
+
+2013-06-14 13:04:00 -0500 Charles Kerr (9373536)
+
+	* add ido_calendar_menu_item_new_from_model()
+
+2013-06-14 13:03:08 -0500 Charles Kerr (88522dc)
+
+	* add location menuitem
+
+2013-06-14 13:02:50 -0500 Charles Kerr (3db9d6f)
+
+	* add appointment menuitem
+
+2013-06-12 17:43:36 -0400 Lars Uebernickel (ef70e33)
+
+	* Add IdoMediaPlayerMenuItem
+
+2013-06-08 03:52:10 +0000 Jeremy Bicha (7610132)
+
+	* Depend on valac instead of valac-0.16 for easier transitions Have
+          libido3-0.1-dev depend on gir1.2-ido3-0.1 Drop unnecessary
+          gir build-depends.
+
+2013-06-07 22:57:57 -0400 Jeremy Bicha (f265a16)
+
+	* Depend on valac instead of valac-0.16 for easier transitions Have
+          libido3-0.1-dev depend on gir1.2-ido3-0.1 Drop unnecessary
+          gir build-depends
+
+2013-06-07 21:41:53 +0000 Lars Uebernickel (c80dc60)
+
+	* Add support for creating scale menu items from a menu model.
+
+2013-06-07 17:31:39 -0400 Lars Uebernickel (62ed83c)
+
+	* Merge trunk
+
+2013-06-07 16:55:11 -0400 Lars Uebernickel (8db174a)
+
+	* idoscalemenuitem: look "{min,max}-icon" on the GMenuItem
+
+2013-06-07 09:54:07 +0000 Automatic PS uploader (b36e57d)
+
+	* Releasing 13.10.0daily13.06.07-0ubuntu1 to ubuntu.
+
+2013-06-07 02:02:41 +0000 Automatic PS uploader (c9dba5a)
+
+	* Releasing 13.10.0daily13.06.07-0ubuntu1, based on r127
+
+2013-06-07 02:02:38 +0000 Automatic PS uploader (5dc4419)
+
+	* Update symbols
+
+2013-05-31 19:38:19 -0400 Lars Uebernickel (c23cdfc)
+
+	* debian: add new symbols
+
+2013-05-31 18:51:10 -0400 Lars Uebernickel (26d057c)
+
+	* Add support for creating scale menu items from a menu model
+
+2013-05-31 18:50:09 -0400 Lars Uebernickel (03dc54f)
+
+	* Add ido_action_helper_change_state
+
+2013-05-31 17:26:12 -0400 Lars Uebernickel (cb6475e)
+
+	* idoscalemenuitem: make the scale expand and fill in the menu item
+
+2013-05-31 19:51:15 +0000 Charles Kerr (e5d2187)
+
+	* Put a framework in place to move custom menu items from the
+          indicator packages into ido. It depends on a vendor-patch
+          to gtk (see bug #1183505), because gtk+ does not yet have
+          an API for inserting arbitrary menu items into menus
+          created with gtk_menu_new_from_model().
+
+2013-05-31 14:42:41 -0400 Lars Uebernickel (18f2ca9)
+
+	* debian: add new symbols
+
+2013-05-31 14:02:40 -0400 Lars Uebernickel (52b6ef7)
+
+	* Bump glib and gtk dependencies
+
+2013-05-31 11:15:39 -0400 Lars Uebernickel (3578bb3)
+
+	* ido_user_menu_item_new_from_model: fix docstring
+
+2013-05-27 12:04:11 -0400 Lars Uebernickel (e863f12)
+
+	* Move crate_user_menu_item into idousermenuitem.c
+
+2013-05-27 11:11:02 -0400 Lars Uebernickel (07f7907)
+
+	* IdoActionHelper: document signals and properties
+
+2013-05-27 11:10:39 -0400 Lars Uebernickel (d447489)
+
+	* debian/changelog: bump version
+
+2013-05-24 15:17:47 -0400 Lars Uebernickel (2c0fa18)
+
+	* GtkMenuItemFactory -> UbuntuMenuItemFactory
+
+2013-05-23 18:41:17 -0400 Lars Uebernickel (725c0ad)
+
+	* Bumb version to 13.10
+
+2013-05-23 08:58:55 -0400 Lars Uebernickel (424d5f4)
+
+	* Create IdoUserMenuItems for indicator.user-menu-item
+
+2013-05-22 23:35:52 -0400 Lars Uebernickel (1856933)
+
+	* Merge IdoUserMenuItem branch
+
+2013-05-22 23:19:50 -0400 Lars Uebernickel (12a5f15)
+
+	* Add IdoActionHelper
+
+2013-05-22 22:51:19 -0400 Lars Uebernickel (3f3aa14)
+
+	* Add IdoMenuItemFactory
+
+2013-03-27 08:30:38 -0500 Charles Kerr (e9c82c3)
+
+	* rename idousermenuitem's "icon" property as "icon-filename" for a
+          little more clarity.
+
+2013-03-26 16:30:46 -0500 Charles Kerr (0430322)
+
+	* in ido_user_menu_item_primitive_draw_cb_gtk_3(), remove deprecated
+          use of gtk_widget_get_style(), gtk_widget_get_state()
+
+2013-03-26 16:25:04 -0500 Charles Kerr (49c57fd)
+
+	* add idousermenuitem to the examples
+
+2013-03-26 16:24:47 -0500 Charles Kerr (259c7ad)
+
+	* add properties to IdoUserMenuItem and remove its dependencies on
+          DbusmenuMenuitem
+
+2013-03-26 15:14:33 -0500 Charles Kerr (2d8eac6)
+
+	* rename user-widget.[ch] to idousermenuitem.[ch]. Not building yet,
+          next step is to decouple from dbusmenu.
+
+2013-03-26 15:05:06 -0500 Charles Kerr (bf3b14f)
+
+	* add user-widget.[ch] from indicator-session's trunk
+
+2013-03-01 14:54:13 +0000 Automatic PS uploader (27f3661)
+
+	* Releasing 12.10.3daily13.03.01-0ubuntu1 to ubuntu.
+
+2013-03-01 02:02:45 +0000 Automatic PS uploader (34b7cb3)
+
+	* Releasing 12.10.3daily13.03.01-0ubuntu1, based on r125
+
+2013-02-27 15:19:49 +0000 Mathieu Trudel-Lapierre (3f9644c)
+
+	* Fix linking against X11 and Xi which xorg-gtest now seems to
+          require. I'll fix xorg-gtest directly too (in progress),
+          but this is to avoid blocking builds and daily release.
+          Fixes: https://bugs.launchpad.net/bugs/1126353.
+
+2013-02-27 09:49:27 -0500 Mathieu Trudel-Lapierre (3fae0ab)
+
+	* Explicitly link against X11 and Xi while xorg-gtest doesn't.
+
+2013-02-06 18:36:45 +0000 Mathieu Trudel-Lapierre (f294976)
+
+	* Fix building against gtest/xorg-gtest. Fixes:
+          https://bugs.launchpad.net/bugs/1112775.
+
+2013-02-06 11:54:10 -0500 Mathieu Trudel-Lapierre (f81bc0d)
+
+	* Guard against CID:12651, division by zero of FPS value due to its
+          use for timing timeline updates.
+
+2013-02-06 10:10:11 -0500 Mathieu Trudel-Lapierre (d9aa6f0)
+
+	* Shut up coverity about CID:12650.
+
+2013-02-05 16:23:25 -0500 Mathieu Trudel-Lapierre (fe1d726)
+
+	* Avoid FTBFS due to conflicting paths to gtest source, or because
+          the relevant gtest files aren't found -- always use the
+          xorg-gtest gtest source, and adjust path accordingly.
+
+2013-01-11 16:14:38 +0000 Automatic PS uploader (22a384d)
+
+	* Releasing 12.10.3daily13.01.11-0ubuntu1 to ubuntu.
+
+2013-01-11 02:02:27 +0000 Automatic PS uploader (5b7d735)
+
+	* Releasing 12.10.3daily13.01.11-0ubuntu1, based on r122
+
+2013-01-04 11:18:51 +0000 Robert Ancell (2db941f)
+
+	* Add introspection and vala support. Fixes:
+          https://bugs.launchpad.net/bugs/582985.
+
+2012-12-18 17:11:13 +0000 Allan LeSage (b7c4bed)
+
+	* Testing with cyphermox--removing the special Xvfb auto_test
+          override appears to resolve flaky tests under Jenkins.
+
+2012-12-17 16:47:09 -0600 Allan LeSage (d5a5d41)
+
+	* Update changelog.
+
+2012-12-17 16:28:49 -0600 Allan LeSage (6c95630)
+
+	* Remove Xvfb from debian/control.
+
+2012-12-17 16:19:06 -0600 Allan LeSage (0219eb9)
+
+	* Remove auto_test override.
+
+2012-12-15 20:39:02 +1300 Robert Ancell (bdb9026)
+
+	* Update packing for introspection/vapi
+
+2012-12-15 11:13:12 +1300 Robert Ancell (8830da3)
+
+	* Add introspection dependencies
+
+2012-12-14 09:58:39 +1300 Robert Ancell (6c9a668)
+
+	* Add introspection and Vala support to IDO
+
+2012-12-05 16:10:09 +0000 Mathieu Trudel-Lapierre (21040fc)
+
+	* Run tests through xfvb-run.
+
+2012-12-05 10:40:53 -0500 Mathieu Trudel-Lapierre (57be74b)
+
+	*   - Add xvfb to Build-Depends.   - Override dh_auto_test to run
+          them through xvfb-run.
+
+2012-11-26 17:40:13 +0000 Didier Roche (7fc48c2)
+
+	* Bootstrapping ido.
+
+2012-11-26 17:43:09 +0100 Didier Roche (638bd11)
+
+	* add bootstrap comment
+
+2012-11-26 16:37:35 +0000 Mathieu Trudel-Lapierre (2d8dd25)
+
+	* Inline packaging.
+
+2012-11-26 10:35:20 -0500 Mathieu Trudel-Lapierre (7dc37ec)
+
+	* Reactivate tests, they don't fail.
+
+2012-11-26 09:04:04 -0500 Mathieu Trudel-Lapierre (cc01061)
+
+	* Drop the override for dh_makeshlibs.
+
+2012-11-19 17:50:42 -0500 Mathieu Trudel-Lapierre (a06895c)
+
+	* Temporarily disable tests via overriding dh_auto_test; they fail to
+          properly start X in a schroot.
+
+2012-11-19 14:12:44 -0500 Mathieu Trudel-Lapierre (6432279)
+
+	* Add Vcs-Bzr, Vcs-Browser fields with a notice to uploaders.
+
+2012-11-19 14:07:42 -0500 Mathieu Trudel-Lapierre (10bad32)
+
+	*   - Reorganize Build-Depends: move libxorg-gtest-dev up to be
+          consistent with     other indicator stack packages.   -
+          List libgtest-dev explicitly in Build-Depends.
+
+2012-11-19 14:06:24 -0500 Mathieu Trudel-Lapierre (1e30ac2)
+
+	* Add gnome-common to Build-Depends.
+
+2012-11-19 14:05:55 -0500 Mathieu Trudel-Lapierre (dfaa0f4)
+
+	* Override dh_autoreconf to call autogen.sh and not run configure...
+
+2012-11-19 14:04:49 -0500 Mathieu Trudel-Lapierre (634fa1b)
+
+	* * debian/rules:   - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL
+          instead of passing -c4 to     dh_makeshlibs.
+
+2012-11-19 14:00:50 -0500 Mathieu Trudel-Lapierre (e1ee782)
+
+	* * debian/control:   - Update to match style with other indicator
+          stack packages: use trailing     commas at the end of
+          dependency lists.
+
+2012-11-19 13:59:30 -0500 Mathieu Trudel-Lapierre (3432ef3)
+
+	* Specify that bzr-builddeb should use split mode to build the
+          package
+
+2012-11-19 13:58:43 -0500 Mathieu Trudel-Lapierre (804ec33)
+
+	* Manually import debian/ from ido 12.10.2-0ubuntu1.
+
+2012-11-08 09:37:00 -0600 Charles Kerr (ae5b229)
+
+	* one-liner to add 'check-news' to our AM_INIT_AUTOMAKE invocation
+
+2012-11-06 22:45:17 -0600 Charles Kerr (8b984ae)
+
+	* add tests for ido_entry_menu_item_get_entry, bringing package line
+          coverage up to 55.5%
+
+2012-11-06 22:40:20 -0600 Charles Kerr (38965ac)
+
+	* add tests for IdoCalendarMenuItems's mark/unmark/clear days,
+          bringing package line coverage up to 55.2%
+
+2012-11-06 22:31:24 -0600 Charles Kerr (07d422b)
+
+	* add tests for IdoScaleMenuItem, bringing package line coverage to
+          54%
+
+2012-11-06 22:20:20 -0600 Charles Kerr (33683f3)
+
+	* add more coverage for idocalendar. total package's line coverage is
+          up to 50% now
+
+2012-11-06 22:06:59 -0600 Charles Kerr (0b83123)
+
+	* add tests for idomessagedialog
+
+2012-11-06 21:18:21 -0600 Charles Kerr (12437e9)
+
+	* add missing G_BEGIN_DECLS call
+
+2012-11-06 21:04:57 -0600 Charles Kerr (9d88f5c)
+
+	* add IdoSwitchMenuItem test
+
+2012-11-06 20:59:43 -0600 Charles Kerr (d2c974f)
+
+	* extract-method: TestMenuItems::PutInMenu()
+
+2012-09-20 10:59:26 -0500 Charles Kerr (3e84f25)
+
+	* 12.10.2 (tag: 12.10.2, refs/bzr/origin/tags/12.10.2)
+
+2012-09-20 12:11:22 +0000 Charles Kerr (b98fedd)
+
+	* the calendar widget shouldn't eat the ESC key.. Fixes:
+          https://bugs.launchpad.net/bugs/964005. Approved by Lars
+          Uebernickel, jenkins.
+
+2012-09-19 23:32:58 -0500 Charles Kerr (20fe9d4)
+
+	* the calendar widget shouldn't eat the ESC key.
+
+2012-08-27 22:11:59 +0200 Lars Uebernickel (63717ff)
+
+	* 12.10.1 (tag: 12.10.1, refs/bzr/origin/tags/12.10.1)
+
+2012-08-27 22:01:07 +0200 Lars Uebernickel (bfdc842)
+
+	* Merge lp:~larsu/ido/remove-slider-hack-953757
+
+2012-08-22 09:57:08 -0500 Charles Kerr (2481b74)
+
+	* merge lp:~charlesk/ido/nogtk2 to remove gtk2 support from the
+          configure script and the source
+
+2012-08-22 09:44:00 -0500 Charles Kerr (7330280)
+
+	* remove the gtk2 conditional compiles for IdoMessageDialog
+
+2012-08-22 09:43:24 -0500 Charles Kerr (2c68871)
+
+	* remove the gtk2 conditional compiles for IdoCalendarMenuItem
+
+2012-08-22 09:41:36 -0500 Charles Kerr (821b008)
+
+	* remove the gtk2 conditional compiles for IdoEntryMenuItem
+
+2012-08-22 09:39:22 -0500 Charles Kerr (fc8fad2)
+
+	* sync with lp:ido
+
+2012-08-21 20:59:37 -0500 Charles Kerr (8f279d3)
+
+	* merge lp:~ken-vandine/ido/link-libm to AC_CHECK_LIBM to get -lm now
+          that gtk doesn't include that in it's .pc file (tag:
+          12.10.0, refs/bzr/origin/tags/12.10.0)
+
+2012-08-21 20:51:24 -0500 Charles Kerr (a0631d3)
+
+	* merge lp:~charlesk/ido/switch to add GtkSwitchMenuItem
+
+2012-08-21 20:06:46 -0500 Charles Kerr (d4f4fa3)
+
+	* bump to 12.10.0
+
+2012-08-21 16:43:49 -0500 Charles Kerr (402fffb)
+
+	* revert the event delegation for now, it's not necessary for FF
+
+2012-08-21 15:19:12 -0500 Charles Kerr (fbd76f4)
+
+	* when the mouse is over the GtkSwitch widget, the menuitem should
+          delegate the mouse down and motion events to it.
+
+2012-08-21 14:34:16 -0500 Charles Kerr (fb4b306)
+
+	* use gtk_menu_shell_deactivate() rather than gtk_menu_popdown(); the
+          latter handles the issue of the menu title being painted
+          as if the menu were still open
+
+2012-08-21 14:27:04 -0500 Charles Kerr (791d004)
+
+	* ...and if we're not clearing that in dispose(), then we don't need
+          dispose() anymore
+
+2012-08-21 14:24:38 -0500 Charles Kerr (c0af3f5)
+
+	* don't keep the GBinding pointer around, it'll be destroyed
+          automatically when the menuitem's destroyed
+
+2012-08-21 13:19:50 -0500 Charles Kerr (0f1f31d)
+
+	* comment tweaks
+
+2012-08-21 13:10:11 -0500 Charles Kerr (e99fb9f)
+
+	* make the glib 2.32 requirement explicit in configure.ac
+
+2012-08-21 12:22:51 -0500 Charles Kerr (992e746)
+
+	* add IdoSwitchMenuItem
+
+2012-07-24 11:18:32 -0400 Ken VanDine (cfbf3b9)
+
+	* Use AC_CHECK_LIBM to get -lm now that gtk doesn't include that in
+          it's .pc file
+
+2012-05-07 17:18:10 -0700 Charles Kerr (84a6303)
+
+	* require gtk3
+
+2012-05-07 16:58:13 -0700 Charles Kerr (78c634c)
+
+	* remove unused function ido_range_grab_notify()
+
+2012-04-26 22:15:10 -0500 Charles Kerr (2a3f56b)
+
+	* merge lp:~ted/ido/gtest to add the gtest framework and a few tests
+          to make sure our menu items can be created and realized.
+
+2012-04-25 15:24:26 -0500 Ted Gould (4636768)
+
+	* Bring in xorg-gtest to get an X11 wrapper
+
+2012-04-25 14:41:21 -0500 Ted Gould (62a010a)
+
+	* Build a scale menu item as well
+
+2012-04-25 14:32:14 -0500 Ted Gould (d02dfec)
+
+	* Adding in the entry menuitem as well.
+
+2012-04-25 14:31:55 -0500 Ted Gould (e112516)
+
+	* Putting in the BEGIN_DECLS for the C++ folks
+
+2012-04-25 14:22:27 -0500 Ted Gould (072a5ab)
+
+	* Now we can realize the menu item to make sure it doesn't mess that
+          up
+
+2012-04-25 14:12:59 -0500 Ted Gould (7db7f0e)
+
+	* Now we're allocating a calendar
+
+2012-04-25 11:39:52 -0500 Ted Gould (274e477)
+
+	* Adding in a dummy test and the dependencies to build it
+
+2012-04-25 11:09:47 -0500 Ted Gould (68dedd8)
+
+	* No gtk-doc.m4 needed
+
+2012-04-25 11:09:24 -0500 Ted Gould (4f9a30d)
+
+	* We've now got a test directory!
+
+2012-04-25 11:06:56 -0500 Ted Gould (8bba0b8)
+
+	* Adding in Google test build utilities
+
+2012-04-25 10:58:47 -0500 Ted Gould (d6d8e2e)
+
+	* Attaching bug
+
+2012-04-12 10:18:01 -0500 Charles Kerr (ceb09d1)
+
+	* merge lp:~allanlesage/ido/TDD to add targets to autotools build for
+          code-coverage reporting. For more information, see this
+          blog post:
+          http://qualityhour.wordpress.com/2012/01/29/test-coverage-tutorial-for-cc-autotools-projects/
+          .
+
+2012-03-27 23:50:43 -0500 Allan LeSage (0597fa8)
+
+	* Added gcov coverage tooling.
+
+2012-03-21 14:33:21 -0500 Ted Gould (a4ad20e)
+
+	* 0.3.4 (tag: 0.3.4, refs/bzr/origin/tags/0.3.4)
+
+2012-03-16 19:16:04 +0100 Lars Uebernickel (0d4d88d)
+
+	* ido-range: chain up constructed() to base class
+
+2012-03-16 15:45:42 +0100 Lars Uebernickel (dde8321)
+
+	* Remove slider mouse button hack
+
+2012-03-14 13:38:42 -0500 Charles Kerr (6a6e63c)
+
+	* fix regression that broke mousewheel operations on the idoscale
+
+2012-03-14 13:27:55 -0500 Charles Kerr (196217d)
+
+	* fix regression that broke mousewheel operations on the idoscale
+
+2012-03-13 10:42:05 -0500 Charles Kerr (6db7ec8)
+
+	* 0.3.3 (tag: 0.3.3, refs/bzr/origin/tags/0.3.3)
+
+2012-03-13 09:44:58 -0500 Charles Kerr (9915201)
+
+	* merge lp:~charlesk/ido/lp-898611 to fix lp bug #898611
+
+2012-03-12 23:21:26 -0500 Charles Kerr (8722b2b)
+
+	* alter mouse button 2 clicks to behave like mouse button 2 clicks
+          for lp bug #898611.
+
+2012-03-12 17:52:19 -0500 Charles Kerr (9b02ced)
+
+	* Merge lp:~charlesk/indicator-sound/lp-921065 into
+          lp:indicator-sound to add "primary-clicked" and
+          "secondary-clicked" events for lp bug #921065
+
+2012-03-12 16:24:21 -0500 Charles Kerr (728b3d1)
+
+	* Merge lp:~charlesk/ido/lp-906050 into lp:ido to resolve the
+          following LP tickets:
+
+2012-03-10 00:04:36 -0600 Charles Kerr (db0c18c)
+
+	* add primary-clicked and secondary-clicked signals for lp bug
+          #921065
+
+2012-03-09 22:14:53 -0600 Charles Kerr (dfbd1c2)
+
+	* tweak: fix some indentation damage in the header file
+
+2012-03-09 19:10:25 -0600 Charles Kerr (8497b8e)
+
+	* remove idooffscreenproxy
+
+2012-03-09 19:04:41 -0600 Charles Kerr (942c6cc)
+
+	* small code cleanup in update_packing()
+
+2012-03-09 18:54:52 -0600 Charles Kerr (ab9e35a)
+
+	* Fix LP Bug #906050 by removing idoscalemenuitem's offscreen proxy.
+
+2012-03-09 18:53:28 -0600 Charles Kerr (c96a9ad)
+
+	* don't override widget_class.state_changed in idoscalemenuitem ...
+          that was preventing the prelight state from ever showing
+          up there.
+
+2012-03-09 14:50:50 -0600 Ted Gould (5b65ff3)
+
+	* 0.3.2 (tag: 0.3.2, refs/bzr/origin/tags/0.3.2)
+
+2012-02-09 00:30:16 -0500 Ken VanDine (eec3ce5)
+
+	* add style class "menubar" to the offscreen proxy, this fixes the
+          white background drawn in the sound menu menu with the
+          current gtk3/light-themes (LP: #925700)
+
+2012-02-08 23:18:09 -0500 Ken VanDine (a6f5ba8)
+
+	* add style class "menubar" to the offscreen proxy, this fixes the
+          white background drawn in the sound menu with the current
+          gtk3/light-themes (LP: #925700)
+
+2012-01-12 00:49:05 +0100 Ken VanDine (4471ef2)
+
+	* Patch from ~covox (LP: #867649)
+
+2011-12-14 13:29:26 -0500 Ken VanDine (97ead21)
+
+	* removed deprecations from gtk3 and fixed sizing issues with
+          idemessagedialog (LP: #888392)
+
+2011-12-14 12:19:26 -0500 Ken VanDine (9b717e5)
+
+	* removed deprecations from gtk3 and fixed sizing issues with
+          idemessagedialog (LP: #888392)
+
+2011-10-13 10:48:46 -0500 Ted Gould (50b234a)
+
+	* 0.3.1 (tag: 0.3.1, refs/bzr/origin/tags/0.3.1)
+
+2011-10-12 14:05:06 -0500 Ted Gould (8a442cf)
+
+	* Fixes for ARM
+
+2011-10-06 09:25:34 -0400 Ken VanDine (28c45e5)
+
+	* one more fix for armel FTBFS
+
+2011-10-05 13:41:37 -0400 Ken VanDine (fcda383)
+
+	* Fixed FTBFS on armel (LP: #866039)
+
+2011-10-03 17:01:24 +0200 Michal Hruby (93b180b)
+
+	* Merge lp:~mhr3/ido/bug-865122
+
+2011-10-03 16:49:54 +0200 Michal Hruby (565816b)
+
+	* Get rid of unnecessary check
+
+2011-10-03 15:27:13 +0200 Michal Hruby (81e4254)
+
+	* And we need to include config.h
+
+2011-10-03 14:58:08 +0200 Michal Hruby (ae22267)
+
+	* Use the grab-notify workaround only when using Gtk3
+
+2011-10-03 14:33:51 +0200 Michal Hruby (4dd0ca9)
+
+	* Fix bug #865122
+
+2011-09-28 13:48:27 -0500 Ted Gould (8a32a25)
+
+	* 0.3.0 (tag: 0.3.0, refs/bzr/origin/tags/0.3.0)
+
+2011-09-20 00:25:46 -0500 Ted Gould (49d7db7)
+
+	* 0.2.93 (tag: 0.2.93, refs/bzr/origin/tags/0.2.93)
+
+2011-09-16 14:34:54 -0500 Ted Gould (db19271)
+
+	* Ignoring m4
+
+2011-09-16 13:32:21 -0500 Ted Gould (90cb663)
+
+	* Update Autotools and remove Shave
+
+2011-09-16 13:24:49 -0500 Ted Gould (08a590a)
+
+	* Fix the calendar item
+
+2011-09-16 13:04:30 -0500 Ted Gould (3abfadd)
+
+	* Freeing the new event
+
+2011-09-16 12:56:44 -0500 Ted Gould (6e4d5b1)
+
+	* Attaching bug
+
+2011-09-16 12:54:10 -0500 Ted Gould (d903b29)
+
+	* Putting the new code as GTK3 only
+
+2011-09-16 12:42:17 -0500 Ted Gould (f5be40f)
+
+	* Removing a bunch of debug messages
+
+2011-09-16 12:40:28 -0500 Ted Gould (94ce65a)
+
+	* Use get_origin instead of position and uncomment out our
+          adjustments
+
+2011-09-16 12:40:03 -0500 Ted Gould (8d56d16)
+
+	* Use the root position in the event instead of finding it
+
+2011-09-16 10:17:36 -0500 Ted Gould (8ca02b8)
+
+	* Clean up some debug and such
+
+2011-09-15 16:06:37 -0500 Ted Gould (f269963)
+
+	* Reformating
+
+2011-09-15 16:04:16 -0500 Ted Gould (f4c7db4)
+
+	* A check point
+
+2011-09-13 11:42:20 -0500 Ted Gould (1415b10)
+
+	* 0.2.92 (tag: 0.2.92, refs/bzr/origin/tags/0.2.92)
+
+2011-09-13 11:23:09 -0500 Ted Gould (3c96745)
+
+	* Ignoring some junk!
+
+2011-09-13 11:21:24 -0500 Ted Gould (24f2228)
+
+	* Putting the offscreen proxy in EXTRA_DIST if we're building GTK2
+          version
+
+2011-09-13 11:18:40 -0500 Ted Gould (6b7751a)
+
+	* Making the proxy GTK3 only
+
+2011-09-13 11:32:27 -0400 Robert Carr (074baff)
+
+	* Only use the offscreen proxy stuff in GTK3
+
+2011-09-13 08:53:22 -0500 Ted Gould (41f3702)
+
+	* Increasing the number of warnings
+
+2011-09-08 16:20:18 -0500 Ted Gould (9a47c76)
+
+	* 0.2.91 (tag: 0.2.91, refs/bzr/origin/tags/0.2.91)
+
+2011-09-08 10:01:23 -0400 Robert Carr (af912b9)
+
+	* Merge lp:~robertcarr/ido/offscreen-scale
+
+2011-09-06 13:52:37 -0400 Robert Carr (a2ddfbb)
+
+	* Ok I take it back we don't care about border. use custom css to set
+          border-width and radius
+
+2011-09-06 13:00:00 -0400 Robert Carr (01dd00e)
+
+	* Don't leak style context...
+
+2011-09-06 12:53:47 -0400 Robert Carr (0d4a3db)
+
+	* Use GtkBorder in drawing background
+
+2011-09-06 10:47:17 -0400 Robert Carr (7bc5c97)
+
+	* Use gtk_render_background
+
+2011-09-02 14:55:39 -0400 Robert Carr (2f38eb3)
+
+	* Whoops copyright headers
+
+2011-09-02 14:54:40 -0400 Robert Carr (8de6cb9)
+
+	* Implement an IdoOffscreenProxy object to work around GtkRange/Scale
+          needing grabs, change IdoScaleMenuItem to make use of
+          this. Fixes lp: #804009
+
+2011-08-03 16:28:38 +0100 Javier Jardón (c9394c7)
+
+	* configure.ac: Update autotools config a bit
+
+2011-08-03 16:24:01 +0100 Javier Jardón (66af846)
+
+	* build: Use upstream silent rules instead shave
+
+2011-06-21 11:55:14 -0500 Ted Gould (0b3ce25)
+
+	* 0.2.90 (tag: 0.2.90, refs/bzr/origin/tags/0.2.90)
+
+2011-06-21 11:55:01 -0500 Ted Gould (5ae054d)
+
+	* Commenting out boiler plate code that is causing a warning
+
+2011-06-21 11:44:43 -0500 Ted Gould (ea37afc)
+
+	* Making sure the menu example doesn't use a menu proxy
+
+2011-06-21 11:38:32 -0500 Ted Gould (f3a7a21)
+
+	* Avoid duplicate events
+
+2011-06-21 11:32:46 -0500 Ted Gould (e1c4792)
+
+	* Updating to GTK3
+
+2011-06-20 09:34:43 -0400 Michael Terry (d61ddbe)
+
+	* use const not G_CONST_RETURN
+
+2011-06-01 16:08:47 -0400 Michael Terry (cd59e86)
+
+	* drop deprecated use of event_window
+
+2011-06-01 15:53:29 -0400 Michael Terry (db8bf6c)
+
+	* adjustments aren't widgets
+
+2011-06-01 15:49:43 -0400 Michael Terry (da4d22c)
+
+	* fix build errors with gtk2
+
+2011-06-01 15:36:43 -0400 Michael Terry (ab8fccf)
+
+	* fix various unused-variable warnings; not directly related to gtk3
+          work, but helps focus on actual problems
+
+2011-06-01 15:32:49 -0400 Michael Terry (d9ec4cf)
+
+	* some further automake magic for dual versioning
+
+2011-06-01 15:24:28 -0400 Michael Terry (5ddcf6b)
+
+	* allow building either gtk2 or gtk3 versions; some deprecation
+          cleanups
+
+2011-05-27 09:06:46 -0400 Ken VanDine (3e67ec3)
+
+	* porting to gtk3, WIP
+
+2011-05-12 11:00:34 +0100 Karl Lattimer (b80a819)
+
+	* fixed multiple signal issue which caused calendar jumps bug #768956
+
+2011-03-16 12:20:48 -0500 Ted Gould (33ab93d)
+
+	* 0.2.2 (tag: 0.2.2, refs/bzr/origin/tags/0.2.2)
+
+2011-03-16 11:19:55 +0100 David Barth (add9d71)
+
+	* add signals for select/activate and a set date function - merge of
+          karl-qdh branch
+
+2011-03-15 14:02:37 +0000 karl-qdh (d163ba5)
+
+	* Bug in closure
+
+2011-03-14 21:45:26 -0500 Ted Gould (9b651a1)
+
+	* Be able to set active date and signal when it changes
+
+2011-03-06 13:28:21 +0000 karl-qdh (3a78f4c)
+
+	* minor fixes
+
+2011-03-06 13:05:52 +0000 karl-qdh (aac5173)
+
+	* Merge with trunk
+
+2011-03-06 13:01:20 +0000 karl-qdh (368393b)
+
+	* Added new API to the calendar menu item so we can change the
+          selected day/date. Also added new signals for selecting
+          days and selecting with double click. In
+          indicator-datetime these signals will be connected to
+          either launching evolution (double), or invoking a
+          re-building of the appointments menu (single) from the
+          selected day forward.
+
+2011-03-02 16:19:32 -0600 Ted Gould (a38ef76)
+
+	* Adding back lost API
+
+2011-02-28 10:33:01 +0100 David Barth (8264fbe)
+
+	* integrating Karl & mterry's API for exposing calendar display
+          options
+
+2011-02-25 13:26:35 -0500 Michael Terry (4004883)
+
+	* compile fix
+
+2011-02-25 15:25:47 +0000 karl-qdh (acbbf01)
+
+	* Added return if fails to public api
+
+2011-02-25 13:13:55 +0000 karl-qdh (ae4456b)
+
+	* Gmf.
+
+2011-02-25 13:12:18 +0000 karl-qdh (6b313f1)
+
+	* Merging with trunk
+
+2011-02-25 09:47:28 +0000 karl-qdh (a7e9eed)
+
+	* Added missing getter for calendar display options
+
+2011-02-24 16:19:39 -0500 Ken VanDine (acebf0d)
+
+	* Added ido_calendar_menu_item_get_calendar back to prevent a ABI
+          break
+
+2011-02-24 13:25:04 -0600 Cody Russell (3072fd1)
+
+	* Fixed missing semicolon. Also the code formatting was all messed up
+          so I fixed that because I'm kind of a code formatting
+          nazi.  Sie müssen Antretenbzr diff
+
+2011-02-24 12:55:52 -0600 Cody Russell (0ade486)
+
+	* Bump version
+
+2011-02-23 11:14:48 -0600 Ted Gould (461b168)
+
+	* Adding API to the calendar menu item
+
+2011-02-23 15:49:47 +0000 karl-qdh (b6f75c1)
+
+	* Added get_date, pretty critical function
+
+2011-02-23 15:38:31 +0000 karl-qdh (3acb7aa)
+
+	* Removed useless marshal include
+
+2011-02-23 15:35:06 +0000 karl-qdh (f18b9b8)
+
+	* Fixed building of api changes
+
+2011-02-22 15:21:54 +0000 karl-qdh (841bcef)
+
+	* Removed get_calendar, we don't want it and it's unnecessary to do
+          this
+
+2011-02-21 16:05:48 +0000 karl-qdh (f013899)
+
+	* Added month change signal too, slight cleanup of tabs
+
+2011-02-21 09:22:31 +0000 karl-qdh (99b479d)
+
+	* Added additional API for marking days and setting options
+
+2011-01-18 11:12:19 -0600 Cody Russell (5b3b2fe)
+
+	* Remove IdoGestureManager
+
+2011-01-18 11:08:29 -0600 Cody Russell (603f327)
+
+	* Fix linker problems in Natty.
+
+2011-01-18 09:54:24 -0600 Cody Russell (9f82279)
+
+	* Add GTK_LIBS to the example programs' LDADD
+
+2010-10-07 12:19:20 -0500 Cody Russell (ecaf8c7)
+
+	* Listen to GtkMenuItem's 'toggle-size-allocate' signal to get the
+          toggle size instead of using the GSEAL'd
+          GtkMenuItem::toggle_size value.
+
+2010-09-24 09:46:19 -0500 Cody Russell (193b506)
+
+	* Cleanup, and update to latest geis API.
+
+2010-09-14 17:26:36 -0500 Cody Russell (9aa08ce)
+
+	* Merge geis updates.
+
+2010-09-14 17:23:39 -0500 Cody Russell (0a8cdd0)
+
+	* Remove gtk-doc.make
+
+2010-09-14 16:40:31 -0500 Cody Russell (8b95b13)
+
+	* Fix properties.
+
+2010-09-14 16:08:04 -0500 Cody Russell (846ae96)
+
+	* GEIS updates.
+
+2010-09-13 19:31:26 -0500 Cody Russell (f3ca63f)
+
+	* Merge fix for bug #635370
+
+2010-09-10 16:26:16 -0500 Cody Russell (308c307)
+
+	* When we grab focus, it seemed to also select all the text.
+
+2010-09-09 12:17:37 -0500 Cody Russell (8a939cf)
+
+	* Bump version to 0.2.0.
+
+2010-09-09 12:16:54 -0500 Cody Russell (553318d)
+
+	* Bump version to 0.1.12
+
+2010-09-09 12:14:44 -0500 Cody Russell (37df02c)
+
+	* Pull in gtk-doc.make from trunk.
+
+2010-09-09 12:15:03 +0200 David Barth (435b582)
+
+	* replace gtk-doc.make with the packaging version to avoid a merge
+          conflict
+
+2010-09-08 12:01:35 +0200 David Barth (228cbda)
+
+	* fix distcheck; thanks to seb128
+
+2010-08-19 17:48:45 +0100 David Barth (6e46e3b)
+
+	* don't export export menus over dbus, that won't work...
+
+2010-08-15 17:47:53 +0100 Cody Russell (e90ec22)
+
+	* Feel up your widgets.
+
+2010-08-03 14:47:05 -0500 Cody Russell (f3893ee)
+
+	* Fix for armel build.  Patch by David Sugar.
+
+2010-07-29 16:07:05 -0500 Cody Russell (b35ee3e)
+
+	* bleh
+
+2010-07-29 10:01:34 -0500 Cody Russell (ee58467)
+
+	* Bump version.
+
+2010-07-27 13:02:13 -0500 Cody Russell (f5a80f5)
+
+	* Need to update the last progress.
+
+2010-07-22 18:05:12 +0200 Cody Russell (9553644)
+
+	* Bump version
+
+2010-07-22 14:21:06 +0200 Cody Russell (47fbcc2)
+
+	* ido_timeline_set_progress()
+
+2010-07-20 10:52:31 +0200 Cody Russell (9197560)
+
+	* Calendar keyboard navigation.
+
+2010-07-20 10:50:29 +0200 Cody Russell (8ae5a81)
+
+	* Fix something.
+
+2010-07-20 10:33:34 +0200 Cody Russell (12736cb)
+
+	* Small cleanups
+
+2010-07-19 05:56:50 -0500 Cody Russell (29475f3)
+
+	* Calendar
+
+2010-07-15 11:21:39 -0500 Cody Russell (272dafa)
+
+	* Force IdoRange to style itself by name rather than by class. 
+          Otherwise they all have the style used by the last one
+          created.
+
+2010-07-15 10:18:57 -0500 Cody Russell (32093b5)
+
+	* Fix for distcheck
+
+2010-07-15 09:54:48 -0500 Cody Russell (cea3e8f)
+
+	* Bump version to 0.1.9
+
+2010-07-15 09:52:20 -0500 Cody Russell (663fb98)
+
+	* Merge scale-size branch.
+
+2010-07-15 08:44:29 -0500 Cody Russell (b3dc66c)
+
+	* Different range size styles.
+
+2010-07-14 09:51:58 -0500 Cody Russell (7aed15f)
+
+	* Fix compile for ARM
+
+2010-07-13 10:00:43 -0500 Cody Russell (dfa5455)
+
+	* Merge in range branch.
+
+2010-07-13 09:45:22 -0500 Cody Russell (01d2367)
+
+	* Add IdoRange, and modify IdoScaleMenuItem to use it.
+
+2010-07-08 15:17:27 -0500 Cody Russell (09a6454)
+
+	* Bump version
+
+2010-07-08 13:49:37 -0500 Cody Russell (03c0ea4)
+
+	* Fix IdoMessageDialog to compile with deprecated gtk+ for Meerkat.
+
+2010-07-08 11:11:17 -0500 Cody Russell (e937255)
+
+	* Fix license
+
+2010-07-08 10:47:13 -0500 Cody Russell (6218c6d)
+
+	* Fixes for dist
+
+2010-07-08 10:31:49 -0500 Cody Russell (23318a5)
+
+	* Bump version to 0.1.7.
+
+2010-07-08 10:30:50 -0500 Cody Russell (b3f4350)
+
+	* Merge up with trunk.
+
+2010-07-08 10:28:53 -0500 Cody Russell (5fa7b66)
+
+	* Start the morph on focus-in-event rather than button-press-event.
+
+2010-07-07 08:48:37 -0500 Cody Russell (4405889)
+
+	* Send button-press and button-release events to the entry. Also grab
+          focus at the first key-press.
+
+2010-07-02 11:33:56 -0500 Cody Russell (717cf40)
+
+	* Set focus-on-map to FALSE.
+
+2010-06-08 10:52:45 -0500 Cody Russell (fab639c)
+
+	* Bump version to 0.1.6
+
+2010-05-12 23:21:36 +0200 Cody Russell (a544da2)
+
+	* IdoMessageDialog - a morphing message dialog.
+
+2010-05-10 09:14:53 +0200 Cody Russell (ac894c8)
+
+	* Fake out the grab stuff by setting GTK_HAS_GRAB on the scale widget
+          before forwarding the event.
+
+2010-05-10 02:09:13 +0200 Cody Russell (9f85050)
+
+	* Try to remove offscreen fu
+
+2010-04-14 09:53:17 -0500 Cody Russell (dd709ad)
+
+	* reverse-scroll-events property only affects GDK_SCROLL_UP and
+          GDK_SCROLL_DOWN
+
+2010-03-24 11:26:49 +0100 David Barth (172006c)
+
+	* release 0.1.5 - Don't return TRUE if keyval is GDK_Return. - Bump
+          gtk+ requirement to 2.19.7 - Don't capture up/down keys.
+          Compile fixes for latest gtk+. - Button press event fixes.
+          (tag: 0.1.5, refs/bzr/origin/tags/0.1.5)
+
+2010-03-18 13:24:02 -0500 Cody Russell (9a3de4a)
+
+	* Don't return TRUE if keyval is GDK_Return.
+
+2010-03-16 11:24:25 -0500 Cody Russell (e27e482)
+
+	* Bump gtk+ requirement to 2.19.7
+
+2010-03-16 11:10:39 -0500 Cody Russell (e965ac4)
+
+	* Don't capture up/down keys. Compile fixes for latest gtk+.
+
+2010-03-15 09:07:37 -0500 Cody Russell (d6a2f21)
+
+	* Don't capture up/down keys.  Compile fixes for latest gtk+.
+
+2010-03-11 11:11:51 -0600 Cody Russell (7561ce1)
+
+	* Button press event fixes.
+
+2010-03-11 11:11:33 +0100 David Barth (cb28301)
+
+	* release 0.1.4 (tag: 0.1.4, refs/bzr/origin/tags/0.1.4)
+
+2010-03-10 23:30:45 -0600 Cody Russell (0dfd8e6)
+
+	* Button press event fixes.
+
+2010-03-09 20:42:24 -0600 Cody Russell (3865303)
+
+	* Don't forward the event to the entry if the user hit the Esc key.
+
+2010-03-09 11:43:40 -0600 Cody Russell (de771b0)
+
+	* Fix for grab/release signals.  If you grab the slider and then
+          release it while the mouse is outside the menu, it was not
+          emitting the released signal.
+
+2010-03-08 12:45:32 -0600 Cody Russell (a46e53c)
+
+	* Fix keyboard navigation issues in the entry widget, fixes bug
+          #533284.
+
+2010-03-08 12:38:14 -0600 Cody Russell (e2caba6)
+
+	* Merge trunk
+
+2010-03-08 08:06:25 -0600 Cody Russell (ae62dc7)
+
+	* Return TRUE after forwarding the event to priv->entry
+
+2010-03-05 16:04:11 +0000 Cody Russell (6c7fcbe)
+
+	* Add grab/release signals
+
+2010-03-04 16:44:38 -0500 Ken VanDine (af98418)
+
+	* bump version to 0.1.3
+
+2010-03-04 16:46:32 +0000 Cody Russell (2cffa85)
+
+	* Make 'ido-offscreen-scale' the name of the GtkOffscreenWindow, not
+          the GtkScale. (tag: 0.1.3, refs/bzr/origin/tags/0.1.3)
+
+2010-03-04 10:32:56 +0000 Cody Russell (08e010a)
+
+	* Name the offscreen scale 'ido-offscreen-scale'
+
+2010-02-18 12:54:33 +0100 David Barth (3acbbdb)
+
+	* bump version to 0.1.2 (tag: 0.1.2, refs/bzr/origin/tags/0.1.2)
+
+2010-02-13 00:43:20 -0600 Cody Russell (fc660fc)
+
+	* Support reversing scroll events
+
+2010-02-11 17:21:14 -0600 Cody Russell (ad50ecd)
+
+	* merge in secondary_padding branch from ken-vandine
+
+2010-02-11 18:09:46 -0500 Ken VanDine (1841df0)
+
+	* fixed build failure where secondary_padding wasn't initialized
+
+2010-02-11 15:44:02 -0500 Ken VanDine (cf57f22)
+
+	* bump version to 0.1.1 (tag: 0.1.1, refs/bzr/origin/tags/0.1.1)
+
+2010-02-09 14:04:22 -0600 Cody Russell (6ac36fe)
+
+	* Merge initial-slider-value branch
+
+2010-02-09 14:00:51 -0600 Cody Russell (484a47c)
+
+	* Merge scale-icons branch
+
+2010-02-09 11:59:30 -0600 Cody Russell (a843525)
+
+	* Add support for initial value to
+          ido_scale_menu_item_new_with_range()
+
+2010-02-09 09:19:48 -0600 Cody Russell (e8c2d56)
+
+	* Upper/lower clamping on icon click
+
+2010-02-06 12:35:15 -0600 Cody Russell (bd5faca)
+
+	* Add support for primary/secondary icons.
+
+2010-02-05 14:19:30 -0800 Cody Russell (d03f386)
+
+	* Fix build for ARM architecture
+
+2010-02-05 12:35:53 -0800 Cody Russell (518846a)
+
+	* Test ARM fix
+
+2010-02-05 10:02:08 -0800 Cody Russell (e892ebe)
+
+	* merge scale-spacing-fixes branch
+
+2010-02-04 17:15:35 -0800 Cody Russell (50ae8ef)
+
+	* Scale spacing fixes
+
+2010-02-04 14:21:10 -0800 Cody Russell (1595f64)
+
+	* Fix distcheck (tag: 0.1.0, refs/bzr/origin/tags/0.1.0)
+
+2010-02-04 14:14:19 -0800 Cody Russell (c650b69)
+
+	* Merge license change branch
+
+2010-02-04 14:13:47 -0800 Cody Russell (5d5a08d)
+
+	* Merge fix-header-install branch
+
+2010-02-04 13:03:56 -0800 Cody Russell (d9fc8cf)
+
+	* Merge spacing-fixes branch
+
+2010-02-04 13:01:18 -0800 Cody Russell (faf10d1)
+
+	* Fix headers to install
+
+2010-02-04 12:58:36 -0800 Cody Russell (a5aad4e)
+
+	* Remove stuff
+
+2010-02-04 12:57:39 -0800 Cody Russell (8b8228c)
+
+	* Copyright/license fu
+
+2010-02-04 12:32:28 -0800 Cody Russell (9f3461c)
+
+	* Spacing fixes
+
+2010-02-02 12:51:12 -0800 Cody Russell (6b60795)
+
+	* Fix header installs
+
+2010-02-02 10:34:30 -0800 Cody Russell (140b985)
+
+	* Merge entry menuitem
+
+2010-02-01 18:22:16 -0600 Cody Russell (0dc1eba)
+
+	* Entry menu items
+
+2010-02-01 16:24:00 -0600 Cody Russell (c9b34c9)
+
+	* Merge offscreen scale branch
+
+2010-02-01 16:22:31 -0600 Cody Russell (0372535)
+
+	* Unref the pixbuf
+
+2010-01-25 10:02:16 -0600 Cody Russell (c4a23ad)
+
+	* Merge get-scale branch
+
+2010-01-25 09:49:39 -0600 Cody Russell (0696acf)
+
+	* Autogen changes
+
+2010-01-25 08:54:55 -0600 Cody Russell (902d58d)
+
+	* Add ido_scale_menu_item_get_scale() function
+
+2010-01-20 23:43:05 -0600 Cody Russell (51029c2)
+
+	* Use GtkOffscreenWindow to manage rendering of the scale.
+
+2010-01-19 16:02:50 -0600 Cody Russell (ebb7b05)
+
+	* IDO initial commit, scale menuitem
+
