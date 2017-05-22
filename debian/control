@@ -53,6 +53,7 @@ Description: Widgets and other objects used for Ayatana Indicators - development
 Package: gir1.2-ayatana-ido3-0.4
 Section: introspection
 Architecture: any
+Multi-Arch: same
 Depends: ${misc:Depends},
          libayatana-ido3-0.4-0 (>= ${binary:Version}),
          ${gir:Depends}
