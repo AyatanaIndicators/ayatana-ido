@@ -15,7 +15,7 @@ Build-Depends: debhelper (>= 9),
                libgirepository1.0-dev,
                valac (>= 0.16)
 #               libxorg-gtest-dev,
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: https://github.com/ArcticaProject/ayatana-ido
 Vcs-Git: git://cgit.arctica-project.org/ayatana/ayatana-ido.git
 Vcs-Browser: https://cgit.arctica-project.org/ayatana/ayatana-ido.git/
