@@ -15,3 +15,6 @@ override_dh_autoreconf:
 override_dh_install:
 	find debian/tmp/usr/lib -name *.la -delete
 	dh_install --fail-missing
+
+get-orig-source:
+	uscan --noconf --force-download --rename --download-current-version --destdir=..
