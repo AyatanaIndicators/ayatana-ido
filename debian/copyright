@@ -42,6 +42,7 @@ Copyright: 2011, Canonical Ltd.
 License: GPL-3
 
 Files: AUTHORS.Canonical
+ INSTALL
  Makefile.am
  Makefile.am.coverage
  NEWS.Canonical
@@ -67,7 +68,9 @@ Comment:
  the other code files are applicable to the files above.
 
 Files: AUTHORS
- NEWS
+ ChangeLog
+ README
+ TODO
 Copyright: 2015-2017, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 License: GPL-3 or LGPL-2.1 or LGPL-3
 
