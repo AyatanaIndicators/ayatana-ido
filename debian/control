@@ -21,7 +21,6 @@ Vcs-Git: git://cgit.arctica-project.org/ayatana/ayatana-ido.git
 Vcs-Browser: https://cgit.arctica-project.org/ayatana/ayatana-ido.git/
 
 Package: libayatana-ido3-0.4-0
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, 
          ${misc:Depends},
