@@ -1,11 +1,66 @@
-2017-05-22 13:06:21 +0200 Mike Gabriel (ab39f3e)
+2017-09-15 23:53:19 +0200 Mike Gabriel (dd58def)
 
-	* release 0.4.0 (HEAD -> master, release-builds)
+	* release 0.4.1 (HEAD -> master)
+
+2017-06-23 21:03:18 +0200 Mike Gabriel (1202ada)
+
+	* debian/control: Add versioned B-D: dpkg-dev (>= 1.16.1.1)
+
+2017-06-23 21:00:02 +0200 Mike Gabriel (d54247b)
+
+	* debian/upstream: Add upstream signing keys.
+
+2017-06-23 20:59:16 +0200 Mike Gabriel (cf2fe65)
+
+	* debian/watch: Add file.
+
+2017-06-23 20:59:06 +0200 Mike Gabriel (9ade6cd)
+
+	* debian/patches: Add README for patches folder.
+
+2017-06-23 20:58:21 +0200 Mike Gabriel (c17595f)
+
+	* debian/rules: Add get-orig-source rule.
+
+2017-06-23 20:58:07 +0200 Mike Gabriel (b7ac3e9)
+
+	* debian/rules: Enable all hardening flags.
+
+2017-06-23 20:57:24 +0200 Mike Gabriel (9c9bd9d)
+
+	* debian/control: Don't duplicate Section: for shared library
+          package.
+
+2017-06-23 20:56:52 +0200 Mike Gabriel (eb4383f)
+
+	* debian/control: Bump Standards-Version: to 3.9.8. No changes
+          needed.
+
+2017-06-23 20:55:51 +0200 Mike Gabriel (4f7b60c)
+
+	* debian/copyright: Adopt minor changes from official Debian package.
+
+2017-05-22 14:09:42 +0200 Mike Gabriel (03ae439)
+
+	* configure.ac: Let AC_CONFIG_SRCDIR point to src/libayatana-ido.h.
+
+2017-05-22 13:59:03 +0200 Mike Gabriel (e835f22)
+
+	* src/libido.h: Drop empty file (artifact of fork).
+
+2017-05-22 13:24:02 +0200 Mike Gabriel (33c6c13)
+
+	* debian/copyright: Adopt from official Debian package.
+          (release-builds)
+
+2017-05-22 13:06:21 +0200 Mike Gabriel (2c5700f)
+
+	* release 0.4.0 (tag: 0.4.0)
 
 2017-05-22 12:56:31 +0200 Mike Gabriel (fda91d4)
 
 	* configure.ac: Update shared library name, bug tracker URL, homepage
-          URL. (origin/master)
+          URL.
 
 2017-05-22 12:55:25 +0200 Mike Gabriel (39d0d9f)
 
@@ -86,9 +141,8 @@
 
 2015-10-02 15:32:36 +0000 CI Train Bot (d1b09d9)
 
-	* Releasing 13.10.0+15.10.20151002-0ubuntu1 (tag:
-          13.10.0+15.10.20151002-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+15.10.20151002-0ubuntu1,
+	* Releasing 13.10.0+15.10.20151002-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+15.10.20151002-0ubuntu1,
           refs/bzr/origin/heads/master)
 
 2015-10-02 15:32:33 +0000 Lars Uebernickel (771ce0c)
@@ -102,9 +156,8 @@
 
 2015-07-28 21:12:27 +0000 CI Train Bot (f007376)
 
-	* Releasing 13.10.0+15.10.20150728-0ubuntu1 (tag:
-          13.10.0+15.10.20150728-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+15.10.20150728-0ubuntu1)
+	* Releasing 13.10.0+15.10.20150728-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+15.10.20150728-0ubuntu1)
 
 2015-07-28 21:12:24 +0000 Marco Trevisan (Treviño) (0358338)
 
@@ -118,9 +171,8 @@
 
 2015-03-19 16:24:01 +0000 CI Train Bot (6f2f647)
 
-	* Releasing 13.10.0+15.04.20150319-0ubuntu1 (tag:
-          13.10.0+15.04.20150319-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+15.04.20150319-0ubuntu1)
+	* Releasing 13.10.0+15.04.20150319-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+15.04.20150319-0ubuntu1)
 
 2015-03-19 16:23:58 +0000 Lars Uebernickel (4c578ba)
 
@@ -137,9 +189,8 @@
 
 2015-01-30 14:25:14 +0000 CI Train Bot (fced82c)
 
-	* Releasing 13.10.0+15.04.20150130-0ubuntu1 (tag:
-          13.10.0+15.04.20150130-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+15.04.20150130-0ubuntu1)
+	* Releasing 13.10.0+15.04.20150130-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+15.04.20150130-0ubuntu1)
 
 2015-01-30 14:25:03 +0000 Lars Uebernickel (3445894)
 
@@ -151,9 +202,8 @@
 
 2015-01-22 11:56:22 +0000 CI Train Bot (467b70e)
 
-	* Releasing 13.10.0+15.04.20150122-0ubuntu1 (tag:
-          13.10.0+15.04.20150122-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+15.04.20150122-0ubuntu1)
+	* Releasing 13.10.0+15.04.20150122-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+15.04.20150122-0ubuntu1)
 
 2015-01-22 11:56:09 +0000 Lars Uebernickel (9f8609c)
 
@@ -175,9 +225,8 @@
 
 2014-11-03 20:57:41 +0000 CI bot (d69f78b)
 
-	* Releasing 13.10.0+15.04.20141103-0ubuntu1 (tag:
-          13.10.0+15.04.20141103-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+15.04.20141103-0ubuntu1)
+	* Releasing 13.10.0+15.04.20141103-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+15.04.20141103-0ubuntu1)
 
 2014-11-03 20:57:33 +0000 Ted Gould (2d4009b)
 
@@ -203,9 +252,8 @@
 
 2014-04-23 17:03:36 +0000 CI bot (01ce8c3)
 
-	* Releasing 13.10.0+14.04.20140423-0ubuntu1 (tag:
-          13.10.0+14.04.20140423-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140423-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140423-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140423-0ubuntu1)
 
 2014-04-23 17:03:27 +0000 Lars Uebernickel (bc444da)
 
@@ -229,9 +277,8 @@
 
 2014-04-07 12:30:17 +0000 CI bot (c734bb8)
 
-	* Releasing 13.10.0+14.04.20140407-0ubuntu1 (tag:
-          13.10.0+14.04.20140407-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140407-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140407-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140407-0ubuntu1)
 
 2014-04-07 12:30:06 +0000 Lars Uebernickel (c3fc9b1)
 
@@ -247,9 +294,8 @@
 
 2014-03-28 11:27:53 +0000 CI bot (1c842fe)
 
-	* Releasing 13.10.0+14.04.20140328-0ubuntu1 (tag:
-          13.10.0+14.04.20140328-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140328-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140328-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140328-0ubuntu1)
 
 2014-03-28 11:27:50 +0000 CI bot (0627003)
 
@@ -305,9 +351,8 @@
 
 2014-03-24 17:45:12 +0000 CI bot (e14ab5d)
 
-	* Releasing 13.10.0+14.04.20140324-0ubuntu1 (tag:
-          13.10.0+14.04.20140324-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140324-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140324-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140324-0ubuntu1)
 
 2014-03-24 17:45:04 +0000 Lars Uebernickel (f592103)
 
@@ -323,9 +368,8 @@
 
 2014-03-21 06:56:56 +0000 CI bot (bfd8fef)
 
-	* Releasing 13.10.0+14.04.20140321-0ubuntu1 (tag:
-          13.10.0+14.04.20140321-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140321-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140321-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140321-0ubuntu1)
 
 2014-03-21 06:56:47 +0000 Lars Uebernickel (96d791b)
 
@@ -337,9 +381,8 @@
 
 2014-03-13 10:15:45 +0000 CI bot (5cdbd5d)
 
-	* Releasing 13.10.0+14.04.20140313-0ubuntu1 (tag:
-          13.10.0+14.04.20140313-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140313-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140313-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140313-0ubuntu1)
 
 2014-03-13 10:15:33 +0000 Lars Uebernickel (60495e0)
 
@@ -360,9 +403,8 @@
 
 2014-02-13 15:54:16 +0000 CI bot (a52c1a6)
 
-	* Releasing 13.10.0+14.04.20140213-0ubuntu1 (tag:
-          13.10.0+14.04.20140213-0ubuntu1,
-          refs/bzr/origin/tags/13.10.0+14.04.20140213-0ubuntu1)
+	* Releasing 13.10.0+14.04.20140213-0ubuntu1
+          (refs/bzr/origin/tags/13.10.0+14.04.20140213-0ubuntu1)
 
 2014-02-13 15:54:06 +0000 Sebastien Bacher (4a24fe6)
 
@@ -1298,7 +1340,7 @@
 
 2012-09-20 10:59:26 -0500 Charles Kerr (3e84f25)
 
-	* 12.10.2 (tag: 12.10.2, refs/bzr/origin/tags/12.10.2)
+	* 12.10.2 (refs/bzr/origin/tags/12.10.2)
 
 2012-09-20 12:11:22 +0000 Charles Kerr (b98fedd)
 
@@ -1312,7 +1354,7 @@
 
 2012-08-27 22:11:59 +0200 Lars Uebernickel (63717ff)
 
-	* 12.10.1 (tag: 12.10.1, refs/bzr/origin/tags/12.10.1)
+	* 12.10.1 (refs/bzr/origin/tags/12.10.1)
 
 2012-08-27 22:01:07 +0200 Lars Uebernickel (bfdc842)
 
@@ -1342,8 +1384,8 @@
 2012-08-21 20:59:37 -0500 Charles Kerr (8f279d3)
 
 	* merge lp:~ken-vandine/ido/link-libm to AC_CHECK_LIBM to get -lm now
-          that gtk doesn't include that in it's .pc file (tag:
-          12.10.0, refs/bzr/origin/tags/12.10.0)
+          that gtk doesn't include that in it's .pc file
+          (refs/bzr/origin/tags/12.10.0)
 
 2012-08-21 20:51:24 -0500 Charles Kerr (a0631d3)
 

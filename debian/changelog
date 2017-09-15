@@ -1,4 +1,11 @@
-ayatana-ido (0.4.0-0) UNRELEASED; urgency=medium
+ayatana-ido (0.4.1-0) unstable; urgency=medium
+
+  * Upstream-provided Debian package for nx-libs.
+    See upstream ChangeLog for recent changes.
+
+ -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Fri, 15 Sep 2017 23:53:05 +0200
+
+ayatana-ido (0.4.0-0) unstable; urgency=medium
 
   * Fork from Ubuntu's ido code project.
 
