@@ -1,6 +1,6 @@
 ayatana-ido (0.4.1-0) unstable; urgency=medium
 
-  * Upstream-provided Debian package for nx-libs.
+  * Upstream-provided Debian package for ayatana-ido.
     See upstream ChangeLog for recent changes.
 
  -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Fri, 15 Sep 2017 23:53:05 +0200
