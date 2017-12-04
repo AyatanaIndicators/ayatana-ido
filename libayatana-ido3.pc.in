@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libido
+Name: libayatana-ido
 Description: Ayatana Indicator Display Objects
 Version: @VERSION@
 Libs: -L${libdir} -layatana-ido3-0.4
