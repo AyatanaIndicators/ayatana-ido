@@ -1,4 +1,4 @@
-IDOLIB = $(top_builddir)/src/libido3-0.1.la
+IDOLIB = $(top_builddir)/src/libayatana-ido3-0.1.la
 
 # xorg-gtest isn't buildable https://bugs.launchpad.net/ubuntu/+source/xorg-gtest/+bug/1388892
 # check_LIBRARIES = libgtest.a
