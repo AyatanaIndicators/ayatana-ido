@@ -1,5 +1,5 @@
 usr/include/libayatana-ido3-*
-usr/lib/*/pkgconfig/libayatana-ido3-*
 usr/lib/*/libayatana-ido3-*.so
-usr/share/vala
+usr/lib/*/pkgconfig/libayatana-ido3-*
 usr/share/gir-1.0
+usr/share/vala
