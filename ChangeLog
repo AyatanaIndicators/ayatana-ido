@@ -1,6 +1,37 @@
-2017-09-15 23:53:19 +0200 Mike Gabriel (dd58def)
+2017-12-04 16:07:01 +0100 Mike Gabriel (96f0fe7)
 
-	* release 0.4.1 (HEAD -> master)
+	* release 0.4.2 (HEAD -> master)
+
+2017-12-04 15:06:40 +0000 Mike Gabriel (dbf93d9)
+
+	* release 0.4.2
+
+2017-12-04 15:03:31 +0000 Mike Gabriel (511562e)
+
+	* tests/Makefile.am: Fix static lib name (libido -> libayatana-ido).
+
+2017-12-04 15:57:58 +0100 Mike Gabriel (bb3f64f)
+
+	* debian/control: Bump Standards-Version: to 4.1.1. No changes
+          needed.
+
+2017-12-04 15:56:27 +0100 Mike Gabriel (3fcfc52)
+
+	* libayatana-ido3.pc.in: Fix pkg-config name (libido ->
+          libayatana-ido).
+
+2017-10-26 19:14:36 +0200 Mike Gabriel (f87b429)
+
+	* Makefile.am: Drop distcheck features. (origin/master)
+
+2017-10-22 21:11:28 +0200 Mike Gabriel (35eeb7e)
+
+	* debian/changelog: Fix source project name in most recent changelog
+          stanza.
+
+2017-09-15 23:53:19 +0200 Mike Gabriel (75bbddb)
+
+	* release 0.4.1 (tag: 0.4.1)
 
 2017-06-23 21:03:18 +0200 Mike Gabriel (1202ada)
 
@@ -51,7 +82,7 @@
 2017-05-22 13:24:02 +0200 Mike Gabriel (33c6c13)
 
 	* debian/copyright: Adopt from official Debian package.
-          (release-builds)
+          (origin/release-builds, release-builds)
 
 2017-05-22 13:06:21 +0200 Mike Gabriel (2c5700f)
 

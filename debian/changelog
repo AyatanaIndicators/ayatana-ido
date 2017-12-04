@@ -1,3 +1,10 @@
+ayatana-ido (0.4.2-0) unstable; urgency=medium
+
+  * Upstream-provided Debian package for ayatana-ido.
+    See upstream ChangeLog for recent changes.
+
+ -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Mon, 04 Dec 2017 15:05:46 +0000
+
 ayatana-ido (0.4.1-0) unstable; urgency=medium
 
   * Upstream-provided Debian package for ayatana-ido.
