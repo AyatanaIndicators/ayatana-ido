@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKG_NAME="ido"
+PKG_NAME="ayatana-ido"
 
 which mate-autogen || {
     echo "You need mate-common from https://git.mate-desktop.org/mate-common"
