@@ -1,8 +1,9 @@
-ayatana-ido (0.4.2.99-0) UNRELEASED; urgency=medium
+ayatana-ido (0.4.3-0) unstable; urgency=medium
 
-  * Continue development...
+  * Upstream-provided Debian package for ayatana-ido.
+    See upstream ChangeLog for recent changes.
 
- -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Mon, 04 Dec 2017 16:22:48 +0100
+ -- Mike Gabriel <mike.gabriel@das-netzwerkteam.de>  Mon, 13 Aug 2018 11:46:50 +0200
 
 ayatana-ido (0.4.2-0) unstable; urgency=medium
 
