@@ -1,6 +1,19 @@
-2018-08-13 11:48:09 +0200 Mike Gabriel (2986c3e)
+2018-08-13 12:34:25 +0200 Mike Gabriel (e57c3fc)
 
-	* release 0.4.3 (HEAD -> master, tag: 0.4.3)
+	* release 0.4.4 (HEAD -> master, tag: 0.4.4)
+
+2018-08-13 12:33:17 +0200 Mike Gabriel (87e08a6)
+
+	* libayatana-ido3.pc.in: Fix Name: field in .pc file.
+
+2018-08-13 12:32:39 +0200 Mike Gabriel (c4357fb)
+
+	* Revert "libayatana-ido3.pc.in: Unversion name of .pc pkg-config
+          file (plus fix Name: field in .pc file)."
+
+2018-08-13 11:48:09 +0200 Mike Gabriel (b98a821)
+
+	* release 0.4.3 (tag: 0.4.3)
 
 2018-08-13 11:43:24 +0200 Mike Gabriel (455e113)
 
