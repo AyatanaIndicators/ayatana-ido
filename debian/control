@@ -32,9 +32,11 @@ Description: Widgets and other objects used for Ayatana Indicators
  This package contains shared libraries to be used by GTK+ 3
  applications.
 
-Package: libayatana-ido3-0.4-dev
+Package: libayatana-ido3-dev
 Section: libdevel
 Architecture: any
+Breaks: libayatana-ido3-0.4-dev (<< 0.4.2.99~),
+Replaces: libayatana-ido3-0.4-dev (<< 0.4.2.99~),
 Depends: gir1.2-ayatanaido3-0.4 (= ${binary:Version}),
          libayatana-ido3-0.4-0 (= ${binary:Version}),
          libglib2.0-dev (>=2.14.0),
