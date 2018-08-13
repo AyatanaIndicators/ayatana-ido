@@ -7,19 +7,14 @@ QUIET_GEN = $(Q:@=@echo '  GEN   '$@;)
 
 SUBDIRS = src example tests
 
-%-0.4.pc: %.pc
-	$(QUIET_GEN) cp -f $< $@
-
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libayatana-ido3-0.4.pc
+pkgconfig_DATA = libayatana-ido3.pc
 
 CLEANFILES = \
-	libayatana-ido3-0.4.pc \
+	libayatana-ido3.pc \
 	$(NULL)
 
 DISTCLEANFILES = \
-	libayatana-ido.pc \
-	libayatana-ido3.pc \
 	Makefile.in \
 	aclocal.m4 \
 	autom4te.cache/ \
