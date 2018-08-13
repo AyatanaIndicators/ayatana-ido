@@ -54,7 +54,7 @@ Section: introspection
 Architecture: any
 Multi-Arch: same
 Breaks: gir1.2-ayatana-ido3-0.4 (<< 0.4.2-1~),
-Replaces gir1.2-ayatana-ido3-0.4 (<< 0.4.2-1~),
+Replaces: gir1.2-ayatana-ido3-0.4 (<< 0.4.2-1~),
 Depends: libayatana-ido3-0.4-0 (>= ${binary:Version}),
          ${gir:Depends},
          ${misc:Depends},
