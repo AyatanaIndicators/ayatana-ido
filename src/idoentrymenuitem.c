@@ -27,6 +27,7 @@
 #include "idoentrymenuitem.h"
 #include "config.h"
 
+static void     ido_entry_menu_item_finalize          (GObject        *item);
 static void     ido_entry_menu_item_select            (GtkMenuItem        *item);
 static void     ido_entry_menu_item_deselect          (GtkMenuItem        *item);
 static gboolean ido_entry_menu_item_button_release    (GtkWidget      *widget,
@@ -44,16 +45,13 @@ static void     entry_move_focus_cb                   (GtkWidget        *widget,
                                                        GtkDirectionType  direction,
                                                        IdoEntryMenuItem *item);
 
-struct _IdoEntryMenuItemPrivate
-{
+typedef struct {
   GtkWidget       *box;
   GtkWidget       *entry;
   gboolean         selected;
-};
+} IdoEntryMenuItemPrivate;
 
-G_DEFINE_TYPE (IdoEntryMenuItem, ido_entry_menu_item, GTK_TYPE_MENU_ITEM)
-
-#define IDO_ENTRY_MENU_ITEM_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_ENTRY_MENU_ITEM, IdoEntryMenuItemPrivate))
+G_DEFINE_TYPE_WITH_PRIVATE (IdoEntryMenuItem, ido_entry_menu_item, GTK_TYPE_MENU_ITEM)
 
 static void
 ido_entry_menu_item_class_init (IdoEntryMenuItemClass *klass)
@@ -66,6 +64,8 @@ ido_entry_menu_item_class_init (IdoEntryMenuItemClass *klass)
   widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
 
+  gobject_class->finalize = ido_entry_menu_item_finalize;
+
   widget_class->button_release_event = ido_entry_menu_item_button_release;
   widget_class->button_press_event = ido_entry_menu_item_button_press;
 
@@ -73,8 +73,6 @@ ido_entry_menu_item_class_init (IdoEntryMenuItemClass *klass)
   menu_item_class->deselect = ido_entry_menu_item_deselect;
 
   menu_item_class->hide_on_activate = TRUE;
-
-  g_type_class_add_private (gobject_class, sizeof (IdoEntryMenuItemPrivate));
 }
 
 static void
@@ -88,7 +86,7 @@ ido_entry_menu_item_init (IdoEntryMenuItem *item)
   border.top = 2;
   border.bottom = 2;
 
-  priv = item->priv = IDO_ENTRY_MENU_ITEM_GET_PRIVATE (item);
+  priv = ido_entry_menu_item_get_instance_private(item);
 
   priv->entry = g_object_new (gtk_entry_get_type (),
                               "inner-border", &border,
@@ -135,12 +133,13 @@ ido_entry_menu_item_key_press (GtkWidget     *widget,
                                GdkEventKey   *event,
                                gpointer       data)
 {
-  IdoEntryMenuItem *menuitem = (IdoEntryMenuItem *)data;
+  IdoEntryMenuItem *menuitem = IDO_ENTRY_MENU_ITEM(data);
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(menuitem);
 
-  if (menuitem->priv->selected &&
+  if (priv->selected &&
       is_key_press_valid (menuitem, event->keyval))
     {
-      GtkWidget *entry = menuitem->priv->entry;
+      GtkWidget *entry = priv->entry;
 
       gtk_widget_event (entry,
                         ((GdkEvent *)(void*)(event)));
@@ -179,7 +178,10 @@ static gboolean
 ido_entry_menu_item_button_press (GtkWidget      *widget,
                                   GdkEventButton *event)
 {
-  GtkWidget *entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
+  IdoEntryMenuItem *menuitem = IDO_ENTRY_MENU_ITEM(widget);
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(menuitem);
+
+  GtkWidget *entry = priv->entry;
 
   if (event->button == 1)
     {
@@ -206,7 +208,10 @@ static gboolean
 ido_entry_menu_item_button_release (GtkWidget      *widget,
                                     GdkEventButton *event)
 {
-  GtkWidget *entry = IDO_ENTRY_MENU_ITEM (widget)->priv->entry;
+  IdoEntryMenuItem *menuitem = IDO_ENTRY_MENU_ITEM(widget);
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(menuitem);
+
+  GtkWidget *entry = priv->entry;
 
   gtk_widget_event (entry,
                     ((GdkEvent *)(void*)(event)));
@@ -217,17 +222,23 @@ ido_entry_menu_item_button_release (GtkWidget      *widget,
 static void
 ido_entry_menu_item_select (GtkMenuItem *item)
 {
-  IDO_ENTRY_MENU_ITEM (item)->priv->selected = TRUE;
+  IdoEntryMenuItem *menuitem = IDO_ENTRY_MENU_ITEM(item);
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(menuitem);
 
-  ido_entry_menu_item_send_focus_change (GTK_WIDGET (IDO_ENTRY_MENU_ITEM (item)->priv->entry), TRUE);
+  priv->selected = TRUE;
+
+  ido_entry_menu_item_send_focus_change (GTK_WIDGET (priv->entry), TRUE);
 }
 
 static void
 ido_entry_menu_item_deselect (GtkMenuItem *item)
 {
-  IDO_ENTRY_MENU_ITEM (item)->priv->selected = FALSE;
+  IdoEntryMenuItem *menuitem = IDO_ENTRY_MENU_ITEM(item);
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(menuitem);
 
-  ido_entry_menu_item_send_focus_change (GTK_WIDGET (IDO_ENTRY_MENU_ITEM (item)->priv->entry), FALSE);
+  priv->selected = FALSE;
+
+  ido_entry_menu_item_send_focus_change (GTK_WIDGET (priv->entry), FALSE);
 }
 
 
@@ -253,7 +264,9 @@ entry_move_focus_cb (GtkWidget        *widget,
                      GtkDirectionType  direction,
                      IdoEntryMenuItem *item)
 {
-  ido_entry_menu_item_send_focus_change (GTK_WIDGET (IDO_ENTRY_MENU_ITEM (item)->priv->entry), FALSE);
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(item);
+
+  ido_entry_menu_item_send_focus_change (GTK_WIDGET (priv->entry), FALSE);
 
   g_signal_emit_by_name (item,
                          "move-focus",
@@ -286,5 +299,13 @@ ido_entry_menu_item_get_entry (IdoEntryMenuItem *menuitem)
 {
   g_return_val_if_fail (IDO_IS_ENTRY_MENU_ITEM (menuitem), NULL);
 
-  return menuitem->priv->entry;
+  IdoEntryMenuItemPrivate *priv = ido_entry_menu_item_get_instance_private(menuitem);
+
+  return priv->entry;
+}
+
+static void
+ido_entry_menu_item_finalize (GObject *gobject)
+{
+  /* no-op */
 }

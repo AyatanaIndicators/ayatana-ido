@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 typedef struct _IdoLocationMenuItem        IdoLocationMenuItem;
 typedef struct _IdoLocationMenuItemClass   IdoLocationMenuItemClass;
-typedef struct _IdoLocationMenuItemPrivate IdoLocationMenuItemPrivate;
 
 struct _IdoLocationMenuItemClass
 {
@@ -48,7 +47,6 @@ struct _IdoLocationMenuItem
 {
   /*< private >*/
   IdoTimeStampMenuItem parent;
-  IdoLocationMenuItemPrivate * priv;
 };
 
 

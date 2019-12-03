@@ -39,13 +39,10 @@ G_BEGIN_DECLS
 
 typedef struct _IdoCalendarMenuItem        IdoCalendarMenuItem;
 typedef struct _IdoCalendarMenuItemClass   IdoCalendarMenuItemClass;
-typedef struct _IdoCalendarMenuItemPrivate IdoCalendarMenuItemPrivate;
 
 struct _IdoCalendarMenuItem
 {
   GtkMenuItem parent_instance;
-
-  IdoCalendarMenuItemPrivate *priv;
 };
 
 struct _IdoCalendarMenuItemClass

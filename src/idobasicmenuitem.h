@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 
 typedef struct _IdoBasicMenuItem        IdoBasicMenuItem;
 typedef struct _IdoBasicMenuItemClass   IdoBasicMenuItemClass;
-typedef struct _IdoBasicMenuItemPrivate IdoBasicMenuItemPrivate;
 
 struct _IdoBasicMenuItemClass
 {
@@ -44,7 +43,6 @@ struct _IdoBasicMenuItem
 {
   /*< private >*/
   GtkMenuItem parent;
-  IdoBasicMenuItemPrivate * priv;
 };
 
 

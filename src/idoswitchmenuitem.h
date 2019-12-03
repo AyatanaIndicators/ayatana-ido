@@ -34,13 +34,10 @@ G_BEGIN_DECLS
 
 typedef struct _IdoSwitchMenuItem        IdoSwitchMenuItem;
 typedef struct _IdoSwitchMenuItemClass   IdoSwitchMenuItemClass;
-typedef struct _IdoSwitchMenuItemPrivate IdoSwitchMenuItemPrivate;
 
 struct _IdoSwitchMenuItem
 {
   GtkCheckMenuItem parent_instance;
-
-  IdoSwitchMenuItemPrivate *priv;
 };
 
 struct _IdoSwitchMenuItemClass

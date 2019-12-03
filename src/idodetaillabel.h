@@ -31,12 +31,10 @@
 
 typedef struct _IdoDetailLabel        IdoDetailLabel;
 typedef struct _IdoDetailLabelClass   IdoDetailLabelClass;
-typedef struct _IdoDetailLabelPrivate IdoDetailLabelPrivate;
 
 struct _IdoDetailLabel
 {
   GtkWidget parent;
-  IdoDetailLabelPrivate *priv;
 };
 
 struct _IdoDetailLabelClass

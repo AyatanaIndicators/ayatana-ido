@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 
 typedef struct _IdoUserMenuItem        IdoUserMenuItem;
 typedef struct _IdoUserMenuItemClass   IdoUserMenuItemClass;
-typedef struct _IdoUserMenuItemPrivate IdoUserMenuItemPrivate;
 
 /* property keys */
 #define IDO_USER_MENU_ITEM_PROP_LABEL           "label"
@@ -49,7 +48,6 @@ struct _IdoUserMenuItem
 {
   /*< private >*/
   GtkMenuItem parent;
-  IdoUserMenuItemPrivate * priv;
 };
 
 GType ido_user_menu_item_get_type (void) G_GNUC_CONST;

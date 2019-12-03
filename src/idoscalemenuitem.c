@@ -64,7 +64,7 @@ static void     update_packing                             (IdoScaleMenuItem    
 static void     default_primary_clicked_handler            (IdoScaleMenuItem      *self);
 static void     default_secondary_clicked_handler          (IdoScaleMenuItem      *self);
 
-struct _IdoScaleMenuItemPrivate {
+typedef struct {
   GtkWidget            *scale;
   GtkAdjustment        *adjustment;
   GtkWidget            *primary_image;
@@ -78,7 +78,7 @@ struct _IdoScaleMenuItemPrivate {
   IdoRangeStyle         range_style;
   gboolean              ignore_value_changed;
   gboolean              has_focus;
-};
+} IdoScaleMenuItemPrivate;
 
 enum {
   SLIDER_GRABBED,
@@ -99,15 +99,15 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (IdoScaleMenuItem, ido_scale_menu_item, GTK_TYPE_MENU_ITEM)
-
-#define GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_SCALE_MENU_ITEM, IdoScaleMenuItemPrivate))
+G_DEFINE_TYPE_WITH_PRIVATE (IdoScaleMenuItem, ido_scale_menu_item, GTK_TYPE_MENU_ITEM)
 
 static gboolean
 ido_scale_menu_item_scroll_event (GtkWidget      *menuitem,
                                   GdkEventScroll *event)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  IdoScaleMenuItem *item = IDO_SCALE_MENU_ITEM (menuitem);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (item);
+
   GtkWidget *scale = priv->scale;
 
   if (priv->reverse_scroll)
@@ -138,7 +138,7 @@ ido_scale_menu_item_scale_value_changed (GtkRange *range,
                                          gpointer  user_data)
 {
   IdoScaleMenuItem *self = user_data;
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (self);
 
   /* The signal is not sent when it was set through
    * ido_scale_menu_item_set_value().  */
@@ -151,7 +151,8 @@ static void
 ido_scale_menu_item_constructed (GObject *object)
 {
   IdoScaleMenuItem *self = IDO_SCALE_MENU_ITEM (object);
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (self);
+
   GObject *adj = G_OBJECT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 10.0, 0.0));
   IdoRangeStyle range_style;
   GtkWidget *hbox;
@@ -322,14 +323,13 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
                                          G_TYPE_NONE,
                                          1, G_TYPE_DOUBLE);
 
-
-  g_type_class_add_private (item_class, sizeof (IdoScaleMenuItemPrivate));
 }
 
 static void
 update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (self);
+
   GtkBox * box = GTK_BOX (priv->hbox);
   GtkContainer *container = GTK_CONTAINER (priv->hbox);
 
@@ -366,7 +366,7 @@ update_packing (IdoScaleMenuItem *self, IdoScaleMenuItemStyle style)
 static void
 ido_scale_menu_item_init (IdoScaleMenuItem *self)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (self);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (self);
 
   priv->reverse_scroll = TRUE;
 
@@ -380,7 +380,7 @@ ido_scale_menu_item_set_property (GObject         *object,
                                   GParamSpec      *pspec)
 {
   IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (object);
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menu_item);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (menu_item);
 
   switch (prop_id)
     {
@@ -413,7 +413,7 @@ ido_scale_menu_item_get_property (GObject         *object,
                                   GParamSpec      *pspec)
 {
   IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (object);
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menu_item);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (menu_item);
   GtkAdjustment *adjustment;
 
   switch (prop_id)
@@ -442,7 +442,8 @@ ido_scale_menu_item_parent_key_press_event (GtkWidget   *widget,
                                             GdkEventKey *event,
                                             gpointer     user_data)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (user_data);
+  IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (user_data);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (menu_item);
 
   /* only listen to events when the playback menu item is selected */
   if (!priv->has_focus)
@@ -469,7 +470,8 @@ ido_scale_menu_item_parent_key_press_event (GtkWidget   *widget,
 static void
 ido_scale_menu_item_select (GtkMenuItem *item)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+  IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (item);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (menu_item);
 
   priv->has_focus = TRUE;
   gtk_widget_set_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED, FALSE);
@@ -480,7 +482,8 @@ ido_scale_menu_item_select (GtkMenuItem *item)
 static void
 ido_scale_menu_item_deselect (GtkMenuItem *item)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+  IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (item);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (menu_item);
 
   priv->has_focus = FALSE;
   gtk_widget_unset_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED);
@@ -492,7 +495,9 @@ static gboolean
 ido_scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                         GdkEventButton *event)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  IdoScaleMenuItem *item = IDO_SCALE_MENU_ITEM (menuitem);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (item);
+
   GtkAllocation alloc;
   gint x, y;
 
@@ -516,7 +521,8 @@ ido_scale_menu_item_button_release_event (GtkWidget *menuitem,
                                           GdkEventButton *event)
 {
   IdoScaleMenuItem *item = IDO_SCALE_MENU_ITEM (menuitem);
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (item);
+
   GtkWidget *scale = priv->scale;
   GtkAllocation alloc;
   gint x, y;
@@ -569,7 +575,9 @@ static gboolean
 ido_scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
                                          GdkEventMotion *event)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
+  IdoScaleMenuItem *menu_item = IDO_SCALE_MENU_ITEM (menuitem);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (menu_item);
+
   GtkAllocation alloc;
   gint x, y;
 
@@ -596,7 +604,7 @@ static void
 menu_hidden (GtkWidget        *menu,
              IdoScaleMenuItem *scale)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (scale);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (scale);
 
   if (priv->grabbed)
     {
@@ -718,7 +726,7 @@ ido_scale_menu_item_get_scale (IdoScaleMenuItem *menuitem)
 
   g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   return priv->scale;
 }
@@ -739,7 +747,7 @@ ido_scale_menu_item_get_style (IdoScaleMenuItem *menuitem)
 
   g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), IDO_SCALE_MENU_ITEM_STYLE_NONE);
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   return priv->style;
 }
@@ -760,7 +768,7 @@ ido_scale_menu_item_set_style (IdoScaleMenuItem      *menuitem,
 
   g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   priv->style = style;
 
@@ -784,7 +792,7 @@ ido_scale_menu_item_get_primary_image (IdoScaleMenuItem *menuitem)
 
   g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   return priv->primary_image;
 }
@@ -806,7 +814,7 @@ ido_scale_menu_item_get_secondary_image (IdoScaleMenuItem *menuitem)
 
   g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   return priv->secondary_image;
 }
@@ -859,7 +867,7 @@ ido_scale_menu_item_get_primary_label (IdoScaleMenuItem *menuitem)
 
   g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   return gtk_label_get_text (GTK_LABEL (priv->primary_label));
 }
@@ -881,7 +889,7 @@ ido_scale_menu_item_get_secondary_label (IdoScaleMenuItem *menuitem)
 
   g_return_val_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem), NULL);
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   return gtk_label_get_text (GTK_LABEL (priv->secondary_label));
 }
@@ -903,7 +911,7 @@ ido_scale_menu_item_set_primary_label (IdoScaleMenuItem *menuitem,
 
   g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   if (priv->primary_label)
     {
@@ -928,7 +936,7 @@ ido_scale_menu_item_set_secondary_label (IdoScaleMenuItem *menuitem,
 
   g_return_if_fail (IDO_IS_SCALE_MENU_ITEM (menuitem));
 
-  priv = GET_PRIVATE (menuitem);
+  priv = ido_scale_menu_item_get_instance_private (menuitem);
 
   if (priv->secondary_label)
     {
@@ -954,7 +962,8 @@ static void
 default_primary_clicked_handler (IdoScaleMenuItem * item)
 {
   g_debug ("%s: setting scale to lower bound", G_STRFUNC);
-  IdoScaleMenuItemPrivate * priv = GET_PRIVATE (item);
+  IdoScaleMenuItemPrivate * priv = ido_scale_menu_item_get_instance_private (item);
+
   GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
   gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
 }
@@ -977,7 +986,7 @@ static void
 default_secondary_clicked_handler (IdoScaleMenuItem * item)
 {
   g_debug ("%s: setting scale to upper bound", G_STRFUNC);
-  IdoScaleMenuItemPrivate * priv = GET_PRIVATE (item);
+  IdoScaleMenuItemPrivate * priv = ido_scale_menu_item_get_instance_private (item);
   GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (priv->scale));
   gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj));
 }
@@ -991,7 +1000,7 @@ static void
 ido_scale_menu_item_set_value (IdoScaleMenuItem *item,
                                gdouble           value)
 {
-  IdoScaleMenuItemPrivate *priv = GET_PRIVATE (item);
+  IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (item);
 
   /* set ignore_value_changed to signify to the scale menu item that it
    * should not emit its own value-changed signal, as that should only

@@ -47,13 +47,10 @@ typedef enum
 
 typedef struct _IdoScaleMenuItem        IdoScaleMenuItem;
 typedef struct _IdoScaleMenuItemClass   IdoScaleMenuItemClass;
-typedef struct _IdoScaleMenuItemPrivate IdoScaleMenuItemPrivate;
 
 struct _IdoScaleMenuItem
 {
   GtkMenuItem parent_instance;
-
-  IdoScaleMenuItemPrivate *priv;
 };
 
 struct _IdoScaleMenuItemClass

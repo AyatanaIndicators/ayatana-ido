@@ -44,13 +44,11 @@ typedef enum
 } IdoRangeStyle;
 
 typedef struct _IdoRange        IdoRange;
-typedef struct _IdoRangePrivate IdoRangePrivate;
 typedef struct _IdoRangeClass   IdoRangeClass;
 
 struct _IdoRange
 {
   GtkScale parent_instance;
-  IdoRangePrivate *priv;
 };
 
 struct _IdoRangeClass

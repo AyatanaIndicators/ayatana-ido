@@ -34,22 +34,18 @@
 #include "idotimeline.h"
 #include "config.h"
 
-#define IDO_MESSAGE_DIALOG_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_MESSAGE_DIALOG, IdoMessageDialogPrivate))
-
 static GtkWidget *ido_message_dialog_get_secondary_label (IdoMessageDialog *dialog);
 static GtkWidget *ido_message_dialog_get_primary_label   (IdoMessageDialog *dialog);
 
-typedef struct _IdoMessageDialogPrivate      IdoMessageDialogPrivate;
-typedef struct _IdoMessageDialogMorphContext IdoMessageDialogMorphContext;
-
-struct _IdoMessageDialogPrivate
-{
+typedef struct {
   GtkWidget   *action_area;
   GtkWidget   *primary_label;
   GtkWidget   *secondary_label;
 
   gboolean     expanded;
-};
+} IdoMessageDialogPrivate;
+
+typedef struct _IdoMessageDialogMorphContext IdoMessageDialogMorphContext;
 
 struct _IdoMessageDialogMorphContext
 {
@@ -60,13 +56,13 @@ struct _IdoMessageDialogMorphContext
   GtkRequisition end;
 };
 
-G_DEFINE_TYPE (IdoMessageDialog, ido_message_dialog, GTK_TYPE_MESSAGE_DIALOG)
+G_DEFINE_TYPE_WITH_PRIVATE (IdoMessageDialog, ido_message_dialog, GTK_TYPE_MESSAGE_DIALOG)
 
 static void
 ido_message_dialog_map (GtkWidget *widget)
 {
   IdoMessageDialog *dialog = IDO_MESSAGE_DIALOG (widget);
-  IdoMessageDialogPrivate *priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (dialog);
+  IdoMessageDialogPrivate *priv = ido_message_dialog_get_instance_private (dialog);
 
   GTK_WIDGET_CLASS (ido_message_dialog_parent_class)->map (widget);
 
@@ -145,7 +141,7 @@ timeline_finished_cb (IdoTimeline *timeline,
                       gpointer     user_data)
 {
   IdoMessageDialogMorphContext *context = user_data;
-  IdoMessageDialogPrivate *priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (context->widget);
+  IdoMessageDialogPrivate *priv = ido_message_dialog_get_instance_private (IDO_MESSAGE_DIALOG (context->widget));
 
   gtk_widget_show (priv->action_area);
   gtk_widget_show (priv->secondary_label);
@@ -158,7 +154,7 @@ ido_message_dialog_focus_in_event (GtkWidget     *widget,
                                    GdkEventFocus *event)
 {
   IdoMessageDialog *dialog = IDO_MESSAGE_DIALOG (widget);
-  IdoMessageDialogPrivate *priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (dialog);
+  IdoMessageDialogPrivate *priv = ido_message_dialog_get_instance_private (dialog);
 
   if (!priv->expanded)
     {
@@ -203,7 +199,9 @@ ido_message_dialog_focus_in_event (GtkWidget     *widget,
 static void
 ido_message_dialog_constructed (GObject *object)
 {
-  IdoMessageDialogPrivate *priv = IDO_MESSAGE_DIALOG_GET_PRIVATE (object);
+
+  IdoMessageDialog *dialog = IDO_MESSAGE_DIALOG (object);
+  IdoMessageDialogPrivate *priv = ido_message_dialog_get_instance_private (dialog);
   GtkWidget *vbox;
   GtkWidget *event_box;
 
@@ -231,8 +229,6 @@ ido_message_dialog_class_init (IdoMessageDialogClass *class)
 
   widget_class->map            = ido_message_dialog_map;
   widget_class->focus_in_event = ido_message_dialog_focus_in_event;
-
-  g_type_class_add_private (object_class, sizeof (IdoMessageDialogPrivate));
 }
 
 static void

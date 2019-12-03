@@ -21,14 +21,11 @@
 
 #include <math.h>
 
-G_DEFINE_TYPE (IdoDetailLabel, ido_detail_label, GTK_TYPE_WIDGET)
-
-struct _IdoDetailLabelPrivate
-{
+typedef struct {
   gchar *text;
   PangoLayout *layout;
   gboolean draw_lozenge;
-};
+} IdoDetailLabelPrivate;
 
 enum
 {
@@ -39,6 +36,8 @@ enum
 
 static GParamSpec *properties[NUM_PROPERTIES];
 
+G_DEFINE_TYPE_WITH_PRIVATE (IdoDetailLabel, ido_detail_label, GTK_TYPE_WIDGET)
+
 static void
 ido_detail_label_get_property (GObject    *object,
                                guint       property_id,
@@ -46,11 +45,12 @@ ido_detail_label_get_property (GObject    *object,
                                GParamSpec *pspec)
 {
   IdoDetailLabel *self = IDO_DETAIL_LABEL (object);
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(self);
 
   switch (property_id)
     {
     case PROP_TEXT:
-      g_value_set_string (value, self->priv->text);
+      g_value_set_string (value, priv->text);
       break;
 
     default:
@@ -81,7 +81,7 @@ ido_detail_label_set_property (GObject      *object,
 static void
 ido_detail_label_finalize (GObject *object)
 {
-  IdoDetailLabelPrivate *priv = IDO_DETAIL_LABEL (object)->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(IDO_DETAIL_LABEL (object));
 
   g_free (priv->text);
 
@@ -91,7 +91,7 @@ ido_detail_label_finalize (GObject *object)
 static void
 ido_detail_label_dispose (GObject *object)
 {
-  IdoDetailLabelPrivate *priv = IDO_DETAIL_LABEL (object)->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(IDO_DETAIL_LABEL (object));
 
   g_clear_object (&priv->layout);
 
@@ -101,7 +101,7 @@ ido_detail_label_dispose (GObject *object)
 static void
 ido_detail_label_ensure_layout (IdoDetailLabel *label)
 {
-  IdoDetailLabelPrivate *priv = label->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(label);
 
   if (priv->layout == NULL)
     {
@@ -156,7 +156,8 @@ gtk_widget_get_font_metrics (GtkWidget    *widget,
 static gint
 ido_detail_label_get_minimum_text_width (IdoDetailLabel *label)
 {
-  IdoDetailLabelPrivate *priv = label->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(label);
+
   PangoContext *context;
   PangoFontMetrics *metrics;
   gint char_width;
@@ -176,7 +177,8 @@ ido_detail_label_draw (GtkWidget *widget,
                        cairo_t   *cr)
 {
   IdoDetailLabel *label = IDO_DETAIL_LABEL (widget);
-  IdoDetailLabelPrivate *priv = IDO_DETAIL_LABEL (widget)->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(label);
+
   PangoRectangle extents;
   GtkAllocation allocation;
   double x, w, h, radius;
@@ -224,7 +226,8 @@ ido_detail_label_get_preferred_width (GtkWidget *widget,
                                       gint      *minimum,
                                       gint      *natural)
 {
-  IdoDetailLabelPrivate *priv = IDO_DETAIL_LABEL (widget)->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(IDO_DETAIL_LABEL (widget));
+
   PangoRectangle extents;
   double radius;
 
@@ -244,7 +247,7 @@ ido_detail_label_get_preferred_height (GtkWidget *widget,
                                        gint      *minimum,
                                        gint      *natural)
 {
-  IdoDetailLabelPrivate *priv = IDO_DETAIL_LABEL (widget)->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(IDO_DETAIL_LABEL (widget));
   PangoContext *context;
   PangoFontMetrics *metrics;
   PangoRectangle extents;
@@ -277,8 +280,6 @@ ido_detail_label_class_init (IdoDetailLabelClass *klass)
   widget_class->get_preferred_width = ido_detail_label_get_preferred_width;
   widget_class->get_preferred_height = ido_detail_label_get_preferred_height;
 
-  g_type_class_add_private (klass, sizeof (IdoDetailLabelPrivate));
-
   properties[PROP_TEXT] = g_param_spec_string ("text",
                                                "Text",
                                                "The text of the label",
@@ -292,10 +293,6 @@ ido_detail_label_class_init (IdoDetailLabelClass *klass)
 static void
 ido_detail_label_init (IdoDetailLabel *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            IDO_TYPE_DETAIL_LABEL,
-                                            IdoDetailLabelPrivate);
-
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 }
 
@@ -311,7 +308,10 @@ const gchar *
 ido_detail_label_get_text (IdoDetailLabel *label)
 {
   g_return_val_if_fail (IDO_IS_DETAIL_LABEL (label), NULL);
-  return label->priv->text;
+
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(label);
+
+  return priv->text;
 }
 
 /* collapse_whitespace:
@@ -362,7 +362,7 @@ ido_detail_label_set_text_impl (IdoDetailLabel *label,
                                 const gchar    *text,
                                 gboolean        draw_lozenge)
 {
-  IdoDetailLabelPrivate * priv = label->priv;
+  IdoDetailLabelPrivate *priv = ido_detail_label_get_instance_private(label);
 
   g_clear_object (&priv->layout);
   g_free (priv->text);

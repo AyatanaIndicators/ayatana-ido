@@ -39,13 +39,10 @@ G_BEGIN_DECLS
 
 typedef struct _IdoEntryMenuItem        IdoEntryMenuItem;
 typedef struct _IdoEntryMenuItemClass   IdoEntryMenuItemClass;
-typedef struct _IdoEntryMenuItemPrivate IdoEntryMenuItemPrivate;
 
 struct _IdoEntryMenuItem
 {
   GtkMenuItem parent_instance;
-
-  IdoEntryMenuItemPrivate *priv;
 };
 
 struct _IdoEntryMenuItemClass

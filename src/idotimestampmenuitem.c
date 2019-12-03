@@ -39,17 +39,14 @@ enum
 
 static GParamSpec *properties[PROP_LAST];
 
-struct _IdoTimeStampMenuItemPrivate
-{
+typedef struct {
   char * format;
   GDateTime * date_time;
-};
+} IdoTimeStampMenuItemPrivate;
 
-typedef IdoTimeStampMenuItemPrivate priv_t;
-
-G_DEFINE_TYPE (IdoTimeStampMenuItem,
-               ido_time_stamp_menu_item,
-               IDO_TYPE_BASIC_MENU_ITEM);
+G_DEFINE_TYPE_WITH_PRIVATE (IdoTimeStampMenuItem,
+                            ido_time_stamp_menu_item,
+                            IDO_TYPE_BASIC_MENU_ITEM);
 
 /***
 ****  GObject Virtual Functions
@@ -62,16 +59,16 @@ my_get_property (GObject     * o,
                  GParamSpec  * pspec)
 {
   IdoTimeStampMenuItem * self = IDO_TIME_STAMP_MENU_ITEM (o);
-  priv_t * p = self->priv;
+  IdoTimeStampMenuItemPrivate * priv = ido_time_stamp_menu_item_get_instance_private(self);
 
   switch (property_id)
     {
       case PROP_FORMAT:
-        g_value_set_string (v, p->format);
+        g_value_set_string (v, priv->format);
         break;
 
       case PROP_DATE_TIME:
-        g_value_set_boxed (v, p->date_time);
+        g_value_set_boxed (v, priv->date_time);
         break;
 
       default:
@@ -108,9 +105,9 @@ static void
 my_dispose (GObject * object)
 {
   IdoTimeStampMenuItem * self = IDO_TIME_STAMP_MENU_ITEM (object);
-  priv_t * p = self->priv;
+  IdoTimeStampMenuItemPrivate * priv = ido_time_stamp_menu_item_get_instance_private(self);
 
-  g_clear_pointer (&p->date_time, g_date_time_unref);
+  g_clear_pointer (&priv->date_time, g_date_time_unref);
 
   G_OBJECT_CLASS (ido_time_stamp_menu_item_parent_class)->dispose (object);
 }
@@ -119,9 +116,9 @@ static void
 my_finalize (GObject * object)
 {
   IdoTimeStampMenuItem * self = IDO_TIME_STAMP_MENU_ITEM (object);
-  priv_t * p = self->priv;
+  IdoTimeStampMenuItemPrivate * priv = ido_time_stamp_menu_item_get_instance_private(self);
 
-  g_free (p->format);
+  g_free (priv->format);
 
   G_OBJECT_CLASS (ido_time_stamp_menu_item_parent_class)->finalize (object);
 }
@@ -135,8 +132,6 @@ ido_time_stamp_menu_item_class_init (IdoTimeStampMenuItemClass *klass)
 {
   GParamFlags prop_flags;
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (IdoTimeStampMenuItemPrivate));
 
   gobject_class->get_property = my_get_property;
   gobject_class->set_property = my_set_property;
@@ -167,20 +162,18 @@ ido_time_stamp_menu_item_class_init (IdoTimeStampMenuItemClass *klass)
 static void
 ido_time_stamp_menu_item_init (IdoTimeStampMenuItem *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            IDO_TYPE_TIME_STAMP_MENU_ITEM,
-                                            IdoTimeStampMenuItemPrivate);
-
+  /* no-op */
 }
 
 static void
 update_timestamp_label (IdoTimeStampMenuItem * self)
 {
   char * str;
-  priv_t * p = self->priv;
 
-  if (p->date_time && p->format)
-    str = g_date_time_format (p->date_time, p->format);
+  IdoTimeStampMenuItemPrivate * priv = ido_time_stamp_menu_item_get_instance_private(self);
+
+  if (priv->date_time && priv->format)
+    str = g_date_time_format (priv->date_time, priv->format);
   else
     str = NULL;
 
@@ -210,14 +203,15 @@ void
 ido_time_stamp_menu_item_set_date_time (IdoTimeStampMenuItem * self,
                                         GDateTime            * date_time)
 {
-  priv_t * p;
+  IdoTimeStampMenuItemPrivate * priv;
 
   g_return_if_fail (IDO_IS_TIME_STAMP_MENU_ITEM (self));
-  p = self->priv;
 
-  g_clear_pointer (&p->date_time, g_date_time_unref);
+  priv = ido_time_stamp_menu_item_get_instance_private(self);
+
+  g_clear_pointer (&priv->date_time, g_date_time_unref);
   if (date_time != NULL)
-    p->date_time = g_date_time_ref (date_time);
+    priv->date_time = g_date_time_ref (date_time);
   update_timestamp_label (self);
 }
 
@@ -234,20 +228,25 @@ void
 ido_time_stamp_menu_item_set_format (IdoTimeStampMenuItem * self,
                                      const char           * strftime_fmt)
 {
-  priv_t * p;
+  IdoTimeStampMenuItemPrivate * priv;
 
   g_return_if_fail (IDO_IS_TIME_STAMP_MENU_ITEM (self));
-  p = self->priv;
 
-  g_free (p->format);
-  p->format = g_strdup (strftime_fmt);
+  priv = ido_time_stamp_menu_item_get_instance_private(self);
+
+  g_free (priv->format);
+  priv->format = g_strdup (strftime_fmt);
   update_timestamp_label (self);
 }
 
 const gchar *
 ido_time_stamp_menu_item_get_format (IdoTimeStampMenuItem * self)
 {
+  IdoTimeStampMenuItemPrivate * priv;
+
   g_return_val_if_fail (IDO_IS_TIME_STAMP_MENU_ITEM (self), NULL);
 
-  return self->priv->format;
+  priv = ido_time_stamp_menu_item_get_instance_private(self);
+
+  return priv->format;
 }

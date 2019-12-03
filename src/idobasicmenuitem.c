@@ -37,8 +37,7 @@ enum
 
 static GParamSpec *properties[PROP_LAST];
 
-struct _IdoBasicMenuItemPrivate
-{
+typedef struct {
   GIcon * icon;
   char * text;
   char * secondary_text;
@@ -46,11 +45,9 @@ struct _IdoBasicMenuItemPrivate
   GtkWidget * image;
   GtkWidget * label;
   GtkWidget * secondary_label;
-};
+} IdoBasicMenuItemPrivate;
 
-typedef IdoBasicMenuItemPrivate priv_t;
-
-G_DEFINE_TYPE (IdoBasicMenuItem, ido_basic_menu_item, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE_WITH_PRIVATE (IdoBasicMenuItem, ido_basic_menu_item, GTK_TYPE_MENU_ITEM);
 
 /***
 ****  GObject Virtual Functions
@@ -63,7 +60,7 @@ my_get_property (GObject     * o,
                  GParamSpec  * pspec)
 {
   IdoBasicMenuItem * self = IDO_BASIC_MENU_ITEM (o);
-  priv_t * p = self->priv;
+  IdoBasicMenuItemPrivate * p = ido_basic_menu_item_get_instance_private(self);
 
   switch (property_id)
     {
@@ -117,7 +114,7 @@ static void
 my_dispose (GObject * object)
 {
   IdoBasicMenuItem * self = IDO_BASIC_MENU_ITEM (object);
-  priv_t * p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   g_clear_object (&p->icon);
 
@@ -128,7 +125,7 @@ static void
 my_finalize (GObject * object)
 {
   IdoBasicMenuItem * self = IDO_BASIC_MENU_ITEM (object);
-  priv_t * p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   g_free (p->text);
   g_free (p->secondary_text);
@@ -139,7 +136,7 @@ my_finalize (GObject * object)
 static void
 ido_basic_menu_item_update_image (IdoBasicMenuItem *self)
 {
-  IdoBasicMenuItemPrivate * p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   gtk_image_clear (GTK_IMAGE (p->image));
 
@@ -191,8 +188,6 @@ ido_basic_menu_item_class_init (IdoBasicMenuItemClass *klass)
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  g_type_class_add_private (klass, sizeof (IdoBasicMenuItemPrivate));
-
   gobject_class->get_property = my_get_property;
   gobject_class->set_property = my_set_property;
   gobject_class->dispose = my_dispose;
@@ -228,15 +223,11 @@ ido_basic_menu_item_class_init (IdoBasicMenuItemClass *klass)
 static void
 ido_basic_menu_item_init (IdoBasicMenuItem *self)
 {
-  priv_t * p;
+
   GtkWidget * w;
   GtkGrid * grid;
 
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            IDO_TYPE_BASIC_MENU_ITEM,
-                                            IdoBasicMenuItemPrivate);
-
-  p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   p->image = gtk_image_new ();
   gtk_misc_set_alignment(GTK_MISC(p->image), 0.0, 0.0);
@@ -287,7 +278,7 @@ ido_basic_menu_item_new (void)
 void
 ido_basic_menu_item_set_icon (IdoBasicMenuItem * self, GIcon * icon)
 {
-  IdoBasicMenuItemPrivate * p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   if (p->icon != icon)
     {
@@ -314,7 +305,7 @@ ido_basic_menu_item_set_icon_from_file (IdoBasicMenuItem * self, const char * fi
 void
 ido_basic_menu_item_set_text (IdoBasicMenuItem * self, const char * text)
 {
-  IdoBasicMenuItemPrivate * p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   if (g_strcmp0 (p->text, text))
     {
@@ -331,7 +322,7 @@ ido_basic_menu_item_set_text (IdoBasicMenuItem * self, const char * text)
 void
 ido_basic_menu_item_set_secondary_text (IdoBasicMenuItem * self, const char * secondary_text)
 {
-  IdoBasicMenuItemPrivate * p = self->priv;
+  IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   if (g_strcmp0 (p->secondary_text, secondary_text))
     {

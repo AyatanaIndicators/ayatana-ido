@@ -25,15 +25,11 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#define IDO_TIMELINE_GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IDO_TYPE_TIMELINE, IdoTimelinePriv))
 #define MSECS_PER_SEC 1000
 #define FRAME_INTERVAL(nframes) (MSECS_PER_SEC / nframes)
 #define DEFAULT_FPS 30
 
-typedef struct IdoTimelinePriv IdoTimelinePriv;
-
-struct IdoTimelinePriv
-{
+typedef struct {
   guint duration;
   guint fps;
   guint source_id;
@@ -48,7 +44,7 @@ struct IdoTimelinePriv
   guint animations_enabled : 1;
   guint loop               : 1;
   guint direction          : 1;
-};
+} IdoTimelinePrivate;
 
 enum {
   PROP_0,
@@ -81,7 +77,7 @@ static void  ido_timeline_get_property  (GObject         *object,
 static void  ido_timeline_finalize      (GObject *object);
 
 
-G_DEFINE_TYPE (IdoTimeline, ido_timeline, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdoTimeline, ido_timeline, G_TYPE_OBJECT)
 
 
 static void
@@ -193,16 +189,12 @@ ido_timeline_class_init (IdoTimelineClass *klass)
 		  g_cclosure_marshal_VOID__DOUBLE,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_DOUBLE);
-
-  g_type_class_add_private (klass, sizeof (IdoTimelinePriv));
 }
 
 static void
 ido_timeline_init (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
-
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  IdoTimelinePrivate *priv = ido_timeline_get_instance_private (timeline);
 
   priv->fps = DEFAULT_FPS;
   priv->duration = 0.0;
@@ -251,11 +243,8 @@ ido_timeline_get_property (GObject    *object,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-  IdoTimeline *timeline;
-  IdoTimelinePriv *priv;
-
-  timeline = IDO_TIMELINE (object);
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  IdoTimeline *timeline = IDO_TIMELINE (object);
+  IdoTimelinePrivate *priv = ido_timeline_get_instance_private (timeline);
 
   switch (prop_id)
     {
@@ -282,9 +271,8 @@ ido_timeline_get_property (GObject    *object,
 static void
 ido_timeline_finalize (GObject *object)
 {
-  IdoTimelinePriv *priv;
-
-  priv = IDO_TIMELINE_GET_PRIV (object);
+  IdoTimeline *timeline = IDO_TIMELINE (object);
+  IdoTimelinePrivate *priv = ido_timeline_get_instance_private (timeline);
 
   if (priv->source_id)
     {
@@ -301,11 +289,10 @@ ido_timeline_finalize (GObject *object)
 static gboolean
 ido_timeline_run_frame (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
   gdouble delta_progress, progress;
   guint elapsed_time;
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  IdoTimelinePrivate *priv = ido_timeline_get_instance_private (timeline);
 
   elapsed_time = (guint) (g_timer_elapsed (priv->timer, NULL) * 1000);
   g_timer_start (priv->timer);
@@ -395,12 +382,12 @@ ido_timeline_new_for_screen (guint      duration,
 void
 ido_timeline_start (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
   gboolean enable_animations = FALSE;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (!priv->source_id)
     {
@@ -446,11 +433,11 @@ ido_timeline_start (IdoTimeline *timeline)
 void
 ido_timeline_pause (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (priv->source_id)
     {
@@ -470,11 +457,11 @@ ido_timeline_pause (IdoTimeline *timeline)
 void
 ido_timeline_rewind (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (ido_timeline_get_direction(timeline) != IDO_TIMELINE_DIRECTION_FORWARD)
     priv->progress = priv->last_progress = 1.;
@@ -502,11 +489,11 @@ ido_timeline_rewind (IdoTimeline *timeline)
 gboolean
 ido_timeline_is_running (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), FALSE);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   return (priv->source_id != 0);
 }
@@ -522,11 +509,12 @@ ido_timeline_is_running (IdoTimeline *timeline)
 guint
 ido_timeline_get_fps (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), 1);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
+
   return priv->fps;
 }
 
@@ -542,12 +530,12 @@ void
 ido_timeline_set_fps (IdoTimeline *timeline,
                       guint        fps)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
   g_return_if_fail (fps > 0);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   /* Coverity CID: 12650/12651: guard against division by 0. */
   priv->fps = fps > 0 ? fps : priv->fps;
@@ -575,11 +563,12 @@ ido_timeline_set_fps (IdoTimeline *timeline,
 gboolean
 ido_timeline_get_loop (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), FALSE);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
+
   return priv->loop;
 }
 
@@ -595,11 +584,11 @@ void
 ido_timeline_set_loop (IdoTimeline *timeline,
                        gboolean     loop)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (loop != priv->loop)
     {
@@ -619,11 +608,11 @@ void
 ido_timeline_set_duration (IdoTimeline *timeline,
                            guint        duration)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (duration != priv->duration)
     {
@@ -643,11 +632,11 @@ ido_timeline_set_duration (IdoTimeline *timeline,
 guint
 ido_timeline_get_duration (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), 0);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   return priv->duration;
 }
@@ -663,11 +652,11 @@ void
 ido_timeline_set_direction (IdoTimeline          *timeline,
                             IdoTimelineDirection  direction)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (direction != priv->direction)
     {
@@ -687,11 +676,12 @@ ido_timeline_set_direction (IdoTimeline          *timeline,
 IdoTimelineDirection
 ido_timeline_get_direction (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), IDO_TIMELINE_DIRECTION_FORWARD);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
+
   return priv->direction;
 }
 
@@ -706,12 +696,12 @@ void
 ido_timeline_set_screen (IdoTimeline *timeline,
                          GdkScreen   *screen)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
   g_return_if_fail (GDK_IS_SCREEN (screen));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (priv->screen)
     g_object_unref (priv->screen);
@@ -732,11 +722,12 @@ ido_timeline_set_screen (IdoTimeline *timeline,
 GdkScreen *
 ido_timeline_get_screen (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), NULL);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
+
   return priv->screen;
 }
 
@@ -751,11 +742,12 @@ ido_timeline_get_screen (IdoTimeline *timeline)
 gdouble
 ido_timeline_get_progress (IdoTimeline *timeline)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_val_if_fail (IDO_IS_TIMELINE (timeline), 0.);
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
+
   return priv->progress;
 }
 
@@ -769,11 +761,11 @@ ido_timeline_get_progress (IdoTimeline *timeline)
 void
 ido_timeline_set_progress (IdoTimeline *timeline, gdouble progress)
 {
-  IdoTimelinePriv *priv;
+  IdoTimelinePrivate *priv;
 
   g_return_if_fail (IDO_IS_TIMELINE (timeline));
 
-  priv = IDO_TIMELINE_GET_PRIV (timeline);
+  priv = ido_timeline_get_instance_private (timeline);
 
   if (priv->source_id)
     {

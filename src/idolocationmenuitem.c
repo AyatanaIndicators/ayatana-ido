@@ -37,16 +37,13 @@ enum
 
 static GParamSpec *properties[PROP_LAST];
 
-struct _IdoLocationMenuItemPrivate
-{
+typedef struct {
   char * timezone;
 
   guint timestamp_timer;
-};
+} IdoLocationMenuItemPrivate;
 
-typedef IdoLocationMenuItemPrivate priv_t;
-
-G_DEFINE_TYPE (IdoLocationMenuItem, ido_location_menu_item, IDO_TYPE_TIME_STAMP_MENU_ITEM);
+G_DEFINE_TYPE_WITH_PRIVATE (IdoLocationMenuItem, ido_location_menu_item, IDO_TYPE_TIME_STAMP_MENU_ITEM);
 
 /***
 ****  Timestamp Label
@@ -58,7 +55,9 @@ update_timestamp (IdoLocationMenuItem * self)
   GTimeZone * tz;
   GDateTime * date_time;
 
-  tz = g_time_zone_new (self->priv->timezone);
+  IdoLocationMenuItemPrivate * priv = ido_location_menu_item_get_instance_private(self);
+
+  tz = g_time_zone_new (priv->timezone);
   if (tz == NULL)
     tz = g_time_zone_new_local ();
   date_time = g_date_time_new_now (tz);
@@ -73,7 +72,7 @@ update_timestamp (IdoLocationMenuItem * self)
 static void
 stop_timestamp_timer (IdoLocationMenuItem * self)
 {
-  priv_t * p = self->priv;
+  IdoLocationMenuItemPrivate * p = ido_location_menu_item_get_instance_private(self);
 
   if (p->timestamp_timer != 0)
     {
@@ -130,6 +129,7 @@ restart_timestamp_timer (IdoLocationMenuItem * self)
   const char * fmt = ido_time_stamp_menu_item_get_format (IDO_TIME_STAMP_MENU_ITEM (self));
   gboolean timestamp_shows_seconds;
   int interval_sec;
+  IdoLocationMenuItemPrivate * priv = ido_location_menu_item_get_instance_private(self);
 
   stop_timestamp_timer (self);
 
@@ -142,7 +142,7 @@ restart_timestamp_timer (IdoLocationMenuItem * self)
   else
     interval_sec = calculate_seconds_until_next_minute();
 
-  self->priv->timestamp_timer = g_timeout_add_seconds (interval_sec,
+  priv->timestamp_timer = g_timeout_add_seconds (interval_sec,
                                                        on_timestamp_timer,
                                                        self);
 }
@@ -158,7 +158,7 @@ my_get_property (GObject     * o,
                  GParamSpec  * pspec)
 {
   IdoLocationMenuItem * self = IDO_LOCATION_MENU_ITEM (o);
-  priv_t * p = self->priv;
+  IdoLocationMenuItemPrivate * p = ido_location_menu_item_get_instance_private(self);
 
   switch (property_id)
     {
@@ -204,8 +204,9 @@ static void
 my_finalize (GObject * object)
 {
   IdoLocationMenuItem * self = IDO_LOCATION_MENU_ITEM (object);
+  IdoLocationMenuItemPrivate * priv = ido_location_menu_item_get_instance_private(self);
 
-  g_free (self->priv->timezone);
+  g_free (priv->timezone);
 
   G_OBJECT_CLASS (ido_location_menu_item_parent_class)->finalize (object);
 }
@@ -218,8 +219,6 @@ static void
 ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
 {
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (IdoLocationMenuItemPrivate));
 
   gobject_class->get_property = my_get_property;
   gobject_class->set_property = my_set_property;
@@ -239,10 +238,6 @@ ido_location_menu_item_class_init (IdoLocationMenuItemClass *klass)
 static void
 ido_location_menu_item_init (IdoLocationMenuItem *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            IDO_LOCATION_MENU_ITEM_TYPE,
-                                            IdoLocationMenuItemPrivate);
-
   /* Update the timer whenever the format string changes
      because it determines whether we update once per second or per minute */
   g_signal_connect (self, "notify::format",
@@ -271,10 +266,11 @@ void
 ido_location_menu_item_set_timezone (IdoLocationMenuItem   * self,
                                      const char            * timezone)
 {
-  priv_t * p;
+  IdoLocationMenuItemPrivate * p;
 
   g_return_if_fail (IDO_IS_LOCATION_MENU_ITEM (self));
-  p = self->priv;
+
+  p = ido_location_menu_item_get_instance_private(self);
 
   g_free (p->timezone);
   p->timezone = g_strdup (timezone);

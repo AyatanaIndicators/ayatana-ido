@@ -23,24 +23,25 @@
 #include "idoswitchmenuitem.h"
 #include "idoactionhelper.h"
 
+static void     ido_switch_menu_finalize             (GObject * item);
 static gboolean ido_switch_menu_button_release_event (GtkWidget      * widget,
                                                       GdkEventButton * event);
 
 
-struct _IdoSwitchMenuItemPrivate
+typedef struct 
 {
   GtkWidget * box;
   GtkWidget * content_area;
   GtkWidget * label;
   GtkWidget * image;
   GtkWidget * switch_w;
-};
+} IdoSwitchMenuItemPrivate;
 
 /***
 ****  Life Cycle
 ***/
 
-G_DEFINE_TYPE (IdoSwitchMenuItem, ido_switch_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
+G_DEFINE_TYPE_WITH_PRIVATE (IdoSwitchMenuItem, ido_switch_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
 static void
 ido_switch_menu_item_class_init (IdoSwitchMenuItemClass *klass)
@@ -50,7 +51,8 @@ ido_switch_menu_item_class_init (IdoSwitchMenuItemClass *klass)
   GtkCheckMenuItemClass * check_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  g_type_class_add_private (gobject_class, sizeof (IdoSwitchMenuItemPrivate));
+
+  gobject_class->finalize = ido_switch_menu_finalize;
 
   widget_class = GTK_WIDGET_CLASS (klass);
   widget_class->button_release_event = ido_switch_menu_button_release_event;
@@ -62,9 +64,8 @@ ido_switch_menu_item_class_init (IdoSwitchMenuItemClass *klass)
 static void
 ido_switch_menu_item_init (IdoSwitchMenuItem *item)
 {
-  IdoSwitchMenuItemPrivate *priv;
+  IdoSwitchMenuItemPrivate *priv = ido_switch_menu_item_get_instance_private(item);
 
-  priv = item->priv = G_TYPE_INSTANCE_GET_PRIVATE (item, IDO_TYPE_SWITCH_MENU_ITEM, IdoSwitchMenuItemPrivate);
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   priv->content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   priv->switch_w = gtk_switch_new ();
@@ -134,6 +135,8 @@ ido_switch_menu_item_get_content_area (IdoSwitchMenuItem * item)
 
   g_return_val_if_fail (IDO_IS_SWITCH_MENU_ITEM(item), NULL);
 
+  IdoSwitchMenuItemPrivate *priv = ido_switch_menu_item_get_instance_private(item);
+
   if (!warned)
     {
       g_warning ("%s is deprecated. Please don't use it, especially if you're using"
@@ -141,7 +144,7 @@ ido_switch_menu_item_get_content_area (IdoSwitchMenuItem * item)
       warned = TRUE;
     }
 
-  return GTK_CONTAINER (item->priv->content_area);
+  return GTK_CONTAINER (priv->content_area);
 }
 
 /**
@@ -160,7 +163,7 @@ ido_switch_menu_item_set_label (IdoSwitchMenuItem *item,
   g_return_if_fail (IDO_IS_SWITCH_MENU_ITEM (item));
   g_return_if_fail (label != NULL);
 
-  priv = item->priv;
+  priv = ido_switch_menu_item_get_instance_private(item);
 
   if (priv->label == NULL)
     {
@@ -189,7 +192,7 @@ ido_switch_menu_item_set_icon (IdoSwitchMenuItem *item,
   g_return_if_fail (IDO_IS_SWITCH_MENU_ITEM (item));
   g_return_if_fail (icon == NULL || G_IS_ICON (icon));
 
-  priv = item->priv;
+  priv = ido_switch_menu_item_get_instance_private(item);
 
   if (icon)
     {
@@ -213,10 +216,11 @@ ido_source_menu_item_state_changed (IdoActionHelper *helper,
                                     GVariant        *state,
                                     gpointer         user_data)
 {
-  IdoSwitchMenuItem *item = user_data;
+  IdoSwitchMenuItem *item = IDO_SWITCH_MENU_ITEM (user_data);
+  IdoSwitchMenuItemPrivate *priv = ido_switch_menu_item_get_instance_private(item);
 
   if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-    gtk_switch_set_active (GTK_SWITCH (item->priv->switch_w),
+    gtk_switch_set_active (GTK_SWITCH (priv->switch_w),
                            g_variant_get_boolean (state));
 }
 
@@ -269,3 +273,10 @@ ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
 
   return item;
 }
+
+static void
+ido_switch_menu_finalize (GObject * item)
+{
+  /* no-op */
+}
+

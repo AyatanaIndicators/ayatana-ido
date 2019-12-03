@@ -42,8 +42,7 @@ enum
 
 static GParamSpec *properties[PROP_LAST];
 
-struct _IdoUserMenuItemPrivate
-{
+typedef struct {
   GtkWidget* user_image;
   GtkWidget* user_name;
   GtkWidget* container;
@@ -52,9 +51,9 @@ struct _IdoUserMenuItemPrivate
   gboolean is_current_user;
   gchar * label;
   GIcon * icon;
-};
+} IdoUserMenuItemPrivate;
 
-G_DEFINE_TYPE (IdoUserMenuItem, ido_user_menu_item, GTK_TYPE_MENU_ITEM);
+G_DEFINE_TYPE_WITH_PRIVATE (IdoUserMenuItem, ido_user_menu_item, GTK_TYPE_MENU_ITEM);
 
 /* Prototypes */
 static gboolean ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * image,
@@ -72,23 +71,24 @@ my_get_property (GObject     * o,
                  GParamSpec  * pspec)
 {
   IdoUserMenuItem * self = IDO_USER_MENU_ITEM (o);
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
 
   switch (property_id)
     {
       case PROP_LABEL:
-        g_value_set_string (value, self->priv->label);
+        g_value_set_string (value, priv->label);
         break;
 
       case PROP_ICON:
-        g_value_set_object (value, self->priv->icon);
+        g_value_set_object (value, priv->icon);
         break;
 
       case PROP_IS_LOGGED_IN:
-        g_value_set_boolean (value, self->priv->is_logged_in);
+        g_value_set_boolean (value, priv->is_logged_in);
         break;
 
       case PROP_IS_CURRENT_USER:
-        g_value_set_boolean (value, self->priv->is_current_user);
+        g_value_set_boolean (value, priv->is_current_user);
         break;
 
       default:
@@ -104,6 +104,7 @@ my_set_property (GObject       * o,
                  GParamSpec    * pspec)
 {
   IdoUserMenuItem * self = IDO_USER_MENU_ITEM (o);
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
 
   switch (property_id)
     {
@@ -120,7 +121,7 @@ my_set_property (GObject       * o,
         break;
 
       case PROP_IS_CURRENT_USER:
-        self->priv->is_current_user = g_value_get_boolean (value);
+        priv->is_current_user = g_value_get_boolean (value);
         gtk_widget_queue_draw (GTK_WIDGET(self));
         break;
 
@@ -134,8 +135,9 @@ static void
 my_dispose (GObject *object)
 {
   IdoUserMenuItem * self = IDO_USER_MENU_ITEM (object);
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
 
-  g_clear_object (&self->priv->icon);
+  g_clear_object (&priv->icon);
 
   G_OBJECT_CLASS (ido_user_menu_item_parent_class)->dispose (object);
 }
@@ -144,8 +146,9 @@ static void
 my_finalize (GObject *object)
 {
   IdoUserMenuItem * self = IDO_USER_MENU_ITEM (object);
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
 
-  g_free (self->priv->label);
+  g_free (priv->label);
 
   G_OBJECT_CLASS (ido_user_menu_item_parent_class)->finalize (object);
 }
@@ -155,8 +158,6 @@ ido_user_menu_item_class_init (IdoUserMenuItemClass *klass)
 {
   GParamFlags prop_flags;
   GObjectClass * gobject_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (IdoUserMenuItemPrivate));
 
   gobject_class->get_property = my_get_property;
   gobject_class->set_property = my_set_property;
@@ -197,13 +198,7 @@ ido_user_menu_item_class_init (IdoUserMenuItemClass *klass)
 static void
 ido_user_menu_item_init (IdoUserMenuItem *self)
 {
-  IdoUserMenuItemPrivate * priv;
-
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            IDO_USER_MENU_ITEM_TYPE,
-                                            IdoUserMenuItemPrivate);
-
-  priv = self->priv;
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
 
   // Create the UI elements.
   priv->user_image = gtk_image_new ();
@@ -260,7 +255,7 @@ ido_user_menu_item_primitive_draw_cb_gtk_3 (GtkWidget * widget,
 
   g_return_val_if_fail(IS_IDO_USER_MENU_ITEM(user_data), FALSE);
 
-  priv = IDO_USER_MENU_ITEM(user_data)->priv;
+  priv = ido_user_menu_item_get_instance_private(IDO_USER_MENU_ITEM(user_data));
 
   /* Draw dot only when user is the current user. */
   if (priv->is_current_user)
@@ -303,6 +298,8 @@ ido_user_menu_item_set_icon_from_file_icon (IdoUserMenuItem *self,
   gint height;
   GdkPixbuf *pixbuf;
 
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
+
   file = g_file_icon_get_file (G_FILE_ICON (icon));
   path = g_file_get_path (file);
 
@@ -316,7 +313,7 @@ ido_user_menu_item_set_icon_from_file_icon (IdoUserMenuItem *self,
 
   if (pixbuf)
     {
-      gtk_image_set_from_pixbuf (GTK_IMAGE (self->priv->user_image), pixbuf);
+      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->user_image), pixbuf);
       g_object_unref (pixbuf);
       return TRUE;
     }
@@ -331,15 +328,15 @@ ido_user_menu_item_set_icon_from_file_icon (IdoUserMenuItem *self,
 void
 ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
 {
-  IdoUserMenuItemPrivate * p = self->priv;
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
 
-  if (p->icon == icon)
+  if (priv->icon == icon)
     return;
 
-  g_clear_object (&p->icon);
+  g_clear_object (&priv->icon);
 
   if (icon)
-    p->icon = g_object_ref (icon);
+    priv->icon = g_object_ref (icon);
 
   /* Avatars are always loaded from disk. Show the fallback when no icon
    * is set, the icon is not a file icon, or the file could not be
@@ -349,7 +346,7 @@ ido_user_menu_item_set_icon (IdoUserMenuItem * self, GIcon * icon)
       !G_IS_FILE_ICON (icon) ||
       !ido_user_menu_item_set_icon_from_file_icon (self, G_FILE_ICON (icon)))
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (p->user_image),
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->user_image),
                                     FALLBACK_ICON_NAME,
                                     GTK_ICON_SIZE_MENU);
     }
@@ -370,20 +367,26 @@ ido_user_menu_item_set_icon_from_file (IdoUserMenuItem * self, const char * file
 void
 ido_user_menu_item_set_logged_in (IdoUserMenuItem * self, gboolean is_logged_in)
 {
-  gtk_widget_set_visible (self->priv->tick_icon, is_logged_in);
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
+
+  gtk_widget_set_visible (priv->tick_icon, is_logged_in);
 }
 
 void
 ido_user_menu_item_set_current_user (IdoUserMenuItem * self, gboolean is_current_user)
 {
-  self->priv->is_current_user = is_current_user;
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
+
+  priv->is_current_user = is_current_user;
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 void
 ido_user_menu_item_set_label (IdoUserMenuItem * self, const char * label)
 {
-  gtk_label_set_label (GTK_LABEL(self->priv->user_name), label);
+  IdoUserMenuItemPrivate * priv = ido_user_menu_item_get_instance_private(self);
+
+  gtk_label_set_label (GTK_LABEL(priv->user_name), label);
 }
 
 GtkWidget*

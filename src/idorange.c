@@ -27,10 +27,9 @@
 #include "idotypebuiltins.h"
 #include "config.h"
 
-struct _IdoRangePrivate
-{
+typedef struct {
   IdoRangeStyle style;
-};
+} IdoRangePrivate;
 
 static void ido_range_constructed    (GObject          *object);
 static void ido_range_set_property   (GObject          *object,
@@ -42,9 +41,7 @@ static void ido_range_get_property   (GObject          *object,
                                       GValue           *value,
                                       GParamSpec       *pspec);
 
-#define IDO_RANGE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IDO_TYPE_RANGE, IdoRangePrivate))
-
-G_DEFINE_TYPE (IdoRange, ido_range, GTK_TYPE_SCALE)
+G_DEFINE_TYPE_WITH_PRIVATE (IdoRange, ido_range, GTK_TYPE_SCALE)
 
 enum {
   PROP_0,
@@ -87,8 +84,6 @@ ido_range_class_init (IdoRangeClass *class)
                                                              G_MAXINT,
                                                              8,
                                                              G_PARAM_READABLE));
-
-  g_type_class_add_private (class, sizeof (IdoRangePrivate));
 }
 
 static void
@@ -97,7 +92,8 @@ ido_range_get_property (GObject      *object,
                         GValue       *value,
                         GParamSpec   *pspec)
 {
-  IdoRangePrivate *priv = IDO_RANGE (object)->priv;
+  IdoRange *range = IDO_RANGE (object);
+  IdoRangePrivate *priv = ido_range_get_instance_private (range);
 
   switch (prop_id)
     {
@@ -117,7 +113,8 @@ ido_range_set_property (GObject      *object,
                         const GValue *value,
                         GParamSpec   *pspec)
 {
-  IdoRangePrivate *priv = IDO_RANGE (object)->priv;
+  IdoRange *range = IDO_RANGE (object);
+  IdoRangePrivate *priv = ido_range_get_instance_private (range);
 
   switch (prop_id)
     {
@@ -135,6 +132,7 @@ static void
 ido_range_constructed (GObject *object)
 {
   IdoRange *range = IDO_RANGE (object);
+
   IdoRangeStyle style;
   char buf[1024];
 
@@ -163,7 +161,7 @@ ido_range_constructed (GObject *object)
 static void
 ido_range_init (IdoRange *range)
 {
-  range->priv = IDO_RANGE_GET_PRIVATE (range);
+  /* no-op */
 }
 
 /**
