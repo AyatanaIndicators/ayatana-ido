@@ -296,41 +296,45 @@ ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
   guint n;
   gchar * str;
   IdoLocationMenuItem * ido_location;
-  GParameter parameters[4];
+  const gchar * names[3];
+  GValue * values;
+  const guint n_max = 3;
 
   /* create the ido_location */
 
   n = 0;
+  values = g_new0(GValue, n_max);
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      GParameter p = { "text", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "text";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-timezone", "s", &str))
     {
-      GParameter p = { "timezone", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "timezone";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
     {
-      GParameter p = { "format", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "format";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
-  g_assert (n <= G_N_ELEMENTS (parameters));
-  ido_location = g_object_newv (IDO_LOCATION_MENU_ITEM_TYPE, n, parameters);
+  g_assert (n <= G_N_ELEMENTS (names));
+  g_assert (n <= n_max);
+  ido_location = IDO_LOCATION_MENU_ITEM(g_object_new_with_properties (IDO_LOCATION_MENU_ITEM_TYPE, n, names, values));
 
   for (i=0; i<n; i++)
-    g_value_unset (&parameters[i].value);
+    g_value_unset (&values[i]);
 
 
   /* give it an ActionHelper */

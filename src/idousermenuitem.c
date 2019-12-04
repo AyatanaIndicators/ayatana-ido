@@ -415,35 +415,39 @@ user_menu_item_new_from_model (GMenuItem    * menuitem,
   gchar * str;
   gchar * action;
   GVariant * v;
-  GParameter parameters[4];
+  const gchar * names [2];
+  GValue * values;
+  const guint n_max = 2;
 
   /* create the ido_user */
 
   n = 0;
+  values = g_new0(GValue, n_max);
 
   if (g_menu_item_get_attribute (menuitem, G_MENU_ATTRIBUTE_LABEL, "s", &str))
     {
-      GParameter p = { "label", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "label";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
   if ((v = g_menu_item_get_attribute_value (menuitem, G_MENU_ATTRIBUTE_ICON, NULL)))
     {
-      GParameter p = { "icon", G_VALUE_INIT };
+      names[n] = "icon";
       GIcon * icon = g_icon_deserialize (v);
-      g_value_init (&p.value, G_TYPE_OBJECT);
-      g_value_take_object (&p.value, icon);
+      g_value_init (&values[n], G_TYPE_OBJECT);
+      g_value_take_object (&values[n], icon);
       g_variant_unref (v);
-      parameters[n++] = p;
+      n++;
     }
 
-  g_assert (n <= G_N_ELEMENTS (parameters));
-  ido_user = g_object_newv (IDO_USER_MENU_ITEM_TYPE, n, parameters);
+  g_assert (n <= G_N_ELEMENTS (names));
+  g_assert (n <= n_max);
+  ido_user = IDO_USER_MENU_ITEM(g_object_new_with_properties (IDO_USER_MENU_ITEM_TYPE, n, names, values));
 
   for (i=0; i<n; i++)
-    g_value_unset (&parameters[i].value);
+    g_value_unset (&values[i]);
 
   /* gie it an ActionHelper */
 

@@ -58,25 +58,29 @@ ido_progress_menu_item_new_from_model (GMenuItem    * menu_item,
   guint n;
   gchar * str;
   IdoBasicMenuItem * ido_menu_item;
-  GParameter parameters[4];
+  const gchar * names[1] = {0};
+  GValue * values;
+  const guint n_max = 1;
 
   /* create the ido menuitem */;
 
   n = 0;
+  values = g_new0(GValue, n_max);
 
   if (g_menu_item_get_attribute (menu_item, "label", "s", &str))
     {
-      GParameter p = { "text", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "text";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
-  g_assert (n <= G_N_ELEMENTS (parameters));
-  ido_menu_item = g_object_newv (IDO_TYPE_BASIC_MENU_ITEM, n, parameters);
+  g_assert (n <= G_N_ELEMENTS (names));
+  g_assert (n <= n_max);
+  ido_menu_item = IDO_BASIC_MENU_ITEM(g_object_new_with_properties (IDO_TYPE_BASIC_MENU_ITEM, n, names, values));
 
   for (i=0; i<n; i++)
-    g_value_unset (&parameters[i].value);
+    g_value_unset (&values[i]);
 
   /* give it an ActionHelper */
 

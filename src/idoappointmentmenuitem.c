@@ -89,50 +89,54 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
   gint64 i64;
   gchar * str;
   IdoBasicMenuItem * ido_menu_item;
-  GParameter parameters[8];
+  const gchar * names[4] = {0};
+  GValue * values;
+  const guint n_max = 4;
 
   /* create the ido_menu_item */
 
   n = 0;
+  values = g_new0(GValue, n_max);
 
   if (g_menu_item_get_attribute (menu_item, G_MENU_ATTRIBUTE_LABEL, "s", &str))
     {
-      GParameter p = { "text", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "text";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-color", "s", &str))
     {
-      GParameter p = { "icon", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_OBJECT);
-      g_value_take_object (&p.value, create_color_icon_pixbuf (str));
-      parameters[n++] = p;
-      g_free (str);
+      names[n] = "icon";
+      g_value_init (&values[n], G_TYPE_OBJECT);
+      g_value_take_object (&values[n], create_color_icon_pixbuf (str));
+      g_free(str);
+      n++;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
     {
-      GParameter p = { "format", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_STRING);
-      g_value_take_string (&p.value, str);
-      parameters[n++] = p;
+      names[n] = "format";
+      g_value_init (&values[n], G_TYPE_STRING);
+      g_value_take_string (&values[n], str);
+      n++;
     }
 
   if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
     {
-      GParameter p = { "date-time", G_VALUE_INIT };
-      g_value_init (&p.value, G_TYPE_DATE_TIME);
-      g_value_take_boxed (&p.value, g_date_time_new_from_unix_local (i64));
-      parameters[n++] = p;
+      names[n] = "date-time";
+      g_value_init (&values[n], G_TYPE_DATE_TIME);
+      g_value_take_boxed (&values[n], g_date_time_new_from_unix_local (i64));
+      n++;
     }
 
-  g_assert (n <= G_N_ELEMENTS (parameters));
-  ido_menu_item = g_object_newv (IDO_TYPE_TIME_STAMP_MENU_ITEM, n, parameters);
+  g_assert (n <= G_N_ELEMENTS (names));
+  g_assert (n <= n_max);
+  ido_menu_item = IDO_BASIC_MENU_ITEM(g_object_new_with_properties (IDO_TYPE_TIME_STAMP_MENU_ITEM, n, names, values));
 
   for (i=0; i<n; i++)
-    g_value_unset (&parameters[i].value);
+    g_value_unset (&values[i]);
 
 
   /* add an ActionHelper */
