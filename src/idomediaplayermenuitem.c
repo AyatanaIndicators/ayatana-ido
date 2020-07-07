@@ -81,7 +81,7 @@ ido_media_player_menu_item_draw (GtkWidget *widget,
       int y;
 
       gtk_style_context_get_color (gtk_widget_get_style_context (widget),
-                                   gtk_widget_get_state (widget),
+                                   gtk_widget_get_state_flags (widget),
                                    &color);
 
       gtk_widget_get_allocation (widget, &allocation);
