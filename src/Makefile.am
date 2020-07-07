@@ -67,7 +67,7 @@ AM_CPPFLAGS =				\
 	$(GCC_FLAGS)			\
 	$(GTK_CFLAGS)			\
 	$(MAINTAINER_CFLAGS)    \
-	-Wall -Werror -Wextra -Wno-unused-parameter -Wno-error=deprecated-declarations
+	-Wall -Wextra -Wno-unused-parameter -Wno-error=deprecated-declarations
 
 AM_CFLAGS =                             \
 	$(COVERAGE_CFLAGS)
