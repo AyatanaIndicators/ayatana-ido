@@ -11,7 +11,6 @@ stamp_files =				\
 
 sources_h =				\
 	ayatanamenuitemfactory.h	\
-	ayatana-private.h		\
 	idoalarmmenuitem.h		\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\

@@ -18,8 +18,7 @@
  */
 
 #include <gtk/gtk.h>
-#include "ayatana-private.h"
-
+#include "ayatanamenuitemfactory.h"
 #include "idoalarmmenuitem.h"
 #include "idoappointmentmenuitem.h"
 #include "idobasicmenuitem.h"

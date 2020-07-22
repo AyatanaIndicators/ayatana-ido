@@ -5,7 +5,6 @@ Source: https://github.com/AyatanaIndicators/ayatana-ido
 
 Files: src/ayatanamenuitemfactory.c
  src/ayatanamenuitemfactory.h
- src/ayatana-private.h
  src/idoactionhelper.c
  src/idoactionhelper.h
  src/idoalarmmenuitem.c
