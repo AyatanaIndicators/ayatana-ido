@@ -212,7 +212,9 @@ ido_user_menu_item_init (IdoUserMenuItem *self)
 
   priv->tick_icon = gtk_image_new_from_icon_name ("account-logged-in",
                                                    GTK_ICON_SIZE_MENU);
-  gtk_misc_set_alignment(GTK_MISC(priv->tick_icon), 1.0, 0.5);
+
+    gtk_widget_set_halign(priv->tick_icon, GTK_ALIGN_END);
+    gtk_widget_set_valign(priv->tick_icon, GTK_ALIGN_CENTER);
 
   // Pack it together
   gtk_box_pack_start (GTK_BOX (priv->container),
@@ -303,10 +305,8 @@ ido_user_menu_item_set_icon_from_file_icon (IdoUserMenuItem *self,
   file = g_file_icon_get_file (G_FILE_ICON (icon));
   path = g_file_get_path (file);
 
-  /* width and height will always be set by this function */
-  gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (GTK_WIDGET (self)),
-                                     GTK_ICON_SIZE_MENU,
-                                     &width, &height);
+    /* width and height will always be set by this function */
+    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
 
   pixbuf = gdk_pixbuf_new_from_file_at_scale (path, width, height, TRUE, NULL);
   g_free (path);

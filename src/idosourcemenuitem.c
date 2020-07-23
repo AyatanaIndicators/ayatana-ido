@@ -49,13 +49,14 @@ ido_source_menu_item_constructed (GObject *object)
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &icon_width, NULL);
 
   item->icon = g_object_ref (gtk_image_new ());
-  gtk_widget_set_margin_left (item->icon, icon_width);
-  gtk_widget_set_margin_right (item->icon, 6);
+    gtk_widget_set_margin_start(item->icon, icon_width);
+    gtk_widget_set_margin_end(item->icon, 6);
 
   item->label = g_object_ref (gtk_label_new (""));
   gtk_label_set_max_width_chars (GTK_LABEL (item->label), 40);
   gtk_label_set_ellipsize (GTK_LABEL (item->label), PANGO_ELLIPSIZE_END);
-  gtk_misc_set_alignment (GTK_MISC (item->label), 0.0, 0.5);
+    gtk_widget_set_halign(item->label, GTK_ALIGN_START);
+    gtk_widget_set_valign(item->label, GTK_ALIGN_CENTER);
 
   item->detail = g_object_ref (ido_detail_label_new (""));
   gtk_widget_set_halign (item->detail, GTK_ALIGN_END);

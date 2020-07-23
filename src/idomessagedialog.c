@@ -209,7 +209,11 @@ ido_message_dialog_constructed (GObject *object)
   gtk_widget_show (event_box);
 
   vbox = gtk_dialog_get_content_area (GTK_DIALOG (object));
+
+  //I dare you to find a better way!
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   priv->action_area = gtk_dialog_get_action_area (GTK_DIALOG (object));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_object_ref (G_OBJECT (vbox));
   gtk_container_remove (GTK_CONTAINER (object), vbox);
@@ -380,11 +384,11 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
     {
       if (G_TYPE_FROM_INSTANCE (list->data) == GTK_TYPE_BOX && gtk_orientable_get_orientation (list->data) == GTK_ORIENTATION_HORIZONTAL)
         {
-	  GList *hchildren;
+      GList *hchildren;
           GList *hlist;
           GtkWidget *hbox = GTK_WIDGET (list->data);
 
-	  hchildren = gtk_container_get_children (GTK_CONTAINER (hbox));
+      hchildren = gtk_container_get_children (GTK_CONTAINER (hbox));
 
           for (hlist = hchildren; hlist != NULL; hlist = hlist->next)
             {
@@ -392,9 +396,9 @@ ido_message_dialog_get_label (IdoMessageDialog *dialog, gboolean primary)
                 {
                   GList *vlist;
                   GtkWidget *vbox = GTK_WIDGET (hlist->data);
-		  GList *vchildren;
+          GList *vchildren;
 
-		  vchildren = gtk_container_get_children (GTK_CONTAINER (vbox));
+          vchildren = gtk_container_get_children (GTK_CONTAINER (vbox));
 
                   for (vlist = vchildren; vlist != NULL; vlist = vlist->next)
                     {

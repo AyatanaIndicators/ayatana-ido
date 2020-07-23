@@ -45,7 +45,7 @@ ido_application_menu_item_constructed (GObject *object)
 
   item->icon = g_object_ref (gtk_image_new ());
   gtk_image_set_pixel_size (GTK_IMAGE (item->icon), icon_height);
-  gtk_widget_set_margin_right (item->icon, 6);
+    gtk_widget_set_margin_end(item->icon, 6);
 
   item->label = g_object_ref (gtk_label_new (""));
 

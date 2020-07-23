@@ -120,8 +120,8 @@ track_info_label_new ()
   label = gtk_label_new (NULL);
   gtk_label_set_width_chars (GTK_LABEL (label), 25);
   gtk_label_set_max_width_chars (GTK_LABEL (label), 25);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_halign(label, GTK_ALIGN_START);
+    gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
 
   return label;
@@ -135,7 +135,7 @@ ido_media_player_menu_item_init (IdoMediaPlayerMenuItem *self)
   self->cancellable = g_cancellable_new ();
 
   self->player_icon = gtk_image_new();
-  gtk_widget_set_margin_right (self->player_icon, 6);
+    gtk_widget_set_margin_end(self->player_icon, 6);
   gtk_widget_set_halign (self->player_icon, GTK_ALIGN_START);
 
   self->player_label = gtk_label_new (NULL);
@@ -144,7 +144,7 @@ ido_media_player_menu_item_init (IdoMediaPlayerMenuItem *self)
 
   self->album_art = gtk_image_new();
   gtk_widget_set_size_request (self->album_art, ALBUM_ART_SIZE, ALBUM_ART_SIZE);
-  gtk_widget_set_margin_right (self->album_art, 8);
+    gtk_widget_set_margin_end(self->album_art, 8);
 
   self->artist_label = track_info_label_new ();
   self->piece_label = track_info_label_new ();
