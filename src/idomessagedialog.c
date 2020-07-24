@@ -210,7 +210,7 @@ ido_message_dialog_constructed (GObject *object)
 
   vbox = gtk_dialog_get_content_area (GTK_DIALOG (object));
 
-  //I dare you to find a better way!
+  // FIXME: I dare you to find a better way!
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   priv->action_area = gtk_dialog_get_action_area (GTK_DIALOG (object));
   G_GNUC_END_IGNORE_DEPRECATIONS;
