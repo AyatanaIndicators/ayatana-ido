@@ -4,16 +4,16 @@
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
  *
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License version 3, as published 
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 3, as published
  * by the Free Software Foundation.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranties of 
- * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranties of
+ * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
  * PURPOSE.  See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along 
+ * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -230,11 +230,14 @@ ido_basic_menu_item_init (IdoBasicMenuItem *self)
   IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   p->image = gtk_image_new ();
-  gtk_misc_set_alignment(GTK_MISC(p->image), 0.0, 0.0);
+    gtk_widget_set_halign(p->image, GTK_ALIGN_START);
+    gtk_widget_set_valign(p->image, GTK_ALIGN_START);
   p->label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC(p->label), 0.0, 0.5);
+    gtk_widget_set_halign(p->label, GTK_ALIGN_START);
+    gtk_widget_set_valign(p->label, GTK_ALIGN_CENTER);
   p->secondary_label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC(p->secondary_label), 1.0, 0.5);
+    gtk_widget_set_halign(p->secondary_label, GTK_ALIGN_END);
+    gtk_widget_set_valign(p->secondary_label, GTK_ALIGN_CENTER);
 
   w = gtk_grid_new ();
   grid = GTK_GRID (w);

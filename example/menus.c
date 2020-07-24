@@ -88,9 +88,9 @@ main (int argc, char *argv[])
                                                  65, 0, 100, 1);
   ido_scale_menu_item_set_style (IDO_SCALE_MENU_ITEM (menuitem), IDO_SCALE_MENU_ITEM_STYLE_IMAGE);
   image = ido_scale_menu_item_get_primary_image (IDO_SCALE_MENU_ITEM (menuitem));
-  gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_NEW, GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), "document-new", GTK_ICON_SIZE_MENU);
   image = ido_scale_menu_item_get_secondary_image (IDO_SCALE_MENU_ITEM (menuitem));
-  gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), "document-open", GTK_ICON_SIZE_MENU);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   g_signal_connect (menuitem, "slider-grabbed", G_CALLBACK (slider_grabbed), NULL);
@@ -141,7 +141,7 @@ main (int argc, char *argv[])
                                     NULL);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
     }
-      
+
 
 
   /* Add the menubar */

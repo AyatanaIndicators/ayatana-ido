@@ -473,13 +473,6 @@ ido_playback_menu_item_new_from_model (GMenuItem    *item,
  * Drawing
  */
 
-typedef struct
-{
-  double r;
-  double g;
-  double b;
-} CairoColorRGB;
-
 static void
 draw_gradient (cairo_t* cr,
                double   x,
@@ -898,22 +891,21 @@ _color_hls_to_rgb (gdouble *h,
   }
 }
 
-static void
-_color_shade (const CairoColorRGB *a, float k, CairoColorRGB *b)
+static void _color_shade(const GdkRGBA *a, float k, GdkRGBA *b)
 {
   double red;
   double green;
   double blue;
 
-  red   = a->r;
-  green = a->g;
-  blue  = a->b;
+  red = a->red;
+  green = a->green;
+  blue = a->blue;
 
   if (k == 1.0)
   {
-    b->r = red;
-    b->g = green;
-    b->b = blue;
+    b->red = red;
+    b->green = green;
+    b->blue = blue;
     return;
   }
 
@@ -933,9 +925,9 @@ _color_shade (const CairoColorRGB *a, float k, CairoColorRGB *b)
 
   _color_hls_to_rgb (&red, &green, &blue);
 
-  b->r = red;
-  b->g = green;
-  b->b = blue;
+  b->red = red;
+  b->green = green;
+  b->blue = blue;
 }
 
 static inline void
@@ -1145,6 +1137,14 @@ _surface_blur (cairo_surface_t* surface,
   cairo_surface_mark_dirty (surface);
 }
 
+static void get_colour(GtkStyleContext *pStyleContext, GtkStateFlags nState, const gchar *sColour, GdkRGBA *pRGBA)
+{
+    GdkRGBA *pRGBATmp;
+    gtk_style_context_get(pStyleContext, nState, sColour, &pRGBATmp, NULL);
+    *pRGBA = *pRGBATmp;
+    gdk_rgba_free(pRGBATmp);
+}
+
 static gboolean
 ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
 {
@@ -1161,39 +1161,20 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   cairo_surface_t*  surf = NULL;
   cairo_t*       cr_surf = NULL;
 
-  GtkStyle *style;
+    GtkStyleContext *pStyleContext;
 
-  CairoColorRGB bg_color, fg_color, bg_selected, bg_prelight;
-  CairoColorRGB color_middle[2], color_middle_prelight[2], color_outer[2], color_outer_prelight[2],
+    GdkRGBA bg_color, fg_color, bg_selected, bg_prelight;
+    GdkRGBA color_middle[2], color_middle_prelight[2], color_outer[2], color_outer_prelight[2],
                 color_play_outer[2], color_play_outer_prelight[2],
                 color_button[4], color_button_shadow, color_inner[2], color_inner_compressed[2];
 
-  /* Use the menu's style instead of that of the menuitem ('button' is a
-   * menuitem that is packed in a menu directly).  The menuitem's style
-   * can't be used due to a change in light-themes (lp #1130183).
-   * Menuitems now have a transparent background, which confuses
-   * GtkStyle.
-   *
-   * This is a workaround until this code gets refactored to use
-   * GtkStyleContext.
-   */
-  style = gtk_widget_get_style (gtk_widget_get_parent (button));
-
-  bg_color.r = style->bg[0].red/65535.0;
-  bg_color.g = style->bg[0].green/65535.0;
-  bg_color.b = style->bg[0].blue/65535.0;
-
-  bg_prelight.r = style->bg[GTK_STATE_PRELIGHT].red/65535.0;
-  bg_prelight.g = style->bg[GTK_STATE_PRELIGHT].green/65535.0;
-  bg_prelight.b = style->bg[GTK_STATE_PRELIGHT].blue/65535.0;
-
-  bg_selected.r = style->bg[GTK_STATE_SELECTED].red/65535.0;
-  bg_selected.g = style->bg[GTK_STATE_SELECTED].green/65535.0;
-  bg_selected.b = style->bg[GTK_STATE_SELECTED].blue/65535.0;
-
-  fg_color.r = style->fg[0].red/65535.0;
-  fg_color.g = style->fg[0].green/65535.0;
-  fg_color.b = style->fg[0].blue/65535.0;
+    pStyleContext = gtk_widget_get_style_context(gtk_widget_get_parent(button));
+    // Some buggy themes don't define a fallback "background-color" - let's make this a button, then.
+    gtk_style_context_add_class(pStyleContext, GTK_STYLE_CLASS_BUTTON);
+    get_colour(pStyleContext, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_color);
+    get_colour(pStyleContext, GTK_STATE_FLAG_PRELIGHT, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_prelight);
+    get_colour(pStyleContext, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_selected);
+    get_colour(pStyleContext, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_COLOR, &fg_color);
 
   _color_shade (&bg_color,    MIDDLE_START_SHADE, &color_middle[0]);
   _color_shade (&bg_color,    MIDDLE_END_SHADE, &color_middle[1]);
@@ -1217,25 +1198,25 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   _color_shade (&bg_color, INNER_COMPRESSED_START_SHADE, &color_inner_compressed[0]);
   _color_shade (&bg_color, INNER_COMPRESSED_END_SHADE, &color_inner_compressed[1]);
 
-  double MIDDLE_END[]   = {color_middle[0].r, color_middle[0].g, color_middle[0].b, 1.0f};
-  double MIDDLE_START[] = {color_middle[1].r, color_middle[1].g, color_middle[1].b, 1.0f};
-  double MIDDLE_END_PRELIGHT[]   = {color_middle_prelight[0].r, color_middle_prelight[0].g, color_middle_prelight[0].b, 1.0f};
-  double MIDDLE_START_PRELIGHT[] = {color_middle_prelight[1].r, color_middle_prelight[1].g, color_middle_prelight[1].b, 1.0f};
-  double OUTER_END[]   = {color_outer[0].r, color_outer[0].g, color_outer[0].b, 1.0f};
-  double OUTER_START[] = {color_outer[1].r, color_outer[1].g, color_outer[1].b, 1.0f};
-  double OUTER_END_PRELIGHT[]   = {color_outer_prelight[0].r, color_outer_prelight[0].g, color_outer_prelight[0].b, 1.0f};
-  double OUTER_START_PRELIGHT[] = {color_outer_prelight[1].r, color_outer_prelight[1].g, color_outer_prelight[1].b, 1.0f};
-  double SHADOW_BUTTON[] = {color_button_shadow.r, color_button_shadow.g, color_button_shadow.b, 0.3f};
-  double OUTER_PLAY_END[] = {color_play_outer[0].r, color_play_outer[0].g, color_play_outer[0].b, 1.0f};
-  double OUTER_PLAY_START[] = {color_play_outer[1].r, color_play_outer[1].g, color_play_outer[1].b, 1.0f};
-  double OUTER_PLAY_END_PRELIGHT[] = {color_play_outer_prelight[0].r, color_play_outer_prelight[0].g, color_play_outer_prelight[0].b, 1.0f};
-  double OUTER_PLAY_START_PRELIGHT[] = {color_play_outer_prelight[1].r, color_play_outer_prelight[1].g, color_play_outer_prelight[1].b, 1.0f};
-  double BUTTON_END[] = {color_button[0].r, color_button[0].g, color_button[0].b, 1.0f};
-  double BUTTON_START[] = {color_button[1].r, color_button[1].g, color_button[1].b, 1.0f};
-  double BUTTON_SHADOW[] = {color_button[2].r, color_button[2].g, color_button[2].b, 0.75f};
-  double BUTTON_SHADOW_FOCUS[] = {color_button[3].r, color_button[3].g, color_button[3].b, 1.0f};
-  double INNER_COMPRESSED_END[] = {color_inner_compressed[1].r, color_inner_compressed[1].g, color_inner_compressed[1].b, 1.0f};
-  double INNER_COMPRESSED_START[] = {color_inner_compressed[0].r, color_inner_compressed[0].g, color_inner_compressed[0].b, 1.0f};
+  double MIDDLE_END[]   = {color_middle[0].red, color_middle[0].green, color_middle[0].blue, 1.0f};
+  double MIDDLE_START[] = {color_middle[1].red, color_middle[1].green, color_middle[1].blue, 1.0f};
+  double MIDDLE_END_PRELIGHT[]   = {color_middle_prelight[0].red, color_middle_prelight[0].green, color_middle_prelight[0].blue, 1.0f};
+  double MIDDLE_START_PRELIGHT[] = {color_middle_prelight[1].red, color_middle_prelight[1].green, color_middle_prelight[1].blue, 1.0f};
+  double OUTER_END[]   = {color_outer[0].red, color_outer[0].green, color_outer[0].blue, 1.0f};
+  double OUTER_START[] = {color_outer[1].red, color_outer[1].green, color_outer[1].blue, 1.0f};
+  double OUTER_END_PRELIGHT[]   = {color_outer_prelight[0].red, color_outer_prelight[0].green, color_outer_prelight[0].blue, 1.0f};
+  double OUTER_START_PRELIGHT[] = {color_outer_prelight[1].red, color_outer_prelight[1].green, color_outer_prelight[1].blue, 1.0f};
+  double SHADOW_BUTTON[] = {color_button_shadow.red, color_button_shadow.green, color_button_shadow.blue, 0.3f};
+  double OUTER_PLAY_END[] = {color_play_outer[0].red, color_play_outer[0].green, color_play_outer[0].blue, 1.0f};
+  double OUTER_PLAY_START[] = {color_play_outer[1].red, color_play_outer[1].green, color_play_outer[1].blue, 1.0f};
+  double OUTER_PLAY_END_PRELIGHT[] = {color_play_outer_prelight[0].red, color_play_outer_prelight[0].green, color_play_outer_prelight[0].blue, 1.0f};
+  double OUTER_PLAY_START_PRELIGHT[] = {color_play_outer_prelight[1].red, color_play_outer_prelight[1].green, color_play_outer_prelight[1].blue, 1.0f};
+  double BUTTON_END[] = {color_button[0].red, color_button[0].green, color_button[0].blue, 1.0f};
+  double BUTTON_START[] = {color_button[1].red, color_button[1].green, color_button[1].blue, 1.0f};
+  double BUTTON_SHADOW[] = {color_button[2].red, color_button[2].green, color_button[2].blue, 0.75f};
+  double BUTTON_SHADOW_FOCUS[] = {color_button[3].red, color_button[3].green, color_button[3].blue, 1.0f};
+  double INNER_COMPRESSED_END[] = {color_inner_compressed[1].red, color_inner_compressed[1].green, color_inner_compressed[1].blue, 1.0f};
+  double INNER_COMPRESSED_START[] = {color_inner_compressed[0].red, color_inner_compressed[0].green, color_inner_compressed[0].blue, 1.0f};
 
   gtk_widget_get_allocation (button, &alloc);
   X = alloc.x + (alloc.width - RECT_WIDTH) / 2 + OUTER_RADIUS;
