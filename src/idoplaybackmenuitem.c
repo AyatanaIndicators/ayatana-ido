@@ -1137,6 +1137,14 @@ _surface_blur (cairo_surface_t* surface,
   cairo_surface_mark_dirty (surface);
 }
 
+static void get_colour(GtkStyleContext *pStyleContext, GtkStateFlags nState, const gchar *sColour, GdkRGBA *pRGBA)
+{
+    GdkRGBA *pRGBATmp;
+    gtk_style_context_get(pStyleContext, nState, sColour, &pRGBATmp, NULL);
+    *pRGBA = *pRGBATmp;
+    gdk_rgba_free(pRGBATmp);
+}
+
 static gboolean
 ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
 {
@@ -1155,18 +1163,18 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
 
     GtkStyleContext *pStyleContext;
 
-  GdkRGBA bg_color, fg_color, bg_selected, bg_prelight;
-  GdkRGBA color_middle[2], color_middle_prelight[2], color_outer[2], color_outer_prelight[2],
+    GdkRGBA bg_color, fg_color, bg_selected, bg_prelight;
+    GdkRGBA color_middle[2], color_middle_prelight[2], color_outer[2], color_outer_prelight[2],
                 color_play_outer[2], color_play_outer_prelight[2],
                 color_button[4], color_button_shadow, color_inner[2], color_inner_compressed[2];
 
     pStyleContext = gtk_widget_get_style_context(gtk_widget_get_parent(button));
-    // Some buggy themes don't define a fallback "background-color" - let's make this a button, then
+    // Some buggy themes don't define a fallback "background-color" - let's make this a button, then.
     gtk_style_context_add_class(pStyleContext, GTK_STYLE_CLASS_BUTTON);
-    gtk_style_context_get(pStyleContext, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_color, NULL);
-    gtk_style_context_get(pStyleContext, GTK_STATE_FLAG_PRELIGHT, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_prelight, NULL);
-    gtk_style_context_get(pStyleContext, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_selected, NULL);
-    gtk_style_context_get(pStyleContext, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_COLOR, &fg_color, NULL);
+    get_colour(pStyleContext, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_color);
+    get_colour(pStyleContext, GTK_STATE_FLAG_PRELIGHT, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_prelight);
+    get_colour(pStyleContext, GTK_STATE_FLAG_SELECTED, GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &bg_selected);
+    get_colour(pStyleContext, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_COLOR, &fg_color);
 
   _color_shade (&bg_color,    MIDDLE_START_SHADE, &color_middle[0]);
   _color_shade (&bg_color,    MIDDLE_END_SHADE, &color_middle[1]);
