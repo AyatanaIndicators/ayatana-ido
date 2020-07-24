@@ -1,6 +1,48 @@
-2019-12-04 21:44:50 +0100 Mike Gabriel
+2020-07-24 06:38:58 +0200 Mike Gabriel
 
-	* release 0.4.90 (HEAD -> master, tag: 0.4.90)
+	* release 0.5.0 (HEAD -> master, tag: 0.5.0)
+
+2020-07-24 06:34:44 +0200 Mike Gabriel (ef4ea9d)
+
+	* src/idomessagedialog.c: Mark G_GNUC_{BEGIN,END}_IGNORE_DEPRECATIONS
+          wrapping around gtk_dialog_get_action_area() with a FIXME.
+
+2020-07-24 06:31:27 +0200 Mike Gabriel (669fb5e)
+
+	* Merge branch 'tari01-master'
+
+2020-07-24 02:55:50 +0200 Robert Tari (40a8f04)
+
+	* Updated colour getter for playback control
+
+2020-07-24 00:40:20 +0200 Robert Tari (c0bddf1)
+
+	* Some refactoring to avoid warnings
+
+2020-07-23 07:21:31 +0200 Mike Gabriel (f8f87bd)
+
+	* Merge branch 'tari01-master'
+
+2020-07-23 00:28:19 +0200 Robert Tari (9384761)
+
+	* Remove ayatana-private.h
+
+2020-07-07 12:51:02 +0200 Mike Gabriel (9e2cc8f)
+
+	* src/Makefile.am: Don't choke with FTBFS on every future deprecation
+          warning. Drop -Werror from CPPFLAGS.
+
+2020-07-07 12:48:29 +0200 Mike Gabriel (e29ccbb)
+
+	* Merge branch 'kikislater-patch-1'
+
+2020-07-07 09:18:43 +0400 Sylvain POULAIN (033c9f4)
+
+	* gtk_widget_get_state is deprecated
+
+2019-12-04 21:44:50 +0100 Mike Gabriel (f9466bb)
+
+	* release 0.4.90 (tag: 0.4.90)
 
 2019-12-04 14:26:11 +0100 Mike Gabriel (1545345)
 
