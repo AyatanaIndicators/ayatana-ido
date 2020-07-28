@@ -169,6 +169,7 @@ ido_scale_menu_item_constructed (GObject *object)
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_margin_end(hbox, 16);
 
   priv->primary_image = gtk_image_new ();
   g_signal_connect (priv->primary_image, "notify",
@@ -253,7 +254,7 @@ ido_scale_menu_item_class_init (IdoScaleMenuItemClass *item_class)
    * IdoScaleMenuItem::slider-grabbed:
    * @menuitem: The #IdoScaleMenuItem emitting the signal.
    *
-   * The ::slider-grabbed signal is emitted when the pointer selects the slider. 
+   * The ::slider-grabbed signal is emitted when the pointer selects the slider.
    */
   signals[SLIDER_GRABBED] = g_signal_new ("slider-grabbed",
                                           G_OBJECT_CLASS_TYPE (gobject_class),

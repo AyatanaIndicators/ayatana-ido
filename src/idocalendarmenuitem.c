@@ -45,12 +45,12 @@ static void     calendar_realized_cb                     (GtkWidget        *widg
 static void     calendar_move_focus_cb                   (GtkWidget        *widget,
                                                           GtkDirectionType  direction,
                                                           IdoCalendarMenuItem *item);
-static void     calendar_month_changed_cb                (GtkWidget *widget, 
-                                                          gpointer user_data);                             
-static void     calendar_day_selected_double_click_cb    (GtkWidget        *widget, 
+static void     calendar_month_changed_cb                (GtkWidget *widget,
+                                                          gpointer user_data);
+static void     calendar_day_selected_double_click_cb    (GtkWidget        *widget,
                                                           gpointer          user_data);
-static void     calendar_day_selected_cb                 (GtkWidget        *widget, 
-                                                          gpointer          user_data);                               
+static void     calendar_day_selected_cb                 (GtkWidget        *widget,
+                                                          gpointer          user_data);
 typedef struct {
   GtkWidget       *box;
   GtkWidget       *calendar;
@@ -118,7 +118,7 @@ ido_calendar_menu_item_init (IdoCalendarMenuItem *item)
 
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  gtk_box_pack_start (GTK_BOX (priv->box), priv->calendar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->calendar, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (item), priv->box);
 
@@ -209,53 +209,53 @@ static gboolean
 ido_calendar_menu_item_button_press (GtkWidget      *widget,
                                      GdkEventButton *event)
 {
-	IdoCalendarMenuItem *menuitem = IDO_CALENDAR_MENU_ITEM (widget);
-	IdoCalendarMenuItemPrivate *priv = ido_calendar_menu_item_get_instance_private(menuitem);
+    IdoCalendarMenuItem *menuitem = IDO_CALENDAR_MENU_ITEM (widget);
+    IdoCalendarMenuItemPrivate *priv = ido_calendar_menu_item_get_instance_private(menuitem);
 
-	GtkWidget *calendar = priv->calendar;
+    GtkWidget *calendar = priv->calendar;
 
-	if (event->button == 1) {
-		if (gtk_widget_get_window (calendar) != NULL) {
-			gdk_window_raise (gtk_widget_get_window (calendar));
-		}
+    if (event->button == 1) {
+        if (gtk_widget_get_window (calendar) != NULL) {
+            gdk_window_raise (gtk_widget_get_window (calendar));
+        }
 
-		if (!gtk_widget_has_focus (calendar)) {
-			gtk_widget_grab_focus (calendar);
-		}
+        if (!gtk_widget_has_focus (calendar)) {
+            gtk_widget_grab_focus (calendar);
+        }
 
-		GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
-		GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
-		GList * child;
+        GdkEvent * newevent = gdk_event_copy((GdkEvent *)(event));
+        GList * children = gdk_window_get_children(gtk_widget_get_window(calendar));
+        GList * child;
 
-		gint root_x = event->x_root;
-		gint root_y = event->y_root;
+        gint root_x = event->x_root;
+        gint root_y = event->y_root;
 
-		for (child = children; child != NULL; child = g_list_next(child)) {
-			gint newx, newy;
-			gint winx, winy;
-			GdkWindow * newwindow = (GdkWindow*)child->data;
+        for (child = children; child != NULL; child = g_list_next(child)) {
+            gint newx, newy;
+            gint winx, winy;
+            GdkWindow * newwindow = (GdkWindow*)child->data;
 
-			((GdkEventButton *)newevent)->window = newwindow;
+            ((GdkEventButton *)newevent)->window = newwindow;
 
-			gdk_window_get_origin(newwindow, &winx, &winy);
-			newx = root_x - winx;
-			newy = root_y - winy;
+            gdk_window_get_origin(newwindow, &winx, &winy);
+            newx = root_x - winx;
+            newy = root_y - winy;
 
-			if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
-				((GdkEventButton *)newevent)->x = newx;
-				((GdkEventButton *)newevent)->y = newy;
+            if (newx >= 0 && newy >= 0 && newx < gdk_window_get_width(newwindow) && newy < gdk_window_get_height(newwindow)) {
+                ((GdkEventButton *)newevent)->x = newx;
+                ((GdkEventButton *)newevent)->y = newy;
 
-				GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
-			}
-		}
+                GTK_WIDGET_GET_CLASS(calendar)->button_press_event(GTK_WIDGET(calendar), (GdkEventButton*)newevent);
+            }
+        }
 
-		((GdkEventButton *)newevent)->window = event->window;
-		gdk_event_free(newevent);
+        ((GdkEventButton *)newevent)->window = event->window;
+        gdk_event_free(newevent);
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 static gboolean
@@ -346,7 +346,7 @@ calendar_move_focus_cb (GtkWidget        *widget,
 }
 
 static void
-calendar_month_changed_cb (GtkWidget        *widget, 
+calendar_month_changed_cb (GtkWidget        *widget,
                            gpointer          user_data)
 {
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
@@ -354,7 +354,7 @@ calendar_month_changed_cb (GtkWidget        *widget,
 }
 
 static void
-calendar_day_selected_cb (GtkWidget        *widget, 
+calendar_day_selected_cb (GtkWidget        *widget,
                           gpointer          user_data)
 {
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
@@ -362,7 +362,7 @@ calendar_day_selected_cb (GtkWidget        *widget,
 }
 
 static void
-calendar_day_selected_double_click_cb (GtkWidget        *widget, 
+calendar_day_selected_double_click_cb (GtkWidget        *widget,
                                        gpointer          user_data)
 {
   IdoCalendarMenuItem *item = (IdoCalendarMenuItem *)user_data;
@@ -407,12 +407,12 @@ ido_calendar_menu_item_get_calendar (IdoCalendarMenuItem *menuitem)
  * @menuitem: A #IdoCalendarMenuItem
  * @day: the day number to unmark between 1 and 31.
  *
- * Places a visual marker on a particular day. 
+ * Places a visual marker on a particular day.
  *
  * Return Value: #TRUE
  */
 gboolean
-ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
+ido_calendar_menu_item_mark_day (IdoCalendarMenuItem *menuitem, guint day)
 {
   g_return_val_if_fail(IDO_IS_CALENDAR_MENU_ITEM(menuitem), FALSE);
 
@@ -426,7 +426,7 @@ ido_calendar_menu_item_mark_day	(IdoCalendarMenuItem *menuitem, guint day)
  * ido_calendar_menu_item_unmark_day:
  * @menuitem: A #IdoCalendarMenuItem
  * @day: the day number to unmark between 1 and 31.
- * 
+ *
  * Removes the visual marker from a particular day.
  *
  * Return Value: #TRUE
@@ -446,7 +446,7 @@ ido_calendar_menu_item_unmark_day (IdoCalendarMenuItem *menuitem, guint day)
  * ido_calendar_menu_item_clear_marks:
  * @menuitem: A #IdoCalendarMenuItem
  *
- * Remove all visual markers. 
+ * Remove all visual markers.
  */
 void
 ido_calendar_menu_item_clear_marks (IdoCalendarMenuItem *menuitem)
@@ -502,7 +502,7 @@ ido_calendar_menu_item_get_display_options (IdoCalendarMenuItem *menuitem)
  *
  * Gets the selected date.
  */
-void 
+void
 ido_calendar_menu_item_get_date (IdoCalendarMenuItem *menuitem,
                                  guint *year,
                                  guint *month,
@@ -574,10 +574,10 @@ activate_current_day (IdoCalendarMenuItem * ido_calendar,
       GVariant * target;
 
       ido_calendar_menu_item_get_date (ido_calendar, &y, &m, &d);
-      m++; /* adjust month from GtkCalendar (0 based) to GDateTime (1 based) */
+      m++;
       date_time = g_date_time_new_local (y, m, d, 9, 0, 0);
       target = g_variant_new_int64 (g_date_time_to_unix (date_time));
-  
+
       g_action_group_activate_action (action_group, action_name, target);
 
       g_date_time_unref (date_time);
