@@ -1673,8 +1673,7 @@ ido_playback_menu_item_draw (GtkWidget* button, cairo_t *cr)
   }
   else if (item->current_state == STATE_LAUNCHING)
   {
-    // the spinner is not aligned, why? because the play button has odd width/height numbers
-    gtk_render_activity (gtk_widget_get_style_context (button), cr, 106, 6, 30, 30);
+        gtk_render_activity (gtk_widget_get_style_context (button), cr, (alloc.width / 2) - 15, (alloc.height / 2) - 15, 30, 30);
   }
   return FALSE;
 }

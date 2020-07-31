@@ -158,6 +158,7 @@ ido_application_menu_item_new_from_model (GMenuItem    *menuitem,
   gchar *action;
 
   item = g_object_new (IDO_TYPE_APPLICATION_MENU_ITEM, NULL);
+  gtk_widget_set_margin_end(IDO_APPLICATION_MENU_ITEM(item)->label, 16);
 
   if (g_menu_item_get_attribute (menuitem, "label", "s", &label))
     {
