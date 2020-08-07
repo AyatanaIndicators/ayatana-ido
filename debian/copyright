@@ -49,7 +49,6 @@ Files: AUTHORS.Canonical
  configure.ac
  example/Makefile.am
  example/menus.c
- example/messagedialog.c
  libayatana-ido3.pc.in
  m4/gcov.m4
  src/Makefile.am
@@ -77,8 +76,6 @@ Files: src/idocalendarmenuitem.c
  src/idocalendarmenuitem.h
  src/idoentrymenuitem.c
  src/idoentrymenuitem.h
- src/idomessagedialog.c
- src/idomessagedialog.h
  src/idorange.c
  src/idorange.h
  src/idoscalemenuitem.c

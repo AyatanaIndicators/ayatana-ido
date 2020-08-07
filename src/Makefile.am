@@ -14,7 +14,6 @@ sources_h =				\
 	idoalarmmenuitem.h		\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
-	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
@@ -78,7 +77,6 @@ libayatana_ido_0_4_la_SOURCES =		\
 	idocalendarmenuitem.c		\
 	idoalarmmenuitem.c		\
 	idoentrymenuitem.c		\
-	idomessagedialog.c		\
 	idorange.c			\
 	idoscalemenuitem.c		\
 	idoswitchmenuitem.c		\
@@ -104,7 +102,6 @@ libayatana_idoincludedir=$(includedir)/libayatana-ido3-0.4/libayatana-ido
 libayatana_idoinclude_HEADERS =		\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
-	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
@@ -143,7 +140,6 @@ AyatanaIdo3_0_4_gir_LIBS = libayatana-ido3-0.4.la
 AyatanaIdo3_0_4_gir_FILES = \
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
-	idomessagedialog.h		\
 	idorange.h			\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
