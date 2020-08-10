@@ -29,7 +29,6 @@
 #include <libayatana-ido/idocalendarmenuitem.h>
 #include <libayatana-ido/idoscalemenuitem.h>
 #include <libayatana-ido/idoentrymenuitem.h>
-#include <libayatana-ido/idomessagedialog.h>
 
 void ido_init (void);
 
