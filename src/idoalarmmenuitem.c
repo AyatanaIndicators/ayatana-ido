@@ -5,16 +5,16 @@
  *   Charles Kerr <charles.kerr@canonical.com>
  *   Ted Gould <ted@canonical.com>
  *
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License version 3, as published 
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 3, as published
  * by the Free Software Foundation.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranties of 
- * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranties of
+ * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
  * PURPOSE.  See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along 
+ * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -72,7 +72,7 @@ ido_alarm_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-time-format", "s", &str))
     {
       names[n] = "format";
       g_value_init (&values[n], G_TYPE_STRING);
@@ -80,7 +80,7 @@ ido_alarm_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-time", "x", &i64))
     {
       names[n] = "date-time";
       g_value_init (&values[n], G_TYPE_DATE_TIME);
