@@ -106,7 +106,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-color", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-color", "s", &str))
     {
       names[n] = "icon";
       g_value_init (&values[n], G_TYPE_OBJECT);
@@ -115,7 +115,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-time-format", "s", &str))
     {
       names[n] = "format";
       g_value_init (&values[n], G_TYPE_STRING);
@@ -123,7 +123,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time", "x", &i64))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-time", "x", &i64))
     {
       names[n] = "date-time";
       g_value_init (&values[n], G_TYPE_DATE_TIME);

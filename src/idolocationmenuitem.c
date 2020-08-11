@@ -313,7 +313,7 @@ ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-timezone", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-timezone", "s", &str))
     {
       names[n] = "timezone";
       g_value_init (&values[n], G_TYPE_STRING);
@@ -321,7 +321,7 @@ ido_location_menu_item_new_from_model (GMenuItem    * menu_item,
       n++;
     }
 
-  if (g_menu_item_get_attribute (menu_item, "x-canonical-time-format", "s", &str))
+  if (g_menu_item_get_attribute (menu_item, "x-ayatana-time-format", "s", &str))
     {
       names[n] = "format";
       g_value_init (&values[n], G_TYPE_STRING);
