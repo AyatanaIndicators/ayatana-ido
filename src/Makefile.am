@@ -100,6 +100,7 @@ libayatana_ido3_0_4_la_SOURCES = $(libayatana_ido_0_4_la_SOURCES)
 libayatana_idoincludedir=$(includedir)/libayatana-ido3-0.4/libayatana-ido
 
 libayatana_idoinclude_HEADERS =		\
+	ayatanamenuitemfactory.h	\
 	idocalendarmenuitem.h		\
 	idoentrymenuitem.h		\
 	idorange.h			\
