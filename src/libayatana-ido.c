@@ -28,9 +28,9 @@
 void
 ido_init (void)
 {
-  GType ido_menu_item_factory_get_type (void);
+  GType ayatana_ido_menu_item_factory_get_type (void);
 
   /* make sure this extension point is registered so that gtk calls it
    * when finding custom menu items */
-  g_type_ensure (ido_menu_item_factory_get_type ());
+  g_type_ensure (ayatana_ido_menu_item_factory_get_type ());
 }

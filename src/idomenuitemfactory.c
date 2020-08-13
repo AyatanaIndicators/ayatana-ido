@@ -33,23 +33,23 @@
 #include "idoswitchmenuitem.h"
 #include "idoprogressmenuitem.h"
 
-#define IDO_TYPE_MENU_ITEM_FACTORY         (ido_menu_item_factory_get_type ())
-#define IDO_MENU_ITEM_FACTORY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IDO_TYPE_MENU_ITEM_FACTORY, IdoMenuItemFactory))
-#define IDO_IS_MENU_ITEM_FACTORY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), IDO_TYPE_MENU_ITEM_FACTORY))
+#define AYATANA_IDO_TYPE_MENU_ITEM_FACTORY         (ayatana_ido_menu_item_factory_get_type ())
+#define AYATANA_IDO_MENU_ITEM_FACTORY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), AYATANA_IDO_TYPE_MENU_ITEM_FACTORY, AyatanaIdoMenuItemFactory))
+#define AYATANA_IDO_IS_MENU_ITEM_FACTORY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), AYATANA_IDO_TYPE_MENU_ITEM_FACTORY))
 
-typedef GObject      IdoMenuItemFactory;
-typedef GObjectClass IdoMenuItemFactoryClass;
+typedef GObject      AyatanaIdoMenuItemFactory;
+typedef GObjectClass AyatanaIdoMenuItemFactoryClass;
 
-GType       ido_menu_item_factory_get_type (void);
-static void ido_menu_item_factory_interface_init (AyatanaMenuItemFactoryInterface *iface);
+GType       ayatana_ido_menu_item_factory_get_type (void);
+static void ayatana_ido_menu_item_factory_interface_init (AyatanaMenuItemFactoryInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdoMenuItemFactory, ido_menu_item_factory, G_TYPE_OBJECT,
-  G_IMPLEMENT_INTERFACE (AYATANA_TYPE_MENU_ITEM_FACTORY, ido_menu_item_factory_interface_init)
+G_DEFINE_TYPE_WITH_CODE (AyatanaIdoMenuItemFactory, ayatana_ido_menu_item_factory, G_TYPE_OBJECT,
+  G_IMPLEMENT_INTERFACE (AYATANA_TYPE_MENU_ITEM_FACTORY, ayatana_ido_menu_item_factory_interface_init)
   g_io_extension_point_implement (AYATANA_MENU_ITEM_FACTORY_EXTENSION_POINT_NAME,
-                                  g_define_type_id, "ido", 0);)
+                                  g_define_type_id, "ayatanaido", 0);)
 
 static GtkMenuItem *
-ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
+ayatana_ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
                                         const gchar           *type,
                                         GMenuItem             *menuitem,
                                         GActionGroup          *actions)
@@ -102,17 +102,17 @@ ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
 }
 
 static void
-ido_menu_item_factory_class_init (IdoMenuItemFactoryClass *class)
+ayatana_ido_menu_item_factory_class_init (AyatanaIdoMenuItemFactoryClass *class)
 {
 }
 
 static void
-ido_menu_item_factory_interface_init (AyatanaMenuItemFactoryInterface *iface)
+ayatana_ido_menu_item_factory_interface_init (AyatanaMenuItemFactoryInterface *iface)
 {
-  iface->create_menu_item = ido_menu_item_factory_create_menu_item;
+  iface->create_menu_item = ayatana_ido_menu_item_factory_create_menu_item;
 }
 
 static void
-ido_menu_item_factory_init (IdoMenuItemFactory *factory)
+ayatana_ido_menu_item_factory_init (AyatanaIdoMenuItemFactory *factory)
 {
 }
