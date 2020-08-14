@@ -1,6 +1,66 @@
-2020-07-24 06:38:58 +0200 Mike Gabriel
+2020-08-14 20:19:10 +0200 Mike Gabriel
 
-	* release 0.5.0 (HEAD -> master, tag: 0.5.0)
+	* release 0.8.0 (HEAD -> master, tag: 0.8.0)
+
+2020-08-13 22:43:29 +0200 Robert Tari (11e687d)
+
+	* Merge branch 'sunweaver-pr/ayatanamenuitemfactory-make-public-api'
+          Attributes GH PR #13:
+          https://github.com/AyatanaIndicators/ayatana-ido/pull/13
+
+2020-08-13 22:29:59 +0200 Mike Gabriel (d61bb9f)
+
+	* src/Makefile.am: Export ayatanamenuitemfactory.h as part of the
+          public API, needed by indicator-ng.c in
+          libayatana-indicator.
+
+2020-08-11 18:02:33 +0200 Robert Tari (34aa56f)
+
+	* Merge branch 'sunweaver-pr/replace-x-canonical-attributes'
+          Attributes GH PR #11:
+          https://github.com/AyatanaIndicators/ayatana-ido/pull/11
+
+2020-08-11 18:01:19 +0200 Robert Tari (b3686dc)
+
+	* Merge branch 'pr/replace-x-canonical-attributes' of
+          https://github.com/sunweaver/ayatana-ido into
+          sunweaver-pr/replace-x-canonical-attributes
+
+2020-08-11 16:49:26 +0200 Mike Gabriel (974147d)
+
+	* Replace x-canonical attributes solely used by Ayatana Indicators.
+
+2020-08-11 10:51:28 +0200 Robert Tari (9e20973)
+
+	* Replace x-canonical attributes
+
+2020-08-10 22:17:23 +0200 Mike Gabriel (4e2ff26)
+
+	* Merge branch 'tari01-master'
+
+2020-08-07 12:18:59 +0200 Robert Tari (2ce8e4a)
+
+	* Drop IDO Message Dialog
+
+2020-07-31 06:39:33 +0200 Robert Tari (f062e19)
+
+	* Merge pull request #8 from tari01/master
+
+2020-07-31 05:43:05 +0200 Robert Tari (b65bc50)
+
+	* Centre playback menu item spinner/Pad application menu item label
+
+2020-07-28 18:43:26 +0200 Robert Tari (b18ced1)
+
+	* Merge pull request #7 from tari01/master
+
+2020-07-28 18:39:55 +0200 Robert Tari (f937570)
+
+	* Centre volume control/Stretch calendar horizontally
+
+2020-07-24 06:38:58 +0200 Mike Gabriel (fac3c96)
+
+	* release 0.5.0 (tag: 0.5.0)
 
 2020-07-24 06:34:44 +0200 Mike Gabriel (ef4ea9d)
 

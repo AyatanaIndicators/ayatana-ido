@@ -2,7 +2,7 @@
 # shamelessly stolen from clutter-gtk
 #
 m4_define([ido_major_version], [0])
-m4_define([ido_minor_version], [5])
+m4_define([ido_minor_version], [8])
 m4_define([ido_micro_version], [0])
 
 m4_define([ido_api_version],
