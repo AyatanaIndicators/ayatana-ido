@@ -224,6 +224,14 @@ ido_source_menu_item_state_changed (IdoActionHelper *helper,
                            g_variant_get_boolean (state));
 }
 
+static void ido_switch_menu_item_activate(IdoSwitchMenuItem *self, gpointer user_data)
+{
+    IdoActionHelper *helper = user_data;
+    IdoSwitchMenuItemPrivate *priv = ido_switch_menu_item_get_instance_private(self);
+    gboolean active = gtk_switch_get_active(GTK_SWITCH(priv->switch_w));
+    ido_action_helper_activate_with_parameter(helper, g_variant_new_boolean(active));
+}
+
 GtkMenuItem *
 ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
                                           GActionGroup *actions)
@@ -263,9 +271,7 @@ ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
       helper = ido_action_helper_new (GTK_WIDGET (item), actions, action, NULL);
       g_signal_connect (helper, "action-state-changed",
                         G_CALLBACK (ido_source_menu_item_state_changed), item);
-      g_signal_connect_object (item, "activate",
-                               G_CALLBACK (ido_action_helper_activate), helper,
-                               G_CONNECT_SWAPPED);
+      g_signal_connect(item, "activate", G_CALLBACK(ido_switch_menu_item_activate), helper);
       g_signal_connect_swapped (item, "destroy", G_CALLBACK (g_object_unref), helper);
 
       g_free (action);
