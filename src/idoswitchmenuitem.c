@@ -28,7 +28,7 @@ static gboolean ido_switch_menu_button_release_event (GtkWidget      * widget,
                                                       GdkEventButton * event);
 
 
-typedef struct 
+typedef struct
 {
   GtkWidget * box;
   GtkWidget * content_area;
@@ -179,7 +179,7 @@ ido_switch_menu_item_set_label (IdoSwitchMenuItem *item,
 /**
  * ido_switch_menu_item_set_icon:
  * @item: a #IdoSwitchMenuItem.
- * @icon: (allow-none): a #GIcon 
+ * @icon: (allow-none): a #GIcon
  *
  * Set the icon of @item to @icon.
  **/
