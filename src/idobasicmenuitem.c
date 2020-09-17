@@ -359,6 +359,12 @@ ido_basic_menu_item_new_from_model (GMenuItem    * menu_item,
 
   item = ido_basic_menu_item_new ();
 
+    IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(IDO_BASIC_MENU_ITEM(item));
+    gboolean use_markup = FALSE;
+    g_menu_item_get_attribute(menu_item, "x-ayatana-use-markup", "b", &use_markup);
+    g_object_set(p->label, "use-markup", use_markup, NULL);
+    g_object_set(p->secondary_label, "use-markup", use_markup, NULL);
+
   if (g_menu_item_get_attribute (menu_item, "label", "s", &label))
     {
       ido_basic_menu_item_set_text (IDO_BASIC_MENU_ITEM (item), label);
