@@ -226,6 +226,8 @@ ido_source_menu_item_state_changed (IdoActionHelper *helper,
 
 static void ido_switch_menu_item_activate(IdoSwitchMenuItem *self, gpointer user_data)
 {
+    g_return_if_fail(IDO_IS_SWITCH_MENU_ITEM(self));
+
     IdoActionHelper *helper = user_data;
     IdoSwitchMenuItemPrivate *priv = ido_switch_menu_item_get_instance_private(self);
     gboolean active = gtk_switch_get_active(GTK_SWITCH(priv->switch_w));
