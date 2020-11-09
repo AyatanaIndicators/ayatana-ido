@@ -1,6 +1,56 @@
-2020-08-14 20:19:10 +0200 Mike Gabriel
+2020-11-09 17:34:44 +0100 Mike Gabriel
 
-	* release 0.8.0 (HEAD -> master, tag: 0.8.0)
+	* release 0.8.1 (HEAD -> master, tag: 0.8.1)
+
+2020-10-21 13:19:35 +0200 Mike Gabriel (2267a40)
+
+	* Merge branch 'tari01-pr/switch-initial-state'
+
+2020-09-25 01:19:44 +0200 Robert Tari (336b92c)
+
+	* idoswitchmenuitem.c: Fix setting the initial state for the switch
+
+2020-10-21 13:16:30 +0200 Mike Gabriel (b0dfd12)
+
+	* Merge branch 'tari01-pr/basic-markup'
+
+2020-09-25 00:09:24 +0200 Robert Tari (13e3334)
+
+	* Add sanity-check in ido_switch_menu_item_activate
+
+2020-09-16 15:39:07 +0200 Robert Tari (eaa7ce5)
+
+	* idoswitchmenuitem.c: Pass the switch activation state in the action
+          signal
+
+2020-09-16 15:35:43 +0200 Robert Tari (f96d98c)
+
+	* Whitespace fix
+
+2020-09-17 14:45:59 +0200 Robert Tari (009998b)
+
+	* idobasicmenuitem.c: Add optional markup to the basic menu item
+
+2020-09-27 15:46:19 +0200 Mike Gabriel (bbcbd08)
+
+	* Merge branch 'tari01-pr/switch-state-fix'
+
+2020-09-25 00:09:24 +0200 Robert Tari (d318463)
+
+	* Add sanity-check in ido_switch_menu_item_activate
+
+2020-09-16 15:39:07 +0200 Robert Tari (6a4bf3d)
+
+	* idoswitchmenuitem.c: Pass the switch activation state in the action
+          signal
+
+2020-09-16 15:35:43 +0200 Robert Tari (7ed68c1)
+
+	* Whitespace fix
+
+2020-08-14 20:19:10 +0200 Mike Gabriel (d580f61)
+
+	* release 0.8.0 (tag: 0.8.0)
 
 2020-08-13 22:43:29 +0200 Robert Tari (11e687d)
 
