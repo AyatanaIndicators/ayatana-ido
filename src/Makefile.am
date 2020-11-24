@@ -20,6 +20,7 @@ sources_h =				\
 	idousermenuitem.h		\
 	idoappointmentmenuitem.h	\
 	idobasicmenuitem.h		\
+    idoremovablemenuitem.h \
 	idoprogressmenuitem.h		\
 	idotimestampmenuitem.h		\
 	idolocationmenuitem.h		\
@@ -88,6 +89,7 @@ libayatana_ido_0_4_la_SOURCES =		\
 	idoplaybackmenuitem.c		\
 	idoappointmentmenuitem.c	\
 	idobasicmenuitem.c		\
+    idoremovablemenuitem.c \
 	idoprogressmenuitem.c		\
 	idotimestampmenuitem.c		\
 	idolocationmenuitem.c		\

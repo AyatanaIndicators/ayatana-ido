@@ -6,6 +6,7 @@
 #include "idolocationmenuitem.h"
 #include "idoswitchmenuitem.h"
 #include "idousermenuitem.h"
+#include "idoremovablemenuitem.h"
 #include "config.h"
 
 static void
@@ -142,7 +143,13 @@ main (int argc, char *argv[])
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
     }
 
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
 
+  /* Removable */
+  menuitem = ido_removable_menu_item_new();
+  idoRemovableMenuItemSetText(IDO_REMOVABLE_MENU_ITEM(menuitem), "This is a <b>removable</b> menu item\nIt has a <a href=\"http://www.example.com\">link</a>\n<small>And some small text</small>");
+  idoRemovableMenuItemUseMarkup(IDO_REMOVABLE_MENU_ITEM(menuitem), TRUE);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
   /* Add the menubar */
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), root);
