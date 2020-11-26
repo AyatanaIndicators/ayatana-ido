@@ -389,6 +389,7 @@ static void ido_removable_menu_item_init(IdoRemovableMenuItem *self)
     gtk_button_set_label(GTK_BUTTON(pPrivate->pButton), "X");
     gtk_widget_set_halign(pPrivate->pButton, GTK_ALIGN_CENTER);
     gtk_widget_set_valign(pPrivate->pButton, GTK_ALIGN_CENTER);
+    gtk_widget_show(pPrivate->pButton);
 
     GtkWidget *pWidget = gtk_grid_new();
     GtkGrid *pGrid = GTK_GRID(pWidget);
