@@ -27,7 +27,7 @@ jobs:
 #      env:
 #        - MATRIX_EVAL="CC=gcc && CXX=g++"
 #
-    - name: "GCC 7.4"
+    - name: "GCC 7.4 / Ubuntu bionic"
       dist: bionic
       addons:
         apt:
@@ -72,7 +72,7 @@ jobs:
 #      env:
 #        - MATRIX_EVAL="CC=clang-3.9 && CXX=clang++-3.9"
 #
-    - name: "Clang 9.x"
+    - name: "Clang 9.x / Ubuntu bionic"
       dist: bionic
       addons:
         apt:
