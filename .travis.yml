@@ -70,7 +70,7 @@ jobs:
             - valac
 
       env:
-        - MATRIX_EVAL="CC=gcc && CXX=g++"
+        - MATRIX_EVAL="CC=gcc-10 && CXX=g++-10"
 
 #    - name: "Clang 3.9"
 #      dist: xenial
