@@ -101,3 +101,7 @@ before_install:
 
 before_scripts:
   - NOCONFIGURE=1 ./autogen.sh
+
+script:
+  - ./configure --disable-option-checking --disable-silent-rules --disable-maintainer-mode --disable-dependency-tracking
+  - make && make check
