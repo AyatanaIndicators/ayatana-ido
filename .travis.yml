@@ -49,29 +49,29 @@ jobs:
       env:
         - MATRIX_EVAL="CC=gcc && CXX=g++"
 
-    - name: "Clang 3.9"
-      dist: xenial
-      addons:
-        apt:
-          update: true
-          sources:
-            - llvm-toolchain-xenial-3.9
-          packages:
-            - clang-3.9
-            - gobject-introspection
-            - gtk-doc-tools
-            - libgirepository1.0-dev
-            - libglib2.0-dev
-            - libgtest-dev
-            - libgtk-3-dev
-            - libx11-dev
-            - libxi-dev
-            - mate-common
-            - valac
-
-      env:
-        - MATRIX_EVAL="CC=clang-3.9 && CXX=clang++-3.9"
-
+#    - name: "Clang 3.9"
+#      dist: xenial
+#      addons:
+#        apt:
+#          update: true
+#          sources:
+#            - llvm-toolchain-xenial-3.9
+#          packages:
+#            - clang-3.9
+#            - gobject-introspection
+#            - gtk-doc-tools
+#            - libgirepository1.0-dev
+#            - libglib2.0-dev
+#            - libgtest-dev
+#            - libgtk-3-dev
+#            - libx11-dev
+#            - libxi-dev
+#            - mate-common
+#            - valac
+#
+#      env:
+#        - MATRIX_EVAL="CC=clang-3.9 && CXX=clang++-3.9"
+#
     - name: "Clang 9.x"
       dist: bionic
       addons:
