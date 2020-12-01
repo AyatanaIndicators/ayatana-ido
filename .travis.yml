@@ -5,28 +5,28 @@ dist: bionic
 
 jobs:
   include:
-    - name: "GCC 5.4"
-      dist: xenial
-      addons:
-        apt:
-          update: true
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gobject-introspection
-            - gtk-doc-tools
-            - libgirepository1.0-dev
-            - libglib2.0-dev
-            - libgtest-dev
-            - libgtk-3-dev
-            - libx11-dev
-            - libxi-dev
-            - mate-common
-            - valac
-
-      env:
-        - MATRIX_EVAL="CC=gcc && CXX=g++"
-
+#    - name: "GCC 5.4"
+#      dist: xenial
+#      addons:
+#        apt:
+#          update: true
+#          sources:
+#            - ubuntu-toolchain-r-test
+#          packages:
+#            - gobject-introspection
+#            - gtk-doc-tools
+#            - libgirepository1.0-dev
+#            - libglib2.0-dev
+#            - libgtest-dev
+#            - libgtk-3-dev
+#            - libx11-dev
+#            - libxi-dev
+#            - mate-common
+#            - valac
+#
+#      env:
+#        - MATRIX_EVAL="CC=gcc && CXX=g++"
+#
     - name: "GCC 7.4"
       dist: bionic
       addons:
