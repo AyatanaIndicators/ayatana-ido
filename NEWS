@@ -1,0 +1,66 @@
+Overview of changes in ayatana-ido 0.8.2
+
+  - Add Travis support (CI builds).
+
+Overview of changes in ayatana-ido 0.8.1
+
+  - idoswitchmenuitem.c: Fix setting the initial state for the switch.
+  - idoswitchmenuitem.c: Pass the switch activation state in the action
+    signal.
+  - idobasicmenuitem.c: Add optional markup to the basic menu item.
+
+Overview of changes in ayatana-ido 0.8.0
+
+  - src/Makefile.am: Export ayatanamenuitemfactory.h as part of the
+    public API, needed by indicator-ng.c in libayatana-indicator.
+  - Replace x-canonical attributes solely used by Ayatana Indicators.
+  - Drop IDO Message Dialog.
+  - Centre playback menu item spinner/Pad application menu item label.
+  - Centre volume control/Stretch calendar horizontally.
+
+Overview of changes in ayatana-ido 0.5.0
+
+  - src/idomessagedialog.c: Mark G_GNUC_{BEGIN,END}_IGNORE_DEPRECATIONS
+    wrapping around gtk_dialog_get_action_area() with a FIXME.
+  - Updated colour getter for playback control.
+  - Some refactoring to avoid warnings.
+  - Remove ayatana-private.h.
+  - src/Makefile.am: Don't choke with FTBFS on every future deprecation
+    warning. Drop -Werror from CPPFLAGS.
+  - gtk_widget_get_state is deprecated.
+
+Overview of changes in ayatana-ido 0.4.90
+
+  - Port from Glib's g_object_newv to g_object_new_with_properties.
+  - Avoid deprecated g_type_class_add_private.
+
+Overview of changes in ayatana-ido 0.4.4
+
+  - libayatana-ido3.pc.in: Fix Name: field in .pc file.
+  - Revert "libayatana-ido3.pc.in: Unversion name of .pc pkg-config
+    file (plus fix Name: field in .pc file).
+
+Overview of changes in ayatana-ido 0.4.3
+
+  - libayatana-ido3.pc.in: Unversion name of .pc pkg-config file (plus
+    fix Name: field in .pc file).
+  - autogen.sh: Fix PKG_NAME (ido -> ayatana-ido).
+
+Overview of changes in ayatana-ido 0.4.2
+
+  - tests/Makefile.am: Fix static lib name (libido -> libayatana-ido).
+  - libayatana-ido3.pc.in: Fix pkg-config name (libido -> libayatana-ido).
+  - Makefile.am: Drop distcheck features.
+
+Overview of changes in ayatana-ido 0.4.1
+
+  - configure.ac: Let AC_CONFIG_SRCDIR point to src/libayatana-ido.h.
+  - src/libido.h: Drop empty file (artifact of fork).
+
+Overview of changes in ayatana-ido 0.4.1
+
+  - Build system: Drop remnants of GTK-2+ support.
+  - IdoCalendarMenuItem: disconnect from parent signals on item
+    destruction (LP: #1506427)
+  - build system: Switch to mate-common.
+  - Fork ayatana-ido from Ubuntu's ido shared library.
