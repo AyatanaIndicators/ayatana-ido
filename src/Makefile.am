@@ -77,6 +77,11 @@ AM_CFLAGS =				\
 	$(NULL)
 
 libayatana_ido_0_4_la_SOURCES =		\
+	$(sources_h)			\
+	$(sources_c)			\
+	$(NULL)
+
+sources_c =				\
 	ayatanamenuitemfactory.c	\
 	libayatana-ido.c		\
 	idotypebuiltins.c		\
@@ -157,7 +162,9 @@ AyatanaIdo3_0_4_gir_FILES = \
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
 	idotimeline.h			\
-	$(libayatana_ido_0_4_la_SOURCES)
+	$(sources_c)			\
+	$(NULL)
+
 AyatanaIdo3_0_4_gir_NAMESPACE = AyatanaIdo3
 AyatanaIdo3_0_4_gir_VERSION = 0.4
 AyatanaIdo3_0_4_gir_SCANNER_FLAGS = $(INTROSPECTION_SCANNER_ARGS)
