@@ -52,24 +52,24 @@ idotypebuiltins.c: stamp-idotypebuiltins.h
 		$(sources_h) ) > xgen-gtbc \
 	&& cp xgen-gtbc idotypebuiltins.c && rm -f xgen-gtbc
 
-INCLUDES =				\
-	-I$(srcdir)			\
-	-I$(top_srcdir)			\
-	-DG_LOG_DOMAIN=\"IDO\"		\
-	-DPREFIX=\"$(prefix)"\"		\
-	-DLIBDIR=\"$(libdir)"\"		\
-	-DG_DISABLE_DEPRECATED		\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGDK_DISABLE_DEPRECATED
+AM_CPPFLAGS =									\
+	-I$(srcdir)								\
+	-I$(top_srcdir)								\
+	-DG_LOG_DOMAIN=\"IDO\"							\
+	-DPREFIX=\"$(prefix)"\"							\
+	-DLIBDIR=\"$(libdir)"\"							\
+	-DG_DISABLE_DEPRECATED							\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED						\
+	-DGDK_DISABLE_DEPRECATED						\
+	$(GCC_FLAGS)								\
+	$(GTK_CFLAGS)								\
+	$(MAINTAINER_CFLAGS)							\
+	-Wall -Wextra -Wno-unused-parameter -Wno-error=deprecated-declarations	\
+	$(NULL)
 
-AM_CPPFLAGS =				\
-	$(GCC_FLAGS)			\
-	$(GTK_CFLAGS)			\
-	$(MAINTAINER_CFLAGS)    \
-	-Wall -Wextra -Wno-unused-parameter -Wno-error=deprecated-declarations
-
-AM_CFLAGS =                             \
-	$(COVERAGE_CFLAGS)
+AM_CFLAGS =				\
+	$(COVERAGE_CFLAGS)		\
+	$(NULL)
 
 libayatana_ido_0_4_la_SOURCES =		\
 	ayatanamenuitemfactory.c	\
