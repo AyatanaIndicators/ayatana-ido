@@ -37,6 +37,33 @@ sources_h =				\
 	idosourcemenuitem.h		\
 	$(NULL)
 
+sources_c =				\
+	ayatanamenuitemfactory.c	\
+	libayatana-ido.c		\
+	idotypebuiltins.c		\
+	idocalendarmenuitem.c		\
+	idoalarmmenuitem.c		\
+	idoentrymenuitem.c		\
+	idorange.c			\
+	idoscalemenuitem.c		\
+	idoswitchmenuitem.c		\
+	idotimeline.c			\
+	idomenuitemfactory.c		\
+	idoactionhelper.c		\
+	idousermenuitem.c		\
+	idomediaplayermenuitem.c	\
+	idoplaybackmenuitem.c		\
+	idoappointmentmenuitem.c	\
+	idobasicmenuitem.c		\
+	idoremovablemenuitem.c		\
+	idoprogressmenuitem.c		\
+	idotimestampmenuitem.c		\
+	idolocationmenuitem.c		\
+	idoapplicationmenuitem.c	\
+	idodetaillabel.c		\
+	idosourcemenuitem.c		\
+	$(NULL)
+
 EXTRA_DIST =				\
 	ido.list			\
 	idotypebuiltins.h.template	\
@@ -79,33 +106,6 @@ AM_CFLAGS =				\
 libayatana_ido_0_4_la_SOURCES =		\
 	$(sources_h)			\
 	$(sources_c)			\
-	$(NULL)
-
-sources_c =				\
-	ayatanamenuitemfactory.c	\
-	libayatana-ido.c		\
-	idotypebuiltins.c		\
-	idocalendarmenuitem.c		\
-	idoalarmmenuitem.c		\
-	idoentrymenuitem.c		\
-	idorange.c			\
-	idoscalemenuitem.c		\
-	idoswitchmenuitem.c		\
-	idotimeline.c			\
-	idomenuitemfactory.c		\
-	idoactionhelper.c		\
-	idousermenuitem.c		\
-	idomediaplayermenuitem.c	\
-	idoplaybackmenuitem.c		\
-	idoappointmentmenuitem.c	\
-	idobasicmenuitem.c		\
-	idoremovablemenuitem.c		\
-	idoprogressmenuitem.c		\
-	idotimestampmenuitem.c		\
-	idolocationmenuitem.c		\
-	idoapplicationmenuitem.c	\
-	idodetaillabel.c		\
-	idosourcemenuitem.c		\
 	$(NULL)
 
 libayatana_ido3_0_4_la_SOURCES = $(libayatana_ido_0_4_la_SOURCES)
