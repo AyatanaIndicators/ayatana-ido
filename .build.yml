@@ -9,6 +9,7 @@ requires:
     - git
     - make
     - startup-notification
+    - which
     - glib2
     - gobject-introspection
     - gtk3
