@@ -47,4 +47,6 @@ DISTCLEANFILES = \
 
 EXTRA_DIST = libayatana-ido3.pc.in
 
+DISTCHECK_CONFIGURE_FLAGS = --disable-gtk-doc --disable-silent-rules
+
 include $(top_srcdir)/Makefile.am.coverage

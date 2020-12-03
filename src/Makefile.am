@@ -1,3 +1,5 @@
+NULL =
+
 CLEANFILES =
 
 lib_LTLIBRARIES = libayatana-ido3-0.4.la
@@ -7,7 +9,8 @@ ido_built_public_sources =		\
 
 stamp_files =				\
 	idotypebuiltins.h		\
-	idotypebuiltins.c
+	idotypebuiltins.c		\
+	$(NULL)
 
 sources_h =				\
 	ayatanamenuitemfactory.h	\
@@ -20,7 +23,7 @@ sources_h =				\
 	idousermenuitem.h		\
 	idoappointmentmenuitem.h	\
 	idobasicmenuitem.h		\
-    idoremovablemenuitem.h \
+	idoremovablemenuitem.h		\
 	idoprogressmenuitem.h		\
 	idotimestampmenuitem.h		\
 	idolocationmenuitem.h		\
@@ -31,47 +34,10 @@ sources_h =				\
 	idoplaybackmenuitem.h		\
 	idoapplicationmenuitem.h 	\
 	idodetaillabel.h		\
-	idosourcemenuitem.h
+	idosourcemenuitem.h		\
+	$(NULL)
 
-EXTRA_DIST =				\
-	ido.list			\
-	idotypebuiltins.h.template	\
-	idotypebuiltins.c.template
-
-
-idotypebuiltins.h: stamp-idotypebuiltins.h
-
-stamp-idotypebuiltins.h: $(sources_h)
-	( cd $(srcdir) && $(GLIB_MKENUMS) --template idotypebuiltins.h.template \
-		$(sources_h) ) >> xgen-gtbh \
-	&& (cmp -s xgen-gtbh idotypebuiltins.h || cp xgen-gtbh idotypebuiltins.h ) \
-	&& rm -f xgen-gtbh && echo timestamp > $(@F)
-
-idotypebuiltins.c: stamp-idotypebuiltins.h
-	( cd $(srcdir) && $(GLIB_MKENUMS) --template idotypebuiltins.c.template \
-		$(sources_h) ) > xgen-gtbc \
-	&& cp xgen-gtbc idotypebuiltins.c && rm -f xgen-gtbc
-
-INCLUDES =				\
-	-I$(srcdir)			\
-	-I$(top_srcdir)			\
-	-DG_LOG_DOMAIN=\"IDO\"		\
-	-DPREFIX=\"$(prefix)"\"		\
-	-DLIBDIR=\"$(libdir)"\"		\
-	-DG_DISABLE_DEPRECATED		\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	-DGDK_DISABLE_DEPRECATED
-
-AM_CPPFLAGS =				\
-	$(GCC_FLAGS)			\
-	$(GTK_CFLAGS)			\
-	$(MAINTAINER_CFLAGS)    \
-	-Wall -Wextra -Wno-unused-parameter -Wno-error=deprecated-declarations
-
-AM_CFLAGS =                             \
-	$(COVERAGE_CFLAGS)
-
-libayatana_ido_0_4_la_SOURCES =		\
+sources_c =				\
 	ayatanamenuitemfactory.c	\
 	libayatana-ido.c		\
 	idotypebuiltins.c		\
@@ -89,13 +55,58 @@ libayatana_ido_0_4_la_SOURCES =		\
 	idoplaybackmenuitem.c		\
 	idoappointmentmenuitem.c	\
 	idobasicmenuitem.c		\
-    idoremovablemenuitem.c \
+	idoremovablemenuitem.c		\
 	idoprogressmenuitem.c		\
 	idotimestampmenuitem.c		\
 	idolocationmenuitem.c		\
 	idoapplicationmenuitem.c	\
 	idodetaillabel.c		\
-	idosourcemenuitem.c
+	idosourcemenuitem.c		\
+	$(NULL)
+
+EXTRA_DIST =				\
+	ido.list			\
+	idotypebuiltins.h.template	\
+	idotypebuiltins.c.template	\
+	$(NULL)
+
+idotypebuiltins.h: stamp-idotypebuiltins.h
+
+stamp-idotypebuiltins.h: $(sources_h)
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template idotypebuiltins.h.template		\
+		$(sources_h) ) >> xgen-gtbh						\
+	&& (cmp -s xgen-gtbh idotypebuiltins.h || cp xgen-gtbh idotypebuiltins.h )	\
+	&& rm -f xgen-gtbh && echo timestamp > $(@F)					\
+	$(NULL)
+
+idotypebuiltins.c: stamp-idotypebuiltins.h
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template idotypebuiltins.c.template \
+		$(sources_h) ) > xgen-gtbc \
+	&& cp xgen-gtbc idotypebuiltins.c && rm -f xgen-gtbc
+
+AM_CPPFLAGS =									\
+	-I$(srcdir)								\
+	-I$(top_srcdir)								\
+	-DG_LOG_DOMAIN=\"IDO\"							\
+	-DPREFIX=\"$(prefix)"\"							\
+	-DLIBDIR=\"$(libdir)"\"							\
+	-DG_DISABLE_DEPRECATED							\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED						\
+	-DGDK_DISABLE_DEPRECATED						\
+	$(GCC_FLAGS)								\
+	$(GTK_CFLAGS)								\
+	$(MAINTAINER_CFLAGS)							\
+	-Wall -Wextra -Wno-unused-parameter -Wno-error=deprecated-declarations	\
+	$(NULL)
+
+AM_CFLAGS =				\
+	$(COVERAGE_CFLAGS)		\
+	$(NULL)
+
+libayatana_ido_0_4_la_SOURCES =		\
+	$(sources_h)			\
+	$(sources_c)			\
+	$(NULL)
 
 libayatana_ido3_0_4_la_SOURCES = $(libayatana_ido_0_4_la_SOURCES)
 
@@ -109,30 +120,34 @@ libayatana_idoinclude_HEADERS =		\
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
 	idotimeline.h			\
-	libayatana-ido.h
+	libayatana-ido.h		\
+	$(NULL)
 
 libayatana_ido_0_4_la_LIBADD = $(GTK_LIBS) $(LIBM)
-libayatana_ido_0_4_la_LDFLAGS =                 \
-	$(GTK_LT_LDFLAGS)               \
-	$(COVERAGE_LDFLAGS)	\
-	-no-undefined \
-	-export-symbols-regex "^[^_].*"
+libayatana_ido_0_4_la_LDFLAGS =			\
+	$(GTK_LT_LDFLAGS)			\
+	$(COVERAGE_LDFLAGS)			\
+	-no-undefined				\
+	-export-symbols-regex "^[^_].*"		\
+	$(NULL)
+
 libayatana_ido3_0_4_la_LIBADD = $(libayatana_ido_0_4_la_LIBADD)
-libayatana_ido3_0_4_la_LDFLAGS =                \
-	$(libayatana_ido_0_4_la_LDFLAGS)
+libayatana_ido3_0_4_la_LDFLAGS = $(libayatana_ido_0_4_la_LDFLAGS)
 
 DISTCLEANFILES =			\
 	Makefile.in			\
 	stamp-idotypebuiltins.h		\
 	idotypebuiltins.h		\
-	idotypebuiltins.c
+	idotypebuiltins.c		\
+	$(NULL)
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = \
-        --symbol-prefix=ido \
-        --warn-all \
-        --identifier-prefix=Ido
+INTROSPECTION_SCANNER_ARGS =		\
+	--symbol-prefix=ido		\
+	--warn-all			\
+	--identifier-prefix=Ido		\
+	$(NULL)
 
 if HAVE_INTROSPECTION
 
@@ -147,7 +162,9 @@ AyatanaIdo3_0_4_gir_FILES = \
 	idoscalemenuitem.h		\
 	idoswitchmenuitem.h		\
 	idotimeline.h			\
-	$(libayatana_ido_0_4_la_SOURCES)
+	$(sources_c)			\
+	$(NULL)
+
 AyatanaIdo3_0_4_gir_NAMESPACE = AyatanaIdo3
 AyatanaIdo3_0_4_gir_VERSION = 0.4
 AyatanaIdo3_0_4_gir_SCANNER_FLAGS = $(INTROSPECTION_SCANNER_ARGS)
@@ -170,8 +187,8 @@ vapidir = $(datadir)/vala/vapi
 vapi_DATA = AyatanaIdo3-0.4.vapi
 
 AyatanaIdo3-0.4.vapi: AyatanaIdo3-0.4.gir
-	$(VALA_API_GEN) --library=AyatanaIdo3-0.4 \
-			--pkg gtk+-3.0 \
+	$(VALA_API_GEN) --library=AyatanaIdo3-0.4	\
+			--pkg gtk+-3.0			\
 			$<
 
 CLEANFILES += $(vapi_DATA)
