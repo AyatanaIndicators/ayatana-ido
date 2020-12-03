@@ -134,7 +134,7 @@ AC_PATH_PROG([VALA_API_GEN], [vapigen])
 dnl = Google Test Framework ===================================================
 
 dnl xorg-gtest also provides gtest.
-CHECK_XORG_GTEST
+# CHECK_XORG_GTEST
 
 dnl = GTK Doc Check ===========================================================
 
