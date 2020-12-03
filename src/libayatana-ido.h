@@ -26,9 +26,9 @@
 #ifndef __IDO__
 #define __IDO__
 
-#include <libayatana-ido/idocalendarmenuitem.h>
-#include <libayatana-ido/idoscalemenuitem.h>
-#include <libayatana-ido/idoentrymenuitem.h>
+#include "idocalendarmenuitem.h"
+#include "idoscalemenuitem.h"
+#include "idoentrymenuitem.h"
 
 void ido_init (void);
 
