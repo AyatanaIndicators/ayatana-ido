@@ -2,20 +2,19 @@
 # THE FOLLOWING LINES IS USED BY docker-build
 ##########################################################
 requires:
-#  archlinux:
-#    - autoconf-archive
-#    - clang
-#    - gcc
-#    - git
-#    - gobject-introspection
-#    - gtk3
-#    - intltool
-#    - iso-codes
-#    - meson
-#    - make
-#    - mate-common
-#    - startup-notification
-#    - which
+  archlinux:
+    - autoconf-archive
+    - clang
+    - gcc
+    - git
+    - make
+    - startup-notification
+    - glib2
+    - gobject-introspection
+    - gtk3
+    - gtk-doc
+    - mate-common
+    - vala
 
   debian:
     # Useful URL: https://salsa.debian.org/debian-ayatana-team/ayatana-ido

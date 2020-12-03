@@ -26,7 +26,7 @@ script:
   - ./docker-build --name ${DISTRO} --verbose --config .build.yml --build scripts --build autotools
 
 env:
-#  - DISTRO="archlinux:latest"
+  - DISTRO="archlinux:latest"
   - DISTRO="debian:testing"
 #  - DISTRO="fedora:latest"
   - DISTRO="ubuntu:rolling"
