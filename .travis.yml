@@ -20,7 +20,7 @@ before_install:
   # let's use the MATE project's docker build scripts...
   - curl -Ls -o docker-build https://github.com/mate-desktop/mate-dev-scripts/raw/master/travis/docker-build
   - curl -Ls -o gen-index https://github.com/mate-desktop/mate-dev-scripts/raw/master/travis/gen-index.sh
-  - sed -i gen-index -e "s/mate-desktop/ayatana-indicators/g"
+  - sed -i gen-index -e "s/mate-desktop.dev/ayatana-indicators.org/g"
   - chmod +x docker-build gen-index
 
 install:
@@ -33,8 +33,22 @@ script:
 env:
   - DISTRO="archlinux:latest"
   - DISTRO="debian:testing"
-#  - DISTRO="fedora:latest"
+  - DISTRO="fedora:latest"
   - DISTRO="ubuntu:rolling"
+
+deploy:
+  - provider: pages
+    edge: true
+    token: ${GITHUB_TOKEN}
+    keep_history: true
+    committer_from_gh: true
+    target_branch: gh-pages
+    local_dir: html-report
+    strategy: git
+    on:
+      all_branches: true
+      condition: ${DISTRO} =~ ^fedora.*$
+
 jobs:
   exclude:
     - env: DISTRO="archlinux:latest"
