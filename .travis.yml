@@ -2,6 +2,11 @@
 dist: bionic
 language: shell
 os: linux
+
+arch:
+  - amd64
+  - ppc64le
+
 services:
   - docker
 
@@ -30,3 +35,7 @@ env:
   - DISTRO="debian:testing"
 #  - DISTRO="fedora:latest"
   - DISTRO="ubuntu:rolling"
+jobs:
+  exclude:
+    - env: DISTRO="archlinux:latest"
+      arch: ppc64le
