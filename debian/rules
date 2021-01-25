@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-export DPKG_GENSYMBOLS_CHECK_LEVEL = 4 
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
@@ -14,7 +14,10 @@ override_dh_autoreconf:
 
 override_dh_install:
 	find debian/tmp/usr/lib -name *.la -delete
-	dh_install --fail-missing
+	dh_install
+
+override_dh_missing:
+	dh_missing --fail-missing
 
 get-orig-source:
 	uscan --noconf --force-download --rename --download-current-version --destdir=..

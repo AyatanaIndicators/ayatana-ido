@@ -1,11 +1,12 @@
 libayatana-ido3-0.4.so.0 libayatana-ido3-0.4-0 #MINVER#
+*Build-Depends-Package: libayatana-ido3-dev
  ayatana_menu_item_factory_create_menu_item@Base 0.4.0
  ayatana_menu_item_factory_get_all@Base 0.4.0
  ayatana_menu_item_factory_get_type@Base 0.4.0
- idoRemovableMenuItemSetIcon@Base 0.8.1
- idoRemovableMenuItemSetIconFromFile@Base 0.8.1
- idoRemovableMenuItemSetText@Base 0.8.1
- idoRemovableMenuItemUseMarkup@Base 0.8.1
+ idoRemovableMenuItemSetIcon@Base 0.8.2
+ idoRemovableMenuItemSetIconFromFile@Base 0.8.2
+ idoRemovableMenuItemSetText@Base 0.8.2
+ idoRemovableMenuItemUseMarkup@Base 0.8.2
  ido_action_helper_activate@Base 0.4.0
  ido_action_helper_activate_with_parameter@Base 0.4.0
  ido_action_helper_change_action_state@Base 0.4.0
@@ -50,13 +51,16 @@ libayatana-ido3-0.4.so.0 libayatana-ido3-0.4-0 #MINVER#
  ido_location_menu_item_new_from_model@Base 0.4.0
  ido_location_menu_item_set_timezone@Base 0.4.0
  ido_menu_item_factory_get_type@Base 0.4.0
+#MISSING: 0.8.0# ido_message_dialog_get_type@Base 0.1.8
+#MISSING: 0.8.0# ido_message_dialog_new@Base 0.1.8
+#MISSING: 0.8.0# ido_message_dialog_new_with_markup@Base 0.1.8
  ido_progress_menu_item_new_from_model@Base 0.4.0
  ido_range_get_type@Base 0.1.9
  ido_range_new@Base 0.1.9
  ido_range_style_get_type@Base 0.1.9
- ido_removable_menu_item_get_type@Base 0.8.1
- ido_removable_menu_item_new@Base 0.8.1
- ido_removable_menu_item_new_from_model@Base 0.8.1
+ ido_removable_menu_item_get_type@Base 0.8.2
+ ido_removable_menu_item_new@Base 0.8.2
+ ido_removable_menu_item_new_from_model@Base 0.8.2
  ido_scale_menu_item_get_primary_image@Base 0.1.1
  ido_scale_menu_item_get_primary_label@Base 0.1.9
  ido_scale_menu_item_get_scale@Base 0.1.0
