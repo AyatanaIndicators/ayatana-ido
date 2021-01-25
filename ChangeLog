@@ -1,6 +1,175 @@
-2020-11-09 17:34:44 +0100 Mike Gabriel
+2021-01-25 16:55:02 +0100 Mike Gabriel
 
-	* release 0.8.1 (HEAD -> master, tag: 0.8.1)
+	* release 0.8.2 (HEAD -> master, tag: 0.8.2)
+
+2021-01-25 16:40:30 +0100 Mike Gabriel (9f276a0)
+
+	* debian/*: Update from official Debian packaging.
+
+2020-12-22 22:50:16 +0100 Robert Tari (f51b230)
+
+	* Merge branch 'sunweaver-pr/travis-builds-against-fedora'
+
+2020-12-22 15:03:49 +0100 Mike Gabriel (46dc10a)
+
+	* Travis: Enable CI builds against Fedora.
+
+2020-12-22 14:27:35 +0100 Mike Gabriel (bcc5cc5)
+
+	* Merge branch 'dthadi3-ppc64le'
+
+2020-12-10 12:58:29 +0000 Devendranath Thadi (3255a97)
+
+	* Travis-ci: archlinux docker image not available on power
+
+2020-12-10 11:55:39 +0000 Devendranath Thadi (e5a710f)
+
+	* Travis-ci: added support for ppc64le
+
+2020-12-03 20:14:21 +0100 Mike Gabriel (9aa4750)
+
+	* .build.yml: Add 'which' build-requirement (needed by autogen.sh /
+          mate-common) when building against Archlinux.
+
+2020-12-03 17:31:41 +0100 Mike Gabriel (8acd8f7)
+
+	* Travis: First attempt at CI building against Archlinux.
+
+2020-12-03 16:58:43 +0100 Mike Gabriel (af27d39)
+
+	* debian/libayatana-ido3-0.4-0.symbols: Update for new symbols
+          related to idoRemovableMenuItem.
+
+2020-12-03 16:43:01 +0100 Robert Tari (295c154)
+
+	* Merge branch 'sunweaver-pr/fix-make-distcheck'
+
+2020-11-30 23:01:58 +0100 Mike Gabriel (afdf462)
+
+	* AUTHORS: Add Robert Tari to authors.
+
+2020-12-03 16:38:27 +0100 Robert Tari (6e5bb51)
+
+	* Merge branch 'sunweaver-pr/update-authors'
+
+2020-12-02 15:09:49 +0100 Mike Gabriel (5df78c7)
+
+	* TRAVIS: Add .build.yml (missing in previous commit).
+
+2020-12-02 11:26:36 +0100 Mike Gabriel (1803b01)
+
+	* TRAVIS: first attempt of doing CI builds in docker images.
+
+2020-12-03 13:21:55 +0100 Mike Gabriel (3ca4c37)
+
+	* NEWS: Add file (compiled out of Git history).
+
+2020-12-03 11:44:01 +0100 Mike Gabriel (2a83a92)
+
+	* Makefile.am: Add --disable-silent-rules option to
+          DISTCHECK_CONFIGURE_FLAGS.
+
+2020-12-03 11:43:37 +0100 Mike Gabriel (9057543)
+
+	* src/Makefile.am: Move 'sources_c =' variable definition further up.
+
+2020-12-03 11:42:50 +0100 Mike Gabriel (385c797)
+
+	* src/Makefile.am: Split out all *.c files from
+          libayatana_ido_0_4_la_SOURCES into sources_c variable.
+
+2020-12-03 11:41:40 +0100 Mike Gabriel (d5fb21d)
+
+	* src/Makefile.am: Various TAB'bing fixes / beautifications.
+
+2020-12-03 11:40:03 +0100 Mike Gabriel (5307fc8)
+
+	* src/Makefile.am: Merge old 'INCLUDES =' and 'AM_CPPFLAGS =' values
+          (and beautify the TAB'bing).
+
+2020-12-03 11:35:51 +0100 Mike Gabriel (bd87193)
+
+	* src/libayatana-ido.h: Include internal APIs from the local
+          directory (i.e. the same dir where libayatana-ido.h is
+          located).
+
+2020-12-03 11:35:07 +0100 Mike Gabriel (0a5a670)
+
+	* configure.ac: Comment out CHECK_XORG_GTEST. Not available in a
+          functional state, currently.
+
+2020-12-03 10:29:32 +0100 Mike Gabriel (9f5734c)
+
+	* Makefile.am: Re-add DISTCHECK_CONFIGURE_FLAGS to disable GTK doc
+          build during 'make distcheck'.
+
+2020-12-02 15:09:49 +0100 Mike Gabriel (f2e0176)
+
+	* TRAVIS: Add .build.yml (missing in previous commit).
+
+2020-12-02 11:26:36 +0100 Mike Gabriel (8323793)
+
+	* TRAVIS: first attempt of doing CI builds in docker images.
+
+2020-11-30 23:01:58 +0100 Mike Gabriel (36c39de)
+
+	* AUTHORS: Add Robert Tari to authors.
+
+2020-12-01 14:15:53 +0100 Mike Gabriel (6f86a8c)
+
+	* .travis.yml: Correctly set MATRIX_EVAL for 'GCC 10.x / Ubuntu
+          bionic'.
+
+2020-12-01 13:35:05 +0100 Mike Gabriel (1cbc0bc)
+
+	* .travis.yml: Add test-build against GCC 10.x.
+
+2020-12-01 13:34:45 +0100 Mike Gabriel (67324d2)
+
+	* .travis.yml: Name Ubuntu version in CI job names.
+
+2020-12-01 13:32:00 +0100 Mike Gabriel (521d2bd)
+
+	* .travis.yml: Disable 'Clang 3.9 / xenial' CI build (GLib2.0 too old
+          in Ubuntu xenial).
+
+2020-12-01 13:31:48 +0100 Mike Gabriel (9478a52)
+
+	* .travis.yml: Disable 'GCC 5.4 / xenial' CI build (GLib2.0 too old
+          in Ubuntu xenial)..
+
+2020-12-01 11:21:24 +0100 Mike Gabriel (242e670)
+
+	* .travis.yml: Add 'script:' section. Our test target is 'check', not
+          'test'. Also enable more verbose builds.
+
+2020-12-01 09:15:43 +0100 Mike Gabriel (aff72d8)
+
+	* .travis.yml: Run autogen.sh before configuring/building.
+
+2020-11-30 23:00:49 +0100 Mike Gabriel (da6f59b)
+
+	* Initial .travis.yml configuration.
+
+2020-11-30 22:36:54 +0100 Mike Gabriel (7fb66ef)
+
+	* Merge branch 'tari01-pr/show-removable-button'
+
+2020-11-26 22:58:32 +0100 Robert Tari (e7d6217)
+
+	* idoremovablemenuitem.c: Show button by default
+
+2020-11-30 22:34:34 +0100 Mike Gabriel (fbf7f2e)
+
+	* Merge branch 'tari01-pr/ido-removable'
+
+2020-11-24 22:42:18 +0100 Robert Tari (02f9598)
+
+	* Add a new menu item type: IDO Removable
+
+2020-11-09 17:34:44 +0100 Mike Gabriel (d3bcb7d)
+
+	* release 0.8.1 (tag: 0.8.1)
 
 2020-10-21 13:19:35 +0200 Mike Gabriel (2267a40)
 

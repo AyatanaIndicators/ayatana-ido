@@ -1,6 +1,9 @@
 Overview of changes in ayatana-ido 0.8.2
 
   - Add Travis support (CI builds).
+  - Update AUTHORS file.
+  - Add new NEWS file.
+  - Add a new menu item type: IDO Removable.
 
 Overview of changes in ayatana-ido 0.8.1
 
