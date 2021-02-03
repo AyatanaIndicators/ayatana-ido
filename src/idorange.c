@@ -25,7 +25,6 @@
 
 #include "idorange.h"
 #include "idotypebuiltins.h"
-#include "config.h"
 
 typedef struct {
   IdoRangeStyle style;

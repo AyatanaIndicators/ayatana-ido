@@ -25,7 +25,6 @@
 
 #include <gdk/gdkkeysyms.h>
 #include "idoentrymenuitem.h"
-#include "config.h"
 
 static void     ido_entry_menu_item_finalize          (GObject        *item);
 static void     ido_entry_menu_item_select            (GtkMenuItem        *item);
