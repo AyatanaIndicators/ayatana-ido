@@ -23,9 +23,6 @@
  *    Cody Russell <crussell@canonical.com>
  */
 
-#include "config.h"
-
-
 #include <gtk/gtk.h>
 #include "idorange.h"
 #include "idoscalemenuitem.h"

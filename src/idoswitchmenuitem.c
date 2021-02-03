@@ -18,8 +18,6 @@
  * Author: Charles Kerr <charles.kerr@canonical.com>
  */
 
-#include "config.h"
-
 #include "idoswitchmenuitem.h"
 #include "idoactionhelper.h"
 
