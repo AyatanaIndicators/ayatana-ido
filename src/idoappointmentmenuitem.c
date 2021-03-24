@@ -104,7 +104,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
 
   if (g_menu_item_get_attribute (menu_item, "x-ayatana-color", "s", &str))
     {
-      names[n] = "icon";
+      names[n] = "pixbuf";
       g_value_init (&values[n], G_TYPE_OBJECT);
       g_value_take_object (&values[n], create_color_icon_pixbuf (str));
       g_free(str);
