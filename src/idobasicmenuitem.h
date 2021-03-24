@@ -53,6 +53,9 @@ GtkWidget * ido_basic_menu_item_new              (void);
 void ido_basic_menu_item_set_icon                (IdoBasicMenuItem * self,
                                                   GIcon            * icon);
 
+void ido_basic_menu_item_set_pixbuf              (IdoBasicMenuItem * self,
+                                                  GdkPixbuf        * pPixbuf);
+
 void ido_basic_menu_item_set_icon_from_file      (IdoBasicMenuItem * self,
                                                   const char       * filename);
 
