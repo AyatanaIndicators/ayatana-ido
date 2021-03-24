@@ -26,6 +26,7 @@ enum
 {
   PROP_0,
   PROP_ICON,
+  PROP_PIXBUF,
   PROP_TEXT,
   PROP_SECONDARY_TEXT,
   PROP_LAST
@@ -35,6 +36,7 @@ static GParamSpec *properties[PROP_LAST];
 
 typedef struct {
   GIcon * icon;
+  GdkPixbuf *pPixbuf;
   char * text;
   char * secondary_text;
 
@@ -62,6 +64,10 @@ my_get_property (GObject     * o,
     {
       case PROP_ICON:
         g_value_set_object (value, p->icon);
+        break;
+
+      case PROP_PIXBUF:
+        g_value_set_object(value, p->pPixbuf);
         break;
 
       case PROP_TEXT:
@@ -92,6 +98,10 @@ my_set_property (GObject       * o,
         ido_basic_menu_item_set_icon (self, g_value_get_object (value));
         break;
 
+      case PROP_PIXBUF:
+        ido_basic_menu_item_set_pixbuf(self, g_value_get_object(value));
+        break;
+
       case PROP_TEXT:
         ido_basic_menu_item_set_text (self, g_value_get_string (value));
         break;
@@ -113,6 +123,7 @@ my_dispose (GObject * object)
   IdoBasicMenuItemPrivate *p = ido_basic_menu_item_get_instance_private(self);
 
   g_clear_object (&p->icon);
+  g_clear_object (&p->pPixbuf);
 
   G_OBJECT_CLASS (ido_basic_menu_item_parent_class)->dispose (object);
 }
@@ -136,31 +147,39 @@ ido_basic_menu_item_update_image (IdoBasicMenuItem *self)
 
   gtk_image_clear (GTK_IMAGE (p->image));
 
-  if (p->icon == NULL)
+  if (p->icon == NULL && p->pPixbuf == NULL)
     {
       gtk_widget_set_visible (p->image, FALSE);
     }
   else
     {
-      GtkIconInfo *info;
-      const gchar *filename;
-
-      info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (), p->icon, 16, 0);
-      filename = gtk_icon_info_get_filename (info);
-
-      if (filename)
+        if (p->pPixbuf)
         {
-          GdkPixbuf *pixbuf;
-
-          pixbuf = gdk_pixbuf_new_from_file_at_scale (filename, -1, 16, TRUE, NULL);
-          gtk_image_set_from_pixbuf (GTK_IMAGE (p->image), pixbuf);
-
-          g_object_unref (pixbuf);
+            gtk_image_set_from_pixbuf(GTK_IMAGE(p->image), p->pPixbuf);
+            gtk_widget_set_visible(p->image, TRUE);
         }
+        else if (p->icon)
+        {
+            GtkIconInfo *info;
+            const gchar *filename;
 
-      gtk_widget_set_visible (p->image, filename != NULL);
+            info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (), p->icon, 16, 0);
+            filename = gtk_icon_info_get_filename (info);
 
-      g_object_unref (info);
+            if (filename)
+            {
+              GdkPixbuf *pixbuf;
+
+              pixbuf = gdk_pixbuf_new_from_file_at_scale (filename, -1, 16, TRUE, NULL);
+              gtk_image_set_from_pixbuf (GTK_IMAGE (p->image), pixbuf);
+
+              g_object_unref (pixbuf);
+            }
+
+            gtk_widget_set_visible (p->image, filename != NULL);
+
+            g_object_unref (info);
+        }
     }
 }
 
@@ -198,6 +217,12 @@ ido_basic_menu_item_class_init (IdoBasicMenuItemClass *klass)
   properties[PROP_ICON] = g_param_spec_object ("icon",
                                                "Icon",
                                                "The menuitem's GIcon",
+                                               G_TYPE_OBJECT,
+                                               prop_flags);
+
+  properties[PROP_PIXBUF] = g_param_spec_object ("pixbuf",
+                                               "Pixbuf",
+                                               "The menuitem's GdkPixbuf",
                                                G_TYPE_OBJECT,
                                                prop_flags);
 
@@ -286,6 +311,22 @@ ido_basic_menu_item_set_icon (IdoBasicMenuItem * self, GIcon * icon)
 
       p->icon = icon ? g_object_ref (icon) : NULL;
       ido_basic_menu_item_update_image (self);
+    }
+}
+
+void ido_basic_menu_item_set_pixbuf(IdoBasicMenuItem *self, GdkPixbuf *pPixbuf)
+{
+    IdoBasicMenuItemPrivate *pPrivate = ido_basic_menu_item_get_instance_private(self);
+
+    if (pPrivate->pPixbuf != pPixbuf)
+    {
+        if (pPrivate->pPixbuf)
+        {
+            g_object_unref(pPrivate->pPixbuf);
+        }
+
+        pPrivate->pPixbuf = pPixbuf ? g_object_ref(pPixbuf) : NULL;
+        ido_basic_menu_item_update_image(self);
     }
 }
 
