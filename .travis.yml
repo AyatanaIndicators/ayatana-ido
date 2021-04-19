@@ -36,19 +36,6 @@ env:
 #  - DISTRO="fedora:latest"
   - DISTRO="ubuntu:rolling"
 
-deploy:
-  - provider: pages
-    edge: true
-    token: ${GITHUB_TOKEN}
-    keep_history: true
-    committer_from_gh: true
-    target_branch: gh-pages
-    local_dir: html-report
-    strategy: git
-    on:
-      all_branches: true
-      condition: ${DISTRO} =~ ^fedora.*$
-
 jobs:
   exclude:
     - env: DISTRO="archlinux:latest"
