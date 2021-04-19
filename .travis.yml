@@ -17,11 +17,9 @@ addons:
       - python3-setuptools
 
 before_install:
-  # let's use the MATE project's docker build scripts...
+  # let's use the MATE project's docker build script...
   - curl -Ls -o docker-build https://github.com/mate-desktop/mate-dev-scripts/raw/master/travis/docker-build
-  - curl -Ls -o gen-index https://github.com/mate-desktop/mate-dev-scripts/raw/master/travis/gen-index.sh
-  - sed -i gen-index -e "s/mate-desktop.dev/ayatana-indicators.org/g"
-  - chmod +x docker-build gen-index
+  - chmod +x docker-build
 
 install:
   - pip3 install PyGithub
@@ -33,7 +31,6 @@ script:
 env:
   - DISTRO="archlinux:latest"
   - DISTRO="debian:testing"
-#  - DISTRO="fedora:latest"
   - DISTRO="ubuntu:rolling"
 
 jobs:
