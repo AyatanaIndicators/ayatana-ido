@@ -114,5 +114,4 @@ after_scripts:
   -     if [ ${DISTRO_NAME} == "debian" ];then
   -         make check
   -     fi
-  -     make distcheck
   - fi
