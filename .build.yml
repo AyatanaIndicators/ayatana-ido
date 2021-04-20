@@ -92,7 +92,7 @@ build_scripts:
   - elif [ -e ./CMakeLists.txt ]; then
   -     scan-build $CHECKERS --keep-cc --use-cc=clang --use-c++=clang++ -o html-report cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON
   - else
-  -     echo "ERROR: Build system not supported (supported are: autogen.sh, CMake)"
+  -     echo "Build system not supported (we currently support autogen.sh, CMake)."
   -     exit 1
   - fi
   -
