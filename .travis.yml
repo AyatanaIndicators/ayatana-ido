@@ -22,6 +22,7 @@ before_install:
   - chmod +x docker-build
 
 install:
+  - pip3 install wheel
   - pip3 install PyGithub
   - ./docker-build --name ${DISTRO} --config .build.yml --install
 
