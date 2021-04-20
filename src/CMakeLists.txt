@@ -135,6 +135,7 @@ add_custom_command(
     --warn-all
     --include=Gtk-3.0
     --library="ayatana-ido3-0.4"
+    --library-path=${CMAKE_CURRENT_BINARY_DIR}
     --output "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.gir"
 )
 
