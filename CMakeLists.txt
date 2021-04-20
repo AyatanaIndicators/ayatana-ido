@@ -54,11 +54,6 @@ else()
     enable_testing()
     add_subdirectory(example)
     add_subdirectory(tests)
-    ENABLE_COVERAGE_REPORT(
-        TARGETS ${COVERAGE_TARGETS}
-        TESTS ${COVERAGE_TEST_TARGETS}
-        FILTER /usr/include ${CMAKE_BINARY_DIR}/*
-    )
 endif()
 
 # Display config info
