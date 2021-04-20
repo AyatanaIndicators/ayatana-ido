@@ -8,11 +8,13 @@ requires:
     - make
     - startup-notification
     - which
+    - cmake
+    - cmake-extras
+    - mate-common
     - glib2
     - gobject-introspection
     - gtk3
     - gtk-doc
-    - mate-common
     - vala
 
   debian:
@@ -22,6 +24,9 @@ requires:
     - clang-tools
     - cppcheck
     - git
+    - cmake
+    - cmake-extras
+    - mate-common
     - gobject-introspection
     - gtk-doc-tools
     - libgirepository1.0-dev
@@ -30,12 +35,14 @@ requires:
     - libgtk-3-dev
     - libx11-dev
     - libxi-dev
-    - mate-common
     - valac
 
   ubuntu:
     - autopoint
     - git
+    - cmake
+    - cmake-extras
+    - mate-common
     - gobject-introspection
     - gtk-doc-tools
     - libgirepository1.0-dev
@@ -44,7 +51,6 @@ requires:
     - libgtk-3-dev
     - libx11-dev
     - libxi-dev
-    - mate-common
     - valac
 
 variables:
