@@ -3,6 +3,7 @@
 ##########################################################
 requires:
   archlinux:
+    - clang
     - gcc
     - git
     - make
@@ -43,6 +44,8 @@ requires:
 
   ubuntu:
     - autopoint
+    - clang
+    - clang-tools
     - git
     - cmake
     - cmake-extras
