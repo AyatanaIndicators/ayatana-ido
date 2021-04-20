@@ -3,14 +3,11 @@
 ##########################################################
 requires:
   archlinux:
-    - autoconf-archive
-    - clang
     - gcc
     - git
     - make
     - startup-notification
     - which
-    - pacman
     - glib2
     - gobject-introspection
     - gtk3
@@ -38,8 +35,6 @@ requires:
 
   ubuntu:
     - autopoint
-    - clang
-    - clang-tools
     - git
     - gobject-introspection
     - gtk-doc-tools
