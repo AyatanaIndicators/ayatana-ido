@@ -7,18 +7,15 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     SET(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "..." FORCE)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
-option(MAINTAINER_MODE "Enable all tests and checks" OFF)
+option(ENABLE_TESTS "Enable all tests and checks" OFF)
 
 # Check for prerequisites
 
 set(DEPS glib-2.0>=2.64 gtk+-3.0>=3.24)
 
-if(MAINTAINER_MODE)
+if(NOT DISABLE_TESTS)
     # We also need gcovr and lcov
     set(DEPS ${DEPS} gtest>=1.10)
-    set(CMAKE_BUILD_TYPE "Coverage")
-else()
-    set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 find_package (PkgConfig REQUIRED)
@@ -46,13 +43,22 @@ endif()
 add_subdirectory(src)
 add_subdirectory(data)
 
-if(MAINTAINER_MODE)
+if (NOT ENABLE_TESTS)
+    message(STATUS "Unit tests disabled")
+else()
+    message(STATUS "Unit tests enabled")
+    include(CTest)
     enable_testing()
     add_subdirectory(example)
     add_subdirectory(tests)
+    ENABLE_COVERAGE_REPORT(
+        TARGETS ${COVERAGE_TARGETS}
+        TESTS ${COVERAGE_TEST_TARGETS}
+        FILTER /usr/include ${CMAKE_BINARY_DIR}/*
+    )
 endif()
 
 # Display config info
 
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "Maintainer mode: ${MAINTAINER_MODE}")
+message(STATUS "Unit tests:: ${ENABLE_TESTS}")
