@@ -36,29 +36,6 @@ requires:
     - mate-common
     - valac
 
-#  fedora:
-#    - autoconf-archive
-#    - cairo-gobject-devel
-#    - clang-analyzer
-#    - clang
-#    - cppcheck-htmlreport
-#    - dconf-devel
-#    - desktop-file-utils
-#    - gcc
-#    - git
-#    - redhat-rpm-config
-#    - startup-notification-devel
-#    - glib2-devel
-#    - gobject-introspection-devel
-#    - gtest-devel
-#    - gtk-doc
-#    - gtk3-devel
-#    - libX11-devel
-#    - libXi-devel
-#    - make
-#    - mate-common
-#    - vala
-#
   ubuntu:
     - autopoint
     - clang
