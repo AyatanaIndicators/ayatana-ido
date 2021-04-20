@@ -90,7 +90,7 @@ build_scripts:
   -     NOCONFIGURE=1 ./autogen.sh
   -     scan-build $CHECKERS ./configure --prefix=/usr --enable-gtk-doc --enable-compile-warnings=maximum
   - elif [ -e ./CMakeLists.txt ]; then
-  -     scan-build $CHECKERS --keep-cc --use-cc=clang --use-c++=clang++ -o html-report cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON
+  -     scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON
   - else
   -     exit 1
   - fi
