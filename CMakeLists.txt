@@ -19,11 +19,11 @@ endif()
 
 # Check for prerequisites
 
-set(DEPS glib-2.0>=2.64 gtk+-3.0>=3.24)
+set(DEPS glib-2.0>=2.58 gtk+-3.0>=3.24)
 
 if(NOT DISABLE_TESTS)
     # We also need gcovr and lcov
-    set(DEPS ${DEPS} gtest>=1.10)
+    set(DEPS ${DEPS} gtest>=1.8.1)
 endif()
 
 find_package (PkgConfig REQUIRED)
