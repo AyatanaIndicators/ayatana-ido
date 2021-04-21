@@ -41,6 +41,8 @@ requires:
     - valac
     - lcov
     - gcovr
+    - xauth
+    - xvfb
 
   ubuntu:
     - autopoint
@@ -111,11 +113,12 @@ build_scripts:
 
 after_scripts:
   - if [ ${BUILD_TYPE} == "scripts" ];then
+  -     XVFB_RUN=$(which xvfb-run)
   -     if [ ${DISTRO_NAME} == "debian" ];then
   -         if [ -e ./autogen.sh ]; then
-  -             make check
+  -             ${XVFB_RUN} make check
   -         elif [ -e ./CMakeLists.txt ]; then
-  -             make test
+  -             ${XVFB_RUN} make test
   -         fi
   -     fi
   - fi
