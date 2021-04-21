@@ -112,6 +112,10 @@ build_scripts:
 after_scripts:
   - if [ ${BUILD_TYPE} == "scripts" ];then
   -     if [ ${DISTRO_NAME} == "debian" ];then
-  -         make check
+  -         if [ -e ./autogen.sh ]; then
+  -             make check
+  -         elif [ -e ./CMakeLists.txt ]; then
+  -             make test
+  -         fi
   -     fi
   - fi
