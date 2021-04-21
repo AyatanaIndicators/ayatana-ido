@@ -22,6 +22,7 @@ target_link_libraries("gtest-menuitems"
     ${GMOCK_LIBRARIES}
 )
 add_test("gtest-menuitems" "gtest-menuitems")
+add_dependencies("gtest-menuitems" ayatana-ido3-0.4)
 
 
 # coverage
