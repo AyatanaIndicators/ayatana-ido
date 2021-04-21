@@ -20,8 +20,6 @@
  *     Lars Uebernickel <lars.uebernickel@canonical.com>
  */
 
-#include "config.h"
-
 #include "idoplaybackmenuitem.h"
 
 #include <gdk/gdkkeysyms.h>

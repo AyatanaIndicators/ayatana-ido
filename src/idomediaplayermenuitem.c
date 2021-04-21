@@ -19,8 +19,6 @@
  *     Lars Uebernickel <lars.uebernickel@canonical.com>
  */
 
-#include "config.h"
-
 #include "idomediaplayermenuitem.h"
 #include "idoactionhelper.h"
 

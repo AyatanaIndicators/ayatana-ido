@@ -26,7 +26,6 @@
 #include <gdk/gdkkeysyms.h>
 #include "idoactionhelper.h"
 #include "idocalendarmenuitem.h"
-#include "config.h"
 
 static void     ido_calendar_menu_item_finalize          (GObject        *item);
 static void     ido_calendar_menu_item_select            (GtkMenuItem    *item);

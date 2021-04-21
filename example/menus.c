@@ -7,7 +7,6 @@
 #include "idoswitchmenuitem.h"
 #include "idousermenuitem.h"
 #include "idoremovablemenuitem.h"
-#include "config.h"
 
 static void
 slider_grabbed (GtkWidget *widget, gpointer user_data)

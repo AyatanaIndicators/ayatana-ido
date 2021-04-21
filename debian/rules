@@ -6,11 +6,18 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/buildflags.mk
 
-%:
-	dh $@ --with autoreconf
+NULL :=
 
-override_dh_autoreconf:
-	NOCONFIGURE=1 dh_autoreconf ./autogen.sh
+DEB_CMAKE_EXTRA_FLAGS = \
+    -DENABLE_TESTS=ON \
+    -DENABLE_COVERAGE=OFF \
+    $(NULL)
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(DEB_CMAKE_EXTRA_FLAGS)
 
 override_dh_install:
 	find debian/tmp/usr/lib -name *.la -delete
@@ -18,6 +25,9 @@ override_dh_install:
 
 override_dh_missing:
 	dh_missing --fail-missing
+
+override_dh_auto_test:
+	xvfb-run -a dh_auto_test --no-parallel
 
 get-orig-source:
 	uscan --noconf --force-download --rename --download-current-version --destdir=..
