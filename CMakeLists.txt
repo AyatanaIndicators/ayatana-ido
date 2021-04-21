@@ -59,4 +59,4 @@ endif()
 # Display config info
 
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "Unit tests:: ${ENABLE_TESTS}")
+message(STATUS "Unit tests: ${ENABLE_TESTS}")
