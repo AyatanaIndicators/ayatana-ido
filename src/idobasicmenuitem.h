@@ -1,19 +1,21 @@
 /**
  * Copyright 2013 Canonical Ltd.
+ * Copyright 2021 AyatanaIndicators
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  *
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License version 3, as published 
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 3, as published
  * by the Free Software Foundation.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranties of 
- * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranties of
+ * MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
  * PURPOSE.  See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along 
+ * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -52,6 +54,9 @@ GtkWidget * ido_basic_menu_item_new              (void);
 
 void ido_basic_menu_item_set_icon                (IdoBasicMenuItem * self,
                                                   GIcon            * icon);
+
+void ido_basic_menu_item_set_pixbuf              (IdoBasicMenuItem * self,
+                                                  GdkPixbuf        * pPixbuf);
 
 void ido_basic_menu_item_set_icon_from_file      (IdoBasicMenuItem * self,
                                                   const char       * filename);
