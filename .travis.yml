@@ -34,7 +34,7 @@ env:
 #  - DISTRO="archlinux:latest"
   - DISTRO="debian:testing"
   - DISTRO="debian:stable"
-  - DISTRO="ubuntu:rolling"
+#  - DISTRO="ubuntu:rolling"
   - DISTRO="ubuntu:focal"
 
 jobs:
