@@ -51,6 +51,15 @@ if (ENABLE_TESTS)
     enable_testing()
     add_subdirectory(example)
     add_subdirectory(tests)
+    # coverage
+    if (ENABLE_COVERAGE)
+        find_package(CoverageReport)
+        ENABLE_COVERAGE_REPORT(
+            TARGETS "ayatana-ido3-0.4"
+            TESTS "gtest-menuitems"
+            FILTER /usr/include ${CMAKE_BINARY_DIR}/*
+        )
+    endif()
 endif()
 
 # Display config info
