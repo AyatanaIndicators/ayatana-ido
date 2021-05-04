@@ -23,10 +23,3 @@ target_link_libraries("gtest-menuitems"
 )
 add_test("gtest-menuitems" "gtest-menuitems")
 add_dependencies("gtest-menuitems" ayatana-ido3-0.4)
-
-
-# coverage
-if (ENABLE_COVERAGE)
-    find_package(CoverageReport)
-    ENABLE_COVERAGE_REPORT(TARGETS "gtest-menuitems" TESTS "gtest-menuitems")
-endif()
