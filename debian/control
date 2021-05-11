@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 Build-Depends: debhelper (>= 9),
-               cmake (>= 3.16),
+               cmake (>= 3.13),
                cmake-extras,
                lcov,
                gcovr,
