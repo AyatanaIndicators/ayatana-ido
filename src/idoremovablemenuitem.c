@@ -387,16 +387,14 @@ static void ido_removable_menu_item_init(IdoRemovableMenuItem *self)
     gtk_widget_set_valign(pPrivate->pButton, GTK_ALIGN_CENTER);
     gtk_widget_show(pPrivate->pButton);
 
-    GtkWidget *pWidget = gtk_grid_new();
-    GtkGrid *pGrid = GTK_GRID(pWidget);
-
-    gtk_grid_attach(pGrid, pPrivate->pImage, 0, 0, 1, 1);
-    gtk_grid_attach(pGrid, pPrivate->pLabel, 1, 0, 1, 1);
-    gtk_grid_attach(pGrid, pPrivate->pButton, 2, 0, 1, 1);
+    GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(pBox), pPrivate->pImage, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(pBox), pPrivate->pLabel, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(pBox), pPrivate->pButton, FALSE, FALSE, 0);
     g_object_set(pPrivate->pImage, "halign", GTK_ALIGN_START, "hexpand", FALSE, "valign", GTK_ALIGN_CENTER, "margin-right", 6, NULL);
     g_object_set(pPrivate->pLabel, "halign", GTK_ALIGN_START, "hexpand", TRUE, "margin-right", 6, "valign", GTK_ALIGN_CENTER, NULL);
-    gtk_widget_show (pWidget);
-    gtk_container_add(GTK_CONTAINER(self), pWidget);
+    gtk_widget_show(pBox);
+    gtk_container_add(GTK_CONTAINER(self), pBox);
     g_signal_connect(pPrivate->pLabel, "activate-link", G_CALLBACK(onActivateLink), self);
 }
 
