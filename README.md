@@ -34,7 +34,26 @@ https://ayatana-indicators.org
 
 ## About this Software Component
 
-TODO
+Ayatana IDO provides custom GTK menu widgets for Ayatana System Indicators.
+Below is a list of currently available menu item types:
+
+- Basic menu item
+- Scale menu item
+- Entry menu item
+- Source menu item
+- Location menu item
+- Switch menu item
+- Alarm menu item
+- Media player menu item
+- Switch menu item
+- Application menu item
+- Playback menu item
+- Timestamp menu item
+- Appointment menu item
+- Progress menu item
+- User menu item
+- Calendar menu item
+- Removable menu item
 
 ## License and Copyright
 
