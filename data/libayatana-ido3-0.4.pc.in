@@ -8,4 +8,4 @@ Description: Ayatana Indicator Display Objects
 Version: @PROJECT_VERSION@
 Libs: -L${libdir} -layatana-ido3-0.4
 Cflags: -I${includedir}/libayatana-ido3-0.4
-Requires: gtk+-3.0
+Requires: gtk+-3.0 glib-2.0
