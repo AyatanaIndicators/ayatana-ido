@@ -7,14 +7,14 @@
 # idotimeline.h
 # libayatana-ido.h
 
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/ayatanamenuitemfactory.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idocalendarmenuitem.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idoentrymenuitem.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idorange.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idoscalemenuitem.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idoswitchmenuitem.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idotimeline.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/libayatana-ido.h" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/ayatanamenuitemfactory.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idocalendarmenuitem.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idoentrymenuitem.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idorange.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idoscalemenuitem.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idoswitchmenuitem.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idotimeline.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/libayatana-ido.h" DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/libayatana-ido3-0.4/libayatana-ido")
 
 set(HEADERS
     idorange.h
@@ -102,9 +102,9 @@ target_include_directories("ayatana-ido3-0.4" PUBLIC ${PROJECT_DEPS_INCLUDE_DIRS
 target_include_directories("ayatana-ido3-0.4" PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories("ayatana-ido3-0.4" PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions("ayatana-ido3-0.4" PUBLIC G_LOG_DOMAIN="IDO")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so.0" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so.0.0.0" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so.0" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so.0.0.0" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}")
 
 # ayatana-ido3-0.4.gir
 
@@ -139,7 +139,7 @@ add_custom_command(
     --output "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.gir"
 )
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.gir" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/gir-1.0")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.gir" DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/gir-1.0")
 
 # ayatana-ido3-0.4.typelib
 
@@ -154,7 +154,7 @@ add_custom_command(
     -o "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.typelib"
 )
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.typelib" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/girepository-1.0")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.typelib" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/girepository-1.0")
 
 # ayatana-ido3-0.4.vapi
 
@@ -171,6 +171,6 @@ add_custom_command(
     AyatanaIdo3-0.4.gir
 )
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.vapi" DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/vala/vapi")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.vapi" DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/vala/vapi")
 
 add_custom_target("src" ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.vapi")
