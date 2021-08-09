@@ -1,7 +1,5 @@
 find_package(GMock)
 
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -no-pie")
-
 # gtest-menuitems
 
 include_directories(
@@ -12,6 +10,7 @@ include_directories(
 set_source_files_properties(gtest-menuitems.cpp PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS})
 
 add_executable("gtest-menuitems" gtest-menuitems.cpp)
+target_link_options("gtest-menuitems" PRIVATE -no-pie)
 target_link_libraries("gtest-menuitems"
     ayatana-ido3-0.4
 
