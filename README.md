@@ -1,4 +1,4 @@
-# ayatana-ido - Ayatana Indicator Display Objects  [![Build Status](https://travis-ci.com/AyatanaIndicators/ayatana-ido.svg)](https://travis-ci.com/AyatanaIndicators/ayatana-ido)
+# ayatana-ido - Ayatana Indicator Display Objects  [![Build Status](https://api.travis-ci.com/AyatanaIndicators/ayatana-ido.svg)](https://travis-ci.com/github/AyatanaIndicators/ayatana-ido)
 
 ## About Ayatana Indicators
 
