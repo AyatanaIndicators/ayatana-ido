@@ -397,7 +397,7 @@ ido_user_menu_item_new (void)
 
 /*
  * This is a helper function for creating user menuitems for both
- * "indicator.user-menu-item" and "indicator.guest-menu-item",
+ * "org.ayatana.indicator.user-menu-item" and "org.ayatana.indicator.guest-menu-item",
  * since they only differ in how they use their action's state.
  */
 static GtkMenuItem *
@@ -472,7 +472,7 @@ user_menu_item_new_from_model (GMenuItem    * menuitem,
 }
 
 /***
-****  indicator.user-menu-item handler
+****  org.ayatana.indicator.user-menu-item handler
 ***/
 
 /**
@@ -546,7 +546,7 @@ ido_user_menu_item_new_from_model (GMenuItem    *menuitem,
 }
 
 /***
-****  indicator.guest-menu-item handler
+****  org.ayatana.indicator.guest-menu-item handler
 ***/
 
 static void
