@@ -48,6 +48,7 @@ requires:
     - autopoint
     - clang
     - clang-tools
+    - cppcheck
     - git
     - cmake
     - cmake-extras
@@ -63,6 +64,8 @@ requires:
     - valac
     - lcov
     - gcovr
+    - xauth
+    - xvfb
 
 variables:
   - 'CHECKERS="
