@@ -57,10 +57,10 @@ ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
 {
   GtkMenuItem *item = NULL;
 
-  if (g_str_equal (type, "indicator.user-menu-item"))
+  if (g_str_equal (type, "org.ayatana.indicator.user-menu-item"))
     item = ido_user_menu_item_new_from_model (menuitem, actions);
 
-  if (g_str_equal (type, "indicator.guest-menu-item"))
+  if (g_str_equal (type, "org.ayatana.indicator.guest-menu-item"))
     item = ido_guest_menu_item_new_from_model (menuitem, actions);
 
   else if (g_str_equal (type, "org.ayatana.indicator.calendar"))
@@ -81,16 +81,16 @@ ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
   else if (g_str_equal (type, "org.ayatana.indicator.progress"))
     item = ido_progress_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "org.ayatana.unity.slider"))
+  else if (g_str_equal (type, "org.ayatana.indicator.slider"))
     item = ido_scale_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "org.ayatana.unity.media-player"))
+  else if (g_str_equal (type, "org.ayatana.indicator.media-player"))
     item = ido_media_player_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "org.ayatana.unity.playback-item"))
+  else if (g_str_equal (type, "org.ayatana.indicator.playback-item"))
     item = ido_playback_menu_item_new_from_model (menuitem, actions);
 
-  else if (g_str_equal (type, "org.ayatana.application"))
+  else if (g_str_equal (type, "org.ayatana.indicator.application"))
     item = ido_application_menu_item_new_from_model (menuitem, actions);
 
   else if (g_str_equal (type, "org.ayatana.indicator.messages.source"))
