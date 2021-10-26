@@ -139,9 +139,14 @@ build_scripts:
   - fi
   - # check if libgtk-4-dev is installed (this works on DEB systems,
   - # need to check on others if we ever add CI builds for them)
-  - if [ -d /usr/share/doc/libgtk-4-dev ]; then
-  -   flavours="gtk4 ${flavours}"
-  - fi
+  -
+  - ### Disable GTK+-4 builds for now, they don't work, yet.
+  -
+  - ### FIXME: Make sure to re-enable this once the port is about to be completed...
+  -
+  - #if [ -d /usr/share/doc/libgtk-4-dev ]; then
+  - #  flavours="gtk4 ${flavours}"
+  - #fi
   -
   - if [ -e ./CMakeLists.txt ]; then
   -     for flavour in ${flavours}; do
