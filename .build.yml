@@ -6,10 +6,12 @@ requires:
     - clang
     - gcc
     - git
+    - make
     - startup-notification
     - which
     - cmake
     - cmake-extras
+    - mate-common
     - glib2
     - gobject-introspection
     - gtk3
@@ -20,12 +22,14 @@ requires:
 
   debian:
     # Useful URL: https://salsa.debian.org/debian-ayatana-team/ayatana-ido
+    - autopoint
     - clang
     - clang-tools
     - cppcheck
     - git
     - cmake
     - cmake-extras
+    - mate-common
     - gobject-introspection
     - gtk-doc-tools
     - libgirepository1.0-dev
@@ -41,12 +45,14 @@ requires:
     - xvfb
 
   ubuntu:
+    - autopoint
     - clang
     - clang-tools
     - cppcheck
     - git
     - cmake
     - cmake-extras
+    - mate-common
     - gobject-introspection
     - gtk-doc-tools
     - libgirepository1.0-dev
@@ -85,7 +91,10 @@ build_scripts:
   -     cppcheck --enable=warning,style,performance,portability,information,missingInclude .
   - fi
   -
-  - if [ -e ./CMakeLists.txt ]; then
+  - if [ -e ./autogen.sh ]; then
+  -     NOCONFIGURE=1 ./autogen.sh
+  -     scan-build $CHECKERS ./configure --prefix=/usr --enable-gtk-doc --enable-compile-warnings=maximum
+  - elif [ -e ./CMakeLists.txt ]; then
   -     if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ]; then
   -         scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DENABLE_TESTS=ON
   -     else
@@ -108,9 +117,15 @@ build_scripts:
   -     fi
   -     scan-build $CHECKERS --keep-cc -o html-report make
   - fi
-  - XVFB_RUN="$(which xvfb-run || true)"
-  - if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ];then
-  -     if [ -e ./CMakeLists.txt ]; then
-  -         ${XVFB_RUN} make test
+
+after_scripts:
+  - if [ ${BUILD_TYPE} == "scripts" ];then
+  -     XVFB_RUN="$(which xvfb-run || true)"
+  -     if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ];then
+  -         if [ -e ./autogen.sh ]; then
+  -             ${XVFB_RUN} make check
+  -         elif [ -e ./CMakeLists.txt ]; then
+  -             ${XVFB_RUN} make test
+  -         fi
   -     fi
   - fi
