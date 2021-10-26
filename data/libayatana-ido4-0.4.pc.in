@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: libayatana-ido4
+Description: Ayatana Indicator Display Objects
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -layatana-ido4-0.4
+Cflags: -I${includedir}/libayatana-ido4-0.4
+Requires: gtk+-4.0 glib-2.0

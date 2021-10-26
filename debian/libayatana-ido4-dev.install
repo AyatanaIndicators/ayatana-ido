@@ -1,0 +1,5 @@
+usr/include/libayatana-ido4-*
+usr/lib/*/libayatana-ido4-*.so
+usr/lib/*/pkgconfig/libayatana-ido4*
+usr/share/gir-1.0/AyatanaIdo4*.gir
+usr/share/vala/vapi/AyatanaIdo4*.vapi

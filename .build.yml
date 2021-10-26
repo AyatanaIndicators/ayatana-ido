@@ -12,6 +12,7 @@ requires:
     - cmake-extras
     - glib2
     - gobject-introspection
+    - gtk4
     - gtk3
     - gtk-doc
     - vala
@@ -19,6 +20,29 @@ requires:
     - gcovr
 
   debian:
+    # Useful URL: https://salsa.debian.org/debian-ayatana-team/ayatana-ido
+    - clang
+    - clang-tools
+    - cppcheck
+    - git
+    - cmake
+    - cmake-extras
+    - gobject-introspection
+    - gtk-doc-tools
+    - libgirepository1.0-dev
+    - libglib2.0-dev
+    - libgtest-dev
+    - libgtk-4-dev
+    - libgtk-3-dev
+    - libx11-dev
+    - libxi-dev
+    - valac
+    - lcov
+    - gcovr
+    - xauth
+    - xvfb
+
+  debian:stable:
     # Useful URL: https://salsa.debian.org/debian-ayatana-team/ayatana-ido
     - clang
     - clang-tools
@@ -41,6 +65,28 @@ requires:
     - xvfb
 
   ubuntu:
+    - clang
+    - clang-tools
+    - cppcheck
+    - git
+    - cmake
+    - cmake-extras
+    - gobject-introspection
+    - gtk-doc-tools
+    - libgirepository1.0-dev
+    - libglib2.0-dev
+    - libgtest-dev
+    - libgtk-4-dev
+    - libgtk-3-dev
+    - libx11-dev
+    - libxi-dev
+    - valac
+    - lcov
+    - gcovr
+    - xauth
+    - xvfb
+
+  ubuntu:focal:
     - clang
     - clang-tools
     - cppcheck
@@ -85,32 +131,64 @@ build_scripts:
   -     cppcheck --enable=warning,style,performance,portability,information,missingInclude .
   - fi
   -
+  - $flavours=""
+  - # check if libgtk-3-dev is installed (this works on DEB systems,
+  - # need to check on others if we ever add CI builds for them)
+  - if [ -d /usr/share/doc/libgtk-3-dev ]; then
+  -   flavours="gtk3 ${flavours}"
+  - fi
+  - # check if libgtk-4-dev is installed (this works on DEB systems,
+  - # need to check on others if we ever add CI builds for them)
+  -
+  - ### Disable GTK+-4 builds for now, they don't work, yet.
+  -
+  - ### FIXME: Make sure to re-enable this once the port is about to be completed...
+  -
+  - #if [ -d /usr/share/doc/libgtk-4-dev ]; then
+  - #  flavours="gtk4 ${flavours}"
+  - #fi
+  -
   - if [ -e ./CMakeLists.txt ]; then
-  -     if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ]; then
-  -         scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DENABLE_TESTS=ON
-  -     else
-  -         scan-build $CHECKERS cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON
-  -     fi
+  -     for flavour in ${flavours}; do
+  -         mkdir -p build/${flavour}/
+  -         cd build/${flavour}/
+  -         FLAVOUR_CMAKE_OPTION="-DFLAVOUR_$(echo $flavour | tr a-z A-Z)"
+  -         if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ]; then
+  -             scan-build $CHECKERS cmake ../../ -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DENABLE_TESTS=ON ${FLAVOUR_CMAKE_OPTION}
+  -         else
+  -             scan-build $CHECKERS cmake ../../ -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON ${FLAVOUR_CMAKE_OPTION}
+  -         fi
+  -         cd -
+  -     done
   - else
   -     exit 1
   - fi
   -
-  - if [ $CPU_COUNT -gt 1 ]; then
-  -     if [ ${DISTRO_NAME} == "debian" ];then
-  -         scan-build $CHECKERS --keep-cc --use-cc=clang --use-c++=clang++ -o html-report make -j $CPU_COUNT
-  -         make clean
+  - for flavour in $flavours; do
+  -     cd build/$flavour/
+  -     if [ $CPU_COUNT -gt 1 ]; then
+  -         if [ ${DISTRO_NAME} == "debian" ];then
+  -             scan-build $CHECKERS --keep-cc --use-cc=clang --use-c++=clang++ -o html-report make -j $CPU_COUNT
+  -             make clean
+  -         fi
+  -         scan-build $CHECKERS --keep-cc -o html-report make -j $CPU_COUNT
+  -     else
+  -         if [ ${DISTRO_NAME} == "debian" ];then
+  -             scan-build $CHECKERS --keep-cc --use-cc=clang --use-c++=clang++ -o html-report make
+  -             make clean
+  -         fi
+  -         scan-build $CHECKERS --keep-cc -o html-report make
   -     fi
-  -     scan-build $CHECKERS --keep-cc -o html-report make -j $CPU_COUNT
-  - else
-  -     if [ ${DISTRO_NAME} == "debian" ];then
-  -         scan-build $CHECKERS --keep-cc --use-cc=clang --use-c++=clang++ -o html-report make
-  -         make clean
-  -     fi
-  -     scan-build $CHECKERS --keep-cc -o html-report make
-  - fi
+  -     cd -
+  - done
+  -
   - XVFB_RUN="$(which xvfb-run || true)"
-  - if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ];then
-  -     if [ -e ./CMakeLists.txt ]; then
-  -         ${XVFB_RUN} make test
+  - for flavour in $flavours; do
+  -     cd build/$flavour/
+  -     if [ ${DISTRO_NAME} == "debian" ] || [ ${DISTRO_NAME} == "ubuntu" ];then
+  -         if [ -e ./CMakeLists.txt ]; then
+  -             ${XVFB_RUN} make test
+  -         fi
   -     fi
-  - fi
+  -     cd -
+  - done
