@@ -1,3 +1,20 @@
+Overview of changes in ayatana-ido 0.9.0
+
+  - Port to CMake.
+  - Add better documentation.
+  - data/libayatana-ido3-0.4.pc.in: Add glib-2.0 dependency.
+  - src/idoappointmentmenuitem.c: Construct the basic menu item
+    using the pixbuf property.
+  - src/basicmenuitem.c: Add GdkPixbuf source support for the
+    icon.
+  - src/idoremovablemenuitem.c: Replace grid with box to fix
+    a11y.
+  - src/idolocationmenuitem.c: Fix deprecated g_time_zone_new
+    warning.
+  - Fix a unit test failure on Ubuntu 20.04.
+  - Use consistent Ayatana IDO names. This version of Ayatana IDO
+    breaks NG system indicators before 0.9.x.
+
 Overview of changes in ayatana-ido 0.8.2
 
   - Add Travis support (CI builds).
