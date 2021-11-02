@@ -20,7 +20,7 @@ Build-Depends: debhelper (>= 9),
                valac (>= 0.16),
                xauth,
                xvfb,
-Standards-Version: 4.5.1
+Standards-Version: 4.6.0
 Rules-Requires-Root: no
 Homepage: https://github.com/AyatanaIndicator/ayatana-ido
 Vcs-Git: https://github.com/AyatanaIndicator/ayatana-ido
