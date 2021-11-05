@@ -1,5 +1,6 @@
 /*
  * Copyright 2010 Canonical, Ltd.
+ * Copyright 2021 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of either or both of the following licenses:
@@ -21,6 +22,7 @@
  *
  * Authors:
  *    Cody Russell <crussell@canonical.com>
+ *    Robert Tari <robert@tari.in>
  */
 
 #include <gtk/gtk.h>
@@ -166,7 +168,6 @@ ido_scale_menu_item_constructed (GObject *object)
   gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_end(hbox, 16);
 
   priv->primary_image = gtk_image_new ();
   g_signal_connect (priv->primary_image, "notify",
