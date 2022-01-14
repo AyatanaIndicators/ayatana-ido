@@ -95,7 +95,6 @@ add_custom_command(
 
 # ayatana-ido3-0.4.so
 
-set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS})
 add_library("ayatana-ido3-0.4" SHARED ${SOURCES})
 set_target_properties("ayatana-ido3-0.4" PROPERTIES VERSION 0.0.0 SOVERSION 0)
 target_link_libraries("ayatana-ido3-0.4" ${PROJECT_DEPS_LIBRARIES})
