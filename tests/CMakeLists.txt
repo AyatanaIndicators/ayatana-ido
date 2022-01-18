@@ -1,4 +1,4 @@
-find_package(GMock)
+find_package(GTest)
 
 # gtest-menuitems
 
