@@ -7,8 +7,6 @@ include_directories(
     ${PROJECT_DEPS_INCLUDE_DIRS}
 )
 
-set_source_files_properties(gtest-menuitems.cpp PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS})
-
 add_executable("gtest-menuitems" gtest-menuitems.cpp)
 target_link_options("gtest-menuitems" PRIVATE -no-pie)
 target_link_libraries("gtest-menuitems"

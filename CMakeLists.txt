@@ -27,6 +27,16 @@ else()
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+if(ENABLE_WERROR)
+    add_definitions("-Werror")
+endif()
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_definitions("-Weverything")
+else()
+    add_definitions("-Wall")
+endif()
+
 # Check for prerequisites
 
 set(DEPS glib-2.0>=2.58 gtk+-3.0>=3.24)
@@ -38,18 +48,6 @@ pkg_check_modules(PROJECT_DEPS REQUIRED ${DEPS})
 
 include(GNUInstallDirs)
 set(PROJECT_VERSION "0.9.0")
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-
-    set(COMPILE_FLAGS "${COMPILE_FLAGS} -Weverything")
-    set(COMPILE_FLAGS "${COMPILE_FLAGS} -Wno-c++98-compat -Wno-padded")
-    set(COMPILE_FLAGS "${COMPILE_FLAGS} -Wno-documentation")
-
-else()
-
-    set(COMPILE_FLAGS "${COMPILE_FLAGS} -Wall")
-
-endif()
 
 # Make everything
 
