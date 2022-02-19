@@ -97,7 +97,7 @@ add_custom_command(
 
 add_library("ayatana-ido3-0.4" SHARED ${SOURCES})
 set_target_properties("ayatana-ido3-0.4" PROPERTIES VERSION 0.0.0 SOVERSION 0)
-target_link_libraries("ayatana-ido3-0.4" ${PROJECT_DEPS_LIBRARIES})
+target_link_libraries("ayatana-ido3-0.4" ${PROJECT_DEPS_LIBRARIES} m)
 target_include_directories("ayatana-ido3-0.4" PUBLIC ${PROJECT_DEPS_INCLUDE_DIRS})
 target_include_directories("ayatana-ido3-0.4" PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories("ayatana-ido3-0.4" PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
