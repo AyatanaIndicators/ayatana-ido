@@ -106,7 +106,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so" DESTINATION "
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so.0" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.so.0.0.0" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}")
 
-# ayatana-ido3-0.4.gir
+# AyatanaIdo3-0.4.gir
 
 find_package(GObjectIntrospection REQUIRED QUIET)
 
@@ -136,6 +136,7 @@ if (INTROSPECTION_FOUND)
         --pkg=gtk+-3.0
         --warn-all
         --include=Gtk-3.0
+        --c-include="libayatana-ido/libayatana-ido.h"
         --library="ayatana-ido3-0.4"
         --library-path=${CMAKE_CURRENT_BINARY_DIR}
         --output "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.gir"
@@ -143,7 +144,7 @@ if (INTROSPECTION_FOUND)
 
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.gir" DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/gir-1.0")
 
-    # ayatana-ido3-0.4.typelib
+    # AyatanaIdo3-0.4.typelib
 
     add_custom_command(
         OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.typelib"
@@ -158,27 +159,26 @@ if (INTROSPECTION_FOUND)
 
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.typelib" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/girepository-1.0")
 
-
-    # ayatana-ido3-0.4.vapi
+    # libayatana-ido3-0.4.vapi
 
     find_package(Vala REQUIRED QUIET)
 
     if (VALA_FOUND)
 
         add_custom_command(
-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.vapi"
+            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.vapi"
             DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.typelib"
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMAND
             ${VAPI_GEN}
-            --library=AyatanaIdo3-0.4
+            --library=libayatana-ido3-0.4
             --pkg gtk+-3.0
             AyatanaIdo3-0.4.gir
         )
 
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.vapi" DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/vala/vapi")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.vapi" DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/vala/vapi")
 
-        add_custom_target("src" ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/AyatanaIdo3-0.4.vapi")
+        add_custom_target("src" ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libayatana-ido3-0.4.vapi")
 
     endif ()
 
