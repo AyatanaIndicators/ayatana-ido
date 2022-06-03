@@ -1,6 +1,27 @@
+2022-06-03 Mike Gabriel
+
+        * release 0.9.2 (HEAD -> main, tag: 0.9.2)
+
+2022-03-24 Mike Gabriel
+
+        * Merge branch 'ricotz-main' (e56a633c)
+
+2022-03-15 Rico Tzschichholz
+
+        * vala: The name of the vapi should match the pkg-config name
+          (2e1c0409)
+
+2022-02-28 Mike Gabriel
+
+        * Merge branch 'jpalus-link-libm' (d87cc103)
+
+2022-02-19 Jan Palus
+
+        * src/CMakeLists.txt: link libm for expf, pow and sinf (62f510e2)
+
 2022-02-17 Mike Gabriel
 
-        * release 0.9.1 (HEAD -> main, tag: 0.9.1)
+        * release 0.9.1 (9e8a410f) (tag: 0.9.1)
 
 2022-02-08 Robert Tari
 
