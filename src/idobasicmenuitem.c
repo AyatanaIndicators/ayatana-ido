@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Canonical Ltd.
- * Copyright 2021 Robert Tari
+ * Copyright 2021-2022 Robert Tari
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
@@ -20,7 +20,7 @@
  */
 
 #include <gtk/gtk.h>
-
+#include "idodetaillabel.h"
 #include "idoactionhelper.h"
 #include "idobasicmenuitem.h"
 
@@ -126,6 +126,7 @@ my_dispose (GObject * object)
 
   g_clear_object (&p->icon);
   g_clear_object (&p->pPixbuf);
+  g_clear_object (&p->secondary_label);
 
   G_OBJECT_CLASS (ido_basic_menu_item_parent_class)->dispose (object);
 }
@@ -258,9 +259,10 @@ ido_basic_menu_item_init (IdoBasicMenuItem *self)
   p->label = gtk_label_new ("");
     gtk_widget_set_halign(p->label, GTK_ALIGN_START);
     gtk_widget_set_valign(p->label, GTK_ALIGN_CENTER);
-  p->secondary_label = gtk_label_new ("");
+    p->secondary_label = g_object_ref (ido_detail_label_new (""));
     gtk_widget_set_halign(p->secondary_label, GTK_ALIGN_END);
     gtk_widget_set_valign(p->secondary_label, GTK_ALIGN_CENTER);
+    gtk_style_context_add_class (gtk_widget_get_style_context (p->secondary_label), "accelerator");
 
   w = gtk_grid_new ();
   grid = GTK_GRID (w);
@@ -370,12 +372,25 @@ ido_basic_menu_item_set_secondary_text (IdoBasicMenuItem * self, const char * se
     {
       g_free (p->secondary_text);
       p->secondary_text = g_strdup (secondary_text);
-
-      g_object_set (G_OBJECT(p->secondary_label),
-                    "label", p->secondary_text,
-                    "visible", (gboolean)(p->secondary_text && *p->secondary_text),
-                    NULL);
+      ido_detail_label_set_text (IDO_DETAIL_LABEL (p->secondary_label), p->secondary_text);
+      gtk_widget_set_visible (p->secondary_label, (gboolean)(p->secondary_text && *p->secondary_text));
     }
+}
+
+void ido_basic_menu_item_set_secondary_count (IdoBasicMenuItem *self, gint nCount)
+{
+    IdoBasicMenuItemPrivate *pPrivate = ido_basic_menu_item_get_instance_private (self);
+    gchar *sSecondaryText = g_strdup_printf("%i", nCount);
+
+    if (g_strcmp0 (pPrivate->secondary_text, sSecondaryText))
+    {
+        g_free (pPrivate->secondary_text);
+        pPrivate->secondary_text = g_strdup (sSecondaryText);
+        ido_detail_label_set_count (IDO_DETAIL_LABEL (pPrivate->secondary_label), nCount);
+        gtk_widget_set_visible (pPrivate->secondary_label, (gboolean)(pPrivate->secondary_text && *pPrivate->secondary_text));
+    }
+
+    g_free (sSecondaryText);
 }
 
 static void
@@ -408,6 +423,21 @@ ido_basic_menu_item_new_from_model (GMenuItem    * menu_item,
     {
       ido_basic_menu_item_set_text (IDO_BASIC_MENU_ITEM (item), label);
       g_free (label);
+    }
+
+    gchar *sSecondaryText;
+
+    if (g_menu_item_get_attribute (menu_item, "x-ayatana-secondary-text", "s", &sSecondaryText))
+    {
+        ido_basic_menu_item_set_secondary_text (IDO_BASIC_MENU_ITEM (item), sSecondaryText);
+        g_free (sSecondaryText);
+    }
+
+    guint nSecondaryCount;
+
+    if (g_menu_item_get_attribute (menu_item, "x-ayatana-secondary-count", "i", &nSecondaryCount))
+    {
+        ido_basic_menu_item_set_secondary_count (IDO_BASIC_MENU_ITEM (item), nSecondaryCount);
     }
 
   serialized_icon = g_menu_item_get_attribute_value (menu_item, "icon", NULL);
