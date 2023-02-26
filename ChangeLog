@@ -1,6 +1,29 @@
+2023-02-26 Mike Gabriel
+
+        * release 0.9.3 (HEAD -> main, tag: 0.9.3)
+        * Merge branch 'JamiKettunen-modern-gtest' (62ec1cda)
+
+2023-02-26 Jami Kettunen
+
+        * cmake: Enable building tests by default (889c006f)
+        * tests: Fix building against modern GTest (f692439d)
+
+2022-09-05 Mike Gabriel
+
+        * Merge branch 'tari01-pr/secondary-text-and-count' (4e047789)
+
+2022-09-04 Robert Tari
+
+        * src/idobasicmenuitem.c: Set secondary text and count with lozenge
+          from menu model (7aa6323b)
+
+2022-06-27 Mike Gabriel
+
+        * .travis.yml: Add CI builds for Ubuntu 22.04. (10fde125)
+
 2022-06-03 Mike Gabriel
 
-        * release 0.9.2 (HEAD -> main, tag: 0.9.2)
+        * release 0.9.2 (69ba03b9) (tag: 0.9.2)
 
 2022-03-24 Mike Gabriel
 

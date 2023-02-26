@@ -1,3 +1,10 @@
+Overview of changes in ayatana-ido 0.9.3
+
+  - cmake: Enable building tests by default.
+  - tests: Fix building against modern GTest.
+  - src/idobasicmenuitem.c: Set secondary text and count with lozenge from
+    menu model.
+
 Overview of changes in ayatana-ido 0.9.2
 
   - src/CMakeLists.txt: link libm for expf, pow and sinf.
