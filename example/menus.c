@@ -7,6 +7,7 @@
 #include "idoswitchmenuitem.h"
 #include "idousermenuitem.h"
 #include "idoremovablemenuitem.h"
+#include "idolevelmenuitem.h"
 
 static void
 slider_grabbed (GtkWidget *widget, gpointer user_data)
@@ -149,6 +150,16 @@ main (int argc, char *argv[])
   idoRemovableMenuItemSetText(IDO_REMOVABLE_MENU_ITEM(menuitem), "This is a <b>removable</b> menu item\nIt has a <a href=\"http://www.example.com\">link</a>\n<small>And some small text</small>");
   idoRemovableMenuItemUseMarkup(IDO_REMOVABLE_MENU_ITEM(menuitem), TRUE);
   gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), gtk_separator_menu_item_new ());
+
+  /* Level */
+  menuitem = ido_level_menu_item_new();
+  idoLevelMenuItemSetText (IDO_LEVEL_MENU_ITEM (menuitem), "Some battery level");
+  GIcon *pIcon = g_themed_icon_new_with_default_fallbacks ("battery");
+  idoLevelMenuItemSetIcon (IDO_LEVEL_MENU_ITEM (menuitem), pIcon);
+  idoLevelMenuItemSetLevel (IDO_LEVEL_MENU_ITEM (menuitem), 50);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   /* Add the menubar */
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), root);
