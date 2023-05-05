@@ -37,6 +37,11 @@ else()
     add_definitions("-Wall")
 endif()
 
+# Thread fix for old CMake
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 # Check for prerequisites
 
 set(DEPS glib-2.0>=2.58 gtk+-3.0>=3.24)

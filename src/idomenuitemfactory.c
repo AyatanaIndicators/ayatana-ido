@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 Canonical Ltd.
+ * Copyright 2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -15,6 +16,7 @@
  *
  * Authors:
  *     Lars Uebernickel <lars.uebernickel@canonical.com>
+ *     Robert Tari <robert@tari.in>
  */
 
 #include <gtk/gtk.h>
@@ -33,6 +35,7 @@
 #include "idoswitchmenuitem.h"
 #include "idoprogressmenuitem.h"
 #include "idoremovablemenuitem.h"
+#include "idolevelmenuitem.h"
 
 #define IDO_TYPE_MENU_ITEM_FACTORY         (ido_menu_item_factory_get_type ())
 #define IDO_MENU_ITEM_FACTORY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IDO_TYPE_MENU_ITEM_FACTORY, IdoMenuItemFactory))
@@ -101,6 +104,9 @@ ido_menu_item_factory_create_menu_item (AyatanaMenuItemFactory *factory,
 
   else if (g_str_equal (type, "org.ayatana.indicator.removable"))
     item = ido_removable_menu_item_new_from_model (menuitem, actions);
+
+  else if (g_str_equal (type, "org.ayatana.indicator.level"))
+    item = ido_level_menu_item_new_from_model (menuitem, actions);
 
   return item;
 }

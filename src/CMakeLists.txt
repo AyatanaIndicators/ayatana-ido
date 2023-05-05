@@ -39,6 +39,7 @@ set(HEADERS
     idoscalemenuitem.h
     idodetaillabel.h
     idoentrymenuitem.h
+    idolevelmenuitem.h
 )
 
 set(SOURCES
@@ -65,6 +66,7 @@ set(SOURCES
     idousermenuitem.c
     idosourcemenuitem.c
     idotimeline.c
+    idolevelmenuitem.c
     ${CMAKE_CURRENT_BINARY_DIR}/idotypebuiltins.c
 )
 
