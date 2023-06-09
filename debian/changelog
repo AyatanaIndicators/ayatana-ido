@@ -1,4 +1,4 @@
-ayatana-ido (0.10.0-1) UNRELEASED; urgency=medium
+ayatana-ido (0.10.0-0) UNRELEASED; urgency=medium
 
   * Upstream-provided Debian package for ayatana-ido.
     See upstream ChangeLog for recent changes.
