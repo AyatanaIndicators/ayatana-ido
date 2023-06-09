@@ -3,6 +3,9 @@ libayatana-ido3-0.4.so.0 libayatana-ido3-0.4-0 #MINVER#
  ayatana_menu_item_factory_create_menu_item@Base 0.4.0
  ayatana_menu_item_factory_get_all@Base 0.4.0
  ayatana_menu_item_factory_get_type@Base 0.4.0
+ idoLevelMenuItemSetIcon@Base 0.10.0
+ idoLevelMenuItemSetLevel@Base 0.10.0
+ idoLevelMenuItemSetText@Base 0.10.0
  idoRemovableMenuItemSetIcon@Base 0.8.2
  idoRemovableMenuItemSetIconFromFile@Base 0.8.2
  idoRemovableMenuItemSetText@Base 0.8.2
@@ -48,6 +51,9 @@ libayatana-ido3-0.4.so.0 libayatana-ido3-0.4-0 #MINVER#
  ido_entry_menu_item_new@Base 0.1.0
  ido_guest_menu_item_new_from_model@Base 0.4.0
  ido_init@Base 0.4.0
+ ido_level_menu_item_get_type@Base 0.10.0
+ ido_level_menu_item_new@Base 0.10.0
+ ido_level_menu_item_new_from_model@Base 0.10.0
  ido_location_menu_item_get_type@Base 0.4.0
  ido_location_menu_item_new@Base 0.4.0
  ido_location_menu_item_new_from_model@Base 0.4.0
