@@ -1,6 +1,30 @@
+2023-06-09 Mike Gabriel
+
+        * release 0.10.0 (HEAD -> main, tag: 0.10.0)
+
+2023-05-05 Mike Gabriel
+
+        * Merge branch 'tari01-pr/level-item' (e74e767a)
+
+2023-04-04 Robert Tari
+
+        * Add level menu item (876a9fa2)
+        * CMakeLists.txt: Add threads fix for old CMake (fc636cea)
+
+2023-05-05 Mike Gabriel
+
+        * Merge branch 'tari01-pr/progress-item-rewrite' (c730328e)
+
+2023-03-03 Robert Tari
+
+        * src/idoprogressmenuitem.c: Rewrite to use icon, progress property
+          and activation (1b164cf8)
+
 2023-02-26 Mike Gabriel
 
-        * release 0.9.3 (HEAD -> main, tag: 0.9.3)
+        * Revert "cmake: Enable building tests by default" (f19a5f47)
+        * debian/libayatana-ido3-0.4-0.symbols: Update symbols. (109100e2)
+        * release 0.9.3 (10b05bdb) (tag: 0.9.3)
         * Merge branch 'JamiKettunen-modern-gtest' (62ec1cda)
 
 2023-02-26 Jami Kettunen

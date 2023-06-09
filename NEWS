@@ -1,3 +1,11 @@
+Overview of changes in ayatana-ido 0.10.0
+
+  - Add level menu item.
+  - CMakeLists.txt: Add threads fix for old CMake.
+  - src/idoprogressmenuitem.c: Rewrite to use icon, progress property and
+    activation.
+  - Revert "cmake: Enable building tests by default".
+
 Overview of changes in ayatana-ido 0.9.3
 
   - cmake: Enable building tests by default.
