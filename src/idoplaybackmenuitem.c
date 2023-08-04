@@ -292,11 +292,6 @@ ido_playback_menu_item_button_release_event (GtkWidget      *menuitem,
                                              GdkEventButton *event)
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (menuitem);
-  Button button;
-
-  button = ido_playback_menu_item_get_button_at_pos (menuitem, event->x, event->y);
-  if (button != item->cur_pushed_button)
-    button = BUTTON_NONE;
 
   const gchar *action = item->button_actions[item->cur_pushed_button];
   if (item->action_group && action)
