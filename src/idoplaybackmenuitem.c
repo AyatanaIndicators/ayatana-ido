@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 Canonical Ltd.
+ * Copyright 2023 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -18,6 +19,7 @@
  *     Mirco Müller <mirco.mueller@canonical.com>
  *     Andrea Cimitan <andrea.cimitan@canonical.com>
  *     Lars Uebernickel <lars.uebernickel@canonical.com>
+ *     Robert Tari <robert@tari.in>
  */
 
 #include "idoplaybackmenuitem.h"
@@ -291,13 +293,12 @@ ido_playback_menu_item_button_release_event (GtkWidget      *menuitem,
 {
   IdoPlaybackMenuItem *item = IDO_PLAYBACK_MENU_ITEM (menuitem);
   Button button;
-  const gchar *action = action;
 
   button = ido_playback_menu_item_get_button_at_pos (menuitem, event->x, event->y);
   if (button != item->cur_pushed_button)
     button = BUTTON_NONE;
 
-  action = item->button_actions[item->cur_pushed_button];
+  const gchar *action = item->button_actions[item->cur_pushed_button];
   if (item->action_group && action)
     g_action_group_activate_action (item->action_group, action, NULL);
 
