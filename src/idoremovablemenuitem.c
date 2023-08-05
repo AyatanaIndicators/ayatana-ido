@@ -1,8 +1,10 @@
 /*
  * Copyright 2013 Canonical Ltd.
+ * Copyright 2023 Robert Tari
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
+ *   Robert Tari <robert@tari.in>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License version 3, as published
@@ -131,23 +133,8 @@ static void idoRemovableMenuItemStyleUpdateImage(IdoRemovableMenuItem *self)
     }
     else
     {
-        GtkIconInfo *pInfo;
-        const gchar *sFilename;
-
-        pInfo = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_default(), pPrivate->pIcon, 16, 0);
-        sFilename = gtk_icon_info_get_filename(pInfo);
-
-        if (sFilename)
-        {
-            GdkPixbuf *pPixbuf;
-
-            pPixbuf = gdk_pixbuf_new_from_file_at_scale(sFilename, -1, 16, TRUE, NULL);
-            gtk_image_set_from_pixbuf(GTK_IMAGE(pPrivate->pImage), pPixbuf);
-            g_object_unref (pPixbuf);
-        }
-
-        gtk_widget_set_visible(pPrivate->pImage, sFilename != NULL);
-        g_object_unref(pInfo);
+        gtk_image_set_from_gicon (GTK_IMAGE (pPrivate->pImage), pPrivate->pIcon, GTK_ICON_SIZE_MENU);
+        gtk_widget_set_visible (pPrivate->pImage, TRUE);
     }
 }
 
