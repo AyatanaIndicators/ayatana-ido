@@ -1,10 +1,12 @@
 /*
 Copyright 2011 Canonical Ltd.
+Copyright 2023 Robert Tari
 
 Authors:
     Conor Curran <conor.curran@canonical.com>
     Mirco Müller <mirco.mueller@canonical.com>
     Charles Kerr <charles.kerr@canonical.com>
+    Robert Tari <robert@tari.in>
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License version 3, as published
@@ -444,6 +446,8 @@ user_menu_item_new_from_model (GMenuItem    * menuitem,
 
   for (i=0; i<n; i++)
     g_value_unset (&values[i]);
+
+  g_free (values);
 
   /* gie it an ActionHelper */
 
