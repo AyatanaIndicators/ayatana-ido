@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Canonical Ltd.
- * Copyright 2021 Robert Tari
+ * Copyright 2021-2023 Robert Tari
  *
  * Authors:
  *   Charles Kerr <charles.kerr@canonical.com>
@@ -136,6 +136,7 @@ ido_appointment_menu_item_new_from_model (GMenuItem    * menu_item,
   for (i=0; i<n; i++)
     g_value_unset (&values[i]);
 
+  g_free (values);
 
   /* add an ActionHelper */
 
