@@ -1,6 +1,39 @@
+2023-08-24 Mike Gabriel
+
+        * release 0.10.1 (HEAD -> main, tag: 0.10.1)
+        * COPYING: Symlink to COPYING.GPL-3, the licensed used by the
+          majority of code files. (c9bfd1b5)
+        * Rename COPYING to COPYING.GPL-3 and use Debian's version of it.
+          (cc276098)
+        * COPYING files: Ship a copy of LGPL-2(+) and LGPL-3. Some code files
+          in this project use either of those licenses. (b040a375)
+        * COPYING.LGPL.2.1: Rename to COPYING.LGPL-2.1 (and use layout from
+          Debian's LGPL-2.1 license file shipped in
+          /usr/share/common-licenses/). (20d65627)
+        * Merge branch 'tyll-executable_so' (39277de1)
+
+2023-08-24 Till Maas
+
+        * cmake: Install library as library (610ddb96)
+
+2023-08-07 Mike Gabriel
+
+        * Merge branch 'tari01-pr/no-hardcoded-icon-sizes' (b1998c6a)
+
+2023-08-05 Robert Tari
+
+        * Do not hardcode icon sizes (e487b162)
+        * Fix possible memory leaks (ebb915b5)
+        * src/idoalarmmenuitem.c: Do not free non memory-allocated variable
+          (579cad6e)
+        * src/idoplaybackmenuitem.c: Drop unused variable (c2bade07)
+        * src/idoplaybackmenuitem.c: Fix undefined variable (be68b43c)
+
 2023-06-09 Mike Gabriel
 
-        * release 0.10.0 (HEAD -> main, tag: 0.10.0)
+        * d/libayatana-ido3-0.4-0.symbols: Update symbols. (09c5052d)
+        * d/changelog: amend revision (5263257c)
+        * release 0.10.0 (75f61898) (tag: 0.10.0)
 
 2023-05-05 Mike Gabriel
 

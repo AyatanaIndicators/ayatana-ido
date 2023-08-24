@@ -1,3 +1,11 @@
+Overview of changes in ayatana-ido 0.10.1
+
+  - src/idoalarmmenuitem.c: Do not free non memory-allocated variable
+  - Fix possible memory leaks.
+  - Do not hardcode icon sizes.
+  - cmake: Install library as library.
+  - Update/add COPYING files, ship COPYING files for all licensed used.
+
 Overview of changes in ayatana-ido 0.10.0
 
   - Add level menu item.
