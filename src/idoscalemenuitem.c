@@ -26,6 +26,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <math.h>
 #include "idorange.h"
 #include "idoscalemenuitem.h"
 #include "idotypebuiltins.h"
@@ -1048,6 +1049,13 @@ menu_item_get_icon (GMenuItem   *menuitem,
   return value ? g_icon_deserialize (value) : NULL;
 }
 
+static gchar* onFormatValue (GtkScale *pScale, gdouble fValue)
+{
+    gint nValue = fValue * 100;
+    gchar *sValue = g_strdup_printf ("%i%%", nValue);
+
+    return sValue;
+}
 /**
  * ido_scale_menu_item_new_from_model:
  *
@@ -1088,6 +1096,31 @@ ido_scale_menu_item_new_from_model (GMenuItem    *menuitem,
 
       g_free (action);
     }
+
+  IdoScaleMenuItemPrivate *pPrivate = ido_scale_menu_item_get_instance_private (IDO_SCALE_MENU_ITEM (item));
+  guchar nDigits = 0;
+  gboolean bFound = g_menu_item_get_attribute (menuitem, "digits", "y", &nDigits);
+
+  if (bFound)
+  {
+        gtk_scale_set_digits (GTK_SCALE (pPrivate->scale), nDigits);
+        gtk_range_set_round_digits (GTK_RANGE (pPrivate->scale), nDigits);
+  }
+
+  gboolean bMarks = FALSE;
+  bFound = g_menu_item_get_attribute (menuitem, "marks", "b", &bMarks);
+
+  if (bFound)
+  {
+        gtk_scale_set_draw_value (GTK_SCALE (pPrivate->scale), TRUE);
+
+        for (gdouble fValue = min; fValue < (max + step); fValue += step)
+        {
+            gtk_scale_add_mark (GTK_SCALE (pPrivate->scale), round (fValue * 10) / 10, GTK_POS_BOTTOM, NULL);
+        }
+
+        g_signal_connect (pPrivate->scale, "format-value", G_CALLBACK (onFormatValue), NULL);
+  }
 
   min_icon = menu_item_get_icon (menuitem, "min-icon");
   max_icon = menu_item_get_icon (menuitem, "max-icon");
