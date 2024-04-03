@@ -1,6 +1,6 @@
 /*
  * Copyright 2010 Canonical, Ltd.
- * Copyright 2021 Robert Tari
+ * Copyright 2021-2024 Robert Tari
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of either or both of the following licenses:
@@ -701,7 +701,7 @@ ido_scale_menu_item_new_with_range (const gchar  *label,
                                     gdouble       max,
                                     gdouble       step)
 {
-  GObject *adjustment = G_OBJECT (gtk_adjustment_new (value, min, max, step, 10 * step, 0));
+  GObject *adjustment = G_OBJECT (gtk_adjustment_new (value, min, max, step, step, 0));
 
   return GTK_WIDGET (g_object_new (IDO_TYPE_SCALE_MENU_ITEM,
                                   "label",       label,
