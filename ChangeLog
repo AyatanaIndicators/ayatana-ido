@@ -1,6 +1,18 @@
+2024-04-08 Mike Gabriel
+
+        * release 0.10.2 (HEAD -> main, tag: 0.10.2)
+        * Merge branch 'tari01-pr/expand-scale' (de33725f)
+
+2024-04-04 Robert Tari
+
+        * src/idoscalemenuitem.c: Add new functionality via the digits and
+          marks parameters (451a9efb)
+        * src/idoscalemenuitem.c: Make page increment same as step increment
+          (87715f3f)
+
 2023-08-24 Mike Gabriel
 
-        * release 0.10.1 (HEAD -> main, tag: 0.10.1)
+        * release 0.10.1 (13402a2c) (tag: 0.10.1)
         * COPYING: Symlink to COPYING.GPL-3, the licensed used by the
           majority of code files. (c9bfd1b5)
         * Rename COPYING to COPYING.GPL-3 and use Debian's version of it.

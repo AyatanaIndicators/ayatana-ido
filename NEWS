@@ -1,3 +1,9 @@
+Overview of changes in ayatana-ido 0.10.2
+
+  - src/idoscalemenuitem.c: Make page increment same as step increment.
+  - src/idoscalemenuitem.c: Add new functionality via the digits and
+    marks parameters.
+
 Overview of changes in ayatana-ido 0.10.1
 
   - src/idoalarmmenuitem.c: Do not free non memory-allocated variable
