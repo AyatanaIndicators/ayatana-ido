@@ -33,6 +33,7 @@ typedef struct
   GtkWidget * label;
   GtkWidget * image;
   GtkWidget * switch_w;
+  GtkWidget * accelerator;
 } IdoSwitchMenuItemPrivate;
 
 /***
@@ -168,10 +169,44 @@ ido_switch_menu_item_set_label (IdoSwitchMenuItem *item,
       priv->label = gtk_label_new (NULL);
       gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
       gtk_widget_show (priv->label);
-      gtk_box_pack_end (GTK_BOX (priv->content_area), priv->label, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->content_area), priv->label, TRUE, TRUE, 0);
     }
 
   gtk_label_set_text (GTK_LABEL (priv->label), label);
+}
+
+/**
+ * ido_switch_menu_item_set_accelerator:
+ * @item: a #IdoSwitchMenuItem.
+ * @accelerator: a string to set as the accelerator of @item
+ *
+ * Set the accelerator of @item to @accelerator.
+ **/
+
+void ido_switch_menu_item_set_accelerator (IdoSwitchMenuItem *item, const gchar *accelerator)
+{
+    IdoSwitchMenuItemPrivate *priv;
+
+    g_return_if_fail (IDO_IS_SWITCH_MENU_ITEM (item));
+    g_return_if_fail (accelerator != NULL);
+
+    priv = ido_switch_menu_item_get_instance_private (item);
+
+    if (priv->accelerator == NULL)
+    {
+      priv->accelerator = gtk_label_new (NULL);
+      gtk_widget_set_halign (priv->accelerator, GTK_ALIGN_END);
+      GtkStyleContext *pContext = gtk_widget_get_style_context (priv->accelerator);
+      gtk_style_context_add_class (pContext, "accelerator");
+      gtk_widget_show (priv->accelerator);
+      gtk_box_pack_end (GTK_BOX (priv->content_area), priv->accelerator, FALSE, FALSE, 6);
+    }
+
+    guint nKey;
+    GdkModifierType cType;
+    gtk_accelerator_parse (accelerator, &nKey, &cType);
+    gchar *sText = gtk_accelerator_get_label (nKey, cType);
+    gtk_label_set_text (GTK_LABEL (priv->accelerator), sText);
 }
 
 /**
@@ -246,6 +281,15 @@ ido_switch_menu_item_new_from_menu_model (GMenuItem    *menuitem,
     {
       ido_switch_menu_item_set_label (IDO_SWITCH_MENU_ITEM (item), label);
       g_free (label);
+    }
+
+    gchar *sAccelerator;
+    gboolean bAccelerator = g_menu_item_get_attribute (menuitem, "accel", "s", &sAccelerator);
+
+    if (bAccelerator)
+    {
+        ido_switch_menu_item_set_accelerator (IDO_SWITCH_MENU_ITEM (item), sAccelerator);
+        g_free (sAccelerator);
     }
 
   serialized_icon = g_menu_item_get_attribute_value (menuitem, "icon", NULL);
