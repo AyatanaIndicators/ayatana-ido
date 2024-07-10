@@ -52,7 +52,7 @@ pkg_check_modules(PROJECT_DEPS REQUIRED ${DEPS})
 # Set global variables
 
 include(GNUInstallDirs)
-set(PROJECT_VERSION "0.10.2")
+set(PROJECT_VERSION "0.10.3")
 
 # Make everything
 
