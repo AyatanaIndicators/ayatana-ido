@@ -475,8 +475,6 @@ ido_scale_menu_item_select (GtkMenuItem *item)
 
   priv->has_focus = TRUE;
   gtk_widget_set_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED, FALSE);
-
-  GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->select (item);
 }
 
 static void
@@ -487,8 +485,6 @@ ido_scale_menu_item_deselect (GtkMenuItem *item)
 
   priv->has_focus = FALSE;
   gtk_widget_unset_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED);
-
-  GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->deselect (item);
 }
 
 static gboolean
