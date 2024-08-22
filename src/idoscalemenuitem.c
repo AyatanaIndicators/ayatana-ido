@@ -78,6 +78,7 @@ typedef struct {
   IdoRangeStyle         range_style;
   gboolean              ignore_value_changed;
   gboolean              has_focus;
+  gboolean              bCloseOnChange;
 } IdoScaleMenuItemPrivate;
 
 enum {
@@ -143,8 +144,16 @@ ido_scale_menu_item_scale_value_changed (GtkRange *range,
   /* The signal is not sent when it was set through
    * ido_scale_menu_item_set_value().  */
 
-  if (!priv->ignore_value_changed)
-    g_signal_emit (self, signals[VALUE_CHANGED], 0, gtk_range_get_value (range));
+    if (!priv->ignore_value_changed)
+    {
+        g_signal_emit (self, signals[VALUE_CHANGED], 0, gtk_range_get_value (range));
+
+        if (priv->bCloseOnChange)
+        {
+            GtkWidget *pParent = gtk_widget_get_parent (GTK_WIDGET (self));
+            gtk_menu_shell_deactivate (GTK_MENU_SHELL (pParent));
+        }
+    }
 }
 
 static void
@@ -367,7 +376,7 @@ static void
 ido_scale_menu_item_init (IdoScaleMenuItem *self)
 {
   IdoScaleMenuItemPrivate *priv = ido_scale_menu_item_get_instance_private (self);
-
+  priv->bCloseOnChange = FALSE;
   priv->reverse_scroll = TRUE;
 
   gtk_widget_set_size_request (GTK_WIDGET (self), 200, -1);
@@ -475,8 +484,6 @@ ido_scale_menu_item_select (GtkMenuItem *item)
 
   priv->has_focus = TRUE;
   gtk_widget_set_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED, FALSE);
-
-  GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->select (item);
 }
 
 static void
@@ -487,8 +494,6 @@ ido_scale_menu_item_deselect (GtkMenuItem *item)
 
   priv->has_focus = FALSE;
   gtk_widget_unset_state_flags (priv->scale, GTK_STATE_FLAG_FOCUSED);
-
-  GTK_MENU_ITEM_CLASS (ido_scale_menu_item_parent_class)->deselect (item);
 }
 
 static gboolean
@@ -1122,6 +1127,7 @@ ido_scale_menu_item_new_from_model (GMenuItem    *menuitem,
         g_signal_connect (pPrivate->scale, "format-value", G_CALLBACK (onFormatValue), NULL);
   }
 
+  g_menu_item_get_attribute (menuitem, "close-on-change", "b", &pPrivate->bCloseOnChange);
   min_icon = menu_item_get_icon (menuitem, "min-icon");
   max_icon = menu_item_get_icon (menuitem, "max-icon");
   ido_scale_menu_item_set_icons (IDO_SCALE_MENU_ITEM (item), min_icon, max_icon);
