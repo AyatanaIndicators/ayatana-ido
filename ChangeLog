@@ -1,6 +1,17 @@
+2024-08-22 Mike Gabriel
+
+        * release 0.10.4 (HEAD -> main, tag: 0.10.4)
+        * Merge branch 'tari01-pr/value-change-close' (4134bf3d)
+
+2024-07-17 Robert Tari
+
+        * src/idoscalemenuitem.c: Add ability to close the menu when the
+          slider's value changes (4446a18d)
+        * src/idoscalemenuitem.c: Disable menu item selection (1eaf28c9)
+
 2024-07-10 Mike Gabriel
 
-        * release 0.10.3 (HEAD -> main, tag: 0.10.3)
+        * release 0.10.3 (9906cc1d) (tag: 0.10.3)
         * Merge branch 'tari01-pr/switch-accelerator' (bd25ec74)
 
 2024-07-09 Robert Tari

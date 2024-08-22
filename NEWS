@@ -1,3 +1,9 @@
+Overview of changes in ayatana-ido 0.10.4
+
+  - src/idoscalemenuitem.c: Disable menu item selection
+  - src/idoscalemenuitem.c: Add ability to close the menu when the
+    slider's value changes.
+
 Overview of changes in ayatana-ido 0.10.3
 
   - src/idoswitchmenuitem.c: Allow the switch to display an
